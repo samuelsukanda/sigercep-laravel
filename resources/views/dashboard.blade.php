@@ -4,10 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="apple-touch-icon" sizes="76x76" href="./assets/img/apple-icon.png" />
-    <link rel="icon" type="image/png" href="./assets/img/favicon.png" />
     <title>SIGERCEP</title>
-    <!--     Fonts and icons     -->
+    <!-- Fonts and icons -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <link href="https://unpkg.com/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" />
     <link href="https://unpkg.com/nucleo/css/nucleo.css" rel="stylesheet" />
@@ -65,14 +63,42 @@
                 </li>
 
                 <li class="mt-0.5 w-full">
-                    <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
-                        href="./pages/tables.html">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="relative top-0 text-sm leading-normal text-orange-500 nav-icon fas fa-wrench"></i>
+                    <!-- Trigger Komplain -->
+                    <a href="javascript:;" onclick="toggleDropdown(this)"
+                        class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
+                        <div class="flex items-center">
+                            <div
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                                <i class="fas fa-wrench text-sm leading-normal"></i>
+                            </div>
+                            <span class="ml-1 duration-300 ease">Komplain</span>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Komplain</span>
+                        <i class="fas fa-chevron-down text-sm transition-transform duration-200"></i>
                     </a>
+
+                    <!-- Dropdown Menu -->
+                    <ul class="hidden flex-col pl-10 mt-1 space-y-1" dropdown-menu>
+                        <li class="w-full">
+                            <a href="./pages/komplain/daftar.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Daftar Komplain</span>
+                            </a>
+                        </li>
+                        <li class="w-full">
+                            <a href="./pages/komplain/statistik.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                    <i class="fas fa-chart-bar text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Statistik Komplain</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="mt-0.5 w-full">
@@ -126,7 +152,8 @@
                         href="./pages/rtl.html">
                         <div
                             class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-world-2"></i>
+                            <i class="fas fa-balance-scale relative top-0 text-sm leading-normal"
+                                style="color: #f22d2d !important;"></i>
                         </div>
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">SDM & Hukum</span>
                     </a>
@@ -137,7 +164,8 @@
                         href="./pages/rtl.html">
                         <div
                             class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-world-2"></i>
+                            <i class="fas fa-warehouse relative top-0 text-sm leading-normal"
+                                style="color: #362ea8 !important;"></i>
                         </div>
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Pengadaan & Aset</span>
                     </a>
@@ -148,7 +176,8 @@
                         href="./pages/rtl.html">
                         <div
                             class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-world-2"></i>
+                            <i class="fas fa-notes-medical relative top-0 text-sm leading-normal"
+                                style="color: #df6969 !important;"></i>
                         </div>
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Kesiapan Ambulance</span>
                     </a>
@@ -159,7 +188,8 @@
                         href="./pages/rtl.html">
                         <div
                             class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-world-2"></i>
+                            <i class="fas fa-print relative top-0 text-sm leading-normal"
+                                style="color: #5fd444 !important;"></i>
                         </div>
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Toner</span>
                     </a>
@@ -170,7 +200,8 @@
                         href="./pages/rtl.html">
                         <div
                             class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-world-2"></i>
+                            <i class="fas fa-paper-plane relative top-0 text-sm leading-normal"
+                                style="color: #eec524 !important;"></i>
                         </div>
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Visitasi</span>
                     </a>
@@ -181,7 +212,8 @@
                         href="./pages/rtl.html">
                         <div
                             class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-world-2"></i>
+                            <i class="fas fa-hand-holding relative top-0 text-sm leading-normal"
+                                style="color: #cb72f1 !important;"></i>
                         </div>
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Peminjaman</span>
                     </a>
@@ -192,7 +224,8 @@
                         href="./pages/rtl.html">
                         <div
                             class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="relative top-0 text-sm leading-normal text-red-600 ni ni-world-2"></i>
+                            <i class="fas fa-server relative top-0 text-sm leading-normal"
+                                style="color: #47b1d1 !important;"></i>
                         </div>
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Hardware</span>
                     </a>
@@ -231,18 +264,52 @@
                     <div class="flex items-center md:ml-auto md:pr-4"></div>
                     <ul class="flex flex-row justify-end pl-0 mb-0 list-none md-max:w-full">
                         {{-- Profile --}}
-                        <li class="flex items-center h-full">
+                        <li class="flex items-center h-full px-2">
                             <div class="flex items-center space-x-3">
                                 <span class="text-sm text-white font-semibold">{{ Auth::user()->name }}</span>
                             </div>
                         </li>
 
                         {{-- Settings --}}
-                        <li class="flex items-center px-4">
+                        <li class="flex items-center px-2">
                             <a href="javascript:;" class="p-0 text-sm text-white transition-all ease-nav-brand">
                                 <i fixed-plugin-button-nav class="cursor-pointer fa fa-cog"></i>
                             </a>
                         </li>
+
+                        {{-- Logout --}}
+                        <li class="relative flex items-center px-2">
+                            <p class="hidden transform-dropdown-show"></p>
+
+                            <!-- Tombol ikon dropdown -->
+                            <a href="javascript:;" class="block p-0 text-sm text-white transition-all ease-nav-brand"
+                                dropdown-trigger aria-expanded="false">
+                                <i class="cursor-pointer fa fa-power-off"></i>
+                            </a>
+
+                            <!-- Dropdown Menu -->
+                            <ul dropdown-menu
+                                class="text-sm transform-dropdown before:font-awesome before:leading-default before:duration-350 before:ease lg:shadow-3xl duration-250 min-w-44 before:sm:right-8 before:text-5.5 pointer-events-none absolute right-0 top-0 z-50 origin-top list-none rounded-lg border-0 border-transparent dark:shadow-dark-xl dark:bg-slate-850 bg-white px-2 py-2 text-left text-slate-500 opacity-0 transition-all before:absolute before:right-2 before:top-0 before:z-50 before:content-['\f0d8'] sm:-mr-6 lg:mt-2 lg:block">
+
+                                <!-- Item Setting sebagai link -->
+                                <li class="relative">
+                                    <a href="./pages/setting.html"
+                                        class="dark:hover:bg-slate-900 ease py-1.2 clear-both block w-full whitespace-nowrap rounded-lg px-4 duration-300 hover:bg-gray-200 hover:text-slate-700 lg:transition-colors text-sm font-semibold dark:text-white">
+                                        <i class="fas fa-cog mr-2"></i>
+                                        Setting
+                                    </a>
+                                </li>
+
+                                <li class="relative">
+                                    <a href="./pages/setting.html"
+                                        class="dark:hover:bg-slate-900 ease py-1.2 clear-both block w-full whitespace-nowrap rounded-lg px-4 duration-300 hover:bg-gray-200 hover:text-slate-700 lg:transition-colors text-sm font-semibold dark:text-white">
+                                        <i class="fas fa-right-from-bracket mr-2"></i>
+                                        Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -748,40 +815,8 @@
                     <div class="flex flex-wrap items-center -mx-3 lg:justify-between">
                         <div class="w-full max-w-full px-3 mt-0 mb-6 shrink-0 lg:mb-0 lg:w-1/2 lg:flex-none">
                             <div class="text-sm leading-normal text-center text-slate-500 lg:text-left">
-                                ©
-                                <script>
-                                    document.write(new Date().getFullYear() + ",");
-                                </script>
-                                made with <i class="fa fa-heart"></i> by
-                                <a href="https://www.creative-tim.com"
-                                    class="font-semibold text-slate-700 dark:text-white" target="_blank">Creative
-                                    Tim</a>
-                                for a better web.
+                                © 2025, Rumah Sakit Hamori
                             </div>
-                        </div>
-                        <div class="w-full max-w-full px-3 mt-0 shrink-0 lg:w-1/2 lg:flex-none">
-                            <ul class="flex flex-wrap justify-center pl-0 mb-0 list-none lg:justify-end">
-                                <li class="nav-item">
-                                    <a href="https://www.creative-tim.com"
-                                        class="block px-4 pt-0 pb-1 text-sm font-normal transition-colors ease-in-out text-slate-500"
-                                        target="_blank">Creative Tim</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="https://www.creative-tim.com/presentation"
-                                        class="block px-4 pt-0 pb-1 text-sm font-normal transition-colors ease-in-out text-slate-500"
-                                        target="_blank">About Us</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="https://creative-tim.com/blog"
-                                        class="block px-4 pt-0 pb-1 text-sm font-normal transition-colors ease-in-out text-slate-500"
-                                        target="_blank">Blog</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="https://www.creative-tim.com/license"
-                                        class="block px-4 pt-0 pb-1 pr-0 text-sm font-normal transition-colors ease-in-out text-slate-500"
-                                        target="_blank">License</a>
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </div>
@@ -863,5 +898,20 @@
 <script src="./assets/js/plugins/perfect-scrollbar.min.js" async></script>
 <!-- main script file  -->
 <script src="./assets/js/argon-dashboard-tailwind.js?v=1.0.1" async></script>
+
+<script>
+    function toggleDropdown(el) {
+        const dropdown = el.parentElement.querySelector('[dropdown-menu]');
+        const icon = el.querySelector('i.fas.fa-chevron-down');
+        if (dropdown.classList.contains('hidden')) {
+            dropdown.classList.remove('hidden');
+            icon.classList.add('rotate-180');
+        } else {
+            dropdown.classList.add('hidden');
+            icon.classList.remove('rotate-180');
+        }
+    }
+</script>
+
 
 </html>

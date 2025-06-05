@@ -6,7 +6,7 @@
     <title>SIGERCEP</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @vite('resources/css/app.css') {{-- Pastikan Tailwind aktif --}}
-    {{-- Shortcut Icon --}}
+   {{-- Shortcut Icon --}}
     <link rel="shortcut icon" href="{{ asset('images/logors.png') }}" type="image/x-icon">
 </head>
 
