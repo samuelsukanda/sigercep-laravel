@@ -8,6 +8,13 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return view('pages.dashboard');
     })->name('dashboard');
+
+    Route::get('/layouts/app', function () {
+        return view('app');
+    })->name('app');
+    Route::get('/settings', function () {
+        return view('settings');
+    })->name('settings');
 });
