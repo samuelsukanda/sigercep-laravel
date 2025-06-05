@@ -13,12 +13,12 @@
     <!-- Font Awesome Icons -->
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <!-- Nucleo Icons -->
-    <link href="./assets/css/nucleo-icons.css" rel="stylesheet" />
-    <link href="./assets/css/nucleo-svg.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('assets/css/nucleo-icons.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/nucleo-svg.css') }}">
     <!-- Popper -->
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <!-- Main Styling -->
-    <link href="./assets/css/argon-dashboard-tailwind.css?v=1.0.1" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('assets/css/argon-dashboard-tailwind.css') }}">
     {{-- Shortcut Icon --}}
     <link rel="shortcut icon" href="{{ asset('images/logors.png') }}" type="image/x-icon">
 </head>
@@ -34,7 +34,7 @@
             <i class="absolute top-0 right-0 p-4 opacity-50 cursor-pointer fas fa-times dark:text-white text-slate-400 xl:hidden"
                 sidenav-close></i>
             <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap dark:text-white text-slate-700"
-                href="https://demos.creative-tim.com/argon-dashboard-tailwind/pages/dashboard.html" target="_blank">
+                href="{{ route('dashboard') }}">
                 <img src="{{ asset('images/logors.png') }}"
                     class="inline h-full max-w-full transition-all duration-200 dark:hidden ease-nav-brand max-h-8"
                     alt="main_logo" />
@@ -53,7 +53,7 @@
             <ul class="flex flex-col pl-0 mb-0">
                 <li class="mt-0.5 w-full">
                     <a class="py-2.7 bg-blue-500/13 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors"
-                        href="./pages/dashboard.html">
+                        href="{{ route('dashboard') }}">
                         <div
                             class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <i class="relative top-0 text-sm leading-normal text-blue-500 ni ni-tv-2"></i>
@@ -77,7 +77,8 @@
                     </a>
 
                     <!-- Dropdown Menu -->
-                    <ul class="hidden flex-col pl-10 mt-1 space-y-1" dropdown-menu>
+                    <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                        dropdown-menu style="max-height: 0; opacity: 0;" dropdown-menu>
                         <li class="w-full">
                             <a href="./pages/komplain/daftar.html"
                                 class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -85,7 +86,7 @@
                                     class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
                                     <i class="fas fa-list text-sm leading-normal"></i>
                                 </div>
-                                <span class="ml-1">Daftar Komplain</span>
+                                <span class="ml-1">IPSRS</span>
                             </a>
                         </li>
                         <li class="w-full">
@@ -93,142 +94,452 @@
                                 class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                                 <div
                                     class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
-                                    <i class="fas fa-chart-bar text-sm leading-normal"></i>
+                                    <i class="fas fa-list text-sm leading-normal"></i>
                                 </div>
-                                <span class="ml-1">Statistik Komplain</span>
+                                <span class="ml-1">Outsourching & Vendor</span>
                             </a>
                         </li>
                     </ul>
                 </li>
 
                 <li class="mt-0.5 w-full">
-                    <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
-                        href="./pages/billing.html">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
-                            <i class="relative top-0 text-sm leading-normal text-blue-500 ni ni-calendar-grid-58"></i>
+                    <!-- Trigger Komplain -->
+                    <a href="javascript:;" onclick="toggleDropdown(this)"
+                        class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
+                        <div class="flex items-center">
+                            <div
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                                <i
+                                    class="relative top-0 text-sm leading-normal text-blue-500 ni ni-calendar-grid-58"></i>
+                            </div>
+                            <span class="ml-1 duration-300 ease">Reservasi</span>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Reservasi</span>
+                        <i class="fas fa-chevron-down text-sm transition-transform duration-200"></i>
                     </a>
+
+                    <!-- Dropdown Menu -->
+                    <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                        dropdown-menu style="max-height: 0; opacity: 0;" dropdown-menu>
+                        <li class="w-full">
+                            <a href="./pages/komplain/daftar.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Ruangan</span>
+                            </a>
+                        </li>
+                        <li class="w-full">
+                            <a href="./pages/komplain/statistik.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Kendaraan</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="mt-0.5 w-full">
-                    <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
-                        href="./pages/virtual-reality.html">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="fas fa-palette text-cyan-500 text-sm leading-normal relative top-0"></i>
+                    <!-- Trigger Komplain -->
+                    <a href="javascript:;" onclick="toggleDropdown(this)"
+                        class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
+                        <div class="flex items-center">
+                            <div
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                                <i class="fas fa-palette text-cyan-500 text-sm leading-normal relative top-0"></i>
+                            </div>
+                            <span class="ml-1 duration-300 ease">Desain Grafis</span>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Desain Grafis</span>
+                        <i class="fas fa-chevron-down text-sm transition-transform duration-200"></i>
                     </a>
+
+                    <!-- Dropdown Menu -->
+                    <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                        dropdown-menu style="max-height: 0; opacity: 0;" dropdown-menu>
+                        <li class="w-full">
+                            <a href="./pages/komplain/daftar.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Desain Grafis</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="mt-0.5 w-full">
-                    <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
-                        href="./pages/rtl.html">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="fas fa-radiation relative top-0 text-sm leading-normal text-green-800"
-                                style="color: #0da87c !important;"></i>
+                    <!-- Trigger Komplain -->
+                    <a href="javascript:;" onclick="toggleDropdown(this)"
+                        class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
+                        <div class="flex items-center">
+                            <div
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                                <i class="fas fa-radiation relative top-0 text-sm leading-normal text-green-800"
+                                    style="color: #0da87c !important;"></i>
+                            </div>
+                            <span class="ml-1 duration-300 ease">K3RS</span>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">K3RS</span>
+                        <i class="fas fa-chevron-down text-sm transition-transform duration-200"></i>
                     </a>
+
+                    <!-- Dropdown Menu -->
+                    <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                        dropdown-menu style="max-height: 0; opacity: 0;" dropdown-menu>
+                        <li class="w-full">
+                            <a href="./pages/komplain/daftar.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Kecelakaan Kerja</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="mt-0.5 w-full">
-                    <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
-                        href="./pages/rtl.html">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="fas fa-users relative top-0 text-sm leading-normal"
-                                style="color: #9333ea !important;"></i>
+                    <!-- Trigger Komplain -->
+                    <a href="javascript:;" onclick="toggleDropdown(this)"
+                        class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
+                        <div class="flex items-center">
+                            <div
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                                <i class="fas fa-users relative top-0 text-sm leading-normal"
+                                    style="color: #9333ea !important;"></i>
+                            </div>
+                            <span class="ml-1 duration-300 ease">Komite Mutu</span>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Komite Mutu</span>
+                        <i class="fas fa-chevron-down text-sm transition-transform duration-200"></i>
                     </a>
+
+                    <!-- Dropdown Menu -->
+                    <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                        dropdown-menu style="max-height: 0; opacity: 0;" dropdown-menu>
+                        <li class="w-full">
+                            <a href="./pages/komplain/daftar.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Mutu</span>
+                            </a>
+                        </li>
+                        <li class="w-full">
+                            <a href="./pages/komplain/statistik.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Bank SPO</span>
+                            </a>
+                        </li>
+                        <li class="w-full">
+                            <a href="./pages/komplain/statistik.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Manajemen Resiko</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="mt-0.5 w-full">
-                    <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
-                        href="./pages/rtl.html">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="fas fa-balance-scale relative top-0 text-sm leading-normal"
-                                style="color: #f22d2d !important;"></i>
+                    <!-- Trigger Komplain -->
+                    <a href="javascript:;" onclick="toggleDropdown(this)"
+                        class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
+                        <div class="flex items-center">
+                            <div
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                                <i class="fas fa-balance-scale relative top-0 text-sm leading-normal"
+                                    style="color: #f22d2d !important;"></i>
+                            </div>
+                            <span class="ml-1 duration-300 ease">SDM & Hukum</span>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">SDM & Hukum</span>
+                        <i class="fas fa-chevron-down text-sm transition-transform duration-200"></i>
                     </a>
+
+                    <!-- Dropdown Menu -->
+                    <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                        dropdown-menu style="max-height: 0; opacity: 0;" dropdown-menu>
+                        <li class="w-full">
+                            <a href="./pages/komplain/daftar.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">UTW</span>
+                            </a>
+                        </li>
+                        <li class="w-full">
+                            <a href="./pages/komplain/statistik.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Struktur Organisasi</span>
+                            </a>
+                        </li>
+                        <li class="w-full">
+                            <a href="./pages/komplain/statistik.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Peraturan Perusahaan</span>
+                            </a>
+                        </li>
+                        <li class="w-full">
+                            <a href="./pages/komplain/statistik.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Surat Keputusan</span>
+                            </a>
+                        </li>
+                        <li class="w-full">
+                            <a href="./pages/komplain/statistik.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Buku Mandatory Training</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="mt-0.5 w-full">
-                    <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
-                        href="./pages/rtl.html">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="fas fa-warehouse relative top-0 text-sm leading-normal"
-                                style="color: #362ea8 !important;"></i>
+                    <!-- Trigger Komplain -->
+                    <a href="javascript:;" onclick="toggleDropdown(this)"
+                        class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
+                        <div class="flex items-center">
+                            <div
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                                <i class="fas fa-warehouse relative top-0 text-sm leading-normal"
+                                    style="color: #362ea8 !important;"></i>
+                            </div>
+                            <span class="ml-1 duration-300 ease">Pengadaan & Aset</span>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Pengadaan & Aset</span>
+                        <i class="fas fa-chevron-down text-sm transition-transform duration-200"></i>
                     </a>
+
+                    <!-- Dropdown Menu -->
+                    <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                        dropdown-menu style="max-height: 0; opacity: 0;" dropdown-menu>
+                        <li class="w-full">
+                            <a href="./pages/komplain/daftar.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Peminjaman Aset</span>
+                            </a>
+                        </li>
+                        <li class="w-full">
+                            <a href="./pages/komplain/statistik.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Pengembalian Aset</span>
+                            </a>
+                        </li>
+                        <li class="w-full">
+                            <a href="./pages/komplain/statistik.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Pemindahan Aset</span>
+                            </a>
+                        </li>
+                        <li class="w-full">
+                            <a href="./pages/komplain/statistik.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Laporan Aset Rusak</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="mt-0.5 w-full">
-                    <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
-                        href="./pages/rtl.html">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="fas fa-notes-medical relative top-0 text-sm leading-normal"
-                                style="color: #df6969 !important;"></i>
+                    <!-- Trigger Komplain -->
+                    <a href="javascript:;" onclick="toggleDropdown(this)"
+                        class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
+                        <div class="flex items-center">
+                            <div
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                                <i class="fas fa-notes-medical relative top-0 text-sm leading-normal"
+                                    style="color: #df6969 !important;"></i>
+                            </div>
+                            <span class="ml-1 duration-300 ease">Kesiapan Ambulance</span>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Kesiapan Ambulance</span>
+                        <i class="fas fa-chevron-down text-sm transition-transform duration-200"></i>
                     </a>
+
+                    <!-- Dropdown Menu -->
+                    <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                        dropdown-menu style="max-height: 0; opacity: 0;" dropdown-menu>
+                        <li class="w-full">
+                            <a href="./pages/komplain/daftar.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Kesiapan Ambulance</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="mt-0.5 w-full">
-                    <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
-                        href="./pages/rtl.html">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="fas fa-print relative top-0 text-sm leading-normal"
-                                style="color: #5fd444 !important;"></i>
+                    <!-- Trigger Komplain -->
+                    <a href="javascript:;" onclick="toggleDropdown(this)"
+                        class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
+                        <div class="flex items-center">
+                            <div
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                                <i class="fas fa-print relative top-0 text-sm leading-normal"
+                                    style="color: #5fd444 !important;"></i>
+                            </div>
+                            <span class="ml-1 duration-300 ease">Toner</span>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Toner</span>
+                        <i class="fas fa-chevron-down text-sm transition-transform duration-200"></i>
                     </a>
+
+                    <!-- Dropdown Menu -->
+                    <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                        dropdown-menu style="max-height: 0; opacity: 0;" dropdown-menu>
+                        <li class="w-full">
+                            <a href="./pages/komplain/daftar.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Toner</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="mt-0.5 w-full">
-                    <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
-                        href="./pages/rtl.html">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="fas fa-paper-plane relative top-0 text-sm leading-normal"
-                                style="color: #eec524 !important;"></i>
+                    <!-- Trigger Komplain -->
+                    <a href="javascript:;" onclick="toggleDropdown(this)"
+                        class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
+                        <div class="flex items-center">
+                            <div
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                                <i class="fas fa-paper-plane relative top-0 text-sm leading-normal"
+                                    style="color: #eec524 !important;"></i>
+                            </div>
+                            <span class="ml-1 duration-300 ease">Visitasi</span>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Visitasi</span>
+                        <i class="fas fa-chevron-down text-sm transition-transform duration-200"></i>
                     </a>
+
+                    <!-- Dropdown Menu -->
+                    <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                        dropdown-menu style="max-height: 0; opacity: 0;" dropdown-menu>
+                        <li class="w-full">
+                            <a href="./pages/komplain/daftar.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Visitasi</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="mt-0.5 w-full">
-                    <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
-                        href="./pages/rtl.html">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="fas fa-hand-holding relative top-0 text-sm leading-normal"
-                                style="color: #cb72f1 !important;"></i>
+                    <!-- Trigger Komplain -->
+                    <a href="javascript:;" onclick="toggleDropdown(this)"
+                        class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
+                        <div class="flex items-center">
+                            <div
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                                <i class="fas fa-hand-holding relative top-0 text-sm leading-normal"
+                                    style="color: #cb72f1 !important;"></i>
+                            </div>
+                            <span class="ml-1 duration-300 ease">Peminjaman</span>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Peminjaman</span>
+                        <i class="fas fa-chevron-down text-sm transition-transform duration-200"></i>
                     </a>
+
+                    <!-- Dropdown Menu -->
+                    <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                        dropdown-menu style="max-height: 0; opacity: 0;" dropdown-menu>
+                        <li class="w-full">
+                            <a href="./pages/komplain/daftar.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Peminjaman</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="mt-0.5 w-full">
-                    <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
-                        href="./pages/rtl.html">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="fas fa-server relative top-0 text-sm leading-normal"
-                                style="color: #47b1d1 !important;"></i>
+                    <!-- Trigger Komplain -->
+                    <a href="javascript:;" onclick="toggleDropdown(this)"
+                        class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
+                        <div class="flex items-center">
+                            <div
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                                <i class="fas fa-server relative top-0 text-sm leading-normal"
+                                    style="color: #47b1d1 !important;"></i>
+                            </div>
+                            <span class="ml-1 duration-300 ease">Hardware</span>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Hardware</span>
+                        <i class="fas fa-chevron-down text-sm transition-transform duration-200"></i>
                     </a>
+
+                    <!-- Dropdown Menu -->
+                    <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                        dropdown-menu style="max-height: 0; opacity: 0;" dropdown-menu>
+                        <li class="w-full">
+                            <a href="./pages/komplain/daftar.html"
+                                class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                <div
+                                    class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                    <i class="fas fa-list text-sm leading-normal"></i>
+                                </div>
+                                <span class="ml-1">Hardware</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
             </ul>
@@ -893,25 +1204,10 @@
 </body>
 
 <!-- plugin for charts  -->
-<script src="./assets/js/plugins/chartjs.min.js" async></script>
+<script src="{{ asset('assets/js/plugins/chartjs.min.js') }}"></script>
 <!-- plugin for scrollbar  -->
-<script src="./assets/js/plugins/perfect-scrollbar.min.js" async></script>
+<script src="{{ asset('assets/js/plugins/perfect-scrollbar.min.js') }}"></script>
 <!-- main script file  -->
-<script src="./assets/js/argon-dashboard-tailwind.js?v=1.0.1" async></script>
-
-<script>
-    function toggleDropdown(el) {
-        const dropdown = el.parentElement.querySelector('[dropdown-menu]');
-        const icon = el.querySelector('i.fas.fa-chevron-down');
-        if (dropdown.classList.contains('hidden')) {
-            dropdown.classList.remove('hidden');
-            icon.classList.add('rotate-180');
-        } else {
-            dropdown.classList.add('hidden');
-            icon.classList.remove('rotate-180');
-        }
-    }
-</script>
-
+<script src="{{ asset('assets/js/argon-dashboard-tailwind.js') }}"></script>
 
 </html>
