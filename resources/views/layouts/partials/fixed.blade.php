@@ -1,6 +1,6 @@
 <div fixed-plugin>
     <a fixed-plugin-button
-        class="fixed px-4 py-2 text-xl bg-white shadow-lg cursor-pointer bottom-8 right-8 z-990 rounded-circle text-slate-700">
+        class="fixed px-4 py-2 text-xl bg-white shadow-lg cursor-pointer bottom-8 right-8 z-990 rounded-circle">
         <i class="py-2 pointer-events-none fa fa-cog"> </i>
     </a>
     <!-- -right-90 in loc de 0-->

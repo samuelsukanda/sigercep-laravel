@@ -8,14 +8,17 @@
             <a href="javascript:;" class="block p-0 text-sm text-white transition-all ease-nav-brand xl:hidden px-4"
                 sidenav-trigger>
                 <div class="w-4.5 overflow-hidden">
-                    <i class="ease mb-0.75 relative block h-0.5 rounded-sm bg-white transition-all"></i>
-                    <i class="ease mb-0.75 relative block h-0.5 rounded-sm bg-white transition-all"></i>
-                    <i class="ease relative block h-0.5 rounded-sm bg-white transition-all"></i>
+                    <i class="ease mb-0.75 relative block h-0.5 rounded-sm transition-all"
+                        style="background-color: #7664E4 !important;"></i>
+                    <i class="ease mb-0.75 relative block h-0.5 rounded-sm transition-all"
+                        style="background-color: #7664E4 !important;"></i>
+                    <i class="ease relative block h-0.5 rounded-sm transition-all"
+                        style="background-color: #7664E4 !important;"></i>
                 </div>
             </a>
 
             {{-- Page --}}
-            <h5 class="font-bold text-white capitalize mt-2">Dashboard</h5>
+            <h5 class="font-bold capitalize mt-2" style="color: #7664E4 !important;">Dashboard</h5>
         </div>
 
         <div class="flex items-center mt-2 grow sm:mt-0 sm:mr-6 md:mr-0 lg:flex lg:basis-auto">
@@ -24,23 +27,26 @@
                 {{-- Profile --}}
                 <li class="flex items-center h-full cursor-pointer">
                     <div class="flex items-center space-x-3">
-                        <span class="text-sm text-white font-semibold uppercase">{{ Auth::user()->name }}</span>
+                        <span class="text-sm font-semibold uppercase"
+                            style="color: #7664E4 !important;">{{ Auth::user()->name }}</span>
                     </div>
                 </li>
                 <li class="flex items-center h-full px-1 cursor-pointer">
                     <div class="flex items-center space-x-3">
-                        <span class="text-sm text-white font-semibold"> - </span>
+                        <span class="text-sm font-semibold" style="color: #7664E4 !important;"> - </span>
                     </div>
                 </li>
                 <li class="flex items-center h-full pr-2 cursor-pointer">
                     <div class="flex items-center space-x-3">
-                        <span class="text-sm text-white font-semibold uppercase">{{ Auth::user()->level }}</span>
+                        <span class="text-sm font-semibold uppercase"
+                            style="color: #7664E4 !important;">{{ Auth::user()->level }}</span>
                     </div>
                 </li>
 
                 {{-- Settings --}}
                 <li class="flex items-center px-2">
-                    <a href="javascript:;" class="p-0 text-sm text-white transition-all ease-nav-brand">
+                    <a href="javascript:;" class="p-0 text-sm transition-all ease-nav-brand"
+                        style="color: #7664E4 !important;">
                         <i fixed-plugin-button-nav class="cursor-pointer fa fa-cog"></i>
                     </a>
                 </li>
@@ -50,8 +56,8 @@
                     <p class="hidden transform-dropdown-show"></p>
 
                     <!-- Tombol ikon dropdown -->
-                    <a href="javascript:;" class="block p-0 text-sm text-white transition-all ease-nav-brand"
-                        dropdown-trigger aria-expanded="false">
+                    <a href="javascript:;" class="block p-0 text-sm transition-all ease-nav-brand" dropdown-trigger
+                        aria-expanded="false" style="color: #7664E4 !important;">
                         <i class="cursor-pointer fa fa-power-off"></i>
                     </a>
 

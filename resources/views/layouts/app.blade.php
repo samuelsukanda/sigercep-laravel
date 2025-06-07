@@ -3,7 +3,6 @@
 
 <body
     class="m-0 font-sans text-base antialiased font-normal dark:bg-slate-900 leading-default bg-gray-50 text-slate-500">
-    <div class="absolute w-full bg-blue-500 dark:hidden min-h-75"></div>
 
     {{-- Sidebar --}}
     @include('layouts.partials.sidebar')
@@ -23,12 +22,8 @@
     @include('layouts.partials.fixed')
 </body>
 
-<!-- plugin for charts  -->
-<script src="{{ asset('assets/js/plugins/chartjs.min.js') }}"></script>
-<!-- plugin for scrollbar  -->
-<script src="{{ asset('assets/js/plugins/perfect-scrollbar.min.js') }}"></script>
-<!-- main script file  -->
-<script src="{{ asset('assets/js/argon-dashboard-tailwind.js') }}"></script>
-{{-- end Footer --}}
+{{-- Scripts --}}
+@include('layouts.partials.scripts')
+@stack('scripts')
 
 </html>

@@ -39,8 +39,8 @@
                 <a href="javascript:;" onclick="toggleDropdown(this)"
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
-                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
-                            <i class="fas fa-wrench text-sm leading-normal"></i>
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <i class="fas fa-wrench text-sm leading-normal text-orange-500"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Komplain</span>
                     </div>
@@ -50,20 +50,20 @@
                 <!-- Dropdown Menu -->
                 <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out" style="max-height: 0; opacity: 0;" dropdown-menu>
                     <li class="w-full">
-                        <a href="./pages/komplain/daftar.html"
+                        <a href="{{ route('komplain.ipsrs.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">IPSRS</span>
                         </a>
                     </li>
                     <li class="w-full">
-                        <a href="./pages/komplain/statistik.html"
+                        <a href="#"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Outsourching & Vendor</span>
@@ -77,8 +77,8 @@
                 <a href="javascript:;" onclick="toggleDropdown(this)"
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
-                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
-                            <i class="relative top-0 text-sm leading-normal text-blue-500 ni ni-calendar-grid-58"></i>
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <i class="relative top-0 text-sm leading-normal ni ni-calendar-grid-58 text-blue-500"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Reservasi</span>
                     </div>
@@ -91,7 +91,7 @@
                         <a href="./pages/komplain/daftar.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Ruangan</span>
@@ -101,7 +101,7 @@
                         <a href="./pages/komplain/statistik.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Kendaraan</span>
@@ -115,7 +115,7 @@
                 <a href="javascript:;" onclick="toggleDropdown(this)"
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
-                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                             <i class="fas fa-palette text-cyan-500 text-sm leading-normal relative top-0"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Desain Grafis</span>
@@ -129,7 +129,7 @@
                         <a href="./pages/komplain/daftar.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Desain Grafis</span>
@@ -143,9 +143,8 @@
                 <a href="javascript:;" onclick="toggleDropdown(this)"
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
-                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
-                            <i class="fas fa-radiation relative top-0 text-sm leading-normal text-green-800"
-                                style="color: #0da87c !important;"></i>
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <i class="fas fa-radiation text-red-500 text-sm leading-normal relative top-0"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">K3RS</span>
                     </div>
@@ -158,7 +157,7 @@
                         <a href="./pages/komplain/daftar.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Kecelakaan Kerja</span>
@@ -173,9 +172,8 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
-                            <i class="fas fa-users relative top-0 text-sm leading-normal"
-                                style="color: #9333ea !important;"></i>
+                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <i class="fas fa-users text-blue-500 relative top-0 text-sm leading-normal"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Komite Mutu</span>
                     </div>
@@ -188,7 +186,7 @@
                         <a href="./pages/komplain/daftar.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Mutu</span>
@@ -198,7 +196,7 @@
                         <a href="./pages/komplain/statistik.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Bank SPO</span>
@@ -208,7 +206,7 @@
                         <a href="./pages/komplain/statistik.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Manajemen Resiko</span>
@@ -223,9 +221,9 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                             <i class="fas fa-balance-scale relative top-0 text-sm leading-normal"
-                                style="color: #f22d2d !important;"></i>
+                                style="color: #ee8a0f !important;"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">SDM & Hukum</span>
                     </div>
@@ -238,7 +236,7 @@
                         <a href="./pages/komplain/daftar.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">UTW</span>
@@ -248,7 +246,7 @@
                         <a href="./pages/komplain/statistik.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Struktur Organisasi</span>
@@ -258,7 +256,7 @@
                         <a href="./pages/komplain/statistik.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Peraturan Perusahaan</span>
@@ -268,7 +266,7 @@
                         <a href="./pages/komplain/statistik.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Surat Keputusan</span>
@@ -278,7 +276,7 @@
                         <a href="./pages/komplain/statistik.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Buku Mandatory Training</span>
@@ -293,7 +291,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                             <i class="fas fa-warehouse relative top-0 text-sm leading-normal"
                                 style="color: #362ea8 !important;"></i>
                         </div>
@@ -308,7 +306,7 @@
                         <a href="./pages/komplain/daftar.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Peminjaman Aset</span>
@@ -318,7 +316,7 @@
                         <a href="./pages/komplain/statistik.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Pengembalian Aset</span>
@@ -328,7 +326,7 @@
                         <a href="./pages/komplain/statistik.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Pemindahan Aset</span>
@@ -338,7 +336,7 @@
                         <a href="./pages/komplain/statistik.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-indigo-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Laporan Aset Rusak</span>
@@ -353,9 +351,8 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
-                            <i class="fas fa-notes-medical relative top-0 text-sm leading-normal"
-                                style="color: #df6969 !important;"></i>
+                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <i class="fas fa-notes-medical relative top-0 text-sm leading-normal text-orange-500"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Kesiapan Ambulance</span>
                     </div>
@@ -368,7 +365,7 @@
                         <a href="./pages/komplain/daftar.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Kesiapan Ambulance</span>
@@ -383,7 +380,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                             <i class="fas fa-print relative top-0 text-sm leading-normal"
                                 style="color: #5fd444 !important;"></i>
                         </div>
@@ -398,7 +395,7 @@
                         <a href="./pages/komplain/daftar.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Toner</span>
@@ -413,7 +410,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                             <i class="fas fa-paper-plane relative top-0 text-sm leading-normal"
                                 style="color: #eec524 !important;"></i>
                         </div>
@@ -428,7 +425,7 @@
                         <a href="./pages/komplain/daftar.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Visitasi</span>
@@ -443,7 +440,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                             <i class="fas fa-hand-holding relative top-0 text-sm leading-normal"
                                 style="color: #cb72f1 !important;"></i>
                         </div>
@@ -458,7 +455,7 @@
                         <a href="./pages/komplain/daftar.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Peminjaman</span>
@@ -473,7 +470,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-orange-500">
+                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                             <i class="fas fa-server relative top-0 text-sm leading-normal"
                                 style="color: #47b1d1 !important;"></i>
                         </div>
@@ -488,7 +485,7 @@
                         <a href="./pages/komplain/daftar.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-blue-400">
+                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Hardware</span>
