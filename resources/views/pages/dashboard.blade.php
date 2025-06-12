@@ -486,3 +486,7 @@
             </div>
         </div>
     @endsection
+
+    @push('scripts')
+        <script src="{{ asset('assets/js/carousel.js') }}"></script>
+    @endpush

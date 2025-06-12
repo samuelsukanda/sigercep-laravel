@@ -48,16 +48,17 @@
                     <p class="hidden transform-dropdown-show"></p>
 
                     <!-- Tombol ikon dropdown -->
-                    <a href="javascript:;" class="block p-0 text-sm transition-all ease-nav-brand" dropdown-trigger
-                        aria-expanded="false" style="color: #7664E4 !important;">
+                    <a href="javascript:;" dropdown-logout-trigger
+                        class="block p-0 text-sm transition-all ease-nav-brand" aria-expanded="false"
+                        style="color: #7664E4 !important;">
                         <i class="cursor-pointer fa fa-power-off"></i>
                     </a>
 
                     <!-- Dropdown Menu -->
-                    <ul dropdown-menu
+                    <ul dropdown-logout-menu
                         class="text-sm transform-dropdown before:font-awesome before:leading-default before:duration-350 before:ease lg:shadow-3xl duration-250 min-w-44 before:sm:right-8 before:text-5.5 pointer-events-none absolute right-0 top-0 z-50 origin-top list-none rounded-lg border-0 border-transparent dark:shadow-dark-xl dark:bg-slate-850 bg-white px-2 py-2 text-left text-slate-500 opacity-0 transition-all before:absolute before:right-2 before:top-0 before:z-50 before:content-['\f0d8'] sm:-mr-6 lg:mt-2 lg:block">
 
-                        <!-- Item Setting sebagai link -->
+                        <!-- Item Setting -->
                         <li class="relative">
                             <a href="#"
                                 class="dark:hover:bg-slate-900 ease py-1.2 clear-both block w-full whitespace-nowrap rounded-lg px-4 duration-300 hover:bg-gray-200 hover:text-slate-700 lg:transition-colors text-sm font-semibold dark:text-white">
@@ -66,17 +67,22 @@
                             </a>
                         </li>
 
+                        <!-- Item Logout -->
                         <li class="relative">
                             <a href="{{ route('logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                                 class="dark:hover:bg-slate-900 ease py-1.2 clear-both block w-full whitespace-nowrap rounded-lg px-4 duration-300 hover:bg-gray-200 hover:text-slate-700 lg:transition-colors text-sm font-semibold dark:text-white">
                                 <i class="fas fa-right-from-bracket mr-2"></i>
                                 Logout
                             </a>
+
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                @csrf
+                            </form>
                         </li>
                     </ul>
                 </li>
 
-            </ul>
         </div>
     </div>
 </nav>

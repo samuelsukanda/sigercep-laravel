@@ -1,7 +1,7 @@
 {{-- layouts/app.blade.php --}}
 @include('layouts.partials.header')
 
-<body
+<body data-page="virtual-reality"
     class="m-0 font-sans text-base antialiased font-normal dark:bg-slate-900 leading-default bg-gray-50 text-slate-500">
 
     {{-- Sidebar --}}
@@ -17,7 +17,7 @@
         {{-- Footer --}}
         @includeIf('layouts.partials.footer')
     </main>
-    
+
 </body>
 
 {{-- Scripts --}}
