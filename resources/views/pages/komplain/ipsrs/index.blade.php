@@ -22,7 +22,7 @@
                     <tr>
                         <th class="px-6 py-3">Nama</th>
                         <th class="px-6 py-3">Unit</th>
-                        <th class="px-6 py-3">Tujuan</th>
+                        <th class="px-6 py-3">Tujuan Unit</th>
                         <th class="px-6 py-3">Tanggal</th>
                         <th class="px-6 py-3">Status</th>
                         <th class="px-6 py-3 text-center">Aksi</th>
@@ -34,7 +34,7 @@
                             <td class="px-6 py-4">{{ $item->nama }}</td>
                             <td class="px-6 py-4">{{ $item->unit }}</td>
                             <td class="px-6 py-4">{{ $item->tujuan_unit }}</td>
-                            <td class="px-6 py-4">{{ $item->tanggal }}</td>
+                            <td>{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}</td>
                             <td class="px-6 py-4">
                                 <span
                                     class="px-2 py-1 text-xs rounded-full {{ $item->status === 'Done'

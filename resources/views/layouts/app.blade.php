@@ -17,9 +17,7 @@
         {{-- Footer --}}
         @includeIf('layouts.partials.footer')
     </main>
-
-    {{-- Fixed Plugin --}}
-    @include('layouts.partials.fixed')
+    
 </body>
 
 {{-- Scripts --}}
