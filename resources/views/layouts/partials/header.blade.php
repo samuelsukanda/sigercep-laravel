@@ -9,7 +9,6 @@
     <!-- Fonts and icons -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <link href="https://unpkg.com/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" />
-    <link href="https://unpkg.com/nucleo/css/nucleo.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <!-- Font Awesome Icons -->
     <!-- Nucleo Icons -->
