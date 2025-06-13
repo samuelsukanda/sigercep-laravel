@@ -1,6 +1,4 @@
-// sidenav transition-burger
 
-const sidenav = document.querySelector("aside");
 const sidenav_trigger = document.querySelector("[sidenav-trigger]");
 const sidenav_close_button = document.querySelector("[sidenav-close]");
 const burger = sidenav_trigger.firstElementChild;

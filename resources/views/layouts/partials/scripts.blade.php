@@ -4,6 +4,7 @@
 <script src="{{ asset('assets/js/dropdown.js') }}"></script>
 <script src="{{ asset('assets/js/navbar-sticky.js') }}"></script>
 <script src="{{ asset('assets/js/navbar-dropdown.js')}}"></script>
+<script src="{{ asset('assets/js/fixed-plugin.js') }}"></script>
 <script src="{{ asset('assets/js/sidenav-burger.js') }}"></script>
 <script src="https://buttons.github.io/buttons.js"></script>
 <!-- plugin for charts -->
