@@ -279,7 +279,7 @@
                                 class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
-                            <span class="ml-1">Buku Mandatory Training</span>
+                            <span class="ml-1">Mandatory Training</span>
                         </a>
                     </li>
                 </ul>

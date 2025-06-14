@@ -28,7 +28,9 @@
                                 <div>
                                     <label for="unit"
                                         class="block text-sm font-semibold mb-2 text-slate-700">Unit</label>
-                                    <select id="unit" name="unit" class="form-control select2bs4 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500"" required>
+                                    <select id="unit" name="unit"
+                                        class="form-control select2bs4 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500""
+                                        required>
                                         <option disabled {{ old('unit', $komplain->unit ?? '') == '' ? 'selected' : '' }}>
                                             Pilih Unit</option>
                                         @php

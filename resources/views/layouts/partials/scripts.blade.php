@@ -13,3 +13,5 @@
 <script src="{{ asset('assets/js/plugins/perfect-scrollbar.min.js') }}" async></script>
 {{-- Toogle Dropdown --}}
 <script src="{{ asset('assets/js/toggle-dropdown.js') }}"></script>
+{{-- Custom JS --}}
+<script src="{{ asset('custom.js')}}"></script>
