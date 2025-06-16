@@ -1,0 +1,26 @@
+/* Select2 */
+    .select2-container .select2-selection--single {
+        height: 2.5rem !important; /* sama dengan py-2 */
+        padding: 0.5rem 0.75rem !important; /* sama dengan px-3 */
+        border: 1px solid #d1d5db !important; /* border-gray-300 */
+        border-radius: 0.5rem !important; /* rounded-lg */
+        font-size: 0.875rem; /* text-sm */
+    }
+
+    .select2-selection__rendered {
+        color: #374151; /* text-slate-700 */
+        line-height: 1.5rem !important;
+    }
+
+    .select2-selection__arrow {
+        height: 2.5rem !important;
+        right: 0.75rem;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__placeholder {
+        color: #6b7280; /* placeholder:text-gray-500 */
+    }
+
+    .select2-container--default .select2-selection--single {
+        background-color: #ffffff;
+    }

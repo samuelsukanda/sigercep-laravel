@@ -1,0 +1,24 @@
+// Datatables
+$(document).ready(function () {
+    $("#datatable").DataTable({
+        language: {
+            paginate: {
+                previous: "<<",
+                next: ">>",
+            },
+        },
+    });
+});
+
+// Select2
+$(document).ready(function () {
+    $("#unit").select2({
+        placeholder: "Pilih Unit",
+        allowClear: true,
+    });
+
+    $("#tujuan_unit").select2({
+        placeholder: "Pilih Tujuan Unit",
+        allowClear: true,
+    });
+});

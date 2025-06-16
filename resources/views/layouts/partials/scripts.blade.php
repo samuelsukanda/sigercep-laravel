@@ -3,7 +3,7 @@
 <script src="{{ asset('assets/js/nav-pills.js') }}"></script>
 <script src="{{ asset('assets/js/dropdown.js') }}"></script>
 <script src="{{ asset('assets/js/navbar-sticky.js') }}"></script>
-<script src="{{ asset('assets/js/navbar-dropdown.js')}}"></script>
+<script src="{{ asset('assets/js/navbar-dropdown.js') }}"></script>
 <script src="{{ asset('assets/js/fixed-plugin.js') }}"></script>
 <script src="{{ asset('assets/js/sidenav-burger.js') }}"></script>
 <script src="https://buttons.github.io/buttons.js"></script>
@@ -13,5 +13,13 @@
 <script src="{{ asset('assets/js/plugins/perfect-scrollbar.min.js') }}" async></script>
 {{-- Toogle Dropdown --}}
 <script src="{{ asset('assets/js/toggle-dropdown.js') }}"></script>
+{{-- Datatables --}}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.tailwind.min.js"></script>
+<!-- jQuery (required for Select2) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 {{-- Custom JS --}}
-<script src="{{ asset('custom.js')}}"></script>
+<script src="{{ asset('assets/js/custom.js') }}"></script>

@@ -20,6 +20,12 @@
     <link rel="stylesheet" href="{{ asset('assets/css/argon-dashboard-tailwind.css') }}">
     {{-- Shortcut Icon --}}
     <link rel="shortcut icon" href="{{ asset('images/logors.png') }}" type="image/x-icon">
+    <!-- DataTables Core -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <!-- DataTables Tailwind Theme -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.tailwind.min.css">
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     {{-- Custom CSS --}}
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
 </head>

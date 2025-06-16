@@ -2,13 +2,6 @@
 
 @section('title', 'SIGERCEP')
 
-@push('styles')
-    <!-- DataTables Core -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-    <!-- DataTables Tailwind Theme -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.tailwind.min.css">
-@endpush
-
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4">
@@ -50,14 +43,7 @@
                             </td>
                             <td class="px-6 py-4 text-slate-700 dark:text-white">{{ $item->kendala }}</td>
                             <td class="px-6 py-4 text-slate-700 dark:text-white">
-                                <span
-                                    class="px-2 py-1 rounded-full {{ $item->status === 'Done'
-                                        ? 'bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-100'
-                                        : ($item->status === 'On Progress'
-                                            ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-800 dark:text-yellow-100'
-                                            : 'bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-100') }}">
-                                    {{ $item->status ?? '-' }}
-                                </span>
+                                @include('components.status-badge', ['status' => $item->status])
                             </td>
                             <td class="px-6 py-4 space-x-2">
                                 <a href="{{ route('komplain.ipsrs.edit', $item->id) }}"
@@ -81,22 +67,3 @@
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.tailwind.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            $('#datatable').DataTable({
-                language: {
-                    paginate: {
-                        previous: '<<',
-                        next: '>>'
-                    }
-                }
-            });
-        });
-    </script>
-@endpush
