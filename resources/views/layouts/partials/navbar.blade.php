@@ -27,8 +27,10 @@
                 {{-- Profile --}}
                 <li class="flex items-center h-full cursor-pointer">
                     <div class="flex items-center space-x-3">
-                        <span class="text-sm font-semibold uppercase"
-                            style="color: #7664E4 !important;">{{ Auth::user()->name }}</span>
+                        @if (Auth::check())
+                            <span class="text-sm font-semibold uppercase"
+                                style="color: #7664E4 !important;">{{ Auth::user()->name }}</span>
+                        @endif
                     </div>
                 </li>
                 <li class="flex items-center h-full px-1 cursor-pointer">
@@ -38,8 +40,10 @@
                 </li>
                 <li class="flex items-center h-full pr-2 cursor-pointer">
                     <div class="flex items-center space-x-3">
-                        <span class="text-sm font-semibold uppercase"
-                            style="color: #7664E4 !important;">{{ Auth::user()->level }}</span>
+                        @if (Auth::check())
+                            <span class="text-sm font-semibold uppercase"
+                                style="color: #7664E4 !important;">{{ Auth::user()->level }}</span>
+                        @endif
                     </div>
                 </li>
 
