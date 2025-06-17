@@ -1,4 +1,4 @@
-// Flatpickr
+// File Upload
 const input = document.getElementById("foto-upload");
 const fileNameDisplay = document.getElementById("file-name");
 
@@ -8,9 +8,4 @@ input.addEventListener("change", function () {
     } else {
         fileNameDisplay.textContent = "No File Choosen";
     }
-});
-
-flatpickr("#tanggal", {
-    dateFormat: "Y-m-d",
-    allowInput: true,
 });

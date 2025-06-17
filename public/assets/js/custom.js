@@ -28,3 +28,8 @@ $(document).ready(function () {
     });
 });
 
+// Flatpickr
+flatpickr("#tanggal", {
+    dateFormat: "Y-m-d",
+    allowInput: true,
+});

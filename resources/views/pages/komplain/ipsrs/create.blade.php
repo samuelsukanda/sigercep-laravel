@@ -126,5 +126,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/js/Flatpickr.js')}}"></script>
+    <script src="{{ asset('assets/js/file-upload.js')}}"></script>
 @endpush
