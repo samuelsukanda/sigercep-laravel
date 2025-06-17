@@ -21,4 +21,10 @@ $(document).ready(function () {
         placeholder: "Pilih Tujuan Unit",
         allowClear: true,
     });
+
+    $("#status").select2({
+        placeholder: "Pilih Status",
+        allowClear: true,
+    });
 });
+

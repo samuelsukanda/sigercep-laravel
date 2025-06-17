@@ -23,84 +23,46 @@
                                     <label class="block text-sm font-semibold mb-2 text-slate-700">Nama</label>
                                     <input type="text" name="nama" value="{{ old('nama', $komplain->nama ?? '') }}"
                                         required
-                                        class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500" />
+                                        class="focus:shadow-primary-outline text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"></input>
                                 </div>
 
                                 <!-- Unit -->
                                 <div>
                                     <label for="unit"
                                         class="block text-sm font-semibold mb-2 text-slate-700">Unit</label>
-                                    <select id="unit" name="unit" class="form-control select2bs4 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500"" required>
-                                        <option disabled {{ old('unit', $komplain->unit ?? '') == '' ? 'selected' : '' }}>
-                                            Pilih Unit</option>
-                                        @php
-                                            $units = [
-                                                'Admisi dan Billing',
-                                                'Akuntansi',
-                                                'Casemix',
-                                                'CSSD',
-                                                'Direktur RS',
-                                                'Dokter',
-                                                'Farmasi',
-                                                'Fisioterapi',
-                                                'Gudang',
-                                                'Gizi',
-                                                'HD',
-                                                'ICU',
-                                                'IT',
-                                                'Kesehatan Lingkungan',
-                                                'Kanit',
-                                                'Keuangan',
-                                                'Komite Medik',
-                                                'Komite Mutu',
-                                                'Laboratorium',
-                                                'Marketing',
-                                                'Manager',
-                                                'Maintenance',
-                                                'NICU dan PICU',
-                                                'NS Poli',
-                                                'OK',
-                                                'Pengadaan',
-                                                'Perawat',
-                                                'Rawat Inap',
-                                                'Radiologi',
-                                                'Rekam Medis',
-                                                'Sekretaris',
-                                                'Security',
-                                                'SDM',
-                                                'SPV',
-                                                'UGD',
-                                                'VK',
-                                            ];
-                                            $selectedUnit = old('unit', $komplain->unit ?? '');
-                                        @endphp
+                                    @php
+                                        $units = include resource_path('views/components/units.php');
+                                        $selectedUnit = old('unit', $komplain->unit ?? '');
+                                    @endphp
+                                    <select id="unit" name="unit"
+                                        class="select2 w-full border-gray-300 text-gray-700 outline-none transition-all placeholder:text-gray-500"
+                                        required>
+                                        <option disabled {{ $selectedUnit == '' ? 'selected' : '' }}>Pilih Unit</option>
                                         @foreach ($units as $unit)
                                             <option value="{{ $unit }}"
-                                                {{ $selectedUnit == $unit ? 'selected' : '' }}>{{ $unit }}</option>
+                                                {{ $selectedUnit == $unit ? 'selected' : '' }}>
+                                                {{ $unit }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
 
                                 <!-- Tujuan Unit -->
-                                <div class="mb-4">
+                                <div>
                                     <label for="tujuan_unit"
-                                        class="block text-sm font-semibold mb-2 text-slate-700">Ditujukan Ke Unit:</label>
-                                    <select id="tujuan_unit" name="tujuan_unit" required
-                                        class="form-control select2bs4 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
-                                        <option disabled
-                                            {{ old('tujuan_unit', $komplain->tujuan_unit ?? '') == '' ? 'selected' : '' }}>
-                                            Pilih Unit</option>
-                                        @php
-                                            $tujuanUnits = [
-                                                'Maintenance' => 'Maintenance',
-                                                'Kesehatan Lingkungan' => 'Kesehatan Lingkungan',
-                                                'Elektromedis (Atem)' => 'Elektromedis (Atem)',
-                                            ];
-                                            $selectedTujuan = old('tujuan_unit', $komplain->tujuan_unit ?? '');
-                                        @endphp
-                                        @foreach ($tujuanUnits as $value => $label)
-                                            <option value="{{ $value }}"
-                                                {{ $selectedTujuan == $value ? 'selected' : '' }}>{{ $label }}
+                                        class="block text-sm font-semibold mb-2 text-slate-700">Ditujukan Ke Unit</label>
+                                    @php
+                                        $units = include resource_path('views/components/tujuan-units-komplain.php');
+                                        $tujuanUnits = old('tujuan_unit', $komplain->unit ?? '');
+                                    @endphp
+                                    <select id="tujuan_unit" name="tujuan_unit"
+                                        class="select2 w-full border-gray-300 text-gray-700 outline-none transition-all placeholder:text-gray-500"
+                                        required>
+                                        <option disabled {{ $tujuanUnits == '' ? 'selected' : '' }}>Pilih Unit</option>
+                                        @foreach ($units as $unit)
+                                            <option value="{{ $unit }}"
+                                                {{ $tujuanUnits == $unit ? 'selected' : '' }}>
+                                                {{ $unit }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -109,34 +71,51 @@
                                 <!-- Tanggal -->
                                 <div>
                                     <label class="block text-sm font-semibold mb-2 text-slate-700">Tanggal</label>
-                                    <input type="date" name="tanggal"
+                                    <input id="tanggal" type="text" name="tanggal"
                                         value="{{ old('tanggal', $komplain->tanggal ?? '') }}" required
-                                        class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500" />
+                                        class="form-input w-full px-3 py-2 mb-2 border border-gray-300 rounded-lg text-gray-700 placeholder:text-gray-500 outline-none transition-all"
+                                        placeholder="Pilih Tanggal" />
                                 </div>
 
                                 <!-- Kendala -->
-                                <div class="md:col-span-2">
-                                    <label class="block text-sm font-semibold mb-2 text-slate-700">Kendala</label>
-                                    <textarea name="kendala" rows="4" required
-                                        class="form-textarea w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500">{{ old('kendala', $komplain->kendala ?? '') }}</textarea>
+                                <div>
+                                    <label class="block text-sm font-semibold mb-2 text-slate-700">Kendala Kendala atau
+                                        Pengaduan di lapangan:</label>
+                                    <textarea name="kendala" required rows="5"
+                                        class="focus:shadow-primary-outline min-h-unset text-sm leading-5.6 ease block h-auto w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none">{{ old('kendala', $komplain->kendala ?? '') }}</textarea>
                                 </div>
 
                                 <!-- Foto -->
                                 <div>
-                                    <label class="block text-sm font-semibold mb-2 text-slate-700">Foto</label>
-                                    <input type="file" name="foto"
-                                        class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500" />
-                                    @if (isset($komplain) && $komplain->foto)
-                                        <img src="{{ asset('storage/' . $komplain->foto) }}" alt="Foto"
-                                            class="mt-2 h-24 rounded shadow-md object-cover border border-gray-200" />
-                                    @endif
+                                    <label class="block text-sm font-semibold mb-2 text-slate-700">Foto
+                                        Komplain/Kerusakan/Kendala di Lapangan:</label>
+                                    <div class="w-full">
+                                        <label for="foto-upload" class="block">
+                                            <div id="custom-upload"
+                                                class="flex justify-between items-center w-full px-4 py-2 border border-gray-300 rounded-lg bg-white cursor-pointer">
+                                                <div class="flex items-center space-x-2">
+                                                    <i class="fa-solid fa-file-import text-gray-500 mr-2"></i>
+                                                    <span class="text-sm text-gray-700">Pilih File</span>
+                                                </div>
+                                                <span id="file-name" class="text-sm text-gray-500 truncate"></span>
+                                            </div>
+                                            <input id="foto-upload" name="foto" type="file" class="hidden" />
+                                        </label>
+
+                                        {{-- Preview jika edit --}}
+                                        @if (isset($komplain) && $komplain->foto)
+                                            <img src="{{ asset('storage/' . $komplain->foto) }}" alt="Foto"
+                                                class="mt-2 h-24 rounded shadow-md object-cover border border-gray-200 w-auto max-w-full" />
+                                        @endif
+                                    </div>
                                 </div>
 
                                 <!-- Status -->
                                 <div>
-                                    <label class="block text-sm font-semibold mb-2 text-slate-700">Status</label>
-                                    <select name="status"
-                                        class="form-select w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
+                                    <label for="status"
+                                        class="block text-sm font-semibold mb-2 text-slate-700">Status</label>
+                                    <select id="status" name="status"
+                                        class="select2 w-full border-gray-300 text-gray-700 outline-none transition-all placeholder:text-gray-500">
                                         <option value="">Pilih Status</option>
                                         @foreach (['Pending', 'On Progress', 'Done'] as $status)
                                             <option value="{{ $status }}"
@@ -152,7 +131,7 @@
                                     <label class="block text-sm font-semibold mb-2 text-slate-700">Keterangan</label>
                                     <input type="text" name="keterangan"
                                         value="{{ old('keterangan', $komplain->keterangan ?? '') }}"
-                                        class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-500" />
+                                        class="focus:shadow-primary-outline text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none" />
                                 </div>
                             </div>
 
@@ -174,3 +153,8 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('assets/js/Flatpickr.js') }}"></script>
+@endpush
+    
