@@ -6,15 +6,14 @@
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4">
             <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Komplain IPSRS</h6>
-            <a href="{{ route('komplain.ipsrs.create') }}"
-                class="text-slate-700 dark:text-white text-sm px-6 py-2 rounded-lg shadow-md border border-transparent dark:border-white hover:shadow-lg transition">
+            <x-button.link href="{{ route('komplain.ipsrs.create') }}" color="slate">
                 Tambah Data
-            </a>
-
+            </x-button.link>
         </div>
 
         @if (session('success'))
-            <div class="relative text-s w-full p-4 mb-4 text-white border border-blue-300 border-solid rounded-lg bg-gradient-to-tl from-blue-500 to-violet-500">
+            <div
+                class="relative text-s w-full p-4 mb-4 text-white border border-blue-300 border-solid rounded-lg bg-gradient-to-tl from-blue-500 to-violet-500">
                 {{ session('success') }}
             </div>
         @endif
@@ -35,30 +34,20 @@
                 <tbody class="text-s text-slate-500 bg-slate-100 dark:text-white">
                     @foreach ($komplain as $item)
                         <tr>
-                            <td class="px-6 py-4 text-slate-700 dark:text-white">{{ $item->nama }}</td>
-                            <td class="px-6 py-4 text-slate-700 dark:text-white">{{ $item->unit }}</td>
-                            <td class="px-6 py-4 text-slate-700 dark:text-white">{{ $item->tujuan_unit }}</td>
-                            <td class="px-6 py-4 text-slate-700 dark:text-white">
-                                {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                            <td class="px-6 py-4">{{ $item->nama }}</td>
+                            <td class="px-6 py-4">{{ $item->unit }}</td>
+                            <td class="px-6 py-4">{{ $item->tujuan_unit }}</td>
+                            <td class="px-6 py-4">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
                             </td>
-                            <td class="px-6 py-4 text-slate-700 dark:text-white">{{ $item->kendala }}</td>
-                            <td class="px-6 py-4 text-slate-700 dark:text-white">
-                                @include('components.status-badge', ['status' => $item->status])
+                            <td class="px-6 py-4">{{ $item->kendala }}</td>
+                            <td class="px-6 py-4">
+                                {{ $item->status ?? '-' }}
                             </td>
-                            <td class="px-6 py-4 space-x-2">
-                                <a href="{{ route('komplain.ipsrs.edit', $item->id) }}"
-                                    class="text-emerald-600 dark:text-blue-400 hover:underline text-sm">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </a>
-                                <form action="{{ route('komplain.ipsrs.destroy', $item->id) }}" method="POST"
-                                    class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Yakin ingin hapus?')"
-                                        class="text-red-600 dark:text-red-400 hover:underline text-sm">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </form>
+                            <td class="px-6 py-4 space-x-2 text-center">
+                                <x-button.action href="{{ route('komplain.ipsrs.edit', $item->id) }}" icon="pen-to-square"
+                                    color="emerald" />
+                                <x-button.action href="{{ route('komplain.ipsrs.destroy', $item->id) }}" icon="trash"
+                                    color="red" type="button" method="DELETE" confirm="Yakin ingin hapus?" />
                             </td>
                         </tr>
                     @endforeach
