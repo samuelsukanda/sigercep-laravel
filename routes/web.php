@@ -25,5 +25,6 @@ Route::middleware('auth')->group(function () {
         return view('settings');
     })->name('settings');
 
-    Route::resource('komplain/ipsrs', \App\Http\Controllers\KomplainIpsrsController::class)->names('komplain.ipsrs');
+    // Pages
+    Route::resource('komplain/ipsrs', KomplainIpsrsController::class)->names('komplain.ipsrs');
 });

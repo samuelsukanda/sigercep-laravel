@@ -20,7 +20,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <!-- Nama -->
                                 <div>
-                                    <label class="block text-sm font-semibold mb-2 text-slate-700">Nama</label>
+                                    <label class="block text-sm font-semibold mb-2 text-slate-700">Nama:</label>
                                     <input type="text" name="nama" value="{{ old('nama', $komplain->nama ?? '') }}"
                                         required
                                         class="focus:shadow-primary-outline text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"></input>
@@ -29,7 +29,7 @@
                                 <!-- Unit -->
                                 <div>
                                     <label for="unit"
-                                        class="block text-sm font-semibold mb-2 text-slate-700">Unit</label>
+                                        class="block text-sm font-semibold mb-2 text-slate-700">Unit:</label>
                                     @php
                                         $units = include resource_path('views/components/units.php');
                                         $selectedUnit = old('unit', $komplain->unit ?? '');
@@ -50,7 +50,7 @@
                                 <!-- Tujuan Unit -->
                                 <div>
                                     <label for="tujuan_unit"
-                                        class="block text-sm font-semibold mb-2 text-slate-700">Ditujukan Ke Unit</label>
+                                        class="block text-sm font-semibold mb-2 text-slate-700">Ditujukan Ke Unit:</label>
                                     @php
                                         $units = include resource_path('views/components/tujuan-units-komplain.php');
                                         $tujuanUnits = old('tujuan_unit', $komplain->unit ?? '');
@@ -70,7 +70,7 @@
 
                                 <!-- Tanggal -->
                                 <div>
-                                    <label class="block text-sm font-semibold mb-2 text-slate-700">Tanggal</label>
+                                    <label class="block text-sm font-semibold mb-2 text-slate-700">Tanggal:</label>
                                     <input id="tanggal" type="text" name="tanggal"
                                         value="{{ old('tanggal', $komplain->tanggal ?? '') }}" required
                                         class="form-input w-full px-3 py-2 mb-2 border border-gray-300 rounded-lg text-gray-700 placeholder:text-gray-500 outline-none transition-all"
@@ -79,7 +79,7 @@
 
                                 <!-- Kendala -->
                                 <div>
-                                    <label class="block text-sm font-semibold mb-2 text-slate-700">Kendala Kendala atau
+                                    <label class="block text-sm font-semibold mb-2 text-slate-700">Kendala atau
                                         Pengaduan di lapangan:</label>
                                     <textarea name="kendala" required rows="5"
                                         class="focus:shadow-primary-outline min-h-unset text-sm leading-5.6 ease block h-auto w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none">{{ old('kendala', $komplain->kendala ?? '') }}</textarea>
@@ -113,7 +113,7 @@
                                 <!-- Status -->
                                 <div>
                                     <label for="status"
-                                        class="block text-sm font-semibold mb-2 text-slate-700">Status</label>
+                                        class="block text-sm font-semibold mb-2 text-slate-700">Status:</label>
                                     <select id="status" name="status"
                                         class="select2 w-full border-gray-300 text-gray-700 outline-none transition-all placeholder:text-gray-500">
                                         <option value="">Pilih Status</option>
@@ -128,13 +128,12 @@
 
                                 <!-- Keterangan -->
                                 <div class="md:col-span-2">
-                                    <label class="block text-sm font-semibold mb-2 text-slate-700">Keterangan</label>
+                                    <label class="block text-sm font-semibold mb-2 text-slate-700">Keterangan:</label>
                                     <input type="text" name="keterangan"
                                         value="{{ old('keterangan', $komplain->keterangan ?? '') }}"
                                         class="focus:shadow-primary-outline text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none" />
                                 </div>
                             </div>
-
 
                             <div class="mt-6">
                                 <button type="submit"

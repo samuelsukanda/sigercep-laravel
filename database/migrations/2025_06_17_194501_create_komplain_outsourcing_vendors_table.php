@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('komplain_outsourcing_vendors', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama');
+            $table->string('unit');
+            $table->string('tujuan_unit');
+            $table->time('jam');
+            $table->date('tanggal');
+            $table->text('kendala');
+            $table->string('area');
+            $table->text('foto');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('komplain_outsourcing_vendors');
+    }
+};
