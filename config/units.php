@@ -41,9 +41,9 @@ return [
     ],
 
     'tujuanUnitsIpsrs' => [
-    'Maintenance',
-    'Kesehatan Lingkungan',
-    'Elektromedis (Atem)',
+        'Maintenance',
+        'Kesehatan Lingkungan',
+        'Elektromedis (Atem)',
     ],
 
     'tujuanUnitsOutsourcing' => [
@@ -52,5 +52,17 @@ return [
         'Security ATALIAN',
         'Parkir Berlian',
         'Tata Graha (Taman)',
+    ],
+
+    'ruang' => [
+        'Ruang Meeting',
+        'Ruang Diklat',
+        'Ruang Komite Medik',
+    ],
+
+    'approval' => [
+        'Approved',
+        'Rejected',
+        'Pending',
     ]
 ];

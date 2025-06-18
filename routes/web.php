@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KomplainIpsrsController;
 use App\Http\Controllers\KomplainOutsourcingVendorController;
+use App\Http\Controllers\ReservasiRuanganController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -30,4 +31,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('komplain/ipsrs', KomplainIpsrsController::class)->names('komplain.ipsrs');
     Route::resource('komplain/outsourcing-vendor', KomplainOutsourcingVendorController::class)
         ->names('komplain.outsourcing-vendor');
+    Route::resource('reservasi/ruangan', ReservasiRuanganController::class)
+        ->names('reservasi.ruangan');
 });

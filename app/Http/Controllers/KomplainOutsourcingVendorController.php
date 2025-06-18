@@ -9,13 +9,6 @@ use Illuminate\Support\Facades\Storage;
 
 class KomplainOutsourcingVendorController extends Controller
 {
-    private function getUnitData()
-    {
-        return [
-            'units' => config('units.units'),
-            'tujuanUnits' => config('units.tujuanUnitsOutsourcing'),
-        ];
-    }
 
     public function index()
     {
@@ -25,7 +18,7 @@ class KomplainOutsourcingVendorController extends Controller
 
     public function create()
     {
-        return view('pages.komplain.outsourcing-vendor.create', $this->getUnitData());
+        return view('pages.komplain.outsourcing-vendor.create');
     }
 
     public function store(Request $request)
@@ -56,10 +49,7 @@ class KomplainOutsourcingVendorController extends Controller
     public function edit($id)
     {
         $komplain = KomplainOutsourcingVendor::findOrFail($id);
-        return view('pages.komplain.outsourcing-vendor.edit', array_merge(
-            $this->getUnitData(),
-            ['komplain' => $komplain]
-        ));
+        return view('pages.komplain.outsourcing-vendor.edit', compact('komplain'));
     }
 
     public function update(Request $request, $id)

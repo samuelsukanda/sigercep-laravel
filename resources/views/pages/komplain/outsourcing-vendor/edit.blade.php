@@ -43,7 +43,7 @@
                                     required>{{ old('kendala', $komplain->kendala) }}</x-form.textarea>
 
                                 {{-- Area --}}
-                                <x-form.input name="area" label="Area komplain yang dilaporkan:" :value="old('area', $komplain->area ?? '')"
+                                <x-form.input name="area" label="Area komplain yang dilaporkan" :value="old('area', $komplain->area ?? '')"
                                     required />
 
                                 {{-- Foto --}}

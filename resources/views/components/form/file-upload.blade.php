@@ -6,7 +6,7 @@
 
 <div class="w-full">
     @if ($label)
-        <label class="block text-sm font-semibold mb-2 text-slate-700">{{ $label }}</label>
+        <label class="block text-sm font-semibold mb-2 text-slate-700">{{ $label }} :</label>
     @endif
 
     <label for="{{ $name }}-upload" class="block">

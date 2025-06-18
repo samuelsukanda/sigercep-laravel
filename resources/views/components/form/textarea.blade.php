@@ -8,7 +8,7 @@
 <div {{ $attributes->merge(['class' => '']) }}>
     @if ($label)
         <label for="{{ $name }}"
-            class="block text-sm font-semibold mb-2 text-slate-700">{{ $label }}</label>
+            class="block text-sm font-semibold mb-2 text-slate-700">{{ $label }} :</label>
     @endif
 
     <textarea id="{{ $name }}" name="{{ $name }}" rows="{{ $rows }}" {{ $required ? 'required' : '' }}

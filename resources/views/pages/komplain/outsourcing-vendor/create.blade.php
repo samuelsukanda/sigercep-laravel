@@ -40,7 +40,7 @@
                                 <x-form.input name="area" label="Area komplain yang dilaporkan:" :value="old('area', $komplain->area ?? '')" required />
 
                                 {{-- Foto --}}
-                                <x-form.file-upload name="foto" label="Foto Komplain/Keluhan di Lapangan:"
+                                <x-form.file-upload name="foto" label="Foto Komplain/Keluhan di Lapangan"
                                     :current="$komplain->foto ?? null" />
                             </div>
 

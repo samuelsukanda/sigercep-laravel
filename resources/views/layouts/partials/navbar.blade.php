@@ -48,12 +48,12 @@
                 </li>
 
                 {{-- Settings --}}
-                <li class="flex items-center px-2">
+                {{-- <li class="flex items-center px-2">
                     <a href="javascript:;" class="p-0 text-sm transition-all ease-nav-brand"
                         style="color: #7664E4 !important;">
                         <i fixed-plugin-button-nav class="cursor-pointer fa fa-cog"></i>
                     </a>
-                </li>
+                </li> --}}
 
                 {{-- Logout --}}
                 <li class="relative flex items-center px-2">

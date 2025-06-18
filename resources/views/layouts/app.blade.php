@@ -19,7 +19,7 @@
         @includeIf('layouts.partials.footer')
 
         {{-- Fixed Plugin --}}
-        @include('layouts.partials.fixed')
+        {{-- @include('layouts.partials.fixed') --}}
     </main>
 
 </body>

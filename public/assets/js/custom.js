@@ -26,6 +26,16 @@ $(document).ready(function () {
         placeholder: "Pilih Status",
         allowClear: true,
     });
+
+    $("#ruang").select2({
+        placeholder: "Pilih Ruang",
+        allowClear: true,
+    });
+
+    $("#approval").select2({
+        placeholder: "Pilih Approval",
+        allowClear: true,
+    });
 });
 
 // Flatpickr
@@ -37,6 +47,20 @@ flatpickr("#tanggal", {
 flatpickr("#jam", {
     enableTime: true,
     noCalendar: true,
-    dateFormat: "H:i", // format jam:menit
+    dateFormat: "H:i",
+    time_24hr: true,
+});
+
+flatpickr("#jam_mulai", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+    time_24hr: true,
+});
+
+flatpickr("#jam_selesai", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
     time_24hr: true,
 });

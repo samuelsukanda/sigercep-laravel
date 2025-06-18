@@ -9,13 +9,6 @@ use Illuminate\Support\Facades\Storage;
 
 class KomplainIpsrsController extends Controller
 {
-    private function getUnitData()
-    {
-        return [
-            'units' => config('units.units'),
-            'tujuanUnits' => config('units.tujuanUnitsIpsrs'),
-        ];
-    }
 
     public function index()
     {
@@ -25,7 +18,7 @@ class KomplainIpsrsController extends Controller
 
     public function create()
     {
-        return view('pages.komplain.ipsrs.create', $this->getUnitData());
+        return view('pages.komplain.ipsrs.create');
     }
 
     public function store(Request $request)
@@ -56,10 +49,7 @@ class KomplainIpsrsController extends Controller
     public function edit($id)
     {
         $komplain = KomplainIpsrs::findOrFail($id);
-        return view('pages.komplain.ipsrs.edit', array_merge(
-            $this->getUnitData(),
-            ['komplain' => $komplain]
-        ));
+        return view('pages.komplain.ipsrs.edit', compact('komplain'));
     }
 
     public function update(Request $request, $id)
