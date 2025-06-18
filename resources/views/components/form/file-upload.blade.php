@@ -5,7 +5,7 @@
 ])
 
 <div class="w-full">
-    @if($label)
+    @if ($label)
         <label class="block text-sm font-semibold mb-2 text-slate-700">{{ $label }}</label>
     @endif
 
@@ -21,8 +21,13 @@
         <input id="{{ $name }}-upload" name="{{ $name }}" type="file" class="hidden" />
     </label>
 
+    {{-- Tampilkan preview jika ada --}}
     @if ($preview)
         <img src="{{ asset('storage/' . $preview) }}" alt="Preview"
             class="mt-2 h-24 rounded shadow-md object-cover border border-gray-200 w-auto max-w-full" />
     @endif
+
+    @error($name)
+        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+    @enderror
 </div>

@@ -45,4 +45,12 @@ return [
     'Kesehatan Lingkungan',
     'Elektromedis (Atem)',
     ],
+
+    'tujuanUnitsOutsourcing' => [
+        'SJS',
+        'Laundry',
+        'Security ATALIAN',
+        'Parkir Berlian',
+        'Tata Graha (Taman)',
+    ]
 ];

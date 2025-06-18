@@ -3,29 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\KomplainIpsrs;
+use App\Models\KomplainOutsourcingVendor;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
-class KomplainIpsrsController extends Controller
+class KomplainOutsourcingVendorController extends Controller
 {
     private function getUnitData()
     {
         return [
             'units' => config('units.units'),
-            'tujuanUnits' => config('units.tujuanUnitsIpsrs'),
+            'tujuanUnits' => config('units.tujuanUnitsOutsourcing'),
         ];
     }
 
     public function index()
     {
-        $komplain = KomplainIpsrs::all();
-        return view('pages.komplain.ipsrs.index', compact('komplain'));
+        $komplain = KomplainOutsourcingVendor::all();
+        return view('pages.komplain.outsourcing-vendor.index', compact('komplain'));
     }
 
     public function create()
     {
-        return view('pages.komplain.ipsrs.create', $this->getUnitData());
+        return view('pages.komplain.outsourcing-vendor.create', $this->getUnitData());
     }
 
     public function store(Request $request)
@@ -34,29 +34,29 @@ class KomplainIpsrsController extends Controller
             'nama' => 'required|string|max:50',
             'unit' => 'required|string|max:50',
             'tujuan_unit' => 'required|string|max:50',
+            'jam' => 'required',
             'tanggal' => 'required|date',
             'kendala' => 'required|string',
+            'area' => 'required|string|max:100',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'status' => 'nullable|in:Pending,On Progress,Done',
-            'keterangan' => 'nullable|string|max:255',
         ]);
 
         if ($request->hasFile('foto')) {
             $file = $request->file('foto');
-            $namaFile = 'komplain-ipsrs-' . Carbon::now()->format('YmdHis') . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('images/komplain-ipsrs', $namaFile, 'public');
+            $namaFile = 'komplain-outsourcing-vendor-' . Carbon::now()->format('YmdHis') . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('images/komplain-outsourcing-vendor', $namaFile, 'public');
             $validated['foto'] = $path;
         }
 
-        KomplainIpsrs::create($validated);
+        KomplainOutsourcingVendor::create($validated);
 
-        return redirect()->route('komplain.ipsrs.index')->with('success', 'Data berhasil disimpan.');
+        return redirect()->route('komplain.outsourcing-vendor.index')->with('success', 'Data berhasil disimpan.');
     }
 
     public function edit($id)
     {
-        $komplain = KomplainIpsrs::findOrFail($id);
-        return view('pages.komplain.ipsrs.edit', array_merge(
+        $komplain = KomplainOutsourcingVendor::findOrFail($id);
+        return view('pages.komplain.outsourcing-vendor.edit', array_merge(
             $this->getUnitData(),
             ['komplain' => $komplain]
         ));
@@ -68,45 +68,41 @@ class KomplainIpsrsController extends Controller
             'nama' => 'required|string|max:50',
             'unit' => 'required|string|max:50',
             'tujuan_unit' => 'required|string|max:50',
+            'jam' => 'required',
             'tanggal' => 'required|date',
             'kendala' => 'required|string',
+            'area' => 'required|string|max:100',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'status' => 'nullable|in:Pending,On Progress,Done',
-            'keterangan' => 'nullable|string|max:255',
         ]);
 
-        $komplain = KomplainIpsrs::findOrFail($id);
+        $komplain = KomplainOutsourcingVendor::findOrFail($id);
 
         if ($request->hasFile('foto')) {
-            // Hapus foto lama kalau ada
             if ($komplain->foto && Storage::disk('public')->exists($komplain->foto)) {
                 Storage::disk('public')->delete($komplain->foto);
             }
 
-            // Upload foto baru
             $file = $request->file('foto');
-            $namaFile = 'komplain-ipsrs-' . Carbon::now()->format('YmdHis') . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('images/komplain-ipsrs', $namaFile, 'public');
+            $namaFile = 'komplain-outsourcing-vendor-' . Carbon::now()->format('YmdHis') . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('images/komplain-outsourcing-vendor', $namaFile, 'public');
             $validated['foto'] = $path;
         }
 
         $komplain->update($validated);
 
-        return redirect()->route('komplain.ipsrs.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect()->route('komplain.outsourcing-vendor.index')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
-        $komplain = KomplainIpsrs::findOrFail($id);
+        $komplain = KomplainOutsourcingVendor::findOrFail($id);
 
-        // Hapus foto di storage jika ada
         if ($komplain->foto && Storage::disk('public')->exists($komplain->foto)) {
             Storage::disk('public')->delete($komplain->foto);
         }
 
-        // Hapus data
         $komplain->delete();
 
-        return redirect()->route('komplain.ipsrs.index')->with('success', 'Data berhasil dihapus.');
+        return redirect()->route('komplain.outsourcing-vendor.index')->with('success', 'Data berhasil dihapus.');
     }
 }

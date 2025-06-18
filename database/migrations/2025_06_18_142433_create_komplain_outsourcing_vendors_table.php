@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('tanggal');
             $table->text('kendala');
             $table->string('area');
-            $table->text('foto');
+            $table->text('foto')->nullable();
             $table->timestamps();
         });
     }

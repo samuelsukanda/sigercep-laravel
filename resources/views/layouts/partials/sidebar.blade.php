@@ -60,7 +60,7 @@
                         </a>
                     </li>
                     <li class="w-full">
-                        <a href="#"
+                        <a href="{{ route('komplain.outsourcing-vendor.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div
                                 class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
