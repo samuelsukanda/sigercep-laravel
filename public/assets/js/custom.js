@@ -33,3 +33,10 @@ flatpickr("#tanggal", {
     dateFormat: "Y-m-d",
     allowInput: true,
 });
+
+flatpickr("#jam", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i", // format jam:menit
+    time_24hr: true,
+});
