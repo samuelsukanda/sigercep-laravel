@@ -11,6 +11,18 @@
                         <h6 class="mb-0 font-bold text-lg">Tambah Reservasi Ruangan</h6>
                     </div>
                     <div class="flex-auto p-6">
+
+                        @if ($errors->any())
+                            <div
+                                class="relative w-full p-4 mb-4 text-white border border-red-300 border-solid rounded-lg bg-gradient-to-tl from-red-600 to-orange-600">
+                                <ul class="list-disc pl-5">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <form id="form" action="{{ route('reservasi.ruangan.store') }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
@@ -23,10 +35,12 @@
                                 <x-form.select name="unit" label="Unit" :options="config('units.units')" :selected="old('unit', $reservasi->unit ?? '')" required />
 
                                 {{-- Jam Mulai --}}
-                                <x-form.input type="time" name="jam_mulai" label="Jam Mulai" :value="old('jam_mulai', $reservasi->jam_mulai ?? '')" required />
+                                <x-form.input type="time" name="jam_mulai" label="Jam Mulai" :value="old('jam_mulai', $reservasi->jam_mulai ?? '')"
+                                    required />
 
                                 {{-- Jam Selesai --}}
-                                <x-form.input type="time" name="jam_selesai" label="Jam Selesai" :value="old('jam_selesai', $reservasi->jam_selesai ?? '')" required />
+                                <x-form.input type="time" name="jam_selesai" label="Jam Selesai" :value="old('jam_selesai', $reservasi->jam_selesai ?? '')"
+                                    required />
 
                                 {{-- Tanggal --}}
                                 <x-form.input name="tanggal" label="Tanggal" :value="old('tanggal', $reservasi->tanggal ?? '')" id="tanggal"
@@ -50,8 +64,3 @@
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    <script src="{{ asset('assets/js/file-upload.js') }}"></script>
-    <script src="{{ asset('assets/js/sweatalert.js') }}"></script>
-@endpush

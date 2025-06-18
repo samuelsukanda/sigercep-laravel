@@ -32,6 +32,22 @@ class ReservasiRuanganController extends Controller
             'jam_selesai.after' => 'Jam Selesai harus lebih besar dari Jam Mulai.',
         ]);
 
+        // Cek bentrok jadwal di ruang yang sama pada tanggal yang sama
+        $isOverlap = ReservasiRuangan::where('ruang', $validated['ruang'])
+            ->where('tanggal', $validated['tanggal'])
+            ->where(function ($query) use ($validated) {
+                $query->whereBetween('jam_mulai', [$validated['jam_mulai'], $validated['jam_selesai']])
+                    ->orWhereBetween('jam_selesai', [$validated['jam_mulai'], $validated['jam_selesai']])
+                    ->orWhere(function ($q) use ($validated) {
+                        $q->where('jam_mulai', '<=', $validated['jam_mulai'])
+                            ->where('jam_selesai', '>=', $validated['jam_selesai']);
+                    });
+            })->exists();
+
+        if ($isOverlap) {
+            return back()->withErrors(['Maaf, waktu yang anda inputkan sudah ada yang mendaftar.'])->withInput();
+        }
+
         ReservasiRuangan::create($validated);
 
         return redirect()->route('reservasi.ruangan.index')
@@ -57,6 +73,23 @@ class ReservasiRuanganController extends Controller
         ], [
             'jam_selesai.after' => 'Jam Selesai harus lebih besar dari Jam Mulai.',
         ]);
+
+        // Cek bentrok jadwal di ruang yang sama pada tanggal yang sama
+        $isOverlap = ReservasiRuangan::where('id', '<>', $id)
+            ->where('ruang', $validated['ruang'])
+            ->where('tanggal', $validated['tanggal'])
+            ->where(function ($query) use ($validated) {
+                $query->whereBetween('jam_mulai', [$validated['jam_mulai'], $validated['jam_selesai']])
+                    ->orWhereBetween('jam_selesai', [$validated['jam_mulai'], $validated['jam_selesai']])
+                    ->orWhere(function ($q) use ($validated) {
+                        $q->where('jam_mulai', '<=', $validated['jam_mulai'])
+                            ->where('jam_selesai', '>=', $validated['jam_selesai']);
+                    });
+            })->exists();
+
+        if ($isOverlap) {
+            return back()->withErrors(['Maaf, waktu yang anda inputkan sudah ada yang mendaftar.'])->withInput();
+        }
 
         $reservasi = ReservasiRuangan::findOrFail($id);
         $reservasi->update($validated);

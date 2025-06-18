@@ -12,6 +12,18 @@
                         <h6 class="mb-0 font-bold text-lg">Edit Reservasi Ruangan</h6>
                     </div>
                     <div class="flex-auto p-6">
+
+                        @if ($errors->any())
+                            <div
+                                class="relative w-full p-4 mb-4 text-white border border-red-300 border-solid rounded-lg bg-gradient-to-tl from-red-600 to-orange-600">
+                                <ul class="list-disc pl-5">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <form action="{{ route('reservasi.ruangan.update', $reservasi->id) }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
@@ -59,7 +71,3 @@
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    <script src="{{ asset('assets/js/file-upload.js') }}"></script>
-@endpush
