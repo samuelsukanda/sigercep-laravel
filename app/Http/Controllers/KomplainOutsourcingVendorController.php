@@ -52,6 +52,12 @@ class KomplainOutsourcingVendorController extends Controller
         return view('pages.komplain.outsourcing-vendor.edit', compact('komplain'));
     }
 
+    public function show($id)
+    {
+        $komplain = KomplainOutsourcingVendor::findOrFail($id);
+        return view('pages.komplain.outsourcing-vendor.detail', compact('komplain'));
+    }
+
     public function update(Request $request, $id)
     {
         $validated = $request->validate([

@@ -47,6 +47,8 @@
                             <td class="px-6 py-4 space-x-2 text-center">
                                 <x-button.action href="{{ route('komplain.outsourcing-vendor.edit', $item->id) }}"
                                     icon="pen-to-square" color="emerald" />
+                                <x-button.action href="{{ route('komplain.outsourcing-vendor.show', $item->id) }}" icon="eye"
+                                    color="emerald" />
                                 <x-button.action href="{{ route('komplain.outsourcing-vendor.destroy', $item->id) }}"
                                     icon="trash" color="red" type="button" method="DELETE"
                                     confirm="Yakin ingin hapus?" />

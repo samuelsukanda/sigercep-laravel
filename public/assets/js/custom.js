@@ -36,6 +36,31 @@ $(document).ready(function () {
         placeholder: "Pilih Approval",
         allowClear: true,
     });
+
+    $("#jenis_kendaraan").select2({
+        placeholder: "Pilih Jenis Kendaraan",
+        allowClear: true,
+    });
+
+    $("#jumlah_penumpang").select2({
+        placeholder: "Pilih Jumlah Penumpang",
+        allowClear: true,
+    });
+
+    $("#waktu_tempuh").select2({
+        placeholder: "Pilih  Waktu Tempuh",
+        allowClear: true,
+    });
+
+    $("#jarak_tempuh").select2({
+        placeholder: "Pilih  Jarak Tempuh",
+        allowClear: true,
+    });
+
+    $("#jenis_layanan").select2({
+        placeholder: "Pilih Jenis Layanan",
+        allowClear: true,
+    });
 });
 
 // Flatpickr
@@ -59,6 +84,20 @@ flatpickr("#jam_mulai", {
 });
 
 flatpickr("#jam_selesai", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+    time_24hr: true,
+});
+
+flatpickr("#jam_berangkat", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+    time_24hr: true,
+});
+
+flatpickr("#jam_pulang", {
     enableTime: true,
     noCalendar: true,
     dateFormat: "H:i",

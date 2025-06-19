@@ -48,6 +48,8 @@
                             <td class="px-6 py-4 space-x-2 text-center">
                                 <x-button.action href="{{ route('reservasi.ruangan.edit', $item->id) }}"
                                     icon="pen-to-square" color="emerald" />
+                                <x-button.action href="{{ route('reservasi.ruangan.show', $item->id) }}" icon="eye"
+                                    color="emerald" />
                                 <x-button.action href="{{ route('reservasi.ruangan.destroy', $item->id) }}" icon="trash"
                                     color="red" type="button" method="DELETE" confirm="Yakin ingin hapus?" />
                             </td>

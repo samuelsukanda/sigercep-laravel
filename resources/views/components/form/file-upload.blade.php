@@ -24,7 +24,7 @@
     {{-- Tampilkan preview jika ada --}}
     @if ($preview)
         <img src="{{ asset('storage/' . $preview) }}" alt="Preview"
-            class="mt-2 h-24 rounded shadow-md object-cover border border-gray-200 w-auto max-w-full" />
+            class="mt-2 h-24 rounded shadow-md object-cover border border-gray-200 w-1/2" />
     @endif
 
     @error($name)

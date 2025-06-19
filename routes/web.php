@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KomplainIpsrsController;
 use App\Http\Controllers\KomplainOutsourcingVendorController;
 use App\Http\Controllers\ReservasiRuanganController;
+use App\Http\Controllers\ReservasiKendaraanController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -33,4 +34,6 @@ Route::middleware('auth')->group(function () {
         ->names('komplain.outsourcing-vendor');
     Route::resource('reservasi/ruangan', ReservasiRuanganController::class)
         ->names('reservasi.ruangan');
+    Route::resource('reservasi/kendaraan',ReservasiKendaraanController::class)
+        ->names('reservasi.kendaraan');
 });

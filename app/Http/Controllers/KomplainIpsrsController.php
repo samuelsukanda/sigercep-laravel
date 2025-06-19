@@ -52,6 +52,12 @@ class KomplainIpsrsController extends Controller
         return view('pages.komplain.ipsrs.edit', compact('komplain'));
     }
 
+    public function show($id)
+    {
+        $komplain = KomplainIpsrs::findOrFail($id);
+        return view('pages.komplain.ipsrs.detail', compact('komplain'));
+    }
+
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
