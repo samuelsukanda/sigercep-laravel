@@ -28,7 +28,6 @@
                         <th class="px-6 py-3">Jam</th>
                         <th class="px-6 py-3">Tanggal</th>
                         <th class="px-6 py-3">Kendala</th>
-                        <th class="px-6 py-3">Area</th>
                         <th class="px-6 py-3">Aksi</th>
                     </tr>
                 </thead>
@@ -43,7 +42,6 @@
                             <td class="px-6 py-4">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
                             </td>
                             <td class="px-6 py-4">{{ $item->kendala }}</td>
-                            <td class="px-6 py-4">{{ $item->area }}</td>
                             <td class="px-6 py-4 space-x-2 text-center">
                                 <x-button.action href="{{ route('komplain.outsourcing-vendor.edit', $item->id) }}"
                                     icon="pen-to-square" color="emerald" />
