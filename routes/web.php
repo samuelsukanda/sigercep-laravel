@@ -6,6 +6,7 @@ use App\Http\Controllers\KomplainIpsrsController;
 use App\Http\Controllers\KomplainOutsourcingVendorController;
 use App\Http\Controllers\ReservasiRuanganController;
 use App\Http\Controllers\ReservasiKendaraanController;
+use App\Http\Controllers\VisitasiController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -29,11 +30,19 @@ Route::middleware('auth')->group(function () {
     })->name('settings');
 
     // Pages
+
+    // Komplain
     Route::resource('komplain/ipsrs', KomplainIpsrsController::class)->names('komplain.ipsrs');
     Route::resource('komplain/outsourcing-vendor', KomplainOutsourcingVendorController::class)
         ->names('komplain.outsourcing-vendor');
+
+    // Reservasi
     Route::resource('reservasi/ruangan', ReservasiRuanganController::class)
         ->names('reservasi.ruangan');
-    Route::resource('reservasi/kendaraan',ReservasiKendaraanController::class)
+    Route::resource('reservasi/kendaraan', ReservasiKendaraanController::class)
         ->names('reservasi.kendaraan');
+
+    // Visitasi
+    Route::resource('visitasi', VisitasiController::class)
+        ->names('visitasi');
 });

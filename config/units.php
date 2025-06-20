@@ -108,4 +108,9 @@ return [
         'Dengan Driver',
         'Tanpa Driver',
     ],
+
+    'tim' => [
+        'Tim 1',
+        'Tim 2',
+    ]
 ];
