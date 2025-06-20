@@ -24,7 +24,6 @@
                     <tr>
                         <th class="px-6 py-3">Nama</th>
                         <th class="px-6 py-3">Unit</th>
-                        <th class="px-6 py-3">Tempat Tujuan</th>
                         <th class="px-6 py-3">Jam Berangkat</th>
                         <th class="px-6 py-3">Jam Pulang</th>
                         <th class="px-6 py-3">Tanggal</th>
@@ -37,7 +36,6 @@
                         <tr>
                             <td class="px-6 py-4">{{ $item->nama }}</td>
                             <td class="px-6 py-4">{{ $item->unit }}</td>
-                            <td class="px-6 py-4">{{ $item->tempat_tujuan }}</td>
                             <td class="px-6 py-4">
                                 {{ \Carbon\Carbon::createFromFormat('H:i:s', $item->jam_berangkat)->format('H:i') }}</td>
                             <td class="px-6 py-4">
