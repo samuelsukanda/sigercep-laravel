@@ -42,8 +42,8 @@
                                     readonly />
 
                                 {{-- Keterangan --}}
-                                <x-form.textarea label="Keterangan Monitoring Risiko" name="keterangan" rows="5"
-                                    required>{{ old('keterangan', $mutu->keterangan) }}</x-form.textarea>
+                                <x-form.textarea name="keterangan" label="Keterangan Monitoring Risiko" :value="old('keterangan', $mutu->keterangan ?? '')"
+                                    required />
                             </div>
 
                             <div class="mt-6">
