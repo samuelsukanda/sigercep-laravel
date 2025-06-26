@@ -9,21 +9,22 @@ return new class extends Migration
 
     public function up(): void
     {
-        Schema::create('reservasi_ruangan', function (Blueprint $table) {
+        Schema::create('manajemen_risiko', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
             $table->string('unit');
-            $table->time('jam_mulai');
-            $table->time('jam_selesai');
             $table->date('tanggal');
-            $table->string('ruang');
-            $table->enum('approval', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->text('uraian');
+            $table->string('dampak');
+            $table->string('kemungkinan');
+            $table->integer('nilai');
+            $table->text('keterangan')->nullable();
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('reservasi_ruangans');
+        Schema::dropIfExists('manajemen_risikos');
     }
 };

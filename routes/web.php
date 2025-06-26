@@ -7,6 +7,8 @@ use App\Http\Controllers\KomplainOutsourcingVendorController;
 use App\Http\Controllers\ReservasiRuanganController;
 use App\Http\Controllers\ReservasiKendaraanController;
 use App\Http\Controllers\VisitasiController;
+use App\Http\Controllers\MutuController;
+use App\Http\Controllers\ManajemenRisikoController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -45,4 +47,10 @@ Route::middleware('auth')->group(function () {
     // Visitasi
     Route::resource('visitasi', VisitasiController::class)
         ->names('visitasi');
+
+    // Mutu
+    Route::resource('komite-mutu/mutu', MutuController::class)
+        ->names('komite-mutu.mutu');
+    Route::resource('komite-mutu/manajemen-risiko', ManajemenRisikoController::class)
+        ->names('komite-mutu.manajemen-risiko');
 });

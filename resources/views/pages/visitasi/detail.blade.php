@@ -15,60 +15,41 @@
                             {{-- Nama --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Nama</label>
-                                <p class="text-slate-600">{{ $komplain->nama }}</p>
+                                <p class="text-slate-600">{{ $visitasi->nama }}</p>
                             </div>
 
                             {{-- Tim --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Tim</label>
-                                <p class="text-slate-600">{{ $komplain->unit }}</p>
-                            </div>
-
-                            {{-- Tujuan Unit --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Ditujukan Ke Unit</label>
-                                <p class="text-slate-600">{{ $komplain->tujuan_unit }}</p>
+                                <p class="text-slate-600">{{ $visitasi->tim }}</p>
                             </div>
 
                             {{-- Tanggal --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Tanggal</label>
                                 <p class="text-slate-600">
-                                    {{ \Carbon\Carbon::parse($komplain->tanggal)->translatedFormat('d F Y') }}
+                                    {{ \Carbon\Carbon::parse($visitasi->tanggal)->translatedFormat('d F Y') }}
                                 </p>
                             </div>
 
                             {{-- Kendala --}}
-                            <div class="md:col-span-2">
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Kendala atau
-                                    Pengaduan di lapangan</label>
-                                <p class="text-slate-600">{{ $komplain->kendala }}</p>
-                            </div>
-
-                            {{-- Status --}}
                             <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Status</label>
-                                <p class="text-slate-600">{{ $komplain->status ?? '-' }}</p>
-                            </div>
-
-                            {{-- Keterangan --}}
-                            <div class="md:col-span-2">
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Keterangan</label>
-                                <p class="text-slate-600">{{ $komplain->keterangan ?? '-' }}</p>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Kendala</label>
+                                <p class="text-slate-600">{{ $visitasi->kendala }}</p>
                             </div>
 
                             {{-- Foto --}}
-                            @if ($komplain->foto)
+                            @if ($visitasi->foto)
                                 <div class="md:col-span-2">
                                     <label class="block mb-1 text-sm font-semibold text-slate-700">Foto Komplain</label>
-                                    <img src="{{ asset('storage/' . $komplain->foto) }}" alt="Foto Komplain"
+                                    <img src="{{ asset('storage/' . $visitasi->foto) }}" alt="Foto Komplain"
                                         class="mt-2 h-24 rounded shadow-md object-cover border border-gray-200 w-1/2" />
                                 </div>
                             @endif
                         </div>
 
                         <div class="mt-6">
-                            <a href="{{ route('komplain.ipsrs.index') }}"
+                            <a href="{{ route('visitasi.index') }}"
                                 class="inline-block px-6 py-2 text-xs font-semibold text-slate-700 uppercase bg-gray-200 rounded-lg shadow-md hover:shadow-xs active:opacity-85">
                                 Kembali
                             </a>

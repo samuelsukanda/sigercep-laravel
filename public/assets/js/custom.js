@@ -61,6 +61,21 @@ $(document).ready(function () {
         placeholder: "Pilih Jenis Layanan",
         allowClear: true,
     });
+
+    $("#tim").select2({
+        placeholder: "Pilih Tim",
+        allowClear: true,
+    });
+
+    $("#dampak").select2({
+        placeholder: "Pilih Nilai",
+        allowClear: true,
+    });
+
+    $("#kemungkinan").select2({
+        placeholder: "Pilih Nilai",
+        allowClear: true,
+    });
 });
 
 // Flatpickr

@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('visitasi', function (Blueprint $table) {
             $table->id();
-            $table->string('nama')->nullable();
-            $table->string('tim')->nullable();
-            $table->date('tanggal')->nullable();
-            $table->text('kendala')->nullable();
+            $table->string('nama');
+            $table->string('tim');
+            $table->date('tanggal');
+            $table->text('kendala');
             $table->string('foto')->nullable();
             $table->timestamps();
         });

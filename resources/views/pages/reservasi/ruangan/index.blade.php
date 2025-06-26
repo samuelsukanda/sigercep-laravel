@@ -6,7 +6,8 @@
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4">
             <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Reservasi Ruangan</h6>
-            <x-button.link href="{{ route('reservasi.ruangan.create') }}" color="slate">
+            <x-button.link href="{{ route('komplain.ipsrs.create') }}"
+                class="text-white bg-gradient-to-tl from-emerald-500 to-teal-400">
                 Tambah Data
             </x-button.link>
         </div>
@@ -44,7 +45,9 @@
                             <td class="px-6 py-4">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
                             </td>
                             <td class="px-6 py-4">{{ $item->ruang }}</td>
-                            <td class="px-6 py-4">{{ $item->approval }}</td>
+                            <td class="px-6 py-4">
+                                <x-badge.approval-badge :status="$item->approval" />
+                            </td>
                             <td class="px-6 py-4 space-x-2 text-center">
                                 <x-button.action href="{{ route('reservasi.ruangan.edit', $item->id) }}"
                                     icon="pen-to-square" color="emerald" />
