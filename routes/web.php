@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DesainGrafisController;
 use App\Http\Controllers\KomplainIpsrsController;
 use App\Http\Controllers\KomplainOutsourcingVendorController;
 use App\Http\Controllers\ReservasiRuanganController;
@@ -52,4 +53,8 @@ Route::middleware('auth')->group(function () {
         ->names('komite-mutu.mutu');
     Route::resource('komite-mutu/manajemen-risiko', ManajemenRisikoController::class)
         ->names('komite-mutu.manajemen-risiko');
+
+    // Desain Grafis
+    Route::resource('desain-grafis', DesainGrafisController::class)
+    ->names('desain-grafis');
 });

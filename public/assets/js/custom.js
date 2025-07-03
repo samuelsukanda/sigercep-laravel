@@ -76,6 +76,21 @@ $(document).ready(function () {
         placeholder: "Pilih Nilai",
         allowClear: true,
     });
+
+    $("#satuan").select2({
+        placeholder: "Pilih Ukuran",
+        allowClear: true,
+    });
+
+    $("#detik").select2({
+        placeholder: "Pilih Durasi",
+        allowClear: true,
+    });
+
+    $("#menit").select2({
+        placeholder: "Pilih Durasi",
+        allowClear: true,
+    });
 });
 
 // Flatpickr

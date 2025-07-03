@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+
+    public function up(): void
+    {
+        Schema::create('kecelakaan_kerja', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama');
+            $table->string('unit');
+            $table->integer('no_hp');
+            $table->string('jam');
+            $table->date('tanggal');
+            $table->string('jenis_kecelakaan');
+            $table->string('lokasi_kecelakaan');
+            $table->string('saksi');
+            $table->string('riwayat');
+            $table->string('penyebab');
+            $table->string('bahan');
+            $table->string('cedera');
+            $table->string('pengobatan');
+            $table->string('pengobatan2');
+            $table->string('pelaksana');
+            $table->string('tanda_tangan');
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('kecelakaan_kerjas');
+    }
+};
