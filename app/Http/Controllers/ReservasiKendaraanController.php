@@ -38,7 +38,6 @@ class ReservasiKendaraanController extends Controller
             'jam_pulang.after' => 'Jam Pulang harus lebih besar dari Jam Berangkat.',
         ]);
 
-        // Check for overlapping reservations
         $isOverlap = ReservasiKendaraan::where('jenis_kendaraan', $validated['jenis_kendaraan'])
             ->where('tanggal', $validated['tanggal'])
             ->where(function ($query) use ($validated) {
@@ -91,7 +90,6 @@ class ReservasiKendaraanController extends Controller
             'jam_pulang.after' => 'Jam Pulang harus lebih besar dari Jam Berangkat.',
         ]);
 
-        // Check for overlapping reservations
         $isOverlap = ReservasiKendaraan::where('id', '<>', $id)
             ->where('tanggal', $validated['tanggal'])
             ->where(function ($query) use ($validated) {

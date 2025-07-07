@@ -80,7 +80,6 @@ class DesainGrafisController extends Controller
 
         $updateData = $validated;
 
-        // Reset field yang tidak digunakan berdasarkan jenis desain
         if ($validated['desain'] === 'Video') {
             $updateData['panjang'] = null;
             $updateData['tinggi'] = null;

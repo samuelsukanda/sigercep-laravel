@@ -74,12 +74,10 @@ class KomplainIpsrsController extends Controller
         $komplain = KomplainIpsrs::findOrFail($id);
 
         if ($request->hasFile('foto')) {
-            // Hapus foto lama kalau ada
             if ($komplain->foto && Storage::disk('public')->exists($komplain->foto)) {
                 Storage::disk('public')->delete($komplain->foto);
             }
 
-            // Upload foto baru
             $file = $request->file('foto');
             $namaFile = 'komplain-ipsrs-' . Carbon::now()->format('YmdHis') . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('images/komplain-ipsrs', $namaFile, 'public');
@@ -95,12 +93,10 @@ class KomplainIpsrsController extends Controller
     {
         $komplain = KomplainIpsrs::findOrFail($id);
 
-        // Hapus foto di storage jika ada
         if ($komplain->foto && Storage::disk('public')->exists($komplain->foto)) {
             Storage::disk('public')->delete($komplain->foto);
         }
 
-        // Hapus data
         $komplain->delete();
 
         return redirect()->route('komplain.ipsrs.index')->with('success', 'Data berhasil dihapus.');

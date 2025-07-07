@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const formUkuran = document.getElementById("form-ukuran");
     const formDurasi = document.getElementById("form-durasi");
 
-    // Inisialisasi sembunyi dulu
     formUkuran.style.display = "none";
     formDurasi.style.display = "none";
 
@@ -23,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Event listener untuk setiap radio button
     desainRadios.forEach((radio) => {
         radio.addEventListener("change", function () {
             handleDesainChange(this.value);

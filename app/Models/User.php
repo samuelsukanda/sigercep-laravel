@@ -19,7 +19,6 @@ class User extends Authenticatable
     ];
 
     protected $casts = [
-        //'email_verified_at' => 'datetime', // ini bisa dihapus kalau kamu gak pakai email
         'password' => 'hashed',
     ];
 }

@@ -13,12 +13,13 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->string('unit');
-            $table->integer('no_hp');
+            $table->string('no_hp', 20);
             $table->string('jam');
             $table->date('tanggal');
             $table->string('jenis_kecelakaan');
             $table->string('lokasi_kecelakaan');
             $table->string('saksi');
+            $table->string('kegiatan');
             $table->string('riwayat');
             $table->string('penyebab');
             $table->string('bahan');

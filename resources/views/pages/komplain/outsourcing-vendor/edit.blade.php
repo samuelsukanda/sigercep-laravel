@@ -13,9 +13,18 @@
                     <div class="flex-auto p-6">
                         <form action="{{ route('komplain.outsourcing-vendor.update', $komplain->id) }}" method="POST"
                             enctype="multipart/form-data">
-
                             @csrf
                             @method('PUT')
+
+                            @if ($errors->any())
+                                <div class="alert alert-danger mb-4">
+                                    <ul class="list-disc list-inside text-red-600 text-sm">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama --}}

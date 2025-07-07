@@ -18,7 +18,7 @@ class KecelakaanKerja extends Model
         'jam',
         'tanggal',
         'jenis_kecelakaan',
-        'lokasi_kecelekaan',
+        'lokasi_kecelakaan',
         'saksi',
         'kegiatan',
         'riwayat',

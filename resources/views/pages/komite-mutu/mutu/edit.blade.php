@@ -17,34 +17,38 @@
                             @csrf
                             @method('PUT')
 
+                            @if ($errors->any())
+                                <div class="alert alert-danger mb-4">
+                                    <ul class="list-disc list-inside text-red-600 text-sm">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Judul Indikator --}}
-                                <x-form.input name="indikator" label="Judul Indikator"
-                                    :value="old('indikator', $mutu->indikator)" required />
+                                <x-form.input name="indikator" label="Judul Indikator" :value="old('indikator', $mutu->indikator)" required />
 
                                 {{-- Periode --}}
-                                <x-form.input name="periode" label="Periode"
-                                    :value="old('periode', $mutu->periode)" required />
+                                <x-form.input name="periode" label="Periode" :value="old('periode', $mutu->periode)" required />
 
                                 {{-- Unit --}}
                                 <x-form.select label="Unit" name="unit" :options="config('units.units')" :selected="old('unit', $mutu->unit)"
                                     placeholder="Pilih Unit" required />
 
                                 {{-- PJ Data --}}
-                                <x-form.input name="pj_data" label="Penanggung Jawab Data"
-                                    :value="old('pj_data', $mutu->pj_data)" required />
+                                <x-form.input name="pj_data" label="Penanggung Jawab Data" :value="old('pj_data', $mutu->pj_data)" required />
 
                                 {{-- Numerator --}}
-                                <x-form.input name="numerator" label="Numerator (N)"
-                                    :value="old('numerator', $mutu->numerator)" required />
+                                <x-form.input name="numerator" label="Numerator (N)" :value="old('numerator', $mutu->numerator)" required />
 
                                 {{-- Penumerator --}}
-                                <x-form.input name="penumerator" label="Penumerator (D)"
-                                    :value="old('penumerator', $mutu->penumerator)" required />
+                                <x-form.input name="penumerator" label="Penumerator (D)" :value="old('penumerator', $mutu->penumerator)" required />
 
                                 {{-- Capaian --}}
-                                <x-form.input name="capaian" label="Capaian (%)"
-                                    :value="old('capaian', $mutu->capaian)" required />
+                                <x-form.input name="capaian" label="Capaian (%)" :value="old('capaian', $mutu->capaian)" required />
                             </div>
 
                             <div class="mt-6">

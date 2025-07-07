@@ -11,21 +11,19 @@
                         <h6 class="mb-0 font-bold text-lg">Tambah Reservasi Ruangan</h6>
                     </div>
                     <div class="flex-auto p-6">
-
-                        @if ($errors->any())
-                            <div
-                                class="relative w-full p-4 mb-4 text-white border border-red-300 border-solid rounded-lg bg-gradient-to-tl from-red-600 to-orange-600">
-                                <ul class="list-disc pl-5">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-
                         <form id="form" action="{{ route('reservasi.ruangan.store') }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
+
+                            @if ($errors->any())
+                                <div class="alert alert-danger mb-4">
+                                    <ul class="list-disc list-inside text-red-600 text-sm">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama --}}

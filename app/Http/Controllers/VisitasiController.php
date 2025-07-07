@@ -69,7 +69,6 @@ class VisitasiController extends Controller
         $visitasi = Visitasi::findOrFail($id);
 
         if ($request->hasFile('foto')) {
-            // Hapus foto lama kalau ada
             if ($visitasi->foto && Storage::disk('public')->exists($visitasi->foto)) {
                 Storage::disk('public')->delete($visitasi->foto);
             }
@@ -90,7 +89,6 @@ class VisitasiController extends Controller
     {
         $visitasi = Visitasi::findOrFail($id);
 
-        // Hapus foto jika ada
         if ($visitasi->foto && Storage::disk('public')->exists($visitasi->foto)) {
             Storage::disk('public')->delete($visitasi->foto);
         }

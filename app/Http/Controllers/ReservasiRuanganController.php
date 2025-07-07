@@ -32,7 +32,6 @@ class ReservasiRuanganController extends Controller
             'jam_selesai.after' => 'Jam Selesai harus lebih besar dari Jam Mulai.',
         ]);
 
-        // Check for overlapping reservations
         $isOverlap = ReservasiRuangan::where('ruang', $validated['ruang'])
             ->where('tanggal', $validated['tanggal'])
             ->where(function ($query) use ($validated) {
@@ -80,7 +79,6 @@ class ReservasiRuanganController extends Controller
             'jam_selesai.after' => 'Jam Selesai harus lebih besar dari Jam Mulai.',
         ]);
 
-        // Check for overlapping reservations
         $isOverlap = ReservasiRuangan::where('id', '<>', $id)
             ->where('ruang', $validated['ruang'])
             ->where('tanggal', $validated['tanggal'])

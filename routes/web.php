@@ -11,6 +11,7 @@ use App\Http\Controllers\ReservasiKendaraanController;
 use App\Http\Controllers\VisitasiController;
 use App\Http\Controllers\MutuController;
 use App\Http\Controllers\ManajemenRisikoController;
+use App\Http\Controllers\KecelakaanKerjaController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -57,4 +58,8 @@ Route::middleware('auth')->group(function () {
     // Desain Grafis
     Route::resource('desain-grafis', DesainGrafisController::class)
     ->names('desain-grafis');
+
+    // Kecelakaan Kerja
+    Route::resource('kecelakaan-kerja', KecelakaanKerjaController::class)
+    ->names('kecelakaan-kerja');
 });

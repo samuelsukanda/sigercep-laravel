@@ -15,6 +15,16 @@
                             enctype="multipart/form-data">
                             @csrf
 
+                            @if ($errors->any())
+                                <div class="alert alert-danger mb-4">
+                                    <ul class="list-disc list-inside text-red-600 text-sm">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama --}}
                                 <x-form.input name="nama" label="Nama" :value="old('nama', $komplain->nama ?? '')" required />
@@ -37,7 +47,8 @@
                                     required />
 
                                 {{-- Area --}}
-                                <x-form.input name="area" label="Area komplain yang dilaporkan:" :value="old('area', $komplain->area ?? '')" required />
+                                <x-form.input name="area" label="Area komplain yang dilaporkan:" :value="old('area', $komplain->area ?? '')"
+                                    required />
 
                                 {{-- Foto --}}
                                 <x-form.file-upload name="foto" label="Foto Komplain/Keluhan di Lapangan"
