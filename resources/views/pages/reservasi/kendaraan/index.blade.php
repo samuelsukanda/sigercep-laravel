@@ -45,12 +45,12 @@
                             </td>
                             <td class="px-6 py-4">{{ $item->jenis_kendaraan }}</td>
                             <td class="px-6 py-4 space-x-2 text-center">
-                                <x-button.action href="{{ route('reservasi.kendaraan.edit', $item->id) }}"
-                                    icon="pen-to-square" color="emerald" />
-                                <x-button.action href="{{ route('reservasi.kendaraan.show', $item->id) }}" icon="eye"
-                                    color="emerald" />
-                                <x-button.action href="{{ route('reservasi.kendaraan.destroy', $item->id) }}"
-                                    icon="trash" color="red" type="button" method="DELETE" />
+                                <x-button.action href="{{ route('desain-grafis.edit', $item->id) }}" icon="pen-to-square"
+                                    color="emerald" title="Edit" />
+                                <x-button.action href="{{ route('desain-grafis.show', $item->id) }}" icon="eye"
+                                    color="emerald" title="Lihat Data" />
+                                <x-button.action href="{{ route('desain-grafis.destroy', $item->id) }}" icon="trash"
+                                    color="red" type="button" method="DELETE" title="Hapus" />
                             </td>
                         </tr>
                     @endforeach

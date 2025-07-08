@@ -8,16 +8,23 @@
 ])
 
 @if ($type === 'link')
-    <a href="{{ $href }}" {{ $attributes->merge(['class' => "text-{$color}-600 hover:underline text-sm"]) }}>
+    <a 
+        href="{{ $href }}" 
+        {{ $attributes->merge(['class' => "text-{$color}-600 hover:underline text-sm"]) }}
+        title="{{ $attributes['title'] ?? '' }}"
+    >
         <i class="fa-solid fa-{{ $icon }}"></i>
     </a>
 @else
     <form action="{{ $href }}" method="POST" class="inline delete-form">
         @csrf
         @method($method)
-        <button type="button"
+        <button 
+            type="button"
             class="text-{{ $color }}-600 hover:underline text-sm delete-button"
-            data-confirm="{{ $confirm }}">
+            data-confirm="{{ $confirm }}"
+            title="{{ $attributes['title'] ?? '' }}"
+        >
             <i class="fa-solid fa-{{ $icon }}"></i>
         </button>
     </form>
