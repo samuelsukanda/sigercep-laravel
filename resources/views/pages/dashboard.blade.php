@@ -98,7 +98,7 @@
                             <div class="px-3 text-right basis-1/3">
                                 <div
                                     class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-700 to-cyan-500 border-cyan-200">
-                                    <i class="ni ni-calendar-grid-58 text-lg text-white"></i>
+                                    <i class="fa-solid fa-calendar-days text-lg text-white"></i>
                                 </div>
                             </div>
                         </div>
@@ -131,7 +131,7 @@
                             <div class="px-3 text-right basis-1/3">
                                 <div
                                     class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-orange-500 to-yellow-500">
-                                    <i class="ni ni-calendar-grid-58 text-lg text-white"></i>
+                                    <i class="fa-solid fa-calendar-days text-lg text-white"></i>
                                 </div>
                             </div>
                         </div>
@@ -159,7 +159,8 @@
                                         Total Data: {{ $totalDesainGrafis }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeDesain }}</span>
+                                        <span
+                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeDesain }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -191,7 +192,8 @@
                                         Total Data: {{ $totalK3RS }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500"> {{ $lastInputTimeK3RS }}</span>
+                                        <span class="text-sm font-semibold leading-normal text-emerald-500">
+                                            {{ $lastInputTimeK3RS }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -223,7 +225,8 @@
                                         Total Data: {{ $totalMutu }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeMutu }}</span>
+                                        <span
+                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeMutu }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -290,7 +293,8 @@
                                         Total Data: {{ $totalManajemenRisiko }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeManajemenRisiko }}</span>
+                                        <span
+                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeManajemenRisiko }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -648,7 +652,8 @@
                                         Total Data: {{ $totalVisitasi }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeVisitasi }}</span>
+                                        <span
+                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeVisitasi }}</span>
                                     </p>
                                 </div>
                             </div>

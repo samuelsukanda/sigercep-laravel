@@ -49,11 +49,11 @@
                                 <x-badge.approval-badge :status="$item->approval" />
                             </td>
                             <td class="px-6 py-4 space-x-2 text-center">
-                                <x-button.action href="{{ route('desain-grafis.edit', $item->id) }}" icon="pen-to-square"
+                                <x-button.action href="{{ route('reservasi.ruangan.edit', $item->id) }}" icon="pen-to-square"
                                     color="emerald" title="Edit" />
-                                <x-button.action href="{{ route('desain-grafis.show', $item->id) }}" icon="eye"
+                                <x-button.action href="{{ route('reservasi.ruangan.show', $item->id) }}" icon="eye"
                                     color="emerald" title="Lihat Data" />
-                                <x-button.action href="{{ route('desain-grafis.destroy', $item->id) }}" icon="trash"
+                                <x-button.action href="{{ route('reservasi.ruangan.destroy', $item->id) }}" icon="trash"
                                     color="red" type="button" method="DELETE" title="Hapus" />
                             </td>
                         </tr>

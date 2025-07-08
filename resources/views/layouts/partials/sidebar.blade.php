@@ -48,12 +48,12 @@
                 </a>
 
                 <!-- Dropdown Menu -->
-                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out" style="max-height: 0; opacity: 0;" dropdown-menu>
+                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                    style="max-height: 0; opacity: 0;" dropdown-menu>
                     <li class="w-full">
                         <a href="{{ route('komplain.ipsrs.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">IPSRS</span>
@@ -62,8 +62,7 @@
                     <li class="w-full">
                         <a href="{{ route('komplain.outsourcing-vendor.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Outsourching & Vendor</span>
@@ -78,7 +77,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="relative top-0 text-sm leading-normal ni ni-calendar-grid-58 text-blue-500"></i>
+                            <i class="fa-solid fa-calendar-days text-sm leading-normal text-blue-500"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Reservasi</span>
                     </div>
@@ -86,12 +85,12 @@
                 </a>
 
                 <!-- Dropdown Menu -->
-                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out" style="max-height: 0; opacity: 0;" dropdown-menu>
+                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                    style="max-height: 0; opacity: 0;" dropdown-menu>
                     <li class="w-full">
                         <a href="{{ route('reservasi.ruangan.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Ruangan</span>
@@ -100,8 +99,7 @@
                     <li class="w-full">
                         <a href="{{ route('reservasi.kendaraan.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Kendaraan</span>
@@ -124,12 +122,12 @@
                 </a>
 
                 <!-- Dropdown Menu -->
-                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out" style="max-height: 0; opacity: 0;" dropdown-menu>
+                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                    style="max-height: 0; opacity: 0;" dropdown-menu>
                     <li class="w-full">
-                        <a href="{{ route('desain-grafis.index')}}"
+                        <a href="{{ route('desain-grafis.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Desain Grafis</span>
@@ -152,12 +150,12 @@
                 </a>
 
                 <!-- Dropdown Menu -->
-                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out" style="max-height: 0; opacity: 0;" dropdown-menu>
+                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                    style="max-height: 0; opacity: 0;" dropdown-menu>
                     <li class="w-full">
                         <a href="{{ route('kecelakaan-kerja.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Kecelakaan Kerja</span>
@@ -171,8 +169,7 @@
                 <a href="javascript:;" onclick="toggleDropdown(this)"
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                             <i class="fas fa-users text-blue-500 relative top-0 text-sm leading-normal"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Komite Mutu</span>
@@ -181,12 +178,12 @@
                 </a>
 
                 <!-- Dropdown Menu -->
-                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out" style="max-height: 0; opacity: 0;" dropdown-menu>
+                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                    style="max-height: 0; opacity: 0;" dropdown-menu>
                     <li class="w-full">
                         <a href="{{ route('komite-mutu.mutu.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Mutu</span>
@@ -195,8 +192,7 @@
                     <li class="w-full">
                         <a href="./pages/komplain/statistik.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Bank SPO</span>
@@ -205,8 +201,7 @@
                     <li class="w-full">
                         <a href="{{ route('komite-mutu.manajemen-risiko.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Manajemen Risiko</span>
@@ -220,8 +215,7 @@
                 <a href="javascript:;" onclick="toggleDropdown(this)"
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                             <i class="fas fa-balance-scale relative top-0 text-sm leading-normal"
                                 style="color: #ee8a0f !important;"></i>
                         </div>
@@ -231,12 +225,12 @@
                 </a>
 
                 <!-- Dropdown Menu -->
-                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out" style="max-height: 0; opacity: 0;" dropdown-menu>
+                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                    style="max-height: 0; opacity: 0;" dropdown-menu>
                     <li class="w-full">
                         <a href="./pages/komplain/daftar.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">UTW</span>
@@ -245,8 +239,7 @@
                     <li class="w-full">
                         <a href="./pages/komplain/statistik.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Struktur Organisasi</span>
@@ -255,8 +248,7 @@
                     <li class="w-full">
                         <a href="./pages/komplain/statistik.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Peraturan Perusahaan</span>
@@ -265,8 +257,7 @@
                     <li class="w-full">
                         <a href="./pages/komplain/statistik.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Surat Keputusan</span>
@@ -275,8 +266,7 @@
                     <li class="w-full">
                         <a href="./pages/komplain/statistik.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Mandatory Training</span>
@@ -290,8 +280,7 @@
                 <a href="javascript:;" onclick="toggleDropdown(this)"
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                             <i class="fas fa-warehouse relative top-0 text-sm leading-normal"
                                 style="color: #362ea8 !important;"></i>
                         </div>
@@ -301,12 +290,12 @@
                 </a>
 
                 <!-- Dropdown Menu -->
-                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out" style="max-height: 0; opacity: 0;" dropdown-menu>
+                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                    style="max-height: 0; opacity: 0;" dropdown-menu>
                     <li class="w-full">
                         <a href="./pages/komplain/daftar.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Peminjaman Aset</span>
@@ -315,8 +304,7 @@
                     <li class="w-full">
                         <a href="./pages/komplain/statistik.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Pengembalian Aset</span>
@@ -325,8 +313,7 @@
                     <li class="w-full">
                         <a href="./pages/komplain/statistik.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Pemindahan Aset</span>
@@ -335,8 +322,7 @@
                     <li class="w-full">
                         <a href="./pages/komplain/statistik.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Laporan Aset Rusak</span>
@@ -350,8 +336,7 @@
                 <a href="javascript:;" onclick="toggleDropdown(this)"
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                             <i class="fas fa-notes-medical relative top-0 text-sm leading-normal text-orange-500"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Kesiapan Ambulance</span>
@@ -360,12 +345,12 @@
                 </a>
 
                 <!-- Dropdown Menu -->
-                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out" style="max-height: 0; opacity: 0;" dropdown-menu>
+                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                    style="max-height: 0; opacity: 0;" dropdown-menu>
                     <li class="w-full">
                         <a href="./pages/komplain/daftar.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Kesiapan Ambulance</span>
@@ -379,8 +364,7 @@
                 <a href="javascript:;" onclick="toggleDropdown(this)"
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                             <i class="fas fa-paper-plane relative top-0 text-sm leading-normal"
                                 style="color: #eec524 !important;"></i>
                         </div>
@@ -390,12 +374,12 @@
                 </a>
 
                 <!-- Dropdown Menu -->
-                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out" style="max-height: 0; opacity: 0;" dropdown-menu>
+                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                    style="max-height: 0; opacity: 0;" dropdown-menu>
                     <li class="w-full">
-                        <a href="{{ route('visitasi.index')}}"
+                        <a href="{{ route('visitasi.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Visitasi</span>
@@ -409,8 +393,7 @@
                 <a href="javascript:;" onclick="toggleDropdown(this)"
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                             <i class="fas fa-hand-holding relative top-0 text-sm leading-normal"
                                 style="color: #cb72f1 !important;"></i>
                         </div>
@@ -420,12 +403,12 @@
                 </a>
 
                 <!-- Dropdown Menu -->
-                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out" style="max-height: 0; opacity: 0;" dropdown-menu>
+                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                    style="max-height: 0; opacity: 0;" dropdown-menu>
                     <li class="w-full">
                         <a href="./pages/komplain/daftar.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Peminjaman</span>
@@ -439,8 +422,7 @@
                 <a href="javascript:;" onclick="toggleDropdown(this)"
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
-                        <div
-                            class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                             <i class="fas fa-server relative top-0 text-sm leading-normal"
                                 style="color: #47b1d1 !important;"></i>
                         </div>
@@ -450,12 +432,12 @@
                 </a>
 
                 <!-- Dropdown Menu -->
-                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out" style="max-height: 0; opacity: 0;" dropdown-menu>
+                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                    style="max-height: 0; opacity: 0;" dropdown-menu>
                     <li class="w-full">
                         <a href="./pages/komplain/daftar.html"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
-                            <div
-                                class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Hardware</span>
