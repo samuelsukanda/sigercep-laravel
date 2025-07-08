@@ -156,10 +156,10 @@
                                     </p>
                                     <span class="mb-0 font-semibold text-sm dark:text-white">Desain Grafis</span>
                                     <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data:
+                                        Total Data: {{ $totalDesainGrafis }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500"></span>
+                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeDesain }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -188,10 +188,10 @@
                                     </p>
                                     <span class="mb-0 font-semibold text-sm dark:text-white">Kecelakaan Kerja</span>
                                     <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data:
+                                        Total Data: {{ $totalK3RS }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500"></span>
+                                        <span class="text-sm font-semibold leading-normal text-emerald-500"> {{ $lastInputTimeK3RS }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -220,10 +220,10 @@
                                     </p>
                                     <span class="mb-0 font-semibold text-sm dark:text-white">Mutu</span>
                                     <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data:
+                                        Total Data: {{ $totalMutu }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500"></span>
+                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeMutu }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -287,10 +287,10 @@
                                     </p>
                                     <span class="mb-0 font-semibold text-sm dark:text-white">Manajemen Risiko</span>
                                     <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data:
+                                        Total Data: {{ $totalManajemenRisiko }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500"></span>
+                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeManajemenRisiko }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -645,10 +645,10 @@
                                     </p>
                                     <span class="mb-0 font-semibold text-sm dark:text-white">Visitasi</span>
                                     <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data:
+                                        Total Data: {{ $totalVisitasi }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500"></span>
+                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeVisitasi }}</span>
                                     </p>
                                 </div>
                             </div>

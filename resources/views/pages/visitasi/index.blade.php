@@ -44,7 +44,7 @@
                                 <x-button.action href="{{ route('visitasi.show', $item->id) }}" icon="eye"
                                     color="emerald" />
                                 <x-button.action href="{{ route('visitasi.destroy', $item->id) }}" icon="trash"
-                                    color="red" type="button" method="DELETE" confirm="Yakin ingin hapus?" />
+                                    color="red" type="button" method="DELETE" />
                             </td>
                         </tr>
                     @endforeach
@@ -53,3 +53,7 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('assets/js/alert-delete.js') }}"></script>
+@endpush

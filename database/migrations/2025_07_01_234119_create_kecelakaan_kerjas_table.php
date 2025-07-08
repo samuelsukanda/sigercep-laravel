@@ -18,11 +18,11 @@ return new class extends Migration
             $table->date('tanggal');
             $table->string('jenis_kecelakaan');
             $table->string('lokasi_kecelakaan');
-            $table->string('saksi');
+            $table->string('saksi')->nullable();
             $table->string('kegiatan');
             $table->string('riwayat');
             $table->string('penyebab');
-            $table->string('bahan');
+            $table->string('bahan')->nullable();
             $table->string('cedera');
             $table->string('pengobatan');
             $table->string('pengobatan2');

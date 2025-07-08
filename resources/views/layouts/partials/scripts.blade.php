@@ -21,6 +21,8 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <!-- Flatpickr -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<!-- Laravel Toast -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 {{-- Sweat Alert --}}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {{-- Custom JS --}}

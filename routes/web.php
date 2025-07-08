@@ -32,7 +32,7 @@ Route::middleware('auth')->group(function () {
         return view('settings');
     })->name('settings');
 
-    // Pages
+    // Pages - Views
 
     // Komplain
     Route::resource('komplain/ipsrs', KomplainIpsrsController::class)->names('komplain.ipsrs');

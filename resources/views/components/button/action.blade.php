@@ -2,7 +2,7 @@
     'href' => '#',
     'icon',
     'color' => 'emerald',
-    'type' => 'link', // 'link' or 'button'
+    'type' => 'link',
     'method' => null,
     'confirm' => null,
 ])
@@ -12,11 +12,12 @@
         <i class="fa-solid fa-{{ $icon }}"></i>
     </a>
 @else
-    <form action="{{ $href }}" method="POST" class="inline">
+    <form action="{{ $href }}" method="POST" class="inline delete-form">
         @csrf
         @method($method)
-        <button type="submit" @if ($confirm) onclick="return confirm('{{ $confirm }}')" @endif
-            class="text-{{ $color }}-600 hover:underline text-sm">
+        <button type="button"
+            class="text-{{ $color }}-600 hover:underline text-sm delete-button"
+            data-confirm="{{ $confirm }}">
             <i class="fa-solid fa-{{ $icon }}"></i>
         </button>
     </form>

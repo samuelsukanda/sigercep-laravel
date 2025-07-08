@@ -15,18 +15,8 @@
                             enctype="multipart/form-data">
                             @csrf
 
-                            @if ($errors->any())
-                                <div class="alert alert-danger mb-4">
-                                    <ul class="list-disc list-inside text-red-600 text-sm">
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {{-- Nama --}}
+                               {{-- Nama --}}
                                 <x-form.input name="nama" label="Nama" :value="old('nama', $k3rs->nama ?? '')" required />
 
                                 {{-- Unit --}}
@@ -58,28 +48,28 @@
                                     :value="old('kegiatan', $k3rs->kegiatan ?? '')" required />
 
                                 {{-- Riwayat Kecelakaan --}}
-                                <x-form.input name="riwayat" label="Riwayat Kecelakaan" :value="old('riwayat', $k3rs->riwayat ?? '')" />
+                                <x-form.input name="riwayat" label="Riwayat Kecelakaan" :value="old('riwayat', $k3rs->riwayat ?? '')" required/>
 
                                 {{-- Penyebab Kecelakaan --}}
-                                <x-form.input name="penyebab" label="Penyebab Kecelakaan" :value="old('penyebab', $k3rs->penyebab ?? '')" />
+                                <x-form.input name="penyebab" label="Penyebab Kecelakaan" :value="old('penyebab', $k3rs->penyebab ?? '')" required/>
 
                                 {{-- Nama/Jenis Bahan/Zat Yang Menyebabkan --}}
                                 <x-form.input name="bahan" label="Nama/Jenis Bahan/Zat Yang Menyebabkan (Jika Ada)"
                                     :value="old('bahan', $k3rs->bahan ?? '')" />
 
                                 {{-- Bagian Tubuh Yang Cedera --}}
-                                <x-form.input name="cedera" label="Bagian Tubuh Yang Cedera" :value="old('cedera', $k3rs->cedera ?? '')" />
+                                <x-form.input name="cedera" label="Bagian Tubuh Yang Cedera" :value="old('cedera', $k3rs->cedera ?? '')" required/>
 
                                 {{-- Tindakan Pengobatan Pertama Yang Dilakukan --}}
                                 <x-form.input name="pengobatan" label="Tindakan Pengobatan Pertama Yang Dilakukan"
-                                    :value="old('pengobatan', $k3rs->pengobatan ?? '')" />
+                                    :value="old('pengobatan', $k3rs->pengobatan ?? '')" required/>
 
                                 {{-- Tindakan Pengobatan Selanjutnya --}}
                                 <x-form.input name="pengobatan2" label="Tindakan Pengobatan Selanjutnya"
-                                    :value="old('pengobatan2', $k3rs->pengobatan2 ?? '')" />
+                                    :value="old('pengobatan2', $k3rs->pengobatan2 ?? '')" required/>
 
                                 {{-- Pelaksana/Pemberi Pengobatan --}}
-                                <x-form.input name="pelaksana" label="Pelaksana/Pemberi Pengobatan" :value="old('pelaksana', $k3rs->pelaksana ?? '')" />
+                                <x-form.input name="pelaksana" label="Pelaksana/Pemberi Pengobatan" :value="old('pelaksana', $k3rs->pelaksana ?? '')" required/>
 
                                 {{-- Tanda Tangan Pelapor --}}
                                 <div class="mt-6">
