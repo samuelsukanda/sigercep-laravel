@@ -5,8 +5,8 @@
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4">
-            <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Pengembalian Barang</h6>
-            <x-button.link href="{{ route('pengadaan-aset.pengembalian-aset.create') }}"
+            <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Laporan Aset Rusak</h6>
+            <x-button.link href="{{ route('pengadaan-aset.laporan-aset-rusak.create') }}"
                 class="text-white bg-gradient-to-tl from-emerald-500 to-teal-400">
                 Tambah Data
             </x-button.link>
@@ -25,29 +25,29 @@
                     <tr>
                         <th class="px-6 py-3">Nama</th>
                         <th class="px-6 py-3">Unit</th>
-                        <th class="px-6 py-3">Keperluan</th>
+                        <th class="px-6 py-3">Nama Aset</th>
+                        <th class="px-6 py-3">Lokasi Aset</th>
+                        <th class="px-6 py-3">Kondisi Aset</th>
                         <th class="px-6 py-3">Tanggal</th>
-                        <th class="px-6 py-3">Nama Barang</th>
-                        <th class="px-6 py-3">Tempat Asal Barang</th>
                         <th class="px-6 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="text-s text-slate-500 bg-slate-100 dark:text-white">
-                    @foreach ($komplain as $item)
+                    @foreach ($pengadaan as $item)
                         <tr>
                             <td class="px-6 py-4">{{ $item->nama }}</td>
                             <td class="px-6 py-4">{{ $item->unit }}</td>
-                            <td class="px-6 py-4">{{ $item->keperluan }}</td>
+                            <td class="px-6 py-4">{{ $item->nama_aset }}</td>
+                            <td class="px-6 py-4">{{ $item->lokasi_aset }}</td>
+                            <td class="px-6 py-4">{{ $item->kondisi_aset }}</td>
                             <td class="px-6 py-4">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
                             </td>
-                            <td class="px-6 py-4">{{ $item->nama_barang }}</td>
-                            <td class="px-6 py-4">{{ $item->tempat_asal_barang }}</td>
                             <td class="px-6 py-4 space-x-2 text-center">
-                                <x-button.action href="{{ route('pengadaan-aset.pengembalian-aset.edit', $item->id) }}" icon="pen-to-square"
+                                <x-button.action href="{{ route('pengadaan-aset.laporan-aset-rusak.edit', $item->id) }}" icon="pen-to-square"
                                     color="emerald" title="Edit" />
-                                <x-button.action href="{{ route('pengadaan-aset.pengembalian-aset.show', $item->id) }}" icon="eye"
+                                <x-button.action href="{{ route('pengadaan-aset.laporan-aset-rusak.show', $item->id) }}" icon="eye"
                                     color="emerald" title="Lihat Data" />
-                                <x-button.action href="{{ route('pengadaan-aset.pengembalian-aset.destroy', $item->id) }}" icon="trash"
+                                <x-button.action href="{{ route('pengadaan-aset.laporan-aset-rusak.destroy', $item->id) }}" icon="trash"
                                     color="red" type="button" method="DELETE" title="Hapus" />
                             </td>
                         </tr>

@@ -40,7 +40,7 @@
                                     :current="$pengadaan->foto_barang ?? null" />
 
                                 {{-- Foto Barcode --}}
-                                <x-form.file-upload name="foto_barcode" label="Foto Barcode"
+                                <x-form.file-upload name="foto_barcode" label="Foto Barcode (Jika Ada)"
                                     :current="$pengadaan->foto_barcode ?? null" />
                             </div>
 

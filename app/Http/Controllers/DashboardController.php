@@ -11,6 +11,10 @@ use App\Models\KecelakaanKerja;
 use App\Models\Mutu;
 use App\Models\ManajemenRisiko;
 use App\Models\Visitasi;
+use App\Models\PeminjamanAset;
+use App\Models\PemindahanAset;
+use App\Models\PengembalianAset;
+use App\Models\LaporanAsetRusak;
 
 class DashboardController extends Controller
 {
@@ -62,6 +66,26 @@ class DashboardController extends Controller
         $latestVisitasi = Visitasi::latest('created_at')->first();
         $lastInputTimeVisitasi = $latestVisitasi ? $latestVisitasi->created_at->diffForHumans() : 'Belum ada data';
 
+        // Peminjaman Aset
+        $totalPeminjamanAset = PeminjamanAset::count();
+        $latestPeminjamanAset = PeminjamanAset::latest('created_at')->first();
+        $lastInputTimePeminjamanAset = $latestPeminjamanAset ? $latestPeminjamanAset->created_at->diffForHumans() : 'Belum ada data';
+
+        // Pemindahan Aset
+        $totalPemindahanAset = PemindahanAset::count();
+        $latestPemindahanAset = PemindahanAset::latest('created_at')->first();
+        $lastInputTimePemindahanAset = $latestPemindahanAset ? $latestPemindahanAset->created_at->diffForHumans() : 'Belum ada data';
+
+        // Pengembalian Aset
+        $totalPengembalianAset = PengembalianAset::count();
+        $latestPengembalianAset = PengembalianAset::latest('created_at')->first();
+        $lastInputTimePengembalianAset = $latestPengembalianAset ? $latestPengembalianAset->created_at->diffForHumans() : 'Belum ada data';
+
+        // Laporan Aset Rusak
+        $totalLaporanAsetRusak = LaporanAsetRusak::count();
+        $latestLaporanAsetRusak = LaporanAsetRusak::latest('created_at')->first();
+        $lastInputTimeLaporanAsetRusak = $latestLaporanAsetRusak ? $latestLaporanAsetRusak->created_at->diffForHumans() : 'Belum ada data';
+
         return view('pages.dashboard', compact(
             'totalKomplainIpsrs',
             'lastInputTimeIpsrs',
@@ -81,6 +105,14 @@ class DashboardController extends Controller
             'lastInputTimeManajemenRisiko',
             'totalVisitasi',
             'lastInputTimeVisitasi',
+            'totalPeminjamanAset',
+            'lastInputTimePeminjamanAset',
+            'totalPemindahanAset',
+            'lastInputTimePemindahanAset',
+            'totalPengembalianAset',
+            'lastInputTimePengembalianAset',
+            'totalLaporanAsetRusak',
+            'lastInputTimeLaporanAsetRusak'
         ));
     }
 }

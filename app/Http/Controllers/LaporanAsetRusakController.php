@@ -3,62 +3,117 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\LaporanAsetRusak;
+use Illuminate\Support\Facades\Storage;
 
 class LaporanAsetRusakController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        //
+        $pengadaan = LaporanAsetRusak::all();
+        return view('pages.pengadaan-aset.laporan-aset-rusak.index', compact('pengadaan'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('pages.pengadaan-aset.laporan-aset-rusak.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nama' => 'required|string|max:50',
+            'unit' => 'required|string|max:50',
+            'nama_aset' => 'required|string|max:50',
+            'lokasi_aset' => 'required|string|max:50',
+            'kondisi_aset' => 'required|string|max:50',
+            'tanggal' => 'required|date',
+            'status' => 'nullable|in:Rusak Total,Bisa Diperbaiki',
+            'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'foto_barcode' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
+            $namaFileFoto = 'foto-' . now()->format('YmdHis') . '.' . $foto->getClientOriginalExtension();
+            $pathFoto = $foto->storeAs('images/laporan-aset-rusak/foto-aset-rusak', $namaFileFoto, 'public');
+            $validated['foto'] = $pathFoto;
+        }
+
+        if ($request->hasFile('foto_barcode')) {
+            $fileBarcode = $request->file('foto_barcode');
+            $namaFileBarcode = 'foto-barcode-' . now()->format('YmdHis') . '.' . $fileBarcode->getClientOriginalExtension();
+            $pathBarcode = $fileBarcode->storeAs('images/laporan-aset-rusak/foto-barcode', $namaFileBarcode, 'public');
+            $validated['foto_barcode'] = $pathBarcode;
+        }
+
+        LaporanAsetRusak::create($validated);
+
+        return redirect()->route('pengadaan-aset.laporan-aset-rusak.index')->with('success', 'Data berhasil disimpan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        $pengadaan = LaporanAsetRusak::findOrFail($id);
+        return view('pages.pengadaan-aset.laporan-aset-rusak.detail', compact('pengadaan'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
+        $pengadaan = LaporanAsetRusak::findOrFail($id);
+        return view('pages.pengadaan-aset.laporan-aset-rusak.edit', compact('pengadaan'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'nama' => 'required|string|max:50',
+            'unit' => 'required|string|max:50',
+            'nama_aset' => 'required|string|max:50',
+            'lokasi_aset' => 'required|string|max:50',
+            'kondisi_aset' => 'required|string|max:50',
+            'tanggal' => 'required|date',
+            'status' => 'nullable|in:Rusak Total,Bisa Diperbaiki',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto_barcode' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $pengadaan = LaporanAsetRusak::findOrFail($id);
+
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
+            $namaFileFoto = 'foto-' . now()->format('YmdHis') . '.' . $foto->getClientOriginalExtension();
+            $pathFoto = $foto->storeAs('images/laporan-aset-rusak/foto-aset-rusak', $namaFileFoto, 'public');
+            $validated['foto'] = $pathFoto;
+        }
+
+        if ($request->hasFile('foto_barcode')) {
+            $fileBarcode = $request->file('foto_barcode');
+            $namaFileBarcode = 'foto-barcode-' . now()->format('YmdHis') . '.' . $fileBarcode->getClientOriginalExtension();
+            $pathBarcode = $fileBarcode->storeAs('images/laporan-aset-rusak/foto-barcode', $namaFileBarcode, 'public');
+            $validated['foto_barcode'] = $pathBarcode;
+        }
+
+        $pengadaan->update($validated);
+
+        return redirect()->route('pengadaan-aset.laporan-aset-rusak.index')->with('success', 'Data berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        $pengadaan = LaporanAsetRusak::findOrFail($id);
+
+        if ($pengadaan->foto && Storage::disk('public')->exists($pengadaan->foto)) {
+            Storage::disk('public')->delete($pengadaan->foto);
+        }
+
+        if ($pengadaan->foto_barcode && Storage::disk('public')->exists($pengadaan->foto_barcode)) {
+            Storage::disk('public')->delete($pengadaan->foto_barcode);
+        }
+
+        $pengadaan->delete();
+
+        return redirect()->route('pengadaan-aset.laporan-aset-rusak.index')->with('success', 'Data berhasil dihapus.');
     }
 }

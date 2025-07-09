@@ -33,7 +33,7 @@
                     </tr>
                 </thead>
                 <tbody class="text-s text-slate-500 bg-slate-100 dark:text-white">
-                    @foreach ($komplain as $item)
+                    @foreach ($pengadaan as $item)
                         <tr>
                             <td class="px-6 py-4">{{ $item->nama }}</td>
                             <td class="px-6 py-4">{{ $item->unit }}</td>

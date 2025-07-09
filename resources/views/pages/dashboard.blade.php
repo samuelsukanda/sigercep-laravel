@@ -486,10 +486,10 @@
                                     </p>
                                     <span class="mb-0 font-semibold text-sm dark:text-white">Peminjaman Aset</span>
                                     <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data:
+                                        Total Data: {{ $totalPeminjamanAset }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500"></span>
+                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimePeminjamanAset }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -518,10 +518,10 @@
                                     </p>
                                     <span class="mb-0 font-semibold text-sm dark:text-white">Pengembalian Aset</span>
                                     <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data:
+                                        Total Data: {{ $totalPengembalianAset }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500"></span>
+                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimePengembalianAset }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -553,10 +553,10 @@
                                     </p>
                                     <span class="mb-0 font-semibold text-sm dark:text-white">Pemindahan Aset</span>
                                     <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data:
+                                        Total Data: {{ $totalPemindahanAset }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500"></span>
+                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimePemindahanAset }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -585,10 +585,10 @@
                                     </p>
                                     <span class="mb-0 font-semibold text-sm dark:text-white">Laporan Aset Rusak</span>
                                     <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data:
+                                        Total Data: {{ $totalLaporanAsetRusak }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500"></span>
+                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeLaporanAsetRusak }}</span>
                                     </p>
                                 </div>
                             </div>

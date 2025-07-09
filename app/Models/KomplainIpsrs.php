@@ -9,6 +9,8 @@ class KomplainIpsrs extends Model
 {
     use HasFactory;
 
+    protected $table = 'komplain_ipsrs';
+
     protected $fillable = [
         'nama',
         'unit',

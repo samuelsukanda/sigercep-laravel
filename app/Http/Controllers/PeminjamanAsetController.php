@@ -36,14 +36,14 @@ class PeminjamanAsetController extends Controller
         if ($request->hasFile('foto_barang')) {
             $fileBarang = $request->file('foto_barang');
             $namaFileBarang = 'foto-barang-' . now()->format('YmdHis') . '.' . $fileBarang->getClientOriginalExtension();
-            $pathBarang = $fileBarang->storeAs('images/foto-barang', $namaFileBarang, 'public');
+            $pathBarang = $fileBarang->storeAs('images/peminjaman-aset/foto-barang', $namaFileBarang, 'public');
             $validated['foto_barang'] = $pathBarang;
         }
 
         if ($request->hasFile('foto_barcode')) {
             $fileBarcode = $request->file('foto_barcode');
             $namaFileBarcode = 'foto-barcode-' . now()->format('YmdHis') . '.' . $fileBarcode->getClientOriginalExtension();
-            $pathBarcode = $fileBarcode->storeAs('images/foto-barcode', $namaFileBarcode, 'public');
+            $pathBarcode = $fileBarcode->storeAs('images/peminjaman-aset/foto-barcode', $namaFileBarcode, 'public');
             $validated['foto_barcode'] = $pathBarcode;
         }
 
@@ -83,14 +83,14 @@ class PeminjamanAsetController extends Controller
         if ($request->hasFile('foto_barang')) {
             $fileBarang = $request->file('foto_barang');
             $namaFileBarang = 'foto-barang-' . now()->format('YmdHis') . '.' . $fileBarang->getClientOriginalExtension();
-            $pathBarang = $fileBarang->storeAs('images/foto-barang', $namaFileBarang, 'public');
+            $pathBarang = $fileBarang->storeAs('images/peminjaman-aset/foto-barang', $namaFileBarang, 'public');
             $validated['foto_barang'] = $pathBarang;
         }
 
         if ($request->hasFile('foto_barcode')) {
             $fileBarcode = $request->file('foto_barcode');
             $namaFileBarcode = 'foto-barcode-' . now()->format('YmdHis') . '.' . $fileBarcode->getClientOriginalExtension();
-            $pathBarcode = $fileBarcode->storeAs('images/foto-barcode', $namaFileBarcode, 'public');
+            $pathBarcode = $fileBarcode->storeAs('images/peminjaman-aset/foto-barcode', $namaFileBarcode, 'public');
             $validated['foto_barcode'] = $pathBarcode;
         }
 
