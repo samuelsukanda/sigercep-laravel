@@ -9,7 +9,7 @@ return new class extends Migration
 
     public function up(): void
     {
-        Schema::create('komplain_outsourcing_vendors', function (Blueprint $table) {
+        Schema::create('komplain_outsourcing_vendor', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
             $table->string('unit');
@@ -25,6 +25,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('komplain_outsourcing_vendors');
+        Schema::dropIfExists('komplain_outsourcing_vendor');
     }
 };

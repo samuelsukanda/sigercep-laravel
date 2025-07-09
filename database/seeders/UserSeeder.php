@@ -42,6 +42,18 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('sdm24$'),
                 'level' => 'admin',
             ],
+            [
+                'name' => 'MUTU',
+                'username' => 'mutu',
+                'password' => Hash::make('mutuhmr123'),
+                'level' => 'admin',
+            ],
+            [
+                'name' => 'Desain Grafis',
+                'username' => 'desaingrafis',
+                'password' => Hash::make('hamori24$'),
+                'level' => 'admin',
+            ],
         ];
 
         foreach ($users as $user) {

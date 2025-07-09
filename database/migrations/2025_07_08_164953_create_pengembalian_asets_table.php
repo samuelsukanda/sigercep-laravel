@@ -9,26 +9,22 @@ return new class extends Migration
 
     public function up(): void
     {
-        Schema::create('reservasi_kendaraan', function (Blueprint $table) {
+        Schema::create('pengembalian_aset', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
             $table->string('unit');
-            $table->string('tempat_tujuan');
             $table->string('keperluan');
-            $table->time('jam_berangkat');
-            $table->time('jam_pulang');
             $table->date('tanggal');
-            $table->string('jenis_kendaraan');
-            $table->string('jumlah_penumpang');
-            $table->string('waktu_tempuh');
-            $table->string('jarak_tempuh');
-            $table->string('jenis_layanan');
+            $table->string('nama_barang');
+            $table->string('tempat_asal_barang');
+            $table->string('foto_barang');
+            $table->string('foto_barcode')->nullable(); 
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('reservasi_kendaraan');
+        Schema::dropIfExists('pengembalian_aset');
     }
 };

@@ -12,6 +12,10 @@ use App\Http\Controllers\VisitasiController;
 use App\Http\Controllers\MutuController;
 use App\Http\Controllers\ManajemenRisikoController;
 use App\Http\Controllers\KecelakaanKerjaController;
+use App\Http\Controllers\PengembalianAsetController;
+use App\Http\Controllers\PeminjamanAsetController;
+use App\Http\Controllers\PemindahannAsetController;
+use App\Http\Controllers\LaporanAsetRusakController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -62,4 +66,14 @@ Route::middleware('auth')->group(function () {
     // Kecelakaan Kerja
     Route::resource('kecelakaan-kerja', KecelakaanKerjaController::class)
     ->names('kecelakaan-kerja');
+
+    // Pengadaan Aset
+    Route::resource('pengadaan-aset/pengembalian-aset', PengembalianAsetController::class)
+        ->names('pengadaan-aset.pengembalian-aset');
+    Route::resource('pengadaan-aset/peminjaman-aset', PeminjamanAsetController::class)
+        ->names('pengadaan-aset.peminjaman-aset');
+    Route::resource('pengadaan-aset/pemindahan-aset', PemindahannAsetController::class)
+        ->names('pengadaan-aset.pemindahan-aset');
+    Route::resource('pengadaan-aset/laporan-aset-rusak', LaporanAsetRusakController::class)
+        ->names('pengadaan-aset.laporan-aset-rusak');
 });

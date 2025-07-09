@@ -58,15 +58,13 @@
                             </div>
 
                             {{-- Foto --}}
-                            <div class="md:col-span-2">
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Foto Komplain</label>
-                                @if ($komplain->foto)
-                                    <img src="{{ asset('storage/' . $komplain->foto) }}" alt="Foto Barang"
+                            @if ($komplain->foto)
+                                <div class="md:col-span-2">
+                                    <label class="block mb-1 text-sm font-semibold text-slate-700">Foto Komplain</label>
+                                    <img src="{{ asset('storage/' . $komplain->foto) }}" alt="Foto Komplain"
                                         class="mt-2 h-24 rounded shadow-md object-cover border border-gray-200 w-1/2" />
-                                @else
-                                    <p class="mt-2 text-sm text-slate-600">Tidak ada foto komplain</p>
-                                @endif
-                            </div>
+                                </div>
+                            @endif
                         </div>
 
                         <div class="mt-6">

@@ -1,18 +1,36 @@
 // Laravel Toaster
-document.getElementById("form").addEventListener("submit", function (e) {
-    const fileInput = document.getElementById("foto-upload");
-    const file = fileInput.files[0];
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("form");
 
-    if (!file) {
-        e.preventDefault();
-        toastr.error("Foto harus diisi sebelum mengirim form!", "Error");
-        return false;
-    }
+    const requiredFiles = ["foto", "foto_barang"];
+
+    form.addEventListener("submit", function (e) {
+        let valid = true;
+
+        requiredFiles.forEach(function (name) {
+            const input = document.getElementById(`${name}-upload`);
+            if (input && input.files.length === 0) {
+                valid = false;
+                toastr.error(
+                    `${name.replace(
+                        "_",
+                        " "
+                    )} harus diisi sebelum mengirim form!`,
+                    "Error"
+                );
+            }
+        });
+
+        if (!valid) {
+            e.preventDefault();
+        }
+    });
+
+    // Toastr konfigurasi
+    toastr.options = {
+        closeButton: true,
+        progressBar: true,
+        positionClass: "toast-top-right",
+        timeOut: "5000",
+    };
 });
-
-toastr.options = {
-    "closeButton": true,
-    "progressBar": true,
-    "positionClass": "toast-top-right",
-    "timeOut": "5000",
-};
