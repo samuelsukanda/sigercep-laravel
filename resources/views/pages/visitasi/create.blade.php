@@ -27,11 +27,11 @@
                                     placeholder="Pilih Tanggal" required />
 
                                 {{-- Kendala --}}
-                                <x-form.textarea name="kendala" label="Kendala atau Pengaduan di lapangan" :value="old('kendala', $visitasi->kendala ?? '')"
+                                <x-form.textarea name="kendala" label="Kendala Atau Pengaduan Di Lapangan" :value="old('kendala', $visitasi->kendala ?? '')"
                                     required />
 
                                 {{-- Foto --}}
-                                <x-form.file-upload name="foto" label="Foto Komplain/Kerusakan/Kendala di Lapangan"
+                                <x-form.file-upload name="foto" label="Foto Komplain/Kerusakan/Kendala Di Lapangan"
                                     :current="$visitasi->foto ?? null" />
                             </div>
 

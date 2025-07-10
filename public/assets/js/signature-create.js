@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", function (e) {
         if (signaturePad.isEmpty()) {
             e.preventDefault();
-            alert("Tanda tangan belum diisi. Silakan isi tanda tangan terlebih dahulu.");
+            toastr.error("Tanda tangan belum diisi. Silakan isi tanda tangan terlebih dahulu.", "Error");
             return;
         }
 

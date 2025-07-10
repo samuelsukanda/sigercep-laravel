@@ -15,6 +15,7 @@ use App\Models\PeminjamanAset;
 use App\Models\PemindahanAset;
 use App\Models\PengembalianAset;
 use App\Models\LaporanAsetRusak;
+use App\Models\Peminjaman;
 
 class DashboardController extends Controller
 {
@@ -86,6 +87,11 @@ class DashboardController extends Controller
         $latestLaporanAsetRusak = LaporanAsetRusak::latest('created_at')->first();
         $lastInputTimeLaporanAsetRusak = $latestLaporanAsetRusak ? $latestLaporanAsetRusak->created_at->diffForHumans() : 'Belum ada data';
 
+        // Peminjaman
+        $totalPeminjaman = Peminjaman::count();
+        $latestPeminjaman = Peminjaman::latest('created_at')->first();
+        $lastInputTimePeminjaman = $latestPeminjaman ? $latestPeminjaman->created_at->diffForHumans() : 'Belum ada data';
+
         return view('pages.dashboard', compact(
             'totalKomplainIpsrs',
             'lastInputTimeIpsrs',
@@ -112,7 +118,9 @@ class DashboardController extends Controller
             'totalPengembalianAset',
             'lastInputTimePengembalianAset',
             'totalLaporanAsetRusak',
-            'lastInputTimeLaporanAsetRusak'
+            'lastInputTimeLaporanAsetRusak',
+            'totalPeminjaman',
+            'lastInputTimePeminjaman'
         ));
     }
 }

@@ -33,15 +33,15 @@
                                 <x-form.input type="date" name="tanggal" label="Tanggal" :value="old('tanggal', $komplain->tanggal ?? '')" required />
 
                                 {{-- Kendala --}}
-                                <x-form.textarea name="kendala" label="Kendala atau Pengaduan di lapangan" :value="old('kendala', $komplain->kendala ?? '')"
+                                <x-form.textarea name="kendala" label="Kendala atau Pengaduan Di Lapangan" :value="old('kendala', $komplain->kendala ?? '')"
                                     required />
 
                                 {{-- Area --}}
-                                <x-form.input name="area" label="Area komplain yang dilaporkan:" :value="old('area', $komplain->area ?? '')"
+                                <x-form.input name="area" label="Area Komplain Yang Di Laporkan:" :value="old('area', $komplain->area ?? '')"
                                     required />
 
                                 {{-- Foto --}}
-                                <x-form.file-upload name="foto" label="Foto Komplain/Keluhan di Lapangan"
+                                <x-form.file-upload name="foto" label="Foto Komplain/Keluhan Di Lapangan"
                                     :current="$komplain->foto ?? null" />
                             </div>
 

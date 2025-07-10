@@ -38,15 +38,15 @@
                                     value="{{ old('jam', $komplain->jam) }}" required />
 
                                 {{-- Kendala --}}
-                                <x-form.textarea label="Kendala atau Pengaduan di Lapangan" name="kendala" rows="5"
+                                <x-form.textarea label="Kendala Atau Pengaduan Di Lapangan" name="kendala" rows="5"
                                     required>{{ old('kendala', $komplain->kendala) }}</x-form.textarea>
 
                                 {{-- Area --}}
-                                <x-form.input name="area" label="Area komplain yang dilaporkan" :value="old('area', $komplain->area ?? '')"
+                                <x-form.input name="area" label="Area Komplain Yang Di Laporkan" :value="old('area', $komplain->area ?? '')"
                                     required />
 
                                 {{-- Foto --}}
-                                <x-form.file-upload label="Foto Komplain/Kerusakan/Kendala di Lapangan" name="foto"
+                                <x-form.file-upload label="Foto Komplain/Kerusakan/Kendala Di Lapangan" name="foto"
                                     preview="{{ $komplain->foto ?? null }}" />
                             </div>
 

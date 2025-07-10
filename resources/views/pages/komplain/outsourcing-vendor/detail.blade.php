@@ -47,15 +47,15 @@
 
                             {{-- Kendala --}}
                             <div class="md:col-span-2">
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Kendala atau
-                                    Pengaduan di lapangan</label>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Kendala Atau
+                                    Pengaduan Di Lapangan</label>
                                 <p class="text-slate-600">{{ $komplain->kendala }}</p>
                             </div>
 
                             {{-- Area --}}
                             <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Area komplain yang
-                                    dilaporkan</label>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Area Komplain Yang
+                                    Di Laporkan</label>
                                 <p class="text-slate-600">{{ $komplain->area }}</p>
                             </div>
 

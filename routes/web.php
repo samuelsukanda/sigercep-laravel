@@ -16,6 +16,7 @@ use App\Http\Controllers\PengembalianAsetController;
 use App\Http\Controllers\PeminjamanAsetController;
 use App\Http\Controllers\PemindahannAsetController;
 use App\Http\Controllers\LaporanAsetRusakController;
+use App\Http\Controllers\PeminjamanController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -61,11 +62,11 @@ Route::middleware('auth')->group(function () {
 
     // Desain Grafis
     Route::resource('desain-grafis', DesainGrafisController::class)
-    ->names('desain-grafis');
+        ->names('desain-grafis');
 
     // Kecelakaan Kerja
     Route::resource('kecelakaan-kerja', KecelakaanKerjaController::class)
-    ->names('kecelakaan-kerja');
+        ->names('kecelakaan-kerja');
 
     // Pengadaan Aset
     Route::resource('pengadaan-aset/pengembalian-aset', PengembalianAsetController::class)
@@ -76,4 +77,8 @@ Route::middleware('auth')->group(function () {
         ->names('pengadaan-aset.pemindahan-aset');
     Route::resource('pengadaan-aset/laporan-aset-rusak', LaporanAsetRusakController::class)
         ->names('pengadaan-aset.laporan-aset-rusak');
+
+    // Peminjaman
+    Route::resource('peminjaman', PeminjamanController::class)
+        ->names('peminjaman');
 });
