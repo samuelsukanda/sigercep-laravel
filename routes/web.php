@@ -17,6 +17,7 @@ use App\Http\Controllers\PeminjamanAsetController;
 use App\Http\Controllers\PemindahannAsetController;
 use App\Http\Controllers\LaporanAsetRusakController;
 use App\Http\Controllers\PeminjamanController;
+use App\Http\Controllers\KesiapanAmbulanceController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -81,4 +82,8 @@ Route::middleware('auth')->group(function () {
     // Peminjaman
     Route::resource('peminjaman', PeminjamanController::class)
         ->names('peminjaman');
+
+    // Kesiapan Ambulance
+    Route::resource('kesiapan-ambulance', KesiapanAmbulanceController::class)
+        ->names('kesiapan-ambulance');
 });

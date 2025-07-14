@@ -91,6 +91,11 @@ $(document).ready(function () {
         placeholder: "Pilih Durasi",
         allowClear: true,
     });
+
+    $("#perawat").select2({
+        placeholder: "Pilih Perawat",
+        allowClear: true,
+    });
 });
 
 // Flatpickr

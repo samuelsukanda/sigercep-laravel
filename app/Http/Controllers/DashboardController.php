@@ -8,6 +8,7 @@ use App\Models\ReservasiRuangan;
 use App\Models\ReservasiKendaraan;
 use App\Models\DesainGrafis;
 use App\Models\KecelakaanKerja;
+use App\Models\KesiapanAmbulance;
 use App\Models\Mutu;
 use App\Models\ManajemenRisiko;
 use App\Models\Visitasi;
@@ -92,6 +93,11 @@ class DashboardController extends Controller
         $latestPeminjaman = Peminjaman::latest('created_at')->first();
         $lastInputTimePeminjaman = $latestPeminjaman ? $latestPeminjaman->created_at->diffForHumans() : 'Belum ada data';
 
+        // Kesiapan Ambulance
+        $totalAmbulance = KesiapanAmbulance::count();
+        $latestAmbulance = KesiapanAmbulance::latest('created_at')->first();
+        $lastInputTimeAmbulance = $latestAmbulance ? $latestAmbulance->created_at->diffForHumans() : 'Belum ada data';
+
         return view('pages.dashboard', compact(
             'totalKomplainIpsrs',
             'lastInputTimeIpsrs',
@@ -120,7 +126,9 @@ class DashboardController extends Controller
             'totalLaporanAsetRusak',
             'lastInputTimeLaporanAsetRusak',
             'totalPeminjaman',
-            'lastInputTimePeminjaman'
+            'lastInputTimePeminjaman',
+            'totalAmbulance',
+            'lastInputTimeAmbulance'
         ));
     }
 }

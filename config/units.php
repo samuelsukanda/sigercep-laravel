@@ -40,6 +40,21 @@ return [
         'VK',
     ],
 
+    'perawat' => [
+        'Yusuf Ifnugroho, AMK">Yusuf Ifnugroho, AMK',
+        'Nur Fitriyana Sutisna, S.Kep.,Ners',
+        'Siska Roheni, A.Md.Kep',
+        'Hilya Aeni, A.Md.Kep',
+        'Dea Agustin, A.Md.Kep',
+        'Alvin Aprilianto Widjojo, A.Md.Kep',
+        'Benny Laksana, A.Md.Kep',
+        'Hemavanna Trisrasepti, A.Md.Kep',
+        'Dedeh Rina, A.Md.Kep',
+        'Miftah Choirul Anam, S.Kep.,Ners',
+        'Candra Nugraha, A.Md.Kep',
+        'Ecin Lestari Putri, A.Md.Kep',
+    ],
+
     'tujuanUnitsIpsrs' => [
         'Maintenance',
         'Kesehatan Lingkungan',
