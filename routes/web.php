@@ -18,6 +18,7 @@ use App\Http\Controllers\PemindahannAsetController;
 use App\Http\Controllers\LaporanAsetRusakController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\KesiapanAmbulanceController;
+use App\Http\Controllers\StrukturOrganisasiController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -86,4 +87,8 @@ Route::middleware('auth')->group(function () {
     // Kesiapan Ambulance
     Route::resource('kesiapan-ambulance', KesiapanAmbulanceController::class)
         ->names('kesiapan-ambulance');
+
+    // SDM & Hukum
+    Route::get('/sdm-hukum/struktur-organisasi', [StrukturOrganisasiController::class, 'index'])
+        ->name('sdm-hukum.struktur-organisasi.index');
 });
