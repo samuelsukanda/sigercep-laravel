@@ -18,6 +18,7 @@ use App\Models\PemindahanAset;
 use App\Models\PengembalianAset;
 use App\Models\LaporanAsetRusak;
 use App\Models\Peminjaman;
+use App\Models\Toner;
 
 class DashboardController extends Controller
 {
@@ -104,6 +105,11 @@ class DashboardController extends Controller
         $latestAmbulance = KesiapanAmbulance::latest('created_at')->first();
         $lastInputTimeAmbulance = $latestAmbulance ? $latestAmbulance->created_at->diffForHumans() : 'Belum ada data';
 
+        // Toner
+        $totalToner = Toner::count();
+        $latestToner = Toner::latest('created_at')->first();
+        $lastInputTimeToner = $latestToner ? $latestToner->created_at->diffForHumans() : 'Belum ada data';
+
         return view('pages.dashboard', compact(
             'totalKomplainIpsrs',
             'lastInputTimeIpsrs',
@@ -136,7 +142,9 @@ class DashboardController extends Controller
             'totalPeminjaman',
             'lastInputTimePeminjaman',
             'totalAmbulance',
-            'lastInputTimeAmbulance'
+            'lastInputTimeAmbulance',
+            'totalToner',
+            'lastInputTimeToner'
         ));
     }
 }
