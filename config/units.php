@@ -151,4 +151,14 @@ return [
         'm',
         'inch',
     ],
+
+    'toner' => [
+        'BROTHER HL-L2360DN',
+        'BROTHER HL-B2080DW',
+        'EPSON M1140',
+        'EPSON L6550 - MAGENTA',
+        'EPSON L6550 - YELLOW',
+        'EPSON L6550 - BLACK',
+        'EPSON L6550 - CYAN',
+    ],
 ];

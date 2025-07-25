@@ -17,6 +17,11 @@ $(document).ready(function () {
         allowClear: true,
     });
 
+    $("#toner").select2({
+        placeholder: "Pilih toner",
+        allowClear: true,
+    });
+
     $("#tujuan_unit").select2({
         placeholder: "Pilih Tujuan Unit",
         allowClear: true,

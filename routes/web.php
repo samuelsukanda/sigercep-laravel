@@ -20,6 +20,7 @@ use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\KesiapanAmbulanceController;
 use App\Http\Controllers\StrukturOrganisasiController;
 use App\Http\Controllers\KesehatanLingkunganController;
+use App\Http\Controllers\TonerController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -94,4 +95,8 @@ Route::middleware('auth')->group(function () {
     // SDM & Hukum
     Route::get('/sdm-hukum/struktur-organisasi', [StrukturOrganisasiController::class, 'index'])
         ->name('sdm-hukum.struktur-organisasi.index');
+
+    // Toner
+    Route::resource('toner', TonerController::class)
+        ->names('toner');
 });
