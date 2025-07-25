@@ -6,8 +6,7 @@
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4">
             <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Komplain Outsourcing Vendor</h6>
-            <x-button.link href="{{ route('komplain.outsourcing-vendor.create') }}"
-                class="text-white bg-gradient-to-tl from-emerald-500 to-teal-400">
+            <x-button.link href="{{ route('komplain.outsourcing-vendor.create') }}">
                 Tambah Data
             </x-button.link>
         </div>
@@ -44,12 +43,12 @@
                             </td>
                             <td class="px-6 py-4">{{ $item->kendala }}</td>
                             <td class="px-6 py-4 space-x-2 text-center">
-                                <x-button.action href="{{ route('komplain.outsourcing-vendor.edit', $item->id) }}" icon="pen-to-square"
-                                    color="emerald" title="Edit" />
-                                <x-button.action href="{{ route('komplain.outsourcing-vendor.show', $item->id) }}" icon="eye"
-                                    color="emerald" title="Lihat Data" />
-                                <x-button.action href="{{ route('komplain.outsourcing-vendor.destroy', $item->id) }}" icon="trash"
-                                    color="red" type="button" method="DELETE" title="Hapus" />
+                                <x-button.action href="{{ route('komplain.outsourcing-vendor.edit', $item->id) }}"
+                                    icon="pen-to-square" color="emerald" title="Edit" />
+                                <x-button.action href="{{ route('komplain.outsourcing-vendor.show', $item->id) }}"
+                                    icon="eye" color="emerald" title="Lihat Data" />
+                                <x-button.action href="{{ route('komplain.outsourcing-vendor.destroy', $item->id) }}"
+                                    icon="trash" color="red" type="button" method="DELETE" title="Hapus" />
                             </td>
                         </tr>
                     @endforeach

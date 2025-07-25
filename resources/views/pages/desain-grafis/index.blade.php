@@ -6,8 +6,7 @@
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4">
             <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Desain Grafis</h6>
-            <x-button.link href="{{ route('desain-grafis.create') }}"
-                class="text-white bg-gradient-to-tl from-emerald-500 to-teal-400">
+            <x-button.link href="{{ route('desain-grafis.create') }}">
                 Tambah Data
             </x-button.link>
         </div>

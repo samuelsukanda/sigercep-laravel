@@ -6,8 +6,7 @@
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4">
             <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Komplain IPSRS</h6>
-            <x-button.link href="{{ route('komplain.ipsrs.create') }}"
-                class="text-white bg-gradient-to-tl from-emerald-500 to-teal-400">
+            <x-button.link href="{{ route('komplain.ipsrs.create') }}">
                 Tambah Data
             </x-button.link>
         </div>
@@ -63,4 +62,3 @@
 @push('scripts')
     <script src="{{ asset('assets/js/alert-delete.js') }}"></script>
 @endpush
-
