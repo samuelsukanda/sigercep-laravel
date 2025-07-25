@@ -68,6 +68,15 @@
                             <span class="ml-1">Outsourching & Vendor</span>
                         </a>
                     </li>
+                    <li class="w-full">
+                        <a href="{{ route('komplain.kesehatan-lingkungan.index') }}"
+                            class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                                <i class="fas fa-list text-sm leading-normal"></i>
+                            </div>
+                            <span class="ml-1">Kesehatan Lingkungan</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
 
@@ -293,7 +302,7 @@
                 <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
                     style="max-height: 0; opacity: 0;" dropdown-menu>
                     <li class="w-full">
-                        <a href="{{ route('pengadaan-aset.peminjaman-aset.index')}}"
+                        <a href="{{ route('pengadaan-aset.peminjaman-aset.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
@@ -354,6 +363,34 @@
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
                             <span class="ml-1">Kesiapan Ambulance</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="mt-0.5 w-full">
+                <!-- Trigger -->
+                <a href="javascript:;" onclick="toggleDropdown(this)"
+                    class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
+                    <div class="flex items-center">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <i class="fas fa-print relative top-0 text-sm leading-normal text-blue-500"></i>
+                        </div>
+                        <span class="ml-1 duration-300 ease">Toner</span>
+                    </div>
+                    <i class="fas fa-chevron-down text-sm transition-transform duration-200"></i>
+                </a>
+
+                <!-- Dropdown Menu -->
+                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                    style="max-height: 0; opacity: 0;" dropdown-menu>
+                    <li class="w-full">
+                        <a href="#"
+                            class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                                <i class="fas fa-list text-sm leading-normal"></i>
+                            </div>
+                            <span class="ml-1">Toner</span>
                         </a>
                     </li>
                 </ul>

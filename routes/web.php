@@ -19,6 +19,7 @@ use App\Http\Controllers\LaporanAsetRusakController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\KesiapanAmbulanceController;
 use App\Http\Controllers\StrukturOrganisasiController;
+use App\Http\Controllers\KesehatanLingkunganController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -43,6 +44,8 @@ Route::middleware('auth')->group(function () {
 
     // Komplain
     Route::resource('komplain/ipsrs', KomplainIpsrsController::class)->names('komplain.ipsrs');
+    Route::resource('komplain/kesehatan-lingkungan', KesehatanLingkunganController::class)
+        ->names('komplain.kesehatan-lingkungan');
     Route::resource('komplain/outsourcing-vendor', KomplainOutsourcingVendorController::class)
         ->names('komplain.outsourcing-vendor');
 

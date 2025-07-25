@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KomplainIpsrs;
 use App\Models\KomplainOutsourcingVendor;
+use App\Models\KesehatanLingkungan;
 use App\Models\ReservasiRuangan;
 use App\Models\ReservasiKendaraan;
 use App\Models\DesainGrafis;
@@ -32,6 +33,11 @@ class DashboardController extends Controller
         $totalKomplainOutsourcingVendor = KomplainOutsourcingVendor::count();
         $latestVendor = KomplainOutsourcingVendor::latest('created_at')->first();
         $lastInputTimeVendor = $latestVendor ? $latestVendor->created_at->diffForHumans() : 'Belum ada data';
+
+        // Kesehatan Lingkungan
+        $totalKesehatanLingkungan = KesehatanLingkungan::count();
+        $latestKesehatanLingkungan = KesehatanLingkungan::latest('created_at')->first();
+        $lastInputTimeKesehatanLingkungan = $latestKesehatanLingkungan ? $latestKesehatanLingkungan->created_at->diffForHumans() : 'Belum ada data';
 
         // Reservasi Ruangan
         $totalReservasiRuangan = ReservasiRuangan::count();
@@ -103,6 +109,8 @@ class DashboardController extends Controller
             'lastInputTimeIpsrs',
             'totalKomplainOutsourcingVendor',
             'lastInputTimeVendor',
+            'totalKesehatanLingkungan',
+            'lastInputTimeKesehatanLingkungan',
             'totalReservasiRuangan',
             'lastInputTimeRuangan',
             'totalReservasiKendaraan',

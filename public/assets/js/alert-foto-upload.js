@@ -2,7 +2,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("form");
 
-    const requiredFiles = ["foto", "foto_barang"];
+    const requiredFiles = ["foto", "foto_barang", "dokumentasi"];
 
     form.addEventListener("submit", function (e) {
         let valid = true;
