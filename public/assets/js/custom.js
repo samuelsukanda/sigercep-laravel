@@ -18,7 +18,12 @@ $(document).ready(function () {
     });
 
     $("#toner").select2({
-        placeholder: "Pilih toner",
+        placeholder: "Pilih Toner",
+        allowClear: true,
+    });
+
+    $("#jenis_spo").select2({
+        placeholder: "Pilih Jenis SPO",
         allowClear: true,
     });
 

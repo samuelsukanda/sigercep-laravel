@@ -10,6 +10,7 @@ use App\Http\Controllers\ReservasiRuanganController;
 use App\Http\Controllers\ReservasiKendaraanController;
 use App\Http\Controllers\VisitasiController;
 use App\Http\Controllers\MutuController;
+use App\Http\Controllers\BankSpoController;
 use App\Http\Controllers\ManajemenRisikoController;
 use App\Http\Controllers\KecelakaanKerjaController;
 use App\Http\Controllers\PengembalianAsetController;
@@ -60,9 +61,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('visitasi', VisitasiController::class)
         ->names('visitasi');
 
-    // Mutu
+    // Komite Mutu
     Route::resource('komite-mutu/mutu', MutuController::class)
         ->names('komite-mutu.mutu');
+    Route::resource('komite-mutu/bank-spo', BankSpoController::class)
+        ->names('komite-mutu.bank-spo');
     Route::resource('komite-mutu/manajemen-risiko', ManajemenRisikoController::class)
         ->names('komite-mutu.manajemen-risiko');
 
