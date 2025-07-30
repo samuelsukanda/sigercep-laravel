@@ -42,7 +42,7 @@
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">File SPO</label>
                                 <a href="{{ route('bank-spo.show-file', $bank_spo->id) }}" target="_blank"
-                                    class="text-blue-600 hover:underline">
+                                    class="px-2 py-1 bg-blue-500 rounded text-white hover:shadow-xs active:opacity-85">
                                     📄 Lihat File PDF
                                 </a>
                             </div>

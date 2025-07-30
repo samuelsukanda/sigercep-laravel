@@ -7,9 +7,21 @@ use App\Models\DesainGrafis;
 
 class DesainGrafisController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $desain = DesainGrafis::all();
+
+        $query = DesainGrafis::query();
+
+        if ($request->start_date && $request->end_date) {
+            $query->whereBetween('created_at', [
+                $request->start_date . ' 00:00:00',
+                $request->end_date . ' 23:59:59'
+            ]);
+        }
+
+        $desain = $query->latest()->get();
+
         return view('pages.desain-grafis.index', compact('desain'));
     }
 

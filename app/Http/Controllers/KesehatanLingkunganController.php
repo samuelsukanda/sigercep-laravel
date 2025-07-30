@@ -10,9 +10,21 @@ use Illuminate\Support\Facades\Storage;
 class KesehatanLingkunganController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $komplain = KesehatanLingkungan::all();
+
+        $query = KesehatanLingkungan::query();
+
+        if ($request->start_date && $request->end_date) {
+            $query->whereBetween('created_at', [
+                $request->start_date . ' 00:00:00',
+                $request->end_date . ' 23:59:59'
+            ]);
+        }
+
+        $komplain = $query->latest()->get();
+
         return view('pages.komplain.kesehatan-lingkungan.index', compact('komplain'));
     }
 

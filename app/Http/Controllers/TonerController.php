@@ -9,9 +9,21 @@ use Illuminate\Support\Facades\Storage;
 class TonerController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $toner = Toner::all();
+
+        $query = Toner::query();
+
+        if ($request->start_date && $request->end_date) {
+            $query->whereBetween('created_at', [
+                $request->start_date . ' 00:00:00',
+                $request->end_date . ' 23:59:59'
+            ]);
+        }
+
+        $toner = $query->latest()->get();
+
         return view('pages.toner.index', compact('toner'));
     }
 

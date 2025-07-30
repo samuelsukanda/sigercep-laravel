@@ -8,9 +8,21 @@ use App\Models\ManajemenRisiko;
 class ManajemenRisikoController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $mutu = ManajemenRisiko::all();
+
+        $query = ManajemenRisiko::query();
+
+        if ($request->start_date && $request->end_date) {
+            $query->whereBetween('created_at', [
+                $request->start_date . ' 00:00:00',
+                $request->end_date . ' 23:59:59'
+            ]);
+        }
+
+        $mutu = $query->latest()->get();
+
         return view('pages.komite-mutu.manajemen-risiko.index', compact('mutu'));
     }
 

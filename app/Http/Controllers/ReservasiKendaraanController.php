@@ -8,9 +8,21 @@ use Illuminate\Http\Request;
 class ReservasiKendaraanController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $reservasi = ReservasiKendaraan::all();
+
+        $query = ReservasiKendaraan::query();
+
+        if ($request->start_date && $request->end_date) {
+            $query->whereBetween('created_at', [
+                $request->start_date . ' 00:00:00',
+                $request->end_date . ' 23:59:59'
+            ]);
+        }
+
+        $reservasi = $query->latest()->get();
+
         return view('pages.reservasi.kendaraan.index', compact('reservasi'));
     }
 

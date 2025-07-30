@@ -9,9 +9,21 @@ use Illuminate\Support\Facades\Storage;
 class PeminjamanAsetController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $pengadaan = PeminjamanAset::all();
+
+        $query = PeminjamanAset::query();
+
+        if ($request->start_date && $request->end_date) {
+            $query->whereBetween('created_at', [
+                $request->start_date . ' 00:00:00',
+                $request->end_date . ' 23:59:59'
+            ]);
+        }
+
+        $pengadaan = $query->latest()->get();
+
         return view('pages.pengadaan-aset.peminjaman-aset.index', compact('pengadaan'));
     }
 
