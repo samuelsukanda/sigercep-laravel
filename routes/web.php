@@ -66,6 +66,7 @@ Route::middleware('auth')->group(function () {
         ->names('komite-mutu.mutu');
     Route::resource('komite-mutu/bank-spo', BankSpoController::class)
         ->names('komite-mutu.bank-spo');
+    Route::get('/bank-spo/file/{id}', [BankSpoController::class, 'showFile'])->name('bank-spo.show-file');
     Route::resource('komite-mutu/manajemen-risiko', ManajemenRisikoController::class)
         ->names('komite-mutu.manajemen-risiko');
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\BankSpo;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
 
 class BankSpoController extends Controller
 {
@@ -82,7 +83,7 @@ class BankSpoController extends Controller
             ]);
         }
 
-        return redirect()->route('komite-mutu.bank-spo.index')->with('success', 'SPO berhasil disimpan.');
+        return redirect()->route('komite-mutu.bank-spo.index')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -91,9 +92,32 @@ class BankSpoController extends Controller
         return view('pages.komite-mutu.bank-spo.detail', compact('bank_spo'));
     }
 
+    public function showFile($id)
+    {
+        $spo = BankSpo::findOrFail($id);
+
+        // Ambil path file dari SPO Utama jika SPO Terkait
+        $filePath = $spo->file_source_id
+            ? optional(BankSpo::find($spo->file_source_id))->file_path
+            : $spo->file_path;
+
+        if (!Storage::disk('public')->exists($filePath)) {
+            abort(404, 'File tidak ditemukan');
+        }
+
+        $unit = $spo->unit;
+        $namaFile = $unit . '-' . pathinfo($filePath, PATHINFO_BASENAME);
+
+        return Response::make(Storage::disk('public')->get($filePath), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $namaFile . '"'
+        ]);
+    }
+
     public function edit(string $id)
     {
-        //
+        $bank_spo = BankSpo::findOrFail($id);
+        return view('pages.komite-mutu.bank-spo.edit', compact('bank_spo'));
     }
 
     public function update(Request $request, string $id)

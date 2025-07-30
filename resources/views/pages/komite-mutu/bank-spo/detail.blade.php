@@ -38,11 +38,10 @@
                                 </p>
                             </div>
 
-                            {{-- FIle SPO --}}
                             {{-- File SPO --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">File SPO</label>
-                                <a href="{{ asset('storage/' . $bank_spo->file_path) }}" target="_blank"
+                                <a href="{{ route('bank-spo.show-file', $bank_spo->id) }}" target="_blank"
                                     class="text-blue-600 hover:underline">
                                     📄 Lihat File PDF
                                 </a>
