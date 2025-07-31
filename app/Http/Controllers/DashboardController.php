@@ -19,6 +19,7 @@ use App\Models\PengembalianAset;
 use App\Models\LaporanAsetRusak;
 use App\Models\Peminjaman;
 use App\Models\Toner;
+use App\Models\BankSpo;
 
 class DashboardController extends Controller
 {
@@ -64,6 +65,11 @@ class DashboardController extends Controller
         $totalMutu = Mutu::count();
         $latestMutu = Mutu::latest('created_at')->first();
         $lastInputTimeMutu = $latestMutu ? $latestMutu->created_at->diffForHumans() : 'Belum ada data';
+
+        // Bank SPO
+        $totalBankSpo = BankSpo::count();
+        $latestBankSpo = BankSpo::latest('created_at')->first();
+        $lastInputTimeBankSpo = $latestBankSpo ? $latestBankSpo->created_at->diffForHumans() : 'Belum ada data';
 
         // Manajemen Risiko
         $totalManajemenRisiko = ManajemenRisiko::count();
@@ -127,6 +133,8 @@ class DashboardController extends Controller
             'lastInputTimeK3RS',
             'totalMutu',
             'lastInputTimeMutu',
+            'totalBankSpo',
+            'lastInputTimeBankSpo',
             'totalManajemenRisiko',
             'lastInputTimeManajemenRisiko',
             'totalVisitasi',

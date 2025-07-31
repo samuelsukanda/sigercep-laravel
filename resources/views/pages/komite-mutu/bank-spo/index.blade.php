@@ -58,7 +58,7 @@
                         <th class="px-6 py-3">Nama File</th>
                         <th class="px-6 py-3">Unit</th>
                         <th class="px-6 py-3">Jenis SPO</th>
-                        <th class="px-6 py-3">Dibuat Pada</th>
+                        <th class="px-6 py-3">Tanggal</th>
                         <th class="px-6 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
