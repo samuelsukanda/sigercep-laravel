@@ -37,31 +37,43 @@ class BankSpoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'unit' => 'required|string',
+            'unit' => 'required|array',
+            'unit.*' => 'required|string',
             'jenis_spo' => 'required|in:SPO Utama,SPO Terkait',
             'nama_file' => 'required|file|mimes:pdf|max:20480',
         ]);
 
-        $unit = $request->unit;
+        $units = $request->unit;
         $jenisSpo = $request->jenis_spo;
         $uploadedFile = $request->file('nama_file');
         $originalName = $uploadedFile->getClientOriginalName();
 
         if ($jenisSpo === 'SPO Utama') {
-            $targetPath = "bank-spo/$unit/" . $originalName;
+            $existingUnits = BankSpo::where('nama_file', $originalName)
+                ->where('jenis_spo', 'SPO Utama')
+                ->pluck('unit')
+                ->toArray();
 
-            if (Storage::disk('public')->exists($targetPath)) {
-                return back()->withErrors(['nama_file' => 'File sudah ada untuk unit ini.']);
+            $unitsToInsert = array_diff($units, $existingUnits);
+
+            if (empty($unitsToInsert)) {
+                return back()->withErrors([
+                    'nama_file' => 'File SPO Utama ini sudah pernah diunggah untuk unit yang dipilih.'
+                ]);
             }
 
-            Storage::disk('public')->putFileAs("bank-spo/$unit", $uploadedFile, $originalName);
+            foreach ($unitsToInsert as $unit) {
+                $targetPath = "bank-spo/$unit/" . $originalName;
 
-            BankSpo::create([
-                'nama_file' => $originalName,
-                'file_path' => $targetPath,
-                'unit' => $unit,
-                'jenis_spo' => 'SPO Utama',
-            ]);
+                Storage::disk('public')->putFileAs("bank-spo/$unit", $uploadedFile, $originalName);
+
+                BankSpo::create([
+                    'nama_file' => $originalName,
+                    'file_path' => $targetPath,
+                    'unit' => $unit,
+                    'jenis_spo' => 'SPO Utama',
+                ]);
+            }
         }
 
         if ($jenisSpo === 'SPO Terkait') {
@@ -73,21 +85,26 @@ class BankSpoController extends Controller
                 return back()->withErrors(['nama_file' => 'File SPO Utama tidak ditemukan. Harap unggah sebagai SPO Utama terlebih dahulu.']);
             }
 
-            $duplikat = BankSpo::where('nama_file', $originalName)
-                ->where('unit', $unit)
+            $duplikatUnits = BankSpo::where('nama_file', $originalName)
                 ->where('jenis_spo', 'SPO Terkait')
-                ->first();
+                ->whereIn('unit', $units)
+                ->pluck('unit')
+                ->toArray();
 
-            if ($duplikat) {
-                return back()->withErrors(['nama_file' => 'Unit ini sudah memiliki SPO Terkait tersebut.']);
+            if (!empty($duplikatUnits)) {
+                return back()->withErrors([
+                    'nama_file' => 'File SPO Terkait ini sudah pernah diunggah untuk unit: ' . implode(', ', $duplikatUnits) . '. Harap hapus terlebih dahulu jika ingin mengganti.'
+                ]);
             }
 
-            BankSpo::create([
-                'nama_file' => $originalName,
-                'file_path' => $utama->file_path,
-                'unit' => $unit,
-                'jenis_spo' => 'SPO Terkait',
-            ]);
+            foreach ($units as $unit) {
+                BankSpo::create([
+                    'nama_file' => $originalName,
+                    'file_path' => $utama->file_path,
+                    'unit' => $unit,
+                    'jenis_spo' => 'SPO Terkait',
+                ]);
+            }
         }
 
         return redirect()->route('komite-mutu.bank-spo.index')->with('success', 'Data berhasil disimpan.');

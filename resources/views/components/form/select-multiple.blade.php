@@ -9,7 +9,7 @@
         {{ $label }} :
     </label>
     <select id="{{ $name }}" name="{{ $name }}[]" multiple
-        {{ $attributes->merge(['class' => 'select2 w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-700 outline-none transition-all focus:ring-2 focus:ring-blue-500 focus:border-blue-500']) }}
+        {{ $attributes->merge(['class' => 'select2 w-full border-gray-300 text-gray-700 outline-none transition-all']) }}
         @if ($required) required @endif>
         @foreach ($options as $option)
             <option value="{{ $option }}" {{ in_array($option, $selected) ? 'selected' : '' }}>
