@@ -11,6 +11,7 @@ use App\Http\Controllers\ReservasiKendaraanController;
 use App\Http\Controllers\VisitasiController;
 use App\Http\Controllers\MutuController;
 use App\Http\Controllers\BankSpoController;
+use App\Http\Controllers\UtwController;
 use App\Http\Controllers\ManajemenRisikoController;
 use App\Http\Controllers\KecelakaanKerjaController;
 use App\Http\Controllers\PengembalianAsetController;
@@ -99,6 +100,9 @@ Route::middleware('auth')->group(function () {
     // SDM & Hukum
     Route::get('/sdm-hukum/struktur-organisasi', [StrukturOrganisasiController::class, 'index'])
         ->name('sdm-hukum.struktur-organisasi.index');
+    Route::resource('sdm-hukum/utw', UtwController::class)
+        ->names('sdm-hukum.utw');
+    Route::get('/utw/file/{id}', [UtwController::class, 'showFile'])->name('sdm-hukum.utw.show-file');
 
     // Toner
     Route::resource('toner', TonerController::class)

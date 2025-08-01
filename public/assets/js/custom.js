@@ -75,6 +75,16 @@ $(document).ready(function () {
         allowClear: true,
     });
 
+    $("#filter-unit").select2({
+        placeholder: "Pilih Unit",
+        allowClear: true,
+    });
+
+    $("#filter-jenis").select2({
+        placeholder: "Pilih Jenis",
+        allowClear: true,
+    });
+
     $("#toner").select2({
         placeholder: "Pilih Toner",
         allowClear: true,
