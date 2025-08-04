@@ -11,6 +11,13 @@
             </x-button.link>
         </div>
 
+        @if (session('success'))
+            <div
+                class="relative text-s w-full p-4 mb-4 text-white border border-blue-300 border-solid rounded-lg bg-gradient-to-tl from-blue-500 to-violet-500">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
             {{-- Filter Tanggal --}}
             <form method="GET" action="{{ route('komite-mutu.bank-spo.index') }}" class="flex items-center gap-4 mb-4">
@@ -43,13 +50,6 @@
                 </select>
             </div>
         </div>
-
-        @if (session('success'))
-            <div
-                class="relative text-s w-full p-4 mb-4 text-white border border-blue-300 border-solid rounded-lg bg-gradient-to-tl from-blue-500 to-violet-500">
-                {{ session('success') }}
-            </div>
-        @endif
 
         <div class="relative overflow-x-auto shadow-md rounded-lg px-2 dark:text-white">
             <table id="datatable" data-date-column="3"

@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Utw;
 use Illuminate\Support\Facades\Storage;
 
+
 class UtwController extends Controller
 {
+
     public function index(Request $request)
     {
         $utw = Utw::all();
@@ -38,16 +40,21 @@ class UtwController extends Controller
             'nama_file' => 'required|file|mimes:pdf|max:20480',
         ]);
 
+        $unit = $request->unit;
         $file = $request->file('nama_file');
         $originalName = $file->getClientOriginalName();
-        $unit = $request->unit;
-        $targetPath = "utw/$unit/$originalName";
+        $folderPath = "utw/$unit";
+        $targetPath = "$folderPath/$originalName";
+
+        if (!Storage::disk('public')->exists($folderPath)) {
+            Storage::disk('public')->makeDirectory($folderPath);
+        }
 
         if (Storage::disk('public')->exists($targetPath)) {
             return back()->withErrors(['nama_file' => 'File sudah ada di unit ini.']);
         }
 
-        $file->storeAs("public/utw/$unit", $originalName);
+        Storage::disk('public')->putFileAs($folderPath, $file, $originalName);
 
         Utw::create([
             'unit' => $unit,
@@ -97,39 +104,47 @@ class UtwController extends Controller
         ]);
 
         $unit = $request->unit;
-        $file = $request->file('nama_file');
-        $originalName = $file ? $file->getClientOriginalName() : $utw->nama_file;
-        $newPath = "utw/$unit/$originalName";
+        $uploadedFile = $request->file('nama_file');
+        $originalName = $uploadedFile
+            ? $uploadedFile->getClientOriginalName()
+            : $utw->nama_file;
 
-        if ($file) {
-            if ($newPath !== $utw->file_path && Storage::disk('public')->exists($newPath)) {
-                return back()->withErrors(['nama_file' => 'File dengan nama ini sudah ada.']);
-            }
+        $targetPath = "utw/$unit/" . $originalName;
 
-            if (Storage::disk('public')->exists($utw->file_path)) {
+        if ($uploadedFile) {
+            if ($utw->file_path !== $targetPath && Storage::disk('public')->exists($utw->file_path)) {
                 Storage::disk('public')->delete($utw->file_path);
             }
 
-            $file->storeAs("public/utw/$unit", $originalName);
-        } else {
-            if ($newPath !== $utw->file_path && Storage::disk('public')->exists($newPath)) {
-                return back()->withErrors(['nama_file' => 'File dengan nama ini sudah ada di unit tujuan.']);
+            if (Storage::disk('public')->exists($targetPath)) {
+                return back()->withErrors(['nama_file' => 'File sudah ada untuk unit ini.']);
             }
 
-            if (Storage::disk('public')->exists($utw->file_path)) {
-                $content = Storage::disk('public')->get($utw->file_path);
-                Storage::disk('public')->put($newPath, $content);
+            Storage::disk('public')->putFileAs("utw/$unit", $uploadedFile, $originalName);
+        } else {
+            if ($utw->file_path !== $targetPath) {
+                if (!Storage::disk('public')->exists($utw->file_path)) {
+                    return back()->withErrors(['nama_file' => 'File lama tidak ditemukan.']);
+                }
+
+                if (Storage::disk('public')->exists($targetPath)) {
+                    return back()->withErrors(['nama_file' => 'File sudah ada untuk unit ini.']);
+                }
+
+                $fileContent = Storage::disk('public')->get($utw->file_path);
+                Storage::disk('public')->put($targetPath, $fileContent);
+
                 Storage::disk('public')->delete($utw->file_path);
             }
         }
 
         $utw->update([
-            'unit' => $unit,
             'nama_file' => $originalName,
-            'file_path' => $newPath,
+            'file_path' => $targetPath,
+            'unit' => $unit,
         ]);
 
-        return redirect()->route('komite-mutu.bank-spo.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect()->route('sdm-hukum.utw.index')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)

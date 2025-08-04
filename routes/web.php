@@ -23,6 +23,8 @@ use App\Http\Controllers\KesiapanAmbulanceController;
 use App\Http\Controllers\StrukturOrganisasiController;
 use App\Http\Controllers\KesehatanLingkunganController;
 use App\Http\Controllers\TonerController;
+use App\Http\Controllers\PeraturanPerusahaanController;
+use App\Http\Controllers\MandatoryTrainingController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -102,7 +104,13 @@ Route::middleware('auth')->group(function () {
         ->name('sdm-hukum.struktur-organisasi.index');
     Route::resource('sdm-hukum/utw', UtwController::class)
         ->names('sdm-hukum.utw');
-    Route::get('/utw/file/{id}', [UtwController::class, 'showFile'])->name('sdm-hukum.utw.show-file');
+    Route::get('/utw/file/{id}', [UtwController::class, 'showFile'])->name('utw.show-file');
+    Route::resource('sdm-hukum/peraturan-perusahaan', PeraturanPerusahaanController::class)
+        ->names('sdm-hukum.peraturan-perusahaan');
+    Route::get('/peraturan-perusahaan/file/{id}', [PeraturanPerusahaanController::class, 'showFile'])->name('peraturan-perusahaan.show-file');
+    Route::resource('sdm-hukum/mandatory-training', MandatoryTrainingController::class)
+        ->names('sdm-hukum.mandatory-training');
+    Route::get('/mandatory-training/file/{id}', [MandatoryTrainingController::class, 'showFile'])->name('mandatory-training.show-file');
 
     // Toner
     Route::resource('toner', TonerController::class)

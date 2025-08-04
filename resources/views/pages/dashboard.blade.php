@@ -366,10 +366,10 @@
                                     </p>
                                     <span class="mb-0 font-semibold text-sm dark:text-white">UTW</span>
                                     <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data:
+                                        Total Data: {{ $totalUtw }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500"></span>
+                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeUtw }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -398,10 +398,10 @@
                                     </p>
                                     <span class="mb-0 font-semibold text-sm dark:text-white">Peraturan Perusahaan</span>
                                     <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data:
+                                        Total Data: {{ $totalPeraturanPerusahaan }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500"></span>
+                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimePeraturanPerusahaan }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -430,7 +430,7 @@
                                     </p>
                                     <span class="mb-0 font-semibold text-sm dark:text-white">Surat Keputusan</span>
                                     <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data:
+                                        Total Data: 
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
                                         <span class="text-sm font-semibold leading-normal text-emerald-500"></span>
@@ -462,10 +462,10 @@
                                     </p>
                                     <span class="mb-0 font-semibold text-sm dark:text-white">Mandatory Training</span>
                                     <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data:
+                                        Total Data: {{ $totalMandatoryTraining }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500"></span>
+                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeMandatoryTraining }}</span>
                                     </p>
                                 </div>
                             </div>

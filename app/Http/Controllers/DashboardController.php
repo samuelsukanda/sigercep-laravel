@@ -20,6 +20,10 @@ use App\Models\LaporanAsetRusak;
 use App\Models\Peminjaman;
 use App\Models\Toner;
 use App\Models\BankSpo;
+use App\Models\Utw;
+use App\Models\PeraturanPerusahaan;
+use App\Models\MandatoryTraining;
+
 
 class DashboardController extends Controller
 {
@@ -75,6 +79,21 @@ class DashboardController extends Controller
         $totalManajemenRisiko = ManajemenRisiko::count();
         $latestManajemenRisiko = ManajemenRisiko::latest('created_at')->first();
         $lastInputTimeManajemenRisiko = $latestManajemenRisiko ? $latestManajemenRisiko->created_at->diffForHumans() : 'Belum ada data';
+
+        // UTW
+        $totalUtw = Utw::count();
+        $latestUtw = Utw::latest('created_at')->first();
+        $lastInputTimeUtw = $latestUtw ? $latestUtw->created_at->diffForHumans() : 'Belum ada data';
+
+        // PeraturanPerusahaan
+        $totalPeraturanPerusahaan = PeraturanPerusahaan::count();
+        $latestPeraturanPerusahaan = PeraturanPerusahaan::latest('created_at')->first();
+        $lastInputTimePeraturanPerusahaan = $latestPeraturanPerusahaan ? $latestPeraturanPerusahaan->created_at->diffForHumans() : 'Belum ada data';
+
+        // Mandatory Training
+        $totalMandatoryTraining = MandatoryTraining::count();
+        $latestMandatoryTraining = MandatoryTraining::latest('created_at')->first();
+        $lastInputTimeMandatoryTraining = $latestMandatoryTraining ? $latestMandatoryTraining->created_at->diffForHumans() : 'Belum ada data';
 
         // Visitasi
         $totalVisitasi = Visitasi::count();
@@ -137,6 +156,12 @@ class DashboardController extends Controller
             'lastInputTimeBankSpo',
             'totalManajemenRisiko',
             'lastInputTimeManajemenRisiko',
+            'totalUtw',
+            'lastInputTimeUtw',
+            'totalPeraturanPerusahaan',
+            'lastInputTimePeraturanPerusahaan',
+            'totalMandatoryTraining',
+            'lastInputTimeMandatoryTraining',
             'totalVisitasi',
             'lastInputTimeVisitasi',
             'totalPeminjamanAset',

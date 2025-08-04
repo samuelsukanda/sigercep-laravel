@@ -4,9 +4,9 @@
 
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
-        <div class="flex justify-between items-center mb-4">
-            <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Pemindahan Barang</h6>
-            <x-button.link href="{{ route('pengadaan-aset.pemindahan-aset.create') }}">
+        <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+            <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Peraturan Perusahaan</h6>
+            <x-button.link href="{{ route('sdm-hukum.peraturan-perusahaan.create') }}">
                 Tambah Data
             </x-button.link>
         </div>
@@ -18,9 +18,10 @@
             </div>
         @endif
 
-        <div class="flex justify-end items-center mb-4 flex-wrap gap-2">
+        <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
             {{-- Filter Tanggal --}}
-            <form method="GET" action="{{ route('komplain.ipsrs.index') }}" class="flex items-center gap-4 mb-4">
+            <form method="GET" action="{{ route('sdm-hukum.peraturan-perusahaan.index') }}"
+                class="flex items-center gap-4 mb-4">
                 <div>
                     <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}"
                         class="border rounded px-3 py-2 w-full">
@@ -33,35 +34,28 @@
         </div>
 
         <div class="relative overflow-x-auto shadow-md rounded-lg px-2 dark:text-white">
-            <table id="datatable" data-date-column="3"
+            <table id="datatable" data-date-column="1"
                 class="min-w-full divide-y divide-gray-200 dark:divide-white-200 dark:text-white">
                 <thead class="text-xs text-slate-500 uppercase bg-slate-100 dark:text-white">
                     <tr>
-                        <th class="px-6 py-3">Nama</th>
-                        <th class="px-6 py-3">Unit</th>
-                        <th class="px-6 py-3">Keperluan</th>
+                        <th class="px-6 py-3">Nama File</th>
                         <th class="px-6 py-3">Tanggal</th>
-                        <th class="px-6 py-3">Nama Barang</th>
-                        <th class="px-6 py-3">Tempat Asal Barang</th>
                         <th class="px-6 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="text-s text-slate-500 bg-slate-100 dark:text-white">
-                    @foreach ($pengadaan as $item)
+                    @foreach ($peraturanPerusahaan as $item)
                         <tr>
-                            <td class="px-6 py-4">{{ $item->nama }}</td>
-                            <td class="px-6 py-4">{{ $item->unit }}</td>
-                            <td class="px-6 py-4">{{ $item->keperluan }}</td>
-                            <td class="px-6 py-4">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                            <td class="px-6 py-4">{{ $item->nama_file }}</td>
+                            <td class="px-6 py-4">
+                                {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y H:i') }}
                             </td>
-                            <td class="px-6 py-4">{{ $item->nama_barang }}</td>
-                            <td class="px-6 py-4">{{ $item->tempat_asal_barang }}</td>
                             <td class="px-6 py-4 space-x-2 text-center">
-                                <x-button.action href="{{ route('pengadaan-aset.pemindahan-aset.edit', $item->id) }}"
+                                <x-button.action href="{{ route('sdm-hukum.peraturan-perusahaan.edit', $item->id) }}"
                                     icon="pen-to-square" color="emerald" title="Edit" />
-                                <x-button.action href="{{ route('pengadaan-aset.pemindahan-aset.show', $item->id) }}"
+                                <x-button.action href="{{ route('sdm-hukum.peraturan-perusahaan.show', $item->id) }}"
                                     icon="eye" color="emerald" title="Lihat Data" />
-                                <x-button.action href="{{ route('pengadaan-aset.pemindahan-aset.destroy', $item->id) }}"
+                                <x-button.action href="{{ route('sdm-hukum.peraturan-perusahaan.destroy', $item->id) }}"
                                     icon="trash" color="red" type="button" method="DELETE" title="Hapus" />
                             </td>
                         </tr>

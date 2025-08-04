@@ -11,6 +11,13 @@
             </x-button.link>
         </div>
 
+        @if (session('success'))
+            <div
+                class="relative text-s w-full p-4 mb-4 text-white border border-blue-300 border-solid rounded-lg bg-gradient-to-tl from-blue-500 to-violet-500">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="flex justify-end items-center mb-4 flex-wrap gap-2">
             {{-- Filter Tanggal --}}
             <form method="GET" action="{{ route('komplain.ipsrs.index') }}" class="flex items-center gap-4 mb-4">
@@ -25,15 +32,9 @@
             </form>
         </div>
 
-        @if (session('success'))
-            <div
-                class="relative text-s w-full p-4 mb-4 text-white border border-blue-300 border-solid rounded-lg bg-gradient-to-tl from-blue-500 to-violet-500">
-                {{ session('success') }}
-            </div>
-        @endif
-
         <div class="relative overflow-x-auto shadow-md rounded-lg px-2 dark:text-white">
-            <table id="datatable" data-date-column="4" class="min-w-full divide-y divide-gray-200 dark:divide-white-200 dark:text-white">
+            <table id="datatable" data-date-column="4"
+                class="min-w-full divide-y divide-gray-200 dark:divide-white-200 dark:text-white">
                 <thead class="text-xs text-slate-500 uppercase bg-slate-100 dark:text-white">
                     <tr>
                         <th class="px-6 py-3">Nama</th>
