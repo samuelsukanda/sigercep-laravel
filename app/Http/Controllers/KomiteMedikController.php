@@ -3,17 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Utw;
+use App\Models\KomiteMedik;
 use Illuminate\Support\Facades\Storage;
 
-class UtwController extends Controller
+class KomiteMedikController extends Controller
 {
-
     public function index(Request $request)
     {
-        $utw = Utw::all();
+        $komiteMedik = KomiteMedik::all();
 
-        $query = Utw::query();
+        $query = KomiteMedik::query();
 
         if ($request->start_date && $request->end_date) {
             $query->whereBetween('created_at', [
@@ -22,14 +21,14 @@ class UtwController extends Controller
             ]);
         }
 
-        $utw = $query->latest()->get();
+        $komiteMedik = $query->latest()->get();
 
-        return view('pages.sdm-hukum.utw.index', compact('utw'));
+        return view('pages.komite-medik.index', compact('komiteMedik'));
     }
 
     public function create()
     {
-        return view('pages.sdm-hukum.utw.create');
+        return view('pages.komite-medik.create');
     }
 
     public function store(Request $request)
@@ -42,7 +41,7 @@ class UtwController extends Controller
         $unit = $request->unit;
         $file = $request->file('nama_file');
         $originalName = $file->getClientOriginalName();
-        $folderPath = "utw/$unit";
+        $folderPath = "komite-medik/$unit";
         $targetPath = "$folderPath/$originalName";
 
         if (!Storage::disk('public')->exists($folderPath)) {
@@ -55,26 +54,26 @@ class UtwController extends Controller
 
         Storage::disk('public')->putFileAs($folderPath, $file, $originalName);
 
-        Utw::create([
+        KomiteMedik::create([
             'unit' => $unit,
             'nama_file' => $originalName,
             'file_path' => $targetPath,
         ]);
 
-        return redirect()->route('sdm-hukum.utw.index')->with('success', 'Data berhasil disimpan.');
+        return redirect()->route('komite-medik.index')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
     {
-        $utw = Utw::findOrFail($id);
-        return view('pages.sdm-hukum.utw.detail', compact('utw'));
+        $komiteMedik = KomiteMedik::findOrFail($id);
+        return view('pages.komite-medik.detail', compact('komiteMedik'));
     }
 
     public function showFile($id)
     {
-        $utw = Utw::findOrFail($id);
+        $komiteMedik = KomiteMedik::findOrFail($id);
 
-        $filePath = storage_path("app/public/{$utw->file_path}");
+        $filePath = storage_path("app/public/{$komiteMedik->file_path}");
 
         if (!file_exists($filePath)) {
             abort(404, 'File tidak ditemukan');
@@ -82,20 +81,20 @@ class UtwController extends Controller
 
         return response()->file($filePath, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . $utw->unit . '-' . $utw->nama_file . '"'
+            'Content-Disposition' => 'inline; filename="' . $komiteMedik->unit . '-' . $komiteMedik->nama_file . '"'
         ]);
     }
 
 
     public function edit(string $id)
     {
-        $utw = Utw::findOrFail($id);
-        return view('pages.sdm-hukum.utw.edit', compact('utw'));
+        $komiteMedik = KomiteMedik::findOrFail($id);
+        return view('pages.komite-medik.edit', compact('komiteMedik'));
     }
 
     public function update(Request $request, string $id)
     {
-        $utw = Utw::findOrFail($id);
+        $komiteMedik = KomiteMedik::findOrFail($id);
 
         $request->validate([
             'unit' => 'required|string',
@@ -106,23 +105,23 @@ class UtwController extends Controller
         $uploadedFile = $request->file('nama_file');
         $originalName = $uploadedFile
             ? $uploadedFile->getClientOriginalName()
-            : $utw->nama_file;
+            : $komiteMedik->nama_file;
 
-        $targetPath = "utw/$unit/" . $originalName;
+        $targetPath = "komite-medik/$unit/" . $originalName;
 
         if ($uploadedFile) {
-            if ($utw->file_path !== $targetPath && Storage::disk('public')->exists($utw->file_path)) {
-                Storage::disk('public')->delete($utw->file_path);
+            if ($komiteMedik->file_path !== $targetPath && Storage::disk('public')->exists($komiteMedik->file_path)) {
+                Storage::disk('public')->delete($komiteMedik->file_path);
             }
 
             if (Storage::disk('public')->exists($targetPath)) {
                 return back()->withErrors(['nama_file' => 'File sudah ada untuk unit ini.']);
             }
 
-            Storage::disk('public')->putFileAs("utw/$unit", $uploadedFile, $originalName);
+            Storage::disk('public')->putFileAs("komite-medik/$unit", $uploadedFile, $originalName);
         } else {
-            if ($utw->file_path !== $targetPath) {
-                if (!Storage::disk('public')->exists($utw->file_path)) {
+            if ($komiteMedik->file_path !== $targetPath) {
+                if (!Storage::disk('public')->exists($komiteMedik->file_path)) {
                     return back()->withErrors(['nama_file' => 'File lama tidak ditemukan.']);
                 }
 
@@ -130,32 +129,32 @@ class UtwController extends Controller
                     return back()->withErrors(['nama_file' => 'File sudah ada untuk unit ini.']);
                 }
 
-                $fileContent = Storage::disk('public')->get($utw->file_path);
+                $fileContent = Storage::disk('public')->get($komiteMedik->file_path);
                 Storage::disk('public')->put($targetPath, $fileContent);
 
-                Storage::disk('public')->delete($utw->file_path);
+                Storage::disk('public')->delete($komiteMedik->file_path);
             }
         }
 
-        $utw->update([
+        $komiteMedik->update([
             'nama_file' => $originalName,
             'file_path' => $targetPath,
             'unit' => $unit,
         ]);
 
-        return redirect()->route('sdm-hukum.utw.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect()->route('komite-medik.index')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)
     {
-        $utw = Utw::findOrFail($id);
+        $komiteMedik = KomiteMedik::findOrFail($id);
 
-        if (Storage::disk('public')->exists($utw->file_path)) {
-            Storage::disk('public')->delete($utw->file_path);
+        if (Storage::disk('public')->exists($komiteMedik->file_path)) {
+            Storage::disk('public')->delete($komiteMedik->file_path);
         }
 
-        $utw->delete();
+        $komiteMedik->delete();
 
-        return redirect()->route('sdm-hukum.utw.index')->with('success', 'Data berhasil dihapus.');
+        return redirect()->route('komite-medik.index')->with('success', 'Data berhasil dihapus.');
     }
 }

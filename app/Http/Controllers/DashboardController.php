@@ -23,6 +23,8 @@ use App\Models\BankSpo;
 use App\Models\Utw;
 use App\Models\PeraturanPerusahaan;
 use App\Models\MandatoryTraining;
+use App\Models\SuratKeputusan;
+use App\Models\KomiteMedik;
 
 
 class DashboardController extends Controller
@@ -95,6 +97,11 @@ class DashboardController extends Controller
         $latestMandatoryTraining = MandatoryTraining::latest('created_at')->first();
         $lastInputTimeMandatoryTraining = $latestMandatoryTraining ? $latestMandatoryTraining->created_at->diffForHumans() : 'Belum ada data';
 
+        // Surat Keputusan
+        $totalSuratKeputusan = SuratKeputusan::count();
+        $latestSuratKeputusan = SuratKeputusan::latest('created_at')->first();
+        $lastInputTimeSuratKeputusan = $latestSuratKeputusan ? $latestSuratKeputusan->created_at->diffForHumans() : 'Belum ada data';
+
         // Visitasi
         $totalVisitasi = Visitasi::count();
         $latestVisitasi = Visitasi::latest('created_at')->first();
@@ -119,6 +126,11 @@ class DashboardController extends Controller
         $totalLaporanAsetRusak = LaporanAsetRusak::count();
         $latestLaporanAsetRusak = LaporanAsetRusak::latest('created_at')->first();
         $lastInputTimeLaporanAsetRusak = $latestLaporanAsetRusak ? $latestLaporanAsetRusak->created_at->diffForHumans() : 'Belum ada data';
+
+        // Komte Medik
+        $totalKomiteMedik = KomiteMedik::count();
+        $latestKomiteMedik = KomiteMedik::latest('created_at')->first();
+        $lastInputTimeKomiteMedik = $latestKomiteMedik ? $latestKomiteMedik->created_at->diffForHumans() : 'Belum ada data';
 
         // Peminjaman
         $totalPeminjaman = Peminjaman::count();
@@ -162,6 +174,8 @@ class DashboardController extends Controller
             'lastInputTimePeraturanPerusahaan',
             'totalMandatoryTraining',
             'lastInputTimeMandatoryTraining',
+            'totalSuratKeputusan',
+            'lastInputTimeSuratKeputusan',
             'totalVisitasi',
             'lastInputTimeVisitasi',
             'totalPeminjamanAset',
@@ -172,6 +186,8 @@ class DashboardController extends Controller
             'lastInputTimePengembalianAset',
             'totalLaporanAsetRusak',
             'lastInputTimeLaporanAsetRusak',
+            'totalKomiteMedik',
+            'lastInputTimeKomiteMedik',
             'totalPeminjaman',
             'lastInputTimePeminjaman',
             'totalAmbulance',

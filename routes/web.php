@@ -25,6 +25,8 @@ use App\Http\Controllers\KesehatanLingkunganController;
 use App\Http\Controllers\TonerController;
 use App\Http\Controllers\PeraturanPerusahaanController;
 use App\Http\Controllers\MandatoryTrainingController;
+use App\Http\Controllers\SuratKeputusanController;
+use App\Http\Controllers\KomiteMedikController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -111,6 +113,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('sdm-hukum/mandatory-training', MandatoryTrainingController::class)
         ->names('sdm-hukum.mandatory-training');
     Route::get('/mandatory-training/file/{id}', [MandatoryTrainingController::class, 'showFile'])->name('mandatory-training.show-file');
+    Route::resource('sdm-hukum/surat-keputusan', SuratKeputusanController::class)
+        ->names('sdm-hukum.surat-keputusan');
+    Route::get('/surat-keputusan/file/{id}', [SuratKeputusanController::class, 'showFile'])->name('surat-keputusan.show-file');
+
+    // Komite Medik
+    Route::resource('komite-medik', KomiteMedikController::class)
+        ->names('komite-medik');
+    Route::get('/komite-medik/file/{id}', [KomiteMedikController::class, 'showFile'])->name('komite-medik.show-file');
 
     // Toner
     Route::resource('toner', TonerController::class)
