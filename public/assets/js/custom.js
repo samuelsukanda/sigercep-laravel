@@ -75,6 +75,11 @@ $(document).ready(function () {
         allowClear: true,
     });
 
+    $("#lantai").select2({
+        placeholder: "Pilih Lantai",
+        allowClear: true,
+    });
+
     $("#filter-unit").select2({
         placeholder: "Pilih Unit",
         allowClear: true,

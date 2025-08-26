@@ -312,6 +312,14 @@ return [
         '> 4 Jam',
     ],
 
+    'lantai' => [
+        'Lantai 1',
+        'Lantai 2',
+        'Lantai 3',
+        'Lantai 4',
+        'Lantai 5',
+    ],
+
     'jarak_tempuh' => [
         '1 Km',
         '2 Km',

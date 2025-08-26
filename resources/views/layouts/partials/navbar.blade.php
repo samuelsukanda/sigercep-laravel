@@ -72,7 +72,7 @@
 
                         <!-- Item Setting -->
                         <li class="relative">
-                            <a href="#"
+                            <a href="{{ route('roles.index') }}"
                                 class="dark:hover:bg-slate-900 ease py-1.2 clear-both block w-full whitespace-nowrap rounded-lg px-4 duration-300 hover:bg-gray-200 hover:text-slate-700 lg:transition-colors text-sm font-semibold dark:text-white">
                                 <i class="fas fa-cog mr-2"></i>
                                 Settings

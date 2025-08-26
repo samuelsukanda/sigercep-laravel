@@ -25,7 +25,7 @@ use App\Models\PeraturanPerusahaan;
 use App\Models\MandatoryTraining;
 use App\Models\SuratKeputusan;
 use App\Models\KomiteMedik;
-
+use App\Models\Hardware;
 
 class DashboardController extends Controller
 {
@@ -147,6 +147,11 @@ class DashboardController extends Controller
         $latestToner = Toner::latest('created_at')->first();
         $lastInputTimeToner = $latestToner ? $latestToner->created_at->diffForHumans() : 'Belum ada data';
 
+        // Hardware
+        $totalHardware = Hardware::count();
+        $latestHardware = Hardware::latest('created_at')->first();
+        $lastInputTimeHardware = $latestHardware ? $latestHardware->created_at->diffForHumans() : 'Belum ada data';
+
         return view('pages.dashboard', compact(
             'totalKomplainIpsrs',
             'lastInputTimeIpsrs',
@@ -193,7 +198,9 @@ class DashboardController extends Controller
             'totalAmbulance',
             'lastInputTimeAmbulance',
             'totalToner',
-            'lastInputTimeToner'
+            'lastInputTimeToner',
+            'totalHardware',
+            'lastInputTimeHardware'
         ));
     }
 }

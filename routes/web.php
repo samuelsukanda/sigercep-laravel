@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesainGrafisController;
 use App\Http\Controllers\KomplainIpsrsController;
@@ -27,6 +28,7 @@ use App\Http\Controllers\PeraturanPerusahaanController;
 use App\Http\Controllers\MandatoryTrainingController;
 use App\Http\Controllers\SuratKeputusanController;
 use App\Http\Controllers\KomiteMedikController;
+use App\Http\Controllers\HardwareController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -46,6 +48,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings', function () {
         return view('settings');
     })->name('settings');
+
+    // Roles
+    Route::resource('roles', RoleController::class)->names('roles');
 
     // Pages - Views
 
@@ -125,4 +130,8 @@ Route::middleware('auth')->group(function () {
     // Toner
     Route::resource('toner', TonerController::class)
         ->names('toner');
+
+    // Hardware
+    Route::resource('hardware', HardwareController::class)
+        ->names('hardware');
 });
