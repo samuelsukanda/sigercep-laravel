@@ -7,6 +7,7 @@ use App\Models\KesiapanAmbulance;
 
 class KesiapanAmbulanceController extends Controller
 {
+
     public function index()
     {
         $ambulance = KesiapanAmbulance::all();

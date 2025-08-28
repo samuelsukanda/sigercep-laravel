@@ -7,6 +7,7 @@ use App\Models\DesainGrafis;
 
 class DesainGrafisController extends Controller
 {
+
     public function index(Request $request)
     {
         $desain = DesainGrafis::all();

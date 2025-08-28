@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class KomiteMedikController extends Controller
 {
+
     public function index(Request $request)
     {
         $komiteMedik = KomiteMedik::all();

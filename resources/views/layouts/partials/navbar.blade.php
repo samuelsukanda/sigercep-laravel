@@ -40,10 +40,18 @@
                 </li>
                 <li class="flex items-center h-full pr-2 cursor-pointer">
                     <div class="flex items-center space-x-3">
-                        @if (Auth::check())
+                        @php
+                            $role = auth()->user()->getRoleNames()->first();
+                        @endphp
+
+                        @if ($role)
+                            <span class="text-sm font-semibold uppercase"
+                                style="color: #7664E4 !important;">{{ ucfirst($role) }}</span>
+                        @endif
+                        {{-- @if (Auth::check())
                             <span class="text-sm font-semibold uppercase"
                                 style="color: #7664E4 !important;">{{ Auth::user()->level }}</span>
-                        @endif
+                        @endif --}}
                     </div>
                 </li>
 
@@ -72,7 +80,7 @@
 
                         <!-- Item Setting -->
                         <li class="relative">
-                            <a href="{{ route('roles.index') }}"
+                            <a href="{{ route('settings.index') }}"
                                 class="dark:hover:bg-slate-900 ease py-1.2 clear-both block w-full whitespace-nowrap rounded-lg px-4 duration-300 hover:bg-gray-200 hover:text-slate-700 lg:transition-colors text-sm font-semibold dark:text-white">
                                 <i class="fas fa-cog mr-2"></i>
                                 Settings

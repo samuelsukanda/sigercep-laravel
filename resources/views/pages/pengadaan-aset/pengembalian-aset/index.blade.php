@@ -5,7 +5,7 @@
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4">
-            <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Pengembalian Barang</h6>
+            <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Pengembalian Aset</h6>
             <x-button.link href="{{ route('pengadaan-aset.pengembalian-aset.create') }}">
                 Tambah Data
             </x-button.link>

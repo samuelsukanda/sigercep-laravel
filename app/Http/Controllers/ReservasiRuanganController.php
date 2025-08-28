@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class ReservasiRuanganController extends Controller
 {
+
     public function index(Request $request)
     {
         $reservasi = ReservasiRuangan::all();
