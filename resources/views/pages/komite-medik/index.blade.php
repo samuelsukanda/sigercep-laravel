@@ -6,9 +6,12 @@
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
             <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Komite Medik</h6>
-            <x-button.link href="{{ route('komite-medik.create') }}">
-                Tambah Data
-            </x-button.link>
+
+            @canAccess('komite_medik', 'create')
+                <x-button.link href="{{ route('komite-medik.create') }}">
+                    Tambah Data
+                </x-button.link>
+            @endcanAccess
         </div>
 
         @if (session('success'))
@@ -32,7 +35,6 @@
             </form>
 
             <div class="filter">
-                {{-- Filter Unit --}}
                 <select id="filter-unit"
                     class="rounded-lg border border-gray-300 text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">Semua Unit</option>
@@ -63,12 +65,20 @@
                                 {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y H:i') }}
                             </td>
                             <td class="px-6 py-4 space-x-2 text-center">
-                                <x-button.action href="{{ route('komite-medik.edit', $item->id) }}" icon="pen-to-square"
-                                    color="emerald" title="Edit" />
-                                <x-button.action href="{{ route('komite-medik.show', $item->id) }}" icon="eye"
-                                    color="emerald" title="Lihat Data" />
-                                <x-button.action href="{{ route('komite-medik.destroy', $item->id) }}" icon="trash"
-                                    color="red" type="button" method="DELETE" title="Hapus" />
+                                @canAccess('komite_medik', 'update')
+                                    <x-button.action href="{{ route('komite-medik.edit', $item->id) }}"
+                                        icon="pen-to-square" color="emerald" title="Edit" />
+                                @endcanAccess
+
+                                @canAccess('komite_medik', 'read')
+                                    <x-button.action href="{{ route('komite-medik.show', $item->id) }}"
+                                        icon="eye" color="emerald" title="Lihat Data" />
+                                @endcanAccess
+
+                                @canAccess('komite_medik', 'delete')
+                                    <x-button.action href="{{ route('komite-medik.destroy', $item->id) }}"
+                                        icon="trash" color="red" type="button" method="DELETE" title="Hapus" />
+                                @endcanAccess
                             </td>
                         </tr>
                     @endforeach

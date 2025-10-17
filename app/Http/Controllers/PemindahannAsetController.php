@@ -41,8 +41,8 @@ class PemindahannAsetController extends Controller
             'tanggal' => 'required|date',
             'nama_barang' => 'required|string|max:50',
             'tempat_asal_barang' => 'required|string|max:50',
-            'foto_barang' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-            'foto_barcode' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto_barang' => 'required|image|mimes:jpg,jpeg,png',
+            'foto_barcode' => 'nullable|image|mimes:jpg,jpeg,png',
         ]);
 
         if ($request->hasFile('foto_barang')) {
@@ -85,8 +85,8 @@ class PemindahannAsetController extends Controller
             'tanggal' => 'required|date',
             'nama_barang' => 'required|string|max:50',
             'tempat_asal_barang' => 'required|string|max:50',
-            'foto_barang' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'foto_barcode' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto_barang' => 'nullable|image|mimes:jpg,jpeg,png',
+            'foto_barcode' => 'nullable|image|mimes:jpg,jpeg,png',
         ]);
 
         $pengadaan = PemindahanAset::findOrFail($id);

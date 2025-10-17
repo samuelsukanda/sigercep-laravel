@@ -41,7 +41,7 @@ class KesehatanLingkunganController extends Controller
             'tanggal' => 'required|date',
             'lokasi_masalah' => 'required|string',
             'jenis_hama' => 'required|string',
-            'dokumentasi' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'dokumentasi' => 'nullable|image|mimes:jpg,jpeg,png',
         ]);
 
         if ($request->hasFile('dokumentasi')) {
@@ -76,7 +76,7 @@ class KesehatanLingkunganController extends Controller
             'tanggal' => 'required|date',
             'lokasi_masalah' => 'required|string',
             'jenis_hama' => 'required|string',
-            'dokumentasi' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'dokumentasi' => 'nullable|image|mimes:jpg,jpeg,png',
         ]);
 
         $komplain = KesehatanLingkungan::findOrFail($id);

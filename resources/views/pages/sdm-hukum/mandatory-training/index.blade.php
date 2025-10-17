@@ -6,9 +6,11 @@
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
             <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Mandatory Training</h6>
+            @canAccess('mandatory_training', 'create')
             <x-button.link href="{{ route('sdm-hukum.mandatory-training.create') }}">
                 Tambah Data
             </x-button.link>
+            @endcanAccess
         </div>
 
         @if (session('success'))
@@ -51,12 +53,20 @@
                                 {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y H:i') }}
                             </td>
                             <td class="px-6 py-4 space-x-2 text-center">
+                                @canAccess('mandatory_training', 'update')
                                 <x-button.action href="{{ route('sdm-hukum.mandatory-training.edit', $item->id) }}"
                                     icon="pen-to-square" color="emerald" title="Edit" />
+                                @endcanAccess
+
+                                @canAccess('mandatory_training', 'read')
                                 <x-button.action href="{{ route('sdm-hukum.mandatory-training.show', $item->id) }}"
                                     icon="eye" color="emerald" title="Lihat Data" />
+                                @endcanAccess
+
+                                @canAccess('mandatory_training', 'delete')
                                 <x-button.action href="{{ route('sdm-hukum.mandatory-training.destroy', $item->id) }}"
                                     icon="trash" color="red" type="button" method="DELETE" title="Hapus" />
+                                @endcanAccess
                             </td>
                         </tr>
                     @endforeach

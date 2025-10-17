@@ -41,7 +41,7 @@ class KomplainIpsrsController extends Controller
             'tujuan_unit' => 'required|string|max:50',
             'tanggal' => 'required|date',
             'kendala' => 'required|string',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png',
             'status' => 'nullable|in:Pending,On Progress,Done',
             'keterangan' => 'nullable|string|max:255',
         ]);
@@ -78,7 +78,7 @@ class KomplainIpsrsController extends Controller
             'tujuan_unit' => 'required|string|max:50',
             'tanggal' => 'required|date',
             'kendala' => 'required|string',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png',
             'status' => 'nullable|in:Pending,On Progress,Done',
             'keterangan' => 'nullable|string|max:255',
         ]);

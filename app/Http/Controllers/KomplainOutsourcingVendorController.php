@@ -43,7 +43,7 @@ class KomplainOutsourcingVendorController extends Controller
             'tanggal' => 'required|date',
             'kendala' => 'required|string',
             'area' => 'required|string|max:100',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png',
         ]);
 
         if ($request->hasFile('foto')) {
@@ -80,7 +80,7 @@ class KomplainOutsourcingVendorController extends Controller
             'tanggal' => 'required|date',
             'kendala' => 'required|string',
             'area' => 'required|string|max:100',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png',
         ]);
 
         $komplain = KomplainOutsourcingVendor::findOrFail($id);

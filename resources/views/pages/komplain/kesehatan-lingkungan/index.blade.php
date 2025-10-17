@@ -6,9 +6,11 @@
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4">
             <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Komplain Kesehatan Lingkungan</h6>
+            @canAccess('kesehatan_lingkungan', 'create')
             <x-button.link href="{{ route('komplain.kesehatan-lingkungan.create') }}">
                 Tambah Data
             </x-button.link>
+            @endcanAccess
         </div>
 
         @if (session('success'))
@@ -56,12 +58,20 @@
                             <td class="px-6 py-4">{{ $item->lokasi_masalah }}</td>
                             <td class="px-6 py-4">{{ $item->jenis_hama }}</td>
                             <td class="px-6 py-4 space-x-2 text-center">
+                                @canAccess('kesehatan_lingkungan', 'update')
                                 <x-button.action href="{{ route('komplain.kesehatan-lingkungan.edit', $item->id) }}"
                                     icon="pen-to-square" color="emerald" title="Edit" />
+                                @endcanAccess
+
+                                @canAccess('kesehatan_lingkungan', 'read')
                                 <x-button.action href="{{ route('komplain.kesehatan-lingkungan.show', $item->id) }}"
                                     icon="eye" color="emerald" title="Lihat Data" />
+                                @endcanAccess
+
+                                @canAccess('kesehatan_lingkungan', 'delete')
                                 <x-button.action href="{{ route('komplain.kesehatan-lingkungan.destroy', $item->id) }}"
                                     icon="trash" color="red" type="button" method="DELETE" title="Hapus" />
+                                @endcanAccess
                             </td>
                         </tr>
                     @endforeach

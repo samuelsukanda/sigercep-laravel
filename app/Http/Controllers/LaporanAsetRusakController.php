@@ -42,8 +42,8 @@ class LaporanAsetRusakController extends Controller
             'kondisi_aset' => 'required|string|max:50',
             'tanggal' => 'required|date',
             'status' => 'nullable|in:Rusak Total,Bisa Diperbaiki',
-            'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-            'foto_barcode' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto' => 'required|image|mimes:jpg,jpeg,png',
+            'foto_barcode' => 'nullable|image|mimes:jpg,jpeg,png',
         ]);
 
         if ($request->hasFile('foto')) {
@@ -87,8 +87,8 @@ class LaporanAsetRusakController extends Controller
             'kondisi_aset' => 'required|string|max:50',
             'tanggal' => 'required|date',
             'status' => 'nullable|in:Rusak Total,Bisa Diperbaiki',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'foto_barcode' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png',
+            'foto_barcode' => 'nullable|image|mimes:jpg,jpeg,png',
         ]);
 
         $pengadaan = LaporanAsetRusak::findOrFail($id);

@@ -55,83 +55,119 @@ Route::middleware('auth')->group(function () {
     // Pages - Views
 
     // Komplain
-    Route::resource('komplain/ipsrs', KomplainIpsrsController::class)->names('komplain.ipsrs');
-    Route::resource('komplain/kesehatan-lingkungan', KesehatanLingkunganController::class)
+    Route::middleware(['auth', 'permission:komplain_ipsrs,read'])
+        ->resource('komplain/ipsrs', KomplainIpsrsController::class)
+        ->names('komplain.ipsrs');
+
+    Route::middleware(['auth', 'permission:kesehatan_lingkungan,read'])
+        ->resource('komplain/kesehatan-lingkungan', KesehatanLingkunganController::class)
         ->names('komplain.kesehatan-lingkungan');
-    Route::resource('komplain/outsourcing-vendor', KomplainOutsourcingVendorController::class)
+
+    Route::middleware(['auth', 'permission:outsourcing_vendor,read'])
+        ->resource('komplain/outsourcing-vendor', KomplainOutsourcingVendorController::class)
         ->names('komplain.outsourcing-vendor');
 
     // Reservasi
-    Route::resource('reservasi/ruangan', ReservasiRuanganController::class)
+    Route::middleware(['auth', 'permission:reservasi_ruangan,read'])
+        ->resource('reservasi/ruangan', ReservasiRuanganController::class)
         ->names('reservasi.ruangan');
-    Route::resource('reservasi/kendaraan', ReservasiKendaraanController::class)
+
+    Route::middleware(['auth', 'permission:reservasi_kendaraan,read'])
+        ->resource('reservasi/kendaraan', ReservasiKendaraanController::class)
         ->names('reservasi.kendaraan');
 
     // Visitasi
-    Route::resource('visitasi', VisitasiController::class)
+    Route::middleware(['auth', 'permission:visitasi,read'])
+        ->resource('visitasi', VisitasiController::class)
         ->names('visitasi');
 
     // Komite Mutu
-    Route::resource('komite-mutu/mutu', MutuController::class)
+    Route::middleware(['auth', 'permission:mutu,read'])
+        ->resource('komite-mutu/mutu', MutuController::class)
         ->names('komite-mutu.mutu');
-    Route::resource('komite-mutu/bank-spo', BankSpoController::class)
+
+    Route::middleware(['auth', 'permission:bank_spo,read'])
+        ->resource('komite-mutu/bank-spo', BankSpoController::class)
         ->names('komite-mutu.bank-spo');
-    Route::get('/bank-spo/file/{id}', [BankSpoController::class, 'showFile'])->name('bank-spo.show-file');
-    Route::resource('komite-mutu/manajemen-risiko', ManajemenRisikoController::class)
+
+    Route::middleware(['auth', 'permission:manajemen_risiko,read'])
+        ->resource('komite-mutu/manajemen-risiko', ManajemenRisikoController::class)
         ->names('komite-mutu.manajemen-risiko');
+    Route::get('/bank-spo/file/{id}', [BankSpoController::class, 'showFile'])->name('bank-spo.show-file');
 
     // Desain Grafis
-    Route::resource('desain-grafis', DesainGrafisController::class)
+    Route::middleware(['auth', 'permission:desain_grafis,read'])
+        ->resource('desain-grafis', DesainGrafisController::class)
         ->names('desain-grafis');
 
     // Kecelakaan Kerja
-    Route::resource('kecelakaan-kerja', KecelakaanKerjaController::class)
+    Route::middleware(['auth', 'permission:kecelakaan_kerja,read'])
+        ->resource('kecelakaan-kerja', KecelakaanKerjaController::class)
         ->names('kecelakaan-kerja');
 
     // Pengadaan Aset
-    Route::resource('pengadaan-aset/pengembalian-aset', PengembalianAsetController::class)
+    Route::middleware(['auth', 'permission:pengadaan_aset,read'])
+        ->resource('pengadaan-aset/pengembalian-aset', PengembalianAsetController::class)
         ->names('pengadaan-aset.pengembalian-aset');
+
     Route::resource('pengadaan-aset/peminjaman-aset', PeminjamanAsetController::class)
         ->names('pengadaan-aset.peminjaman-aset');
+
     Route::resource('pengadaan-aset/pemindahan-aset', PemindahannAsetController::class)
         ->names('pengadaan-aset.pemindahan-aset');
+
     Route::resource('pengadaan-aset/laporan-aset-rusak', LaporanAsetRusakController::class)
         ->names('pengadaan-aset.laporan-aset-rusak');
 
     // Peminjaman
-    Route::resource('peminjaman', PeminjamanController::class)
+    Route::middleware(['auth', 'permission:peminjaman,read'])
+        ->resource('peminjaman', PeminjamanController::class)
         ->names('peminjaman');
 
     // Kesiapan Ambulance
-    Route::resource('kesiapan-ambulance', KesiapanAmbulanceController::class)
+    Route::middleware(['auth', 'permission:kesiapan_ambulance,read'])
+        ->resource('kesiapan-ambulance', KesiapanAmbulanceController::class)
         ->names('kesiapan-ambulance');
 
     // SDM & Hukum
     Route::get('/sdm-hukum/struktur-organisasi', [StrukturOrganisasiController::class, 'index'])
         ->name('sdm-hukum.struktur-organisasi.index');
-    Route::resource('sdm-hukum/utw', UtwController::class)
+
+    Route::middleware(['auth', 'permission:utw,read'])
+        ->resource('sdm-hukum/utw', UtwController::class)
         ->names('sdm-hukum.utw');
     Route::get('/utw/file/{id}', [UtwController::class, 'showFile'])->name('utw.show-file');
-    Route::resource('sdm-hukum/peraturan-perusahaan', PeraturanPerusahaanController::class)
+
+    Route::middleware(['auth', 'permission:peraturan_perusahaan,read'])
+        ->resource('sdm-hukum/peraturan-perusahaan', PeraturanPerusahaanController::class)
         ->names('sdm-hukum.peraturan-perusahaan');
     Route::get('/peraturan-perusahaan/file/{id}', [PeraturanPerusahaanController::class, 'showFile'])->name('peraturan-perusahaan.show-file');
-    Route::resource('sdm-hukum/mandatory-training', MandatoryTrainingController::class)
+
+    Route::middleware(['auth', 'permission:mandatory_training,read'])
+        ->resource('sdm-hukum/mandatory-training', MandatoryTrainingController::class)
         ->names('sdm-hukum.mandatory-training');
     Route::get('/mandatory-training/file/{id}', [MandatoryTrainingController::class, 'showFile'])->name('mandatory-training.show-file');
-    Route::resource('sdm-hukum/surat-keputusan', SuratKeputusanController::class)
+
+    Route::middleware(['auth', 'permission:surat_keputusan,read'])
+        ->resource('sdm-hukum/surat-keputusan', SuratKeputusanController::class)
         ->names('sdm-hukum.surat-keputusan');
     Route::get('/surat-keputusan/file/{id}', [SuratKeputusanController::class, 'showFile'])->name('surat-keputusan.show-file');
 
     // Komite Medik
-    Route::resource('komite-medik', KomiteMedikController::class)
+    Route::middleware(['auth', 'permission:komite_medik,read'])
+        ->resource('komite-medik', KomiteMedikController::class)
         ->names('komite-medik');
-    Route::get('/komite-medik/file/{id}', [KomiteMedikController::class, 'showFile'])->name('komite-medik.show-file');
+    Route::get('/komite-medik/file/{id}', [KomiteMedikController::class, 'showFile'])
+        ->middleware(['auth', 'permission:komite_medik,read'])
+        ->name('komite-medik.show-file');
 
     // Toner
-    Route::resource('toner', TonerController::class)
+    Route::middleware(['auth', 'permission:toner,read'])
+        ->resource('toner', TonerController::class)
         ->names('toner');
 
     // Hardware
-    Route::resource('hardware', HardwareController::class)
+    Route::middleware(['auth', 'permission:hardware,read'])
+        ->resource('hardware', HardwareController::class)
         ->names('hardware');
 });
