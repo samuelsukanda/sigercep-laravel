@@ -6,9 +6,12 @@
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4">
             <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Pemindahan Barang</h6>
+
+            @canAccess('pemindahan_aset', 'create')
             <x-button.link href="{{ route('pengadaan-aset.pemindahan-aset.create') }}">
                 Tambah Data
             </x-button.link>
+            @endcanAccess
         </div>
 
         @if (session('success'))
@@ -57,12 +60,20 @@
                             <td class="px-6 py-4">{{ $item->nama_barang }}</td>
                             <td class="px-6 py-4">{{ $item->tempat_asal_barang }}</td>
                             <td class="px-6 py-4 space-x-2 text-center">
+                                @canAccess('pemindahan_aset', 'update')
                                 <x-button.action href="{{ route('pengadaan-aset.pemindahan-aset.edit', $item->id) }}"
                                     icon="pen-to-square" color="emerald" title="Edit" />
+                                @endcanAccess
+
+                                @canAccess('pemindahan_aset', 'read')
                                 <x-button.action href="{{ route('pengadaan-aset.pemindahan-aset.show', $item->id) }}"
                                     icon="eye" color="emerald" title="Lihat Data" />
+                                @endcanAccess
+
+                                @canAccess('pemindahan_aset', 'delete')
                                 <x-button.action href="{{ route('pengadaan-aset.pemindahan-aset.destroy', $item->id) }}"
                                     icon="trash" color="red" type="button" method="DELETE" title="Hapus" />
+                                @endcanAccess
                             </td>
                         </tr>
                     @endforeach

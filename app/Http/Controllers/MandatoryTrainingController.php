@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Storage;
 class MandatoryTrainingController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:kesiapan_ambulance,read')->only(['index', 'show']);
+        $this->middleware('permission:kesiapan_ambulance,create')->only(['create', 'store']);
+        $this->middleware('permission:kesiapan_ambulance,update')->only(['edit', 'update']);
+        $this->middleware('permission:kesiapan_ambulance,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $mandatoryTraining = MandatoryTraining::all();

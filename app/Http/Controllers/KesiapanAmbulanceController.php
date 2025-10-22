@@ -7,6 +7,15 @@ use App\Models\KesiapanAmbulance;
 
 class KesiapanAmbulanceController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:kesiapan_ambulance,read')->only(['index', 'show']);
+        $this->middleware('permission:kesiapan_ambulance,create')->only(['create', 'store']);
+        $this->middleware('permission:kesiapan_ambulance,update')->only(['edit', 'update']);
+        $this->middleware('permission:kesiapan_ambulance,delete')->only(['destroy']);
+    }
+
     public function index()
     {
         $ambulance = KesiapanAmbulance::all();

@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Storage;
 class TonerController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:toner,read')->only(['index', 'show']);
+        $this->middleware('permission:toner,create')->only(['create', 'store']);
+        $this->middleware('permission:toner,update')->only(['edit', 'update']);
+        $this->middleware('permission:toner,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $toner = Toner::all();

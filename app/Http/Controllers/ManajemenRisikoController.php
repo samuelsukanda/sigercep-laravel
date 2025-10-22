@@ -8,6 +8,14 @@ use App\Models\ManajemenRisiko;
 class ManajemenRisikoController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:manajemen_risiko,read')->only(['index', 'show']);
+        $this->middleware('permission:manajemen_risiko,create')->only(['create', 'store']);
+        $this->middleware('permission:manajemen_risiko,update')->only(['edit', 'update']);
+        $this->middleware('permission:manajemen_risiko,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $mutu = ManajemenRisiko::all();

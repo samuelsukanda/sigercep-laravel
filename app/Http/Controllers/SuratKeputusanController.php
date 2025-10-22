@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Storage;
 class SuratKeputusanController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:surat_keputusan,read')->only(['index', 'show']);
+        $this->middleware('permission:surat_keputusan,create')->only(['create', 'store']);
+        $this->middleware('permission:surat_keputusan,update')->only(['edit', 'update']);
+        $this->middleware('permission:surat_keputusan,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $suratKeputusan = SuratKeputusan::all();

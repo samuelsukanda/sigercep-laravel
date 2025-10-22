@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Storage;
 class PeraturanPerusahaanController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:peraturan_perusahaan,read')->only(['index', 'show']);
+        $this->middleware('permission:peraturan_perusahaan,create')->only(['create', 'store']);
+        $this->middleware('permission:peraturan_perusahaan,update')->only(['edit', 'update']);
+        $this->middleware('permission:peraturan_perusahaan,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $peraturanPerusahaan = PeraturanPerusahaan::all();

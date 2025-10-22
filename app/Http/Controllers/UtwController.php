@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Storage;
 class UtwController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:utw,read')->only(['index', 'show']);
+        $this->middleware('permission:utw,create')->only(['create', 'store']);
+        $this->middleware('permission:utw,update')->only(['edit', 'update']);
+        $this->middleware('permission:utw,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $utw = Utw::all();

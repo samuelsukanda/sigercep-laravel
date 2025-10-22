@@ -8,6 +8,14 @@ use Illuminate\Http\Request;
 class ReservasiKendaraanController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:reservasi_kendaraan,read')->only(['index', 'show']);
+        $this->middleware('permission:reservasi_kendaraan,create')->only(['create', 'store']);
+        $this->middleware('permission:reservasi_kendaraan,update')->only(['edit', 'update']);
+        $this->middleware('permission:reservasi_kendaraan,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $reservasi = ReservasiKendaraan::all();

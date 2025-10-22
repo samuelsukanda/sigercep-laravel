@@ -63,12 +63,20 @@
                                 <x-badge.approval-badge :status="$item->approval" />
                             </td>
                             <td class="px-6 py-4 space-x-2 text-center">
+                                @canAccess('reservasi_ruangan', 'update')
                                 <x-button.action href="{{ route('reservasi.ruangan.edit', $item->id) }}"
                                     icon="pen-to-square" color="emerald" title="Edit" />
+                                @endcanAccess
+
+                                @canAccess('reservasi_ruangan', 'read')
                                 <x-button.action href="{{ route('reservasi.ruangan.show', $item->id) }}" icon="eye"
                                     color="emerald" title="Lihat Data" />
+                                @endcanAccess
+
+                                @canAccess('reservasi_ruangan', 'delete')
                                 <x-button.action href="{{ route('reservasi.ruangan.destroy', $item->id) }}" icon="trash"
                                     color="red" type="button" method="DELETE" title="Hapus" />
+                                @endcanAccess
                             </td>
                         </tr>
                     @endforeach

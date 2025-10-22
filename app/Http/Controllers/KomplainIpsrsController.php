@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Storage;
 class KomplainIpsrsController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:komplain_ipsrs,read')->only(['index', 'show']);
+        $this->middleware('permission:komplain_ipsrs,create')->only(['create', 'store']);
+        $this->middleware('permission:komplain_ipsrs,update')->only(['edit', 'update']);
+        $this->middleware('permission:komplain_ipsrs,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $komplain = KomplainIpsrs::all();

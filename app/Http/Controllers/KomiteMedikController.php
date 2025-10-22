@@ -8,6 +8,15 @@ use Illuminate\Support\Facades\Storage;
 
 class KomiteMedikController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:komite_medik,read')->only(['index', 'show']);
+        $this->middleware('permission:komite_medik,create')->only(['create', 'store']);
+        $this->middleware('permission:komite_medik,update')->only(['edit', 'update']);
+        $this->middleware('permission:komite_medik,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $komiteMedik = KomiteMedik::all();

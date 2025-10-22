@@ -11,6 +11,14 @@ use Illuminate\Support\Facades\Response;
 class BankSpoController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:bank_spo,read')->only(['index', 'show']);
+        $this->middleware('permission:bank_spo,create')->only(['create', 'store']);
+        $this->middleware('permission:bank_spo,update')->only(['edit', 'update']);
+        $this->middleware('permission:bank_spo,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $bank_spo = BankSpo::all();

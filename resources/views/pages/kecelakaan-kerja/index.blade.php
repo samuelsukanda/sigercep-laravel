@@ -6,9 +6,12 @@
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4">
             <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Kecelakaan Kerja</h6>
+
+            @canAccess('kecelakaan_kerja', 'create')
             <x-button.link href="{{ route('kecelakaan-kerja.create') }}">
                 Tambah Data
             </x-button.link>
+            @endcanAccess
         </div>
 
         @if (session('success'))
@@ -51,12 +54,20 @@
                             <td class="px-6 py-4">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
                             </td>
                             <td class="px-6 py-4 space-x-2 text-center">
+                                @canAccess('kecelakaan_kerja', 'update')
                                 <x-button.action href="{{ route('kecelakaan-kerja.edit', $item->id) }}" icon="pen-to-square"
                                     color="emerald" title="Edit" />
+                                @endcanAccess
+
+                                @canAccess('kecelakaan_kerja', 'read')
                                 <x-button.action href="{{ route('kecelakaan-kerja.show', $item->id) }}" icon="eye"
                                     color="emerald" title="Lihat Data" />
+                                @endcanAccess
+
+                                @canAccess('kecelakaan_kerja', 'delete')
                                 <x-button.action href="{{ route('kecelakaan-kerja.destroy', $item->id) }}" icon="trash"
                                     color="red" type="button" method="DELETE" title="Hapus" />
+                                @endcanAccess
                             </td>
                         </tr>
                     @endforeach

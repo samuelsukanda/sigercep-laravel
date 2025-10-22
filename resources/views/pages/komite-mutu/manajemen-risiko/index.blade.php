@@ -6,9 +6,12 @@
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4">
             <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Manajemen Risiko</h6>
+
+            @canAccess('manajemen_risiko', 'create')
             <x-button.link href="{{ route('komite-mutu.manajemen-risiko.create') }}">
                 Tambah Data
             </x-button.link>
+            @endcanAccess
         </div>
 
         @if (session('success'))
@@ -53,12 +56,20 @@
                             </td>
                             <td class="px-6 py-4">{{ $item->uraian }}</td>
                             <td class="px-6 py-4 space-x-2 text-center">
+                                @canAccess('manajemen_risiko', 'update')
                                 <x-button.action href="{{ route('komite-mutu.manajemen-risiko.edit', $item->id) }}"
                                     icon="pen-to-square" color="emerald" title="Edit" />
+                                @endcanAccess
+
+                                @canAccess('manajemen_risiko', 'read')
                                 <x-button.action href="{{ route('komite-mutu.manajemen-risiko.show', $item->id) }}"
                                     icon="eye" color="emerald" title="Lihat Data" />
+                                @endcanAccess
+
+                                @canAccess('manajemen_risiko', 'delete')
                                 <x-button.action href="{{ route('komite-mutu.manajemen-risiko.destroy', $item->id) }}"
                                     icon="trash" color="red" type="button" method="DELETE" title="Hapus" />
+                                @endcanAccess
                             </td>
                         </tr>
                     @endforeach

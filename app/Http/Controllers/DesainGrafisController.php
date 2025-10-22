@@ -7,6 +7,14 @@ use App\Models\DesainGrafis;
 
 class DesainGrafisController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:desain_grafis,read')->only(['index', 'show']);
+        $this->middleware('permission:desain_grafis,create')->only(['create', 'store']);
+        $this->middleware('permission:desain_grafis,update')->only(['edit', 'update']);
+        $this->middleware('permission:desain_grafis,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $desain = DesainGrafis::all();

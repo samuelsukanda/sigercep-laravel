@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Storage;
 class LaporanAsetRusakController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:laporan_aset_rusak,read')->only(['index', 'show']);
+        $this->middleware('permission:laporan_aset_rusak,create')->only(['create', 'store']);
+        $this->middleware('permission:laporan_aset_rusak,update')->only(['edit', 'update']);
+        $this->middleware('permission:laporan_aset_rusak,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $pengadaan = LaporanAsetRusak::all();

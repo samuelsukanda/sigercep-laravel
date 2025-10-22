@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Storage;
 class KomplainOutsourcingVendorController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:outsourcing_vendor,read')->only(['index', 'show']);
+        $this->middleware('permission:outsourcing_vendor,create')->only(['create', 'store']);
+        $this->middleware('permission:outsourcing_vendor,update')->only(['edit', 'update']);
+        $this->middleware('permission:outsourcing_vendor,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $komplain = KomplainOutsourcingVendor::all();

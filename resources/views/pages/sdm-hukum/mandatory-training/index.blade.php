@@ -6,6 +6,7 @@
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
             <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Mandatory Training</h6>
+            
             @canAccess('mandatory_training', 'create')
             <x-button.link href="{{ route('sdm-hukum.mandatory-training.create') }}">
                 Tambah Data

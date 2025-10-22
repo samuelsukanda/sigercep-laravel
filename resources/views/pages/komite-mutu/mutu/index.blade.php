@@ -6,9 +6,12 @@
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4">
             <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Mutu</h6>
+
+            @canAccess('mutu', 'create')
             <x-button.link href="{{ route('komite-mutu.mutu.create') }}">
                 Tambah Data
             </x-button.link>
+            @endcanAccess
         </div>
 
         @if (session('success'))
@@ -37,12 +40,20 @@
                             <td class="px-6 py-4">{{ $item->unit }}</td>
                             <td class="px-6 py-4">{{ $item->pj_data }}</td>
                             <td class="px-6 py-4 space-x-2 text-center">
+                                @canAccess('mutu', 'update')
                                 <x-button.action href="{{ route('komite-mutu.mutu.edit', $item->id) }}" icon="pen-to-square"
                                     color="emerald" title="Edit" />
+                                @endcanAccess
+
+                                @canAccess('mutu', 'read')
                                 <x-button.action href="{{ route('komite-mutu.mutu.show', $item->id) }}" icon="eye"
                                     color="emerald" title="Lihat Data" />
+                                @endcanAccess
+
+                                @canAccess('mutu', 'delete')
                                 <x-button.action href="{{ route('komite-mutu.mutu.destroy', $item->id) }}" icon="trash"
                                     color="red" type="button" method="DELETE" title="Hapus" />
+                                @endcanAccess
                             </td>
                         </tr>
                     @endforeach

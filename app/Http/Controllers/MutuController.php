@@ -8,6 +8,14 @@ use App\Models\Mutu;
 class MutuController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:mutu,read')->only(['index', 'show']);
+        $this->middleware('permission:mutu,create')->only(['create', 'store']);
+        $this->middleware('permission:mutu,update')->only(['edit', 'update']);
+        $this->middleware('permission:mutu,delete')->only(['destroy']);
+    }
+
     public function index()
     {
         $mutu = Mutu::all();

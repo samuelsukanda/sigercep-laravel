@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Storage;
 class PengembalianAsetController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:pengembalian_aset,read')->only(['index', 'show']);
+        $this->middleware('permission:pengembalian_aset,create')->only(['create', 'store']);
+        $this->middleware('permission:pengembalian_aset,update')->only(['edit', 'update']);
+        $this->middleware('permission:pengembalian_aset,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $pengadaan = PengembalianAset::all();

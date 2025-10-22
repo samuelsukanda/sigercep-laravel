@@ -59,12 +59,21 @@
                             </td>
                             <td class="px-6 py-4">{{ $item->jenis_kendaraan }}</td>
                             <td class="px-6 py-4 space-x-2 text-center">
+                                @canAccess('reservasi_kendaraan', 'update')
                                 <x-button.action href="{{ route('reservasi.kendaraan.edit', $item->id) }}"
                                     icon="pen-to-square" color="emerald" title="Edit" />
+                                @endcanAccess
+
+                                @canAccess('reservasi_kendaraan', 'read')
                                 <x-button.action href="{{ route('reservasi.kendaraan.show', $item->id) }}" icon="eye"
                                     color="emerald" title="Lihat Data" />
+                                @endcanAccess
+
+                                @canAccess('reservasi_kendaraan', 'delete')
                                 <x-button.action href="{{ route('reservasi.kendaraan.destroy', $item->id) }}"
                                     icon="trash" color="red" type="button" method="DELETE" title="Hapus" />
+                                @endcanAccess
+
                             </td>
                         </tr>
                     @endforeach

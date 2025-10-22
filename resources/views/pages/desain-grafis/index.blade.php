@@ -6,9 +6,12 @@
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4">
             <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Desain Grafis</h6>
+
+            @canAccess('desain_grafis', 'create')
             <x-button.link href="{{ route('desain-grafis.create') }}">
                 Tambah Data
             </x-button.link>
+            @endcanAccess
         </div>
 
         @if (session('success'))
@@ -57,12 +60,20 @@
                                 <x-badge.status-badge :status="$item->status" />
                             </td>
                             <td class="px-6 py-4 space-x-2 text-center">
+                                @canAccess('desain_grafis', 'update')
                                 <x-button.action href="{{ route('desain-grafis.edit', $item->id) }}" icon="pen-to-square"
                                     color="emerald" title="Edit" />
+                                @endcanAccess
+
+                                @canAccess('desain_grafis', 'read')
                                 <x-button.action href="{{ route('desain-grafis.show', $item->id) }}" icon="eye"
                                     color="emerald" title="Lihat Data" />
+                                @endcanAccess
+
+                                @canAccess('desain_grafis', 'delete')
                                 <x-button.action href="{{ route('desain-grafis.destroy', $item->id) }}" icon="trash"
                                     color="red" type="button" method="DELETE" title="Hapus" />
+                                @endcanAccess
                             </td>
                         </tr>
                     @endforeach

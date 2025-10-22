@@ -6,9 +6,12 @@
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
             <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Bank SPO</h6>
+
+            @canAccess('bank_spo', 'create')
             <x-button.link href="{{ route('komite-mutu.bank-spo.create') }}">
                 Tambah Data
             </x-button.link>
+            @endcanAccess
         </div>
 
         @if (session('success'))
@@ -73,12 +76,20 @@
                                 {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y H:i') }}
                             </td>
                             <td class="px-6 py-4 space-x-2 text-center">
+                                @canAccess('bank_spo', 'update')
                                 <x-button.action href="{{ route('komite-mutu.bank-spo.edit', $item->id) }}"
                                     icon="pen-to-square" color="emerald" title="Edit" />
+                                @endcanAccess
+
+                                @canAccess('bank_spo', 'read')
                                 <x-button.action href="{{ route('komite-mutu.bank-spo.show', $item->id) }}" icon="eye"
                                     color="emerald" title="Lihat Data" />
+                                @endcanAccess
+
+                                @canAccess('bank_spo', 'delete')
                                 <x-button.action href="{{ route('komite-mutu.bank-spo.destroy', $item->id) }}"
                                     icon="trash" color="red" type="button" method="DELETE" title="Hapus" />
+                                @endcanAccess
                             </td>
                         </tr>
                     @endforeach

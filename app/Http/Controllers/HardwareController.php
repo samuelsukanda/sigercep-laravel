@@ -8,6 +8,14 @@ use App\Models\Hardware;
 class HardwareController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:hardware,read')->only(['index', 'show']);
+        $this->middleware('permission:hardware,create')->only(['create', 'store']);
+        $this->middleware('permission:hardware,update')->only(['edit', 'update']);
+        $this->middleware('permission:hardware,delete')->only(['destroy']);
+    }
+
     public function index()
     {
         $hardware = Hardware::all();
@@ -34,7 +42,7 @@ class HardwareController extends Controller
             'unit'     => $validated['unit'],
             'lantai'   => $validated['lantai'],
             'tanggal'  => $validated['tanggal'],
-            'checklist' => json_encode($validated['checklist']), 
+            'checklist' => json_encode($validated['checklist']),
         ]);
 
         return redirect()->route('hardware.index')->with('success', 'Data berhasil ditambahkan.');

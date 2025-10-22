@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Storage;
 class PeminjamanAsetController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:peminjaman_aset,read')->only(['index', 'show']);
+        $this->middleware('permission:peminjaman_aset,create')->only(['create', 'store']);
+        $this->middleware('permission:peminjaman_aset,update')->only(['edit', 'update']);
+        $this->middleware('permission:peminjaman_aset,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $pengadaan = PeminjamanAset::all();

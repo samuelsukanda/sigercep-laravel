@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Storage;
 class VisitasiController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:visitasi,read')->only(['index', 'show']);
+        $this->middleware('permission:visitasi,create')->only(['create', 'store']);
+        $this->middleware('permission:visitasi,update')->only(['edit', 'update']);
+        $this->middleware('permission:visitasi,delete')->only(['destroy']);
+    }
+
     public function index()
     {
         $visitasi = Visitasi::all();

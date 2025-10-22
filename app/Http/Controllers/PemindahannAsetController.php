@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Storage;
 class PemindahannAsetController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:pemindahan_aset,read')->only(['index', 'show']);
+        $this->middleware('permission:pemindahan_aset,create')->only(['create', 'store']);
+        $this->middleware('permission:pemindahan_aset,update')->only(['edit', 'update']);
+        $this->middleware('permission:pemindahan_aset,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $pengadaan = PemindahanAset::all();

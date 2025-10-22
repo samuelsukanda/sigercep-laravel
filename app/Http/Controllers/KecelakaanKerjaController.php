@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Storage;
 class KecelakaanKerjaController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:kecelakaan_kerja,read')->only(['index', 'show']);
+        $this->middleware('permission:kecelakaan_kerja,create')->only(['create', 'store']);
+        $this->middleware('permission:kecelakaan_kerja,update')->only(['edit', 'update']);
+        $this->middleware('permission:kecelakaan_kerja,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $k3rs = KecelakaanKerja::all();

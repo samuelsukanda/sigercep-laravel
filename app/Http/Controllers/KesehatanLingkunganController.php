@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Storage;
 class KesehatanLingkunganController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:kesehatan_lingkungan,read')->only(['index', 'show']);
+        $this->middleware('permission:kesehatan_lingkungan,create')->only(['create', 'store']);
+        $this->middleware('permission:kesehatan_lingkungan,update')->only(['edit', 'update']);
+        $this->middleware('permission:kesehatan_lingkungan,delete')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $komplain = KesehatanLingkungan::all();
