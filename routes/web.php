@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\RoleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesainGrafisController;
 use App\Http\Controllers\KomplainIpsrsController;
@@ -48,9 +47,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings', function () {
         return view('settings');
     })->name('settings');
-
-    // Roles
-    Route::resource('roles', RoleController::class)->names('roles');
 
     // Pages - Views
 

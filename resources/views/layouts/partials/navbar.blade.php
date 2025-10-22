@@ -71,13 +71,13 @@
                         class="text-sm transform-dropdown before:font-awesome before:leading-default before:duration-350 before:ease lg:shadow-3xl duration-250 min-w-44 before:sm:right-8 before:text-5.5 pointer-events-none absolute right-0 top-0 z-50 origin-top list-none rounded-lg border-0 border-transparent dark:shadow-dark-xl dark:bg-slate-850 bg-white px-2 py-2 text-left text-slate-500 opacity-0 transition-all before:absolute before:right-2 before:top-0 before:z-50 before:content-['\f0d8'] sm:-mr-6 lg:mt-2 lg:block">
 
                         <!-- Item Setting -->
-                        <li class="relative">
+                        {{-- <li class="relative">
                             <a href="{{ route('roles.index') }}"
                                 class="dark:hover:bg-slate-900 ease py-1.2 clear-both block w-full whitespace-nowrap rounded-lg px-4 duration-300 hover:bg-gray-200 hover:text-slate-700 lg:transition-colors text-sm font-semibold dark:text-white">
                                 <i class="fas fa-cog mr-2"></i>
                                 Settings
                             </a>
-                        </li>
+                        </li> --}}
 
                         <!-- Item Logout -->
                         <li class="relative">
