@@ -11,7 +11,7 @@ return new class extends Migration
     {
         Schema::create('mandatory_training', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_file');
+            $table->string('file_pdf');
             $table->string('file_path');
             $table->timestamps();
         });

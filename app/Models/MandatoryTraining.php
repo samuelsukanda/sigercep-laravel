@@ -12,7 +12,7 @@ class MandatoryTraining extends Model
     protected $table = 'mandatory_training';
 
     protected $fillable = [
-        'nama_file',
+        'file_pdf',
         'file_path',
     ];
 }

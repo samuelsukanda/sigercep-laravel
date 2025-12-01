@@ -12,7 +12,7 @@ class Utw extends Model
     protected $table = 'utw';
 
     protected $fillable = [
-        'nama_file',
+        'file_pdf',
         'file_path',
         'unit',
     ];

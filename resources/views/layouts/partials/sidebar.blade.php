@@ -216,6 +216,24 @@
                             <span class="ml-1">Manajemen Risiko</span>
                         </a>
                     </li>
+                    <li class="w-full">
+                        <a href="{{ route('komite-mutu.pelaporan-ikp.index') }}"
+                            class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                                <i class="fas fa-list text-sm leading-normal"></i>
+                            </div>
+                            <span class="ml-1">Pelaporan IKP</span>
+                        </a>
+                    </li>
+                    <li class="w-full">
+                        <a href="{{ route('komite-mutu.pengajuan-dokumen.index') }}"
+                            class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                                <i class="fas fa-list text-sm leading-normal"></i>
+                            </div>
+                            <span class="ml-1">Pengajuan Dokumen</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
 

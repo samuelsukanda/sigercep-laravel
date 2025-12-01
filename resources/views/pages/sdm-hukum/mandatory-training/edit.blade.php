@@ -18,10 +18,10 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama File --}}
-                                <x-form.input name="nama_file" label="Nama File" :value="old('nama_file', $mandatoryTraining->nama_file ?? '')" required disabled/>
+                                <x-form.input name="file_pdf" label="Nama File" :value="old('file_pdf', $mandatoryTraining->file_pdf ?? '')" required disabled/>
 
                                 {{-- File PDF --}}
-                                <x-form.file-upload-pdf name="nama_file"
+                                <x-form.file-upload-pdf name="file_pdf"
                                     label="Upload File (PDF - Kosongkan jika tidak diubah)" />
 
                                 @if ($mandatoryTraining->file_path)

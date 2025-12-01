@@ -23,7 +23,7 @@
                                     required />
 
                                 {{-- File PDF --}}
-                                <x-form.file-upload-pdf name="nama_file" label="Upload File (PDF)" />
+                                <x-form.file-upload-pdf name="file_pdf" label="Upload File (PDF)" />
                             </div>
 
                             <div class="mt-6">
@@ -43,4 +43,5 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/file-upload.js') }}"></script>
+    <script src="{{ asset('assets/js/alert-upload.js') }}"></script>
 @endpush

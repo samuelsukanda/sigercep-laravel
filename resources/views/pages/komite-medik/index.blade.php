@@ -59,7 +59,7 @@
                 <tbody class="text-s text-slate-500 bg-slate-100 dark:text-white">
                     @foreach ($komiteMedik as $item)
                         <tr>
-                            <td class="px-6 py-4">{{ $item->nama_file }}</td>
+                            <td class="px-6 py-4">{{ $item->file_pdf }}</td>
                             <td class="px-6 py-4">{{ $item->unit }}</td>
                             <td class="px-6 py-4">
                                 {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y H:i') }}

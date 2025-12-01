@@ -22,7 +22,6 @@ class PermissionHelper
         // 🛑 MENU KHUSUS hanya bisa diakses penuh oleh superadmin
         $superadminOnlyMenus = ['toner', 'visitasi', 'peminjaman', 'hardware'];
         if (in_array($menu, $superadminOnlyMenus)) {
-            // Selain superadmin hanya boleh read
             return $action === 'read';
         }
 
@@ -43,7 +42,7 @@ class PermissionHelper
 
         // 🟡 ADMIN DENGAN AKSES KHUSUS
         $adminSpecificAccess = [
-            'mutu' => ['bank_spo', 'mutu', 'manajemen_risiko'],
+            'mutu' => ['bank_spo', 'mutu', 'manajemen_risiko', 'pelaporan_ikp', 'pengajuan_dokumen'],
             'sdm'  => ['utw', 'peraturan_perusahaan', 'surat_keputusan', 'mandatory_training'],
             'komdik' => ['komite_medik'],
         ];
@@ -57,7 +56,7 @@ class PermissionHelper
         if ($level === 'admin') {
             // Menu yang restricted hanya untuk admin tertentu
             $restrictedMenus = [
-                'bank_spo', 'mutu', 'manajemen_risiko', // hanya mutu
+                'bank_spo', 'mutu', 'manajemen_risiko', 'pelaporan_ikp', 'pengajuan_dokumen', // hanya mutu
                 'utw', 'peraturan_perusahaan', 'surat_keputusan', 'mandatory_training', // hanya sdm
                 'komite_medik', // hanya komdik
             ];

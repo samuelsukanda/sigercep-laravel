@@ -43,22 +43,22 @@ class PeraturanPerusahaanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_file' => 'required|file|mimes:pdf|max:20480',
+            'file_pdf' => 'required|file|mimes:pdf|max:20480',
         ]);
 
-        $file = $request->file('nama_file');
+        $file = $request->file('file_pdf');
         $originalName = $file->getClientOriginalName();
         $folderPath = "peraturan-perusahaan";
         $targetPath = "$folderPath/$originalName";
 
         if (Storage::disk('public')->exists($targetPath)) {
-            return back()->withErrors(['nama_file' => 'File sudah ada.']);
+            return back()->withErrors(['file_pdf' => 'File sudah ada.']);
         }
 
         Storage::disk('public')->putFileAs($folderPath, $file, $originalName);
 
         PeraturanPerusahaan::create([
-            'nama_file' => $originalName,
+            'file_pdf' => $originalName,
             'file_path' => $targetPath,
         ]);
 
@@ -83,7 +83,7 @@ class PeraturanPerusahaanController extends Controller
 
         return response()->file($filePath, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . $peraturanPerusahaan->unit . '-' . $peraturanPerusahaan->nama_file . '"'
+            'Content-Disposition' => 'inline; filename="' . $peraturanPerusahaan->unit . '-' . $peraturanPerusahaan->file_pdf . '"'
         ]);
     }
 
@@ -98,13 +98,13 @@ class PeraturanPerusahaanController extends Controller
         $peraturanPerusahaan = PeraturanPerusahaan::findOrFail($id);
 
         $request->validate([
-            'nama_file' => 'nullable|file|mimes:pdf|max:20480',
+            'file_pdf' => 'nullable|file|mimes:pdf|max:20480',
         ]);
 
-        $uploadedFile = $request->file('nama_file');
+        $uploadedFile = $request->file('file_pdf');
         $originalName = $uploadedFile
             ? $uploadedFile->getClientOriginalName()
-            : $peraturanPerusahaan->nama_file;
+            : $peraturanPerusahaan->file_pdf;
 
         $targetPath = "peraturan-perusahaan/" . $originalName;
 
@@ -117,18 +117,18 @@ class PeraturanPerusahaanController extends Controller
             }
 
             if (Storage::disk('public')->exists($targetPath)) {
-                return back()->withErrors(['nama_file' => 'File dengan nama ini sudah ada.']);
+                return back()->withErrors(['file_pdf' => 'File dengan nama ini sudah ada.']);
             }
 
             Storage::disk('public')->putFileAs("peraturan-perusahaan", $uploadedFile, $originalName);
         } else {
             if ($peraturanPerusahaan->file_path !== $targetPath) {
                 if (!Storage::disk('public')->exists($peraturanPerusahaan->file_path)) {
-                    return back()->withErrors(['nama_file' => 'File lama tidak ditemukan.']);
+                    return back()->withErrors(['file_pdf' => 'File lama tidak ditemukan.']);
                 }
 
                 if (Storage::disk('public')->exists($targetPath)) {
-                    return back()->withErrors(['nama_file' => 'File sudah ada dengan nama tersebut.']);
+                    return back()->withErrors(['file_pdf' => 'File sudah ada dengan nama tersebut.']);
                 }
 
                 $fileContent = Storage::disk('public')->get($peraturanPerusahaan->file_path);
@@ -138,7 +138,7 @@ class PeraturanPerusahaanController extends Controller
         }
 
         $peraturanPerusahaan->update([
-            'nama_file' => $originalName,
+            'file_pdf' => $originalName,
             'file_path' => $targetPath,
         ]);
 

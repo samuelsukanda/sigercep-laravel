@@ -12,7 +12,7 @@ class KomiteMedik extends Model
     protected $table = 'komite_medik';
 
     protected $fillable = [
-        'nama_file',
+        'file_pdf',
         'file_path',
         'unit',
     ];

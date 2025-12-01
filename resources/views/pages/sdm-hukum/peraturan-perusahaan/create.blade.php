@@ -11,7 +11,8 @@
                         <h6 class="mb-0 font-bold text-lg">Tambah Peraturan Perusahaan</h6>
                     </div>
                     <div class="flex-auto p-6">
-                        <form action="{{ route('sdm-hukum.peraturan-perusahaan.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('sdm-hukum.peraturan-perusahaan.store') }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -36,4 +37,5 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/file-upload.js') }}"></script>
+    <script src="{{ asset('assets/js/alert-upload.js') }}"></script>
 @endpush

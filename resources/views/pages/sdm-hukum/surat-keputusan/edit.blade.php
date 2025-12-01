@@ -18,13 +18,13 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama File --}}
-                                <x-form.input name="nama_file" label="Nama File" :value="old('nama_file', $suratKeputusan->nama_file ?? '')" required disabled/>
+                                <x-form.input name="file_pdf" label="Nama File" :value="old('file_pdf', $suratKeputusan->file_pdf ?? '')" required disabled/>
 
                                 {{-- Unit --}}
                                 <x-form.select name="unit" label="Unit" :options="config('units.sk')" :selected="old('unit', $suratKeputusan->unit)" required />
 
                                 {{-- File PDF --}}
-                                <x-form.file-upload-pdf name="nama_file"
+                                <x-form.file-upload-pdf name="file_pdf"
                                     label="Upload File (PDF - Kosongkan jika tidak diubah)" />
 
                                 @if ($suratKeputusan->file_path)

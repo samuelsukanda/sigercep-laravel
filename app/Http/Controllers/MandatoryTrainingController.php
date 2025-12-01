@@ -43,22 +43,22 @@ class MandatoryTrainingController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_file' => 'required|file|mimes:pdf|max:20480',
+            'file_pdf' => 'required|file|mimes:pdf|max:20480',
         ]);
 
-        $file = $request->file('nama_file');
+        $file = $request->file('file_pdf');
         $originalName = $file->getClientOriginalName();
         $folderPath = "mandatory-training";
         $targetPath = "$folderPath/$originalName";
 
         if (Storage::disk('public')->exists($targetPath)) {
-            return back()->withErrors(['nama_file' => 'File sudah ada.']);
+            return back()->withErrors(['file_pdf' => 'File sudah ada.']);
         }
 
         Storage::disk('public')->putFileAs($folderPath, $file, $originalName);
 
         MandatoryTraining::create([
-            'nama_file' => $originalName,
+            'file_pdf' => $originalName,
             'file_path' => $targetPath,
         ]);
 
@@ -83,7 +83,7 @@ class MandatoryTrainingController extends Controller
 
         return response()->file($filePath, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . $mandatoryTraining->unit . '-' . $mandatoryTraining->nama_file . '"'
+            'Content-Disposition' => 'inline; filename="' . $mandatoryTraining->unit . '-' . $mandatoryTraining->file_pdf . '"'
         ]);
     }
 
@@ -98,13 +98,13 @@ class MandatoryTrainingController extends Controller
         $mandatoryTraining = MandatoryTraining::findOrFail($id);
 
         $request->validate([
-            'nama_file' => 'nullable|file|mimes:pdf|max:20480',
+            'file_pdf' => 'nullable|file|mimes:pdf|max:20480',
         ]);
 
-        $uploadedFile = $request->file('nama_file');
+        $uploadedFile = $request->file('file_pdf');
         $originalName = $uploadedFile
             ? $uploadedFile->getClientOriginalName()
-            : $mandatoryTraining->nama_file;
+            : $mandatoryTraining->file_pdf;
 
         $targetPath = "mandatory-training/" . $originalName;
 
@@ -117,18 +117,18 @@ class MandatoryTrainingController extends Controller
             }
 
             if (Storage::disk('public')->exists($targetPath)) {
-                return back()->withErrors(['nama_file' => 'File dengan nama ini sudah ada.']);
+                return back()->withErrors(['file_pdf' => 'File dengan nama ini sudah ada.']);
             }
 
             Storage::disk('public')->putFileAs("mandatory-training", $uploadedFile, $originalName);
         } else {
             if ($mandatoryTraining->file_path !== $targetPath) {
                 if (!Storage::disk('public')->exists($mandatoryTraining->file_path)) {
-                    return back()->withErrors(['nama_file' => 'File lama tidak ditemukan.']);
+                    return back()->withErrors(['file_pdf' => 'File lama tidak ditemukan.']);
                 }
 
                 if (Storage::disk('public')->exists($targetPath)) {
-                    return back()->withErrors(['nama_file' => 'File sudah ada dengan nama tersebut.']);
+                    return back()->withErrors(['file_pdf' => 'File sudah ada dengan nama tersebut.']);
                 }
 
                 $fileContent = Storage::disk('public')->get($mandatoryTraining->file_path);
@@ -138,7 +138,7 @@ class MandatoryTrainingController extends Controller
         }
 
         $mandatoryTraining->update([
-            'nama_file' => $originalName,
+            'file_pdf' => $originalName,
             'file_path' => $targetPath,
         ]);
 

@@ -44,11 +44,11 @@ class SuratKeputusanController extends Controller
     {
         $request->validate([
             'unit' => 'required|string',
-            'nama_file' => 'required|file|mimes:pdf|max:20480',
+            'file_pdf' => 'required|file|mimes:pdf|max:20480',
         ]);
 
         $unit = $request->unit;
-        $file = $request->file('nama_file');
+        $file = $request->file('file_pdf');
         $originalName = $file->getClientOriginalName();
         $folderPath = "surat-keputusan/$unit";
         $targetPath = "$folderPath/$originalName";
@@ -58,14 +58,14 @@ class SuratKeputusanController extends Controller
         }
 
         if (Storage::disk('public')->exists($targetPath)) {
-            return back()->withErrors(['nama_file' => 'File sudah ada di unit ini.']);
+            return back()->withErrors(['file_pdf' => 'File sudah ada di unit ini.']);
         }
 
         Storage::disk('public')->putFileAs($folderPath, $file, $originalName);
 
         SuratKeputusan::create([
             'unit' => $unit,
-            'nama_file' => $originalName,
+            'file_pdf' => $originalName,
             'file_path' => $targetPath,
         ]);
 
@@ -90,7 +90,7 @@ class SuratKeputusanController extends Controller
 
         return response()->file($filePath, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . $suratKeputusan->unit . '-' . $suratKeputusan->nama_file . '"'
+            'Content-Disposition' => 'inline; filename="' . $suratKeputusan->unit . '-' . $suratKeputusan->file_pdf . '"'
         ]);
     }
 
@@ -107,14 +107,14 @@ class SuratKeputusanController extends Controller
 
         $request->validate([
             'unit' => 'required|string',
-            'nama_file' => 'nullable|file|mimes:pdf|max:20480',
+            'file_pdf' => 'nullable|file|mimes:pdf|max:20480',
         ]);
 
         $unit = $request->unit;
-        $uploadedFile = $request->file('nama_file');
+        $uploadedFile = $request->file('file_pdf');
         $originalName = $uploadedFile
             ? $uploadedFile->getClientOriginalName()
-            : $suratKeputusan->nama_file;
+            : $suratKeputusan->file_pdf;
 
         $targetPath = "surat-keputusan/$unit/" . $originalName;
 
@@ -124,18 +124,18 @@ class SuratKeputusanController extends Controller
             }
 
             if (Storage::disk('public')->exists($targetPath)) {
-                return back()->withErrors(['nama_file' => 'File sudah ada untuk unit ini.']);
+                return back()->withErrors(['file_pdf' => 'File sudah ada untuk unit ini.']);
             }
 
             Storage::disk('public')->putFileAs("surat-keputusan/$unit", $uploadedFile, $originalName);
         } else {
             if ($suratKeputusan->file_path !== $targetPath) {
                 if (!Storage::disk('public')->exists($suratKeputusan->file_path)) {
-                    return back()->withErrors(['nama_file' => 'File lama tidak ditemukan.']);
+                    return back()->withErrors(['file_pdf' => 'File lama tidak ditemukan.']);
                 }
 
                 if (Storage::disk('public')->exists($targetPath)) {
-                    return back()->withErrors(['nama_file' => 'File sudah ada untuk unit ini.']);
+                    return back()->withErrors(['file_pdf' => 'File sudah ada untuk unit ini.']);
                 }
 
                 $fileContent = Storage::disk('public')->get($suratKeputusan->file_path);
@@ -146,7 +146,7 @@ class SuratKeputusanController extends Controller
         }
 
         $suratKeputusan->update([
-            'nama_file' => $originalName,
+            'file_pdf' => $originalName,
             'file_path' => $targetPath,
             'unit' => $unit,
         ]);

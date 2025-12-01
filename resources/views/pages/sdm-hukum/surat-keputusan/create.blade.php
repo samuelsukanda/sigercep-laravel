@@ -11,7 +11,8 @@
                         <h6 class="mb-0 font-bold text-lg">Tambah Surat Keputusan</h6>
                     </div>
                     <div class="flex-auto p-6">
-                        <form action="{{ route('sdm-hukum.surat-keputusan.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('sdm-hukum.surat-keputusan.store') }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -19,7 +20,7 @@
                                 <x-form.select name="unit" label="Unit" :options="config('units.sk')" :selected="old('unit')" required />
 
                                 {{-- File PDF --}}
-                                <x-form.file-upload-pdf name="nama_file" label="Upload File (PDF)" />
+                                <x-form.file-upload-pdf name="file_pdf" label="Upload File (PDF)" />
                             </div>
 
                             <div class="mt-6">
@@ -39,4 +40,5 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/file-upload.js') }}"></script>
+    <script src="{{ asset('assets/js/alert-upload.js') }}"></script>
 @endpush

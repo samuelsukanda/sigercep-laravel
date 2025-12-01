@@ -10,6 +10,8 @@ use App\Http\Controllers\ReservasiRuanganController;
 use App\Http\Controllers\ReservasiKendaraanController;
 use App\Http\Controllers\VisitasiController;
 use App\Http\Controllers\MutuController;
+use App\Http\Controllers\PelaporanIkpController;
+use App\Http\Controllers\PengajuanDokumenController;
 use App\Http\Controllers\BankSpoController;
 use App\Http\Controllers\UtwController;
 use App\Http\Controllers\ManajemenRisikoController;
@@ -81,6 +83,14 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth'])
         ->resource('komite-mutu/mutu', MutuController::class)
         ->names('komite-mutu.mutu');
+
+    Route::middleware(['auth'])
+        ->resource('komite-mutu/pelaporan-ikp', PelaporanIkpController::class)
+        ->names('komite-mutu.pelaporan-ikp');
+
+    Route::middleware(['auth'])
+        ->resource('komite-mutu/pengajuan-dokumen', PengajuanDokumenController::class)
+        ->names('komite-mutu.pengajuan-dokumen');
 
     Route::middleware(['auth'])
         ->resource('komite-mutu/bank-spo', BankSpoController::class)

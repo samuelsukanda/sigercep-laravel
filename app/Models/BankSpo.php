@@ -12,7 +12,7 @@ class BankSpo extends Model
     protected $table = 'bank_spo';
 
     protected $fillable = [
-        'nama_file',
+        'file_pdf',
         'file_path',
         'unit',
         'jenis_spo',

@@ -12,7 +12,7 @@ class PeraturanPerusahaan extends Model
     protected $table = 'peraturan_perusahaan';
 
     protected $fillable = [
-        'nama_file',
+        'file_pdf',
         'file_path',
     ];
 }

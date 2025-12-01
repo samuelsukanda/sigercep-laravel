@@ -20,6 +20,7 @@ return [
         'Kesehatan Lingkungan',
         'Komite Medik',
         'Komite Mutu',
+        'Komite PPI',
         'Laboratorium',
         'Maintenance',
         'Manager',
@@ -375,5 +376,116 @@ return [
         'EPSON L6550 - YELLOW',
         'EPSON L6550 - BLACK',
         'EPSON L6550 - CYAN',
+    ],
+
+    'umur' => [
+        '0 - 1 Bulan',
+        '1 Bulan - 1 Tahun',
+        '1 Tahun - 5 Tahun',
+        '5 Tahun - 15 Tahun',
+        '15 Tahun - 30 Tahun',
+        '30 Tahun - 65 Tahun',
+        '> 65 Tahun',
+    ],
+
+    'jenis_kelamin' => [
+        'Laki-laki',
+        'Perempuan',
+    ],
+
+    'penanggung_jawab' => [
+        'Pribadi',
+        'Asuransi Swasta',
+        'Pemerintah',
+        'Perusahaan',
+        'BPJS',
+        'Lain-lain',
+    ],
+
+    'jenis_kejadian' => [
+        'Kejadian Potensi Cidera (KPC)',
+        'Kejadian Nyaris Cidera (KNC)',
+        'Kejadian Tidak Cidera (KTC)',
+        'Kejadin Tidak Diharapkan (KTD)',
+        'SENTINEL',
+    ],
+
+    'jenis_insiden' => [
+        'Pasien',
+        'Bukan Pasien',
+        'Lain-lain',
+    ],
+
+    'insiden_pasien' => [
+        'Pasien Rawat Inap',
+        'Pasien IGD',
+        'Pasien Rawat Jalan',
+        'Lain-lain',
+    ],
+
+    'jenis_spesialisasi_pasien' => [
+        'Dalam dan Spesialisasinya',
+        'Anak dan Spesialisasinya',
+        'Bedah dan Spesialisasinya',
+        'Obstetri dan Gynekologi dan Spesialisasinya',
+        'THT dan Spesialisasinya',
+        'Mata dan Spesialisasinya',
+        'Saraf dan Spesialisasinya',
+        'Anestesi dan Spesialisasinya',
+        'Kulit Kelamin dan Spesialisasinya',
+        'Jantung dan Spesialisasinya',
+        'Paru dan Spesialisasinya',
+        'Jiwa dan Spesialisasinya',
+        'Lain-lain',
+    ],
+
+    'akibat_insiden' => [
+        'Tidak Ada Cidera',
+        'Cidera Ringan',
+        'Cidera Reversibel / Cidera Sedang',
+        'Cidera Irreversibel / Cidera Berat',
+        'Kematian',
+    ],
+
+    'tindakan_dilakukan_oleh' => [
+        'Tim',
+        'Dokter',
+        'Perawat',
+        'Petugas Lainnya',
+    ],
+
+    'kejadian_serupa' => [
+        'Ya',
+        'Tidak',
+    ],
+
+    'grading_risiko' => [
+        'Biru',
+        'Hijau',
+        'Kuning',
+        'Merah',
+    ],
+
+    'jenis_dokumen' => [
+        'SPO',
+        'Formulir',
+    ],
+
+    'permintaan_pengajuan' => [
+        'Penerbitan  Dokumen Baru',
+        'Revisi Dokumen',
+        'Penghapusan Dokumen',
+    ],
+
+    'kategori_pengajuan' => [
+        'Cito / Dokumen Yang Akan Digunakan Segera (Cito 1 Hari Kerja)',
+        'Cito 2 (3 Hari Kerja)',
+        'Reguler (5 Hari Kerja)',
+    ],
+
+    'alasan_pengajuan' => [
+        'Penetapan Alur/Bisnis Proses di Unit Kerja',
+        'Update/Revisi Acuan Regulasi',
+        'Update/Revisi Langkah Prosedur',
     ],
 ];

@@ -179,12 +179,114 @@ $(document).ready(function () {
         placeholder: "Pilih Perawat",
         allowClear: true,
     });
+
+    $("#kelompok_umur").select2({
+        placeholder: "Pilih Kelompok Umur",
+        allowClear: true,
+    });
+
+    $("#jenis_kelamin").select2({
+        placeholder: "Pilih Jenis Kelamin",
+        allowClear: true,
+    });
+
+    $("#penanggung_jawab").select2({
+        placeholder: "Pilih Penanggung Jawab",
+        allowClear: true,
+    });
+
+    $("#jenis_kejadian").select2({
+        placeholder: "Pilih Jenis Kejadian",
+        allowClear: true,
+    });
+
+    $("#jenis_insiden").select2({
+        placeholder: "Pilih Jenis Insiden",
+        allowClear: true,
+    });
+
+    $("#insiden_pasien").select2({
+        placeholder: "Pilih Insiden Pasien",
+        allowClear: true,
+    });
+
+    $("#jenis_spesialisasi_pasien").select2({
+        placeholder: "Pilih Jenis Spesialisasi Pasien",
+        allowClear: true,
+    });
+
+    $("#akibat_insiden").select2({
+        placeholder: "Pilih Jenis Akibat Insiden",
+        allowClear: true,
+    });
+
+    $("#tindakan_dilakukan_oleh").select2({
+        placeholder: "Pilih Jenis Tindakan Dilakukan Oleh",
+        allowClear: true,
+    });
+
+    $("#kejadian_serupa").select2({
+        placeholder: "Pilih Jenis Kejadian Serupa",
+        allowClear: true,
+    });
+
+    $("#grading_risiko").select2({
+        placeholder: "Pilih Jenis Grading Risiko",
+        allowClear: true,
+    });
+
+    $("#jenis_dokumen").select2({
+        placeholder: "Pilih Jenis Jenis Dokumen",
+        allowClear: true,
+    });
+
+    $("#permintaan_pengajuan").select2({
+        placeholder: "Pilih Jenis Permintaan Pengajuan",
+        allowClear: true,
+    });
+
+    $("#kategori_pengajuan").select2({
+        placeholder: "Pilih Jenis Kategori Pengajuan",
+        allowClear: true,
+    });
+
+    $("#alasan_pengajuan").select2({
+        placeholder: "Pilih Jenis Alasan Pengajuan",
+        allowClear: true,
+    });
 });
 
 // Flatpickr
 flatpickr("#tanggal", {
     dateFormat: "Y-m-d",
     allowInput: true,
+});
+
+flatpickr("#tanggal_lahir", {
+    dateFormat: "Y-m-d",
+    allowInput: true,
+});
+
+flatpickr("#tanggal_masuk_rs", {
+    dateFormat: "Y-m-d",
+    allowInput: true,
+});
+
+flatpickr("#tanggal_kejadian", {
+    dateFormat: "Y-m-d",
+    allowInput: true,
+});
+
+flatpickr("#tanggal_pengajuan", {
+    dateFormat: "Y-m-d",
+    allowInput: true,
+});
+
+flatpickr("#waktu_kejadian", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+    time_24hr: true,
 });
 
 flatpickr("#jam", {

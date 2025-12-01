@@ -15,7 +15,7 @@
                             {{-- Nama File --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Nama File</label>
-                                <p class="text-slate-600">{{ $mandatoryTraining->nama_file }}</p>
+                                <p class="text-slate-600">{{ $mandatoryTraining->file_pdf }}</p>
                             </div>
 
                             {{-- Tanggal --}}

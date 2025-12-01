@@ -69,7 +69,7 @@
                 <tbody class="text-s text-slate-500 bg-slate-100 dark:text-white">
                     @foreach ($bank_spo as $item)
                         <tr>
-                            <td class="px-6 py-4">{{ $item->nama_file }}</td>
+                            <td class="px-6 py-4">{{ $item->file_pdf }}</td>
                             <td class="px-6 py-4">{{ $item->unit }}</td>
                             <td class="px-6 py-4">{{ $item->jenis_spo }}</td>
                             <td class="px-6 py-4">
