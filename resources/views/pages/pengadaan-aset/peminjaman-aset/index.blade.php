@@ -5,7 +5,7 @@
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4">
-            <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Peminjaman Barang</h6>
+            <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Peminjaman Aset</h6>
 
             @canAccess('peminjaman_aset', 'create')
             <x-button.link href="{{ route('pengadaan-aset.peminjaman-aset.create') }}">
@@ -55,7 +55,8 @@
                             <td class="px-6 py-4">{{ $item->nama }}</td>
                             <td class="px-6 py-4">{{ $item->unit }}</td>
                             <td class="px-6 py-4">{{ $item->keperluan }}</td>
-                            <td class="px-6 py-4">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                            <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->tanggal)->timestamp }}">
+                                {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
                             </td>
                             <td class="px-6 py-4">{{ $item->nama_barang }}</td>
                             <td class="px-6 py-4">{{ $item->tempat_asal_barang }}</td>
@@ -85,4 +86,11 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/alert-delete.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            let table = $('#datatable').DataTable();
+            table.order([3, 'desc']).draw();
+        });
+    </script>
 @endpush

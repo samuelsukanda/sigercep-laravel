@@ -21,8 +21,13 @@
                                 {{-- Nama --}}
                                 <x-form.input name="nama" label="Nama" :value="old('nama', $pengadaan->nama ?? '')" required />
 
-                                {{-- Unit --}}
-                                <x-form.select name="unit" label="Unit" :options="config('units.units')" :selected="old('unit', $pengadaan->unit ?? '')" required />
+                                {{-- Unit Asal --}}
+                                <x-form.select name="unit_asal" label="Unit Asal" :options="config('units.units')" :selected="old('unit_asal', $pengadaan->unit_asal ?? '')"
+                                    required />
+
+                                {{-- Unit Tujuan --}}
+                                <x-form.select name="unit_tujuan" label="Unit Tujuan" :options="config('units.units')" :selected="old('unit_tujuan', $pengadaan->unit_tujuan ?? '')"
+                                    required />
 
                                 {{-- Keperluan --}}
                                 <x-form.input name="keperluan" label="Keperluan" :value="old('keperluan', $pengadaan->keperluan ?? '')" required />
@@ -34,10 +39,6 @@
 
                                 {{-- Nama Barang --}}
                                 <x-form.input name="nama_barang" label="Nama Barang" :value="old('nama_barang', $pengadaan->nama_barang ?? '')" required />
-
-                                {{-- Tempat Asal Barang --}}
-                                <x-form.input name="tempat_asal_barang" label="Tempat Asal Barang" :value="old('tempat_asal_barang', $pengadaan->tempat_asal_barang ?? '')"
-                                    required />
 
                                 {{-- Foto Barang --}}
                                 <x-form.file-upload name="foto_barang" label="Foto Barang"

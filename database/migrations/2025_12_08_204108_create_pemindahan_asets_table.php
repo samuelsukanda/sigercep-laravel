@@ -12,11 +12,11 @@ return new class extends Migration
         Schema::create('pemindahan_aset', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->string('unit');
+            $table->string('unit_asal');
+            $table->string('unit_tujuan');
             $table->string('keperluan');
             $table->date('tanggal');
             $table->string('nama_barang');
-            $table->string('tempat_asal_barang');
             $table->string('foto_barang');
             $table->string('foto_barcode')->nullable();
             $table->timestamps();

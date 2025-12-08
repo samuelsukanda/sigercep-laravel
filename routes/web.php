@@ -18,7 +18,7 @@ use App\Http\Controllers\ManajemenRisikoController;
 use App\Http\Controllers\KecelakaanKerjaController;
 use App\Http\Controllers\PengembalianAsetController;
 use App\Http\Controllers\PeminjamanAsetController;
-use App\Http\Controllers\PemindahannAsetController;
+use App\Http\Controllers\PemindahanAsetController;
 use App\Http\Controllers\LaporanAsetRusakController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\KesiapanAmbulanceController;
@@ -121,7 +121,7 @@ Route::middleware('auth')->group(function () {
         ->names('pengadaan-aset.peminjaman-aset');
 
     Route::middleware(['auth'])
-        ->resource('pengadaan-aset/pemindahan-aset', PemindahannAsetController::class)
+        ->resource('pengadaan-aset/pemindahan-aset', PemindahanAsetController::class)
         ->names('pengadaan-aset.pemindahan-aset');
 
     Route::middleware(['auth'])

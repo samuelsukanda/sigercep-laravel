@@ -301,7 +301,8 @@
                                         Total Data: {{ $totalBankSpo }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeBankSpo }}</span>
+                                        <span
+                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeBankSpo }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -348,9 +349,78 @@
                     </div>
                 </div>
             </div>
+
+            <!-- card4 -->
+            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
+                <div
+                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
+                    <div class="flex-auto p-4">
+                        <div class="flex flex-row -mx-3">
+                            <div class="flex-none w-2/3 max-w-full px-3">
+                                <div>
+                                    <p
+                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
+                                        Komite Mutu
+                                    </p>
+                                    <span class="mb-0 font-semibold text-sm dark:text-white">Pelaporan IKP</span>
+                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
+                                        Total Data: {{ $totalPelaporanIkp }}
+                                    </h5>
+                                    <p class="mb-0 dark:text-white dark:opacity-60">
+                                        <span
+                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimePelaporanIkp }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="px-3 text-right basis-1/3">
+                                <div
+                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-orange-500 to-yellow-500">
+                                    <i class="fas fa-balance-scale text-lg text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- cards row 6 -->
+        <div class="flex flex-wrap mt-6 -mx-3">
+            <!-- card1 -->
+            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
+                <div
+                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
+                    <div class="flex-auto p-4">
+                        <div class="flex flex-row -mx-3">
+                            <div class="flex-none w-2/3 max-w-full px-3">
+                                <div>
+                                    <p
+                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
+                                        Komite Mutu
+                                    </p>
+                                    <span class="mb-0 font-semibold text-sm dark:text-white">Pengajuan Dokumen</span>
+                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
+                                        Total Data: {{ $totalPengajuanDokumen }}
+                                    </h5>
+                                    <p class="mb-0 dark:text-white dark:opacity-60">
+                                        <span
+                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimePengajuanDokumen }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="px-3 text-right basis-1/3">
+                                <div
+                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-500 to-violet-500">
+                                    <i class="fas fa-balance-scale text-lg text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- cards row 7 -->
         <div class="flex flex-wrap mt-6 -mx-3">
             <!-- card1 -->
             <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
@@ -369,7 +439,8 @@
                                         Total Data: {{ $totalUtw }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeUtw }}</span>
+                                        <span
+                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeUtw }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -401,7 +472,8 @@
                                         Total Data: {{ $totalPeraturanPerusahaan }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimePeraturanPerusahaan }}</span>
+                                        <span
+                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimePeraturanPerusahaan }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -433,7 +505,8 @@
                                         Total Data: {{ $totalSuratKeputusan }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeSuratKeputusan }}</span>
+                                        <span
+                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeSuratKeputusan }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -465,7 +538,8 @@
                                         Total Data: {{ $totalMandatoryTraining }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeMandatoryTraining }}</span>
+                                        <span
+                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeMandatoryTraining }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -481,7 +555,7 @@
             </div>
         </div>
 
-        <!-- cards row 7 -->
+        <!-- cards row 8 -->
         <div class="flex flex-wrap mt-6 -mx-3">
             <!-- card1 -->
             <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
@@ -616,7 +690,7 @@
             </div>
         </div>
 
-        <!-- cards row 8 -->
+        <!-- cards row 9 -->
         <div class="flex flex-wrap mt-6 -mx-3">
             <!-- card1 -->
             <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
@@ -628,7 +702,7 @@
                                 <div>
                                     <p
                                         class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Komite Medik    
+                                        Komite Medik
                                     </p>
                                     <span class="mb-0 font-semibold text-sm dark:text-white">Medik</span>
                                     <h5 class="mb-0 font-bold text-sm dark:text-white">
@@ -647,12 +721,12 @@
                                 </div>
                             </div>
                         </div>
-                    </div>  
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- cards row 9 -->
+        <!-- cards row 10 -->
         <div class="flex flex-wrap mt-6 -mx-3">
             <!-- card1 -->
             <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
@@ -688,7 +762,7 @@
             </div>
         </div>
 
-        <!-- cards row 9 -->
+        <!-- cards row 11 -->
         <div class="flex flex-wrap mt-6 -mx-3">
             <!-- card1 -->
             <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
@@ -724,7 +798,7 @@
             </div>
         </div>
 
-        <!-- cards row 10 -->
+        <!-- cards row 12 -->
         <div class="flex flex-wrap mt-6 -mx-3">
             <!-- card1 -->
             <div class="w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:w-1/4">
@@ -760,7 +834,7 @@
             </div>
         </div>
 
-        <!-- cards row 11 -->
+        <!-- cards row 13 -->
         <div class="flex flex-wrap mt-6 -mx-3">
             <!-- card1 -->
             <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
@@ -796,7 +870,7 @@
             </div>
         </div>
 
-        <!-- cards row 12 -->
+        <!-- cards row 14 -->
         <div class="flex flex-wrap mt-6 -mx-3">
             <!-- card1 -->
             <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
@@ -812,10 +886,11 @@
                                     </p>
                                     <span class="mb-0 font-semibold text-sm dark:text-white">Ceklis Hardware</span>
                                     <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data:  {{ $totalHardware }}
+                                        Total Data: {{ $totalHardware }}
                                     </h5>
                                     <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500"> {{ $lastInputTimeHardware }}</span>
+                                        <span class="text-sm font-semibold leading-normal text-emerald-500">
+                                            {{ $lastInputTimeHardware }}</span>
                                     </p>
                                 </div>
                             </div>

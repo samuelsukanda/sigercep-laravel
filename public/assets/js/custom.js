@@ -5,6 +5,7 @@ $(document).ready(function () {
             dom: "Bfrtip",
             buttons: ["colvis"],
             responsive: true,
+            order: [],
             language: {
                 paginate: {
                     previous: "<<",
@@ -72,6 +73,16 @@ $(document).ready(function () {
 $(document).ready(function () {
     $("#unit").select2({
         placeholder: "Pilih Unit",
+        allowClear: true,
+    });
+
+    $("#unit_asal").select2({
+        placeholder: "Pilih Unit Asal",
+        allowClear: true,
+    });
+
+    $("#unit_tujuan").select2({
+        placeholder: "Pilih Unit Tujuan",
         allowClear: true,
     });
 

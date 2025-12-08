@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\PemindahanAset;
 use Illuminate\Support\Facades\Storage;
 
-class PemindahannAsetController extends Controller
+class PemindahanAsetController extends Controller
 {
 
     public function __construct()
@@ -44,11 +44,11 @@ class PemindahannAsetController extends Controller
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:50',
-            'unit' => 'required|string|max:50',
-            'keperluan' => 'required|string|max:50',
+            'unit_asal' => 'required|string|max:50',
+            'unit_tujuan' => 'required|string|max:50',
+            'keperluan' => 'required|string',
             'tanggal' => 'required|date',
             'nama_barang' => 'required|string|max:50',
-            'tempat_asal_barang' => 'required|string|max:50',
             'foto_barang' => 'required|image|mimes:jpg,jpeg,png',
             'foto_barcode' => 'nullable|image|mimes:jpg,jpeg,png',
         ]);
@@ -88,11 +88,11 @@ class PemindahannAsetController extends Controller
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:50',
-            'unit' => 'required|string|max:50',
-            'keperluan' => 'required|string|max:50',
+            'unit_asal' => 'required|string|max:50',
+            'unit_tujuan' => 'required|string|max:50',
+            'keperluan' => 'required|string',
             'tanggal' => 'required|date',
             'nama_barang' => 'required|string|max:50',
-            'tempat_asal_barang' => 'required|string|max:50',
             'foto_barang' => 'nullable|image|mimes:jpg,jpeg,png',
             'foto_barcode' => 'nullable|image|mimes:jpg,jpeg,png',
         ]);

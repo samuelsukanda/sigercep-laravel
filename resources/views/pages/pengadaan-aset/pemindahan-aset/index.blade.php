@@ -5,7 +5,7 @@
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4">
-            <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Pemindahan Barang</h6>
+            <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Pemindahan Aset</h6>
 
             @canAccess('pemindahan_aset', 'create')
             <x-button.link href="{{ route('pengadaan-aset.pemindahan-aset.create') }}">
@@ -41,11 +41,11 @@
                 <thead class="text-xs text-slate-500 uppercase bg-slate-100 dark:text-white">
                     <tr>
                         <th class="px-6 py-3">Nama</th>
-                        <th class="px-6 py-3">Unit</th>
+                        <th class="px-6 py-3">Unit Asal</th>
+                        <th class="px-6 py-3">Unit Tujuan</th>
                         <th class="px-6 py-3">Keperluan</th>
                         <th class="px-6 py-3">Tanggal</th>
                         <th class="px-6 py-3">Nama Barang</th>
-                        <th class="px-6 py-3">Tempat Asal Barang</th>
                         <th class="px-6 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -53,12 +53,13 @@
                     @foreach ($pengadaan as $item)
                         <tr>
                             <td class="px-6 py-4">{{ $item->nama }}</td>
-                            <td class="px-6 py-4">{{ $item->unit }}</td>
+                            <td class="px-6 py-4">{{ $item->unit_asal }}</td>
+                            <td class="px-6 py-4">{{ $item->unit_tujuan }}</td>
                             <td class="px-6 py-4">{{ $item->keperluan }}</td>
-                            <td class="px-6 py-4">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                            <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->tanggal)->timestamp }}">
+                                {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
                             </td>
                             <td class="px-6 py-4">{{ $item->nama_barang }}</td>
-                            <td class="px-6 py-4">{{ $item->tempat_asal_barang }}</td>
                             <td class="px-6 py-4 space-x-2 text-center">
                                 @canAccess('pemindahan_aset', 'update')
                                 <x-button.action href="{{ route('pengadaan-aset.pemindahan-aset.edit', $item->id) }}"
@@ -85,4 +86,11 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/alert-delete.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            let table = $('#datatable').DataTable();
+            table.order([4, 'desc']).draw();
+        });
+    </script>
 @endpush

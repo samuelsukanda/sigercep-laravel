@@ -12,6 +12,8 @@ use App\Models\KecelakaanKerja;
 use App\Models\KesiapanAmbulance;
 use App\Models\Mutu;
 use App\Models\ManajemenRisiko;
+use App\Models\PelaporanIkp;
+use App\Models\PengajuanDokumen;
 use App\Models\Visitasi;
 use App\Models\PeminjamanAset;
 use App\Models\PemindahanAset;
@@ -81,6 +83,16 @@ class DashboardController extends Controller
         $totalManajemenRisiko = ManajemenRisiko::count();
         $latestManajemenRisiko = ManajemenRisiko::latest('created_at')->first();
         $lastInputTimeManajemenRisiko = $latestManajemenRisiko ? $latestManajemenRisiko->created_at->diffForHumans() : 'Belum ada data';
+
+        // Pelaporan IKP
+        $totalPelaporanIkp = PelaporanIkp::count();
+        $latestPelaporanIkp = PelaporanIkp::latest('created_at')->first();
+        $lastInputTimePelaporanIkp = $latestPelaporanIkp ? $latestPelaporanIkp->created_at->diffForHumans() : 'Belum ada data';
+
+        // Pengajuan Dokumen
+        $totalPengajuanDokumen = PengajuanDokumen::count();
+        $latestPengajuanDokumen = PengajuanDokumen::latest('created_at')->first();
+        $lastInputTimePengajuanDokumen = $latestPengajuanDokumen ? $latestPengajuanDokumen->created_at->diffForHumans() : 'Belum ada data';
 
         // UTW
         $totalUtw = Utw::count();
@@ -173,6 +185,10 @@ class DashboardController extends Controller
             'lastInputTimeBankSpo',
             'totalManajemenRisiko',
             'lastInputTimeManajemenRisiko',
+            'totalPelaporanIkp',
+            'lastInputTimePelaporanIkp',
+            'totalPengajuanDokumen',
+            'lastInputTimePengajuanDokumen',
             'totalUtw',
             'lastInputTimeUtw',
             'totalPeraturanPerusahaan',

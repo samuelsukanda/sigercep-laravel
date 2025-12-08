@@ -29,7 +29,7 @@ class PermissionHelper
         $hamoriMenus = [
             'komplain_ipsrs', 'kesehatan_lingkungan', 'outsourcing_vendor',
             'reservasi_ruangan', 'reservasi_kendaraan', 'desain_grafis',
-            'kecelakaan_kerja', 'mutu', 'manajemen_risiko', 'peminjaman_aset',
+            'kecelakaan_kerja', 'mutu', 'manajemen_risiko', 'pelaporan_ikp', 'peminjaman_aset',
             'pengembalian_aset', 'laporan_aset-rusak', 'pemindahan_aset', 'kesiapan_ambulance'
         ];
 
@@ -42,7 +42,7 @@ class PermissionHelper
 
         // 🟡 ADMIN DENGAN AKSES KHUSUS
         $adminSpecificAccess = [
-            'mutu' => ['bank_spo', 'mutu', 'manajemen_risiko', 'pelaporan_ikp', 'pengajuan_dokumen'],
+            'mutu' => ['bank_spo', 'pelaporan_ikp', 'pengajuan_dokumen'],
             'sdm'  => ['utw', 'peraturan_perusahaan', 'surat_keputusan', 'mandatory_training'],
             'komdik' => ['komite_medik'],
         ];
@@ -56,7 +56,7 @@ class PermissionHelper
         if ($level === 'admin') {
             // Menu yang restricted hanya untuk admin tertentu
             $restrictedMenus = [
-                'bank_spo', 'mutu', 'manajemen_risiko', 'pelaporan_ikp', 'pengajuan_dokumen', // hanya mutu
+                'bank_spo', 'pengajuan_dokumen', // hanya mutu
                 'utw', 'peraturan_perusahaan', 'surat_keputusan', 'mandatory_training', // hanya sdm
                 'komite_medik', // hanya komdik
             ];

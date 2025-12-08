@@ -18,10 +18,16 @@
                                 <p class="text-slate-600">{{ $pengadaan->nama }}</p>
                             </div>
 
-                            {{-- Unit --}}
+                            {{-- Unit Asal --}}
                             <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Unit</label>
-                                <p class="text-slate-600">{{ $pengadaan->unit }}</p>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Unit Asal</label>
+                                <p class="text-slate-600">{{ $pengadaan->unit_asal }}</p>
+                            </div>
+
+                            {{-- Unit Tujuan --}}
+                            <div>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Unit Tujuan</label>
+                                <p class="text-slate-600">{{ $pengadaan->unit_tujuan }}</p>
                             </div>
 
                             {{-- Keperluan --}}
@@ -42,12 +48,6 @@
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Nama Barang</label>
                                 <p class="text-slate-600">{{ $pengadaan->nama_barang }}</p>
-                            </div>
-
-                            {{-- Tempat Asal Barang --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Tempat Asal Barang</label>
-                                <p class="text-slate-600">{{ $pengadaan->tempat_asal_barang }}</p>
                             </div>
 
                             {{-- Foto Barang --}}

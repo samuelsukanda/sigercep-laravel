@@ -13,11 +13,11 @@ class PemindahanAset extends Model
 
     protected $fillable = [
         'nama',
-        'unit',
+        'unit_asal',
+        'unit_tujuan',
         'keperluan',
         'tanggal',
         'nama_barang',
-        'tempat_asal_barang',
         'foto_barang',
         'foto_barcode',
     ];

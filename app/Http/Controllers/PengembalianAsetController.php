@@ -45,7 +45,7 @@ class PengembalianAsetController extends Controller
         $validated = $request->validate([
             'nama' => 'required|string|max:50',
             'unit' => 'required|string|max:50',
-            'keperluan' => 'required|string|max:50',
+            'keperluan' => 'required|string',
             'tanggal' => 'required|date',
             'nama_barang' => 'required|string|max:50',
             'tempat_asal_barang' => 'required|string|max:50',
@@ -89,7 +89,7 @@ class PengembalianAsetController extends Controller
         $validated = $request->validate([
             'nama' => 'required|string|max:50',
             'unit' => 'required|string|max:50',
-            'keperluan' => 'required|string|max:50',
+            'keperluan' => 'required|string',
             'tanggal' => 'required|date',
             'nama_barang' => 'required|string|max:50',
             'tempat_asal_barang' => 'required|string|max:50',

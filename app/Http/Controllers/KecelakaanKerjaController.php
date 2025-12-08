@@ -54,11 +54,11 @@ class KecelakaanKerjaController extends Controller
             'kegiatan' => 'required|string',
             'riwayat' => 'required|string',
             'penyebab' => 'required|string',
-            'bahan' => 'nullable|string|max:50',
-            'cedera' => 'required|string|max:50',
-            'pengobatan' => 'required|string|max:50',
-            'pengobatan2' => 'required|string|max:50',
-            'pelaksana' => 'required|string|max:50',
+            'bahan' => 'nullable|string',
+            'cedera' => 'required|string',
+            'pengobatan' => 'required|string',
+            'pengobatan2' => 'required|string',
+            'pelaksana' => 'required|string',
             'tanda_tangan' => 'required|string',
         ]);
 
@@ -105,11 +105,11 @@ class KecelakaanKerjaController extends Controller
             'kegiatan' => 'required|string',
             'riwayat' => 'required|string',
             'penyebab' => 'required|string',
-            'bahan' => 'nullable|string|max:50',
-            'cedera' => 'required|string|max:50',
-            'pengobatan' => 'required|string|max:50',
-            'pengobatan2' => 'required|string|max:50',
-            'pelaksana' => 'required|string|max:50',
+            'bahan' => 'nullable|string',
+            'cedera' => 'required|string',
+            'pengobatan' => 'required|string',
+            'pengobatan2' => 'required|string',
+            'pelaksana' => 'required|string',
             'tanda_tangan' => 'nullable|string',
         ]);
 
