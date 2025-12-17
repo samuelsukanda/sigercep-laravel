@@ -57,7 +57,7 @@ class LaporanAsetRusakController extends Controller
         if ($request->hasFile('foto')) {
             $foto = $request->file('foto');
             $namaFileFoto = 'foto-' . now()->format('YmdHis') . '.' . $foto->getClientOriginalExtension();
-            $pathFoto = $foto->storeAs('images/laporan-aset-rusak/foto-aset-rusak', $namaFileFoto, 'public');
+            $pathFoto = $foto->storeAs('images/laporan-aset-rusak/foto-barang', $namaFileFoto, 'public');
             $validated['foto'] = $pathFoto;
         }
 
@@ -104,7 +104,7 @@ class LaporanAsetRusakController extends Controller
         if ($request->hasFile('foto')) {
             $foto = $request->file('foto');
             $namaFileFoto = 'foto-' . now()->format('YmdHis') . '.' . $foto->getClientOriginalExtension();
-            $pathFoto = $foto->storeAs('images/laporan-aset-rusak/foto-aset-rusak', $namaFileFoto, 'public');
+            $pathFoto = $foto->storeAs('images/laporan-aset-rusak/foto-barang', $namaFileFoto, 'public');
             $validated['foto'] = $pathFoto;
         }
 

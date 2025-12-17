@@ -50,7 +50,7 @@ class SuratKeputusanController extends Controller
         $unit = $request->unit;
         $file = $request->file('file_pdf');
         $originalName = $file->getClientOriginalName();
-        $folderPath = "surat-keputusan/$unit";
+        $folderPath = "surat-keputusan";
         $targetPath = "$folderPath/$originalName";
 
         if (!Storage::disk('public')->exists($folderPath)) {
@@ -116,7 +116,7 @@ class SuratKeputusanController extends Controller
             ? $uploadedFile->getClientOriginalName()
             : $suratKeputusan->file_pdf;
 
-        $targetPath = "surat-keputusan/$unit/" . $originalName;
+        $targetPath = "surat-keputusan/" . $originalName;
 
         if ($uploadedFile) {
             if ($suratKeputusan->file_path !== $targetPath && Storage::disk('public')->exists($suratKeputusan->file_path)) {
@@ -127,7 +127,7 @@ class SuratKeputusanController extends Controller
                 return back()->withErrors(['file_pdf' => 'File sudah ada untuk unit ini.']);
             }
 
-            Storage::disk('public')->putFileAs("surat-keputusan/$unit", $uploadedFile, $originalName);
+            Storage::disk('public')->putFileAs("surat-keputusan/", $uploadedFile, $originalName);
         } else {
             if ($suratKeputusan->file_path !== $targetPath) {
                 if (!Storage::disk('public')->exists($suratKeputusan->file_path)) {

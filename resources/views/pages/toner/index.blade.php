@@ -55,7 +55,8 @@
                             <td class="px-6 py-4">{{ $item->unit }}</td>
                             <td class="px-6 py-4">{{ $item->toner }}</td>
                             <td class="px-6 py-4">{{ $item->jumlah }}</td>
-                            <td class="px-6 py-4">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                            <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->tanggal)->timestamp }}">
+                                {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
                             </td>
                             <td class="px-6 py-4 space-x-2 text-center">
                                 @canAccess('toner', 'update')
@@ -83,4 +84,11 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/alert-delete.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            let table = $('#datatable').DataTable();
+            table.order([4, 'desc']).draw();
+        });
+    </script>
 @endpush

@@ -202,7 +202,6 @@ return [
         'SPV Farmasi',
         'SPV IT',
         'SPV Pelayanan dan Mutu JKN',
-        'SPV Pelayanan dan Mutu JKN',
         'PJS SPV Logistik dan Pengembangan SDM Keperawatan',
         'Kanit Poli',
         'Kanit OK',

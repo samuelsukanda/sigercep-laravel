@@ -90,7 +90,7 @@ class MandatoryTrainingController extends Controller
     public function edit(string $id)
     {
         $mandatoryTraining = MandatoryTraining::findOrFail($id);
-        return view('pages.sdm-hukum.mandatory-training.edit', compact('peraturanPerusahaan'));
+        return view('pages.sdm-hukum.mandatory-training.edit', compact('mandatoryTraining'));
     }
 
     public function update(Request $request, string $id)

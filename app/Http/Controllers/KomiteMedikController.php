@@ -50,7 +50,7 @@ class KomiteMedikController extends Controller
         $unit = $request->unit;
         $file = $request->file('file_pdf');
         $originalName = $file->getClientOriginalName();
-        $folderPath = "komite-medik/$unit";
+        $folderPath = "komite-medik";
         $targetPath = "$folderPath/$originalName";
 
         if (!Storage::disk('public')->exists($folderPath)) {
@@ -116,7 +116,7 @@ class KomiteMedikController extends Controller
             ? $uploadedFile->getClientOriginalName()
             : $komiteMedik->file_pdf;
 
-        $targetPath = "komite-medik/$unit/" . $originalName;
+        $targetPath = "komite-medik/" . $originalName;
 
         if ($uploadedFile) {
             if ($komiteMedik->file_path !== $targetPath && Storage::disk('public')->exists($komiteMedik->file_path)) {
@@ -127,7 +127,7 @@ class KomiteMedikController extends Controller
                 return back()->withErrors(['file_pdf' => 'File sudah ada untuk unit ini.']);
             }
 
-            Storage::disk('public')->putFileAs("komite-medik/$unit", $uploadedFile, $originalName);
+            Storage::disk('public')->putFileAs("komite-medik/", $uploadedFile, $originalName);
         } else {
             if ($komiteMedik->file_path !== $targetPath) {
                 if (!Storage::disk('public')->exists($komiteMedik->file_path)) {

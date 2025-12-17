@@ -11,7 +11,7 @@
                         <h6 class="mb-0 font-bold text-lg">Tambah Mandatory Training</h6>
                     </div>
                     <div class="flex-auto p-6">
-                        <form action="{{ route('sdm-hukum.mandatory-training.store') }}" method="POST"
+                        <form id="form" action="{{ route('sdm-hukum.mandatory-training.store') }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
 

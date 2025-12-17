@@ -8,7 +8,7 @@
             <div class="w-full max-w-full px-3 mx-auto mt-0">
                 <div class="relative flex flex-col bg-white shadow-soft-xl rounded-2xl">
                     <div class="p-6 pb-0 mb-0 bg-white rounded-t-2xl">
-                        <h6 class="mb-0 font-bold text-lg">Edit UTW</h6>
+                        <h6 class="mb-0 font-bold text-lg">Edit Peraturan Perusahaan</h6>
                     </div>
                     <div class="flex-auto p-6">
                         <form action="{{ route('sdm-hukum.peraturan-perusahaan.update', $peraturanPerusahaan->id) }}" method="POST"

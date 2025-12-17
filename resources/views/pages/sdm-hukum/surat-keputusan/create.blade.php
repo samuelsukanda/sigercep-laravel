@@ -11,7 +11,7 @@
                         <h6 class="mb-0 font-bold text-lg">Tambah Surat Keputusan</h6>
                     </div>
                     <div class="flex-auto p-6">
-                        <form action="{{ route('sdm-hukum.surat-keputusan.store') }}" method="POST"
+                        <form id="form" action="{{ route('sdm-hukum.surat-keputusan.store') }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
 

@@ -8,9 +8,9 @@
             <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Komite Medik</h6>
 
             @canAccess('komite_medik', 'create')
-                <x-button.link href="{{ route('komite-medik.create') }}">
-                    Tambah Data
-                </x-button.link>
+            <x-button.link href="{{ route('komite-medik.create') }}">
+                Tambah Data
+            </x-button.link>
             @endcanAccess
         </div>
 
@@ -61,23 +61,23 @@
                         <tr>
                             <td class="px-6 py-4">{{ $item->file_pdf }}</td>
                             <td class="px-6 py-4">{{ $item->unit }}</td>
-                            <td class="px-6 py-4">
-                                {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y H:i') }}
+                            <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->created_at)->timestamp }}">
+                                {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}
                             </td>
                             <td class="px-6 py-4 space-x-2 text-center">
                                 @canAccess('komite_medik', 'update')
-                                    <x-button.action href="{{ route('komite-medik.edit', $item->id) }}"
-                                        icon="pen-to-square" color="emerald" title="Edit" />
+                                <x-button.action href="{{ route('komite-medik.edit', $item->id) }}" icon="pen-to-square"
+                                    color="emerald" title="Edit" />
                                 @endcanAccess
 
                                 @canAccess('komite_medik', 'read')
-                                    <x-button.action href="{{ route('komite-medik.show', $item->id) }}"
-                                        icon="eye" color="emerald" title="Lihat Data" />
+                                <x-button.action href="{{ route('komite-medik.show', $item->id) }}" icon="eye"
+                                    color="emerald" title="Lihat Data" />
                                 @endcanAccess
 
                                 @canAccess('komite_medik', 'delete')
-                                    <x-button.action href="{{ route('komite-medik.destroy', $item->id) }}"
-                                        icon="trash" color="red" type="button" method="DELETE" title="Hapus" />
+                                <x-button.action href="{{ route('komite-medik.destroy', $item->id) }}" icon="trash"
+                                    color="red" type="button" method="DELETE" title="Hapus" />
                                 @endcanAccess
                             </td>
                         </tr>
@@ -90,4 +90,11 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/alert-delete.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            let table = $('#datatable').DataTable();
+            table.order([2, 'desc']).draw();
+        });
+    </script>
 @endpush

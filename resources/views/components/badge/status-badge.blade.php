@@ -5,6 +5,7 @@
         'Done' => 'text-emerald-500 font-semibold',
         'On Progress' => 'text-orange-500 font-semibold',
         'Pending' => 'text-gray-600 font-semibold',
+        'Sudah Di Kembalikan' => 'text-emerald-500 font-semibold',
         default => 'text-gray-500 font-semibold',
     };
 @endphp

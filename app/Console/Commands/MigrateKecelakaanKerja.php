@@ -18,7 +18,15 @@ class MigrateKecelakaanKerja extends Command
 
         foreach ($old as $row) {
 
+            $defaultSignature = 'storage/signatures/toner/default.png';
+
             $createdAt = $row->tanggal . ' ' . $row->waktu_input;
+
+            if (empty($row->tanda_tangan) || $row->tanda_tangan == "?") {
+                $tandaTangan = $defaultSignature;
+            } else {
+                $tandaTangan = 'storage/signatures/toner/' . $row->tanda_tangan;
+            }
 
             DB::connection('mysql')->table('kecelakaan_kerja')->insert([
                 'nama'               => $row->nama,
@@ -37,7 +45,7 @@ class MigrateKecelakaanKerja extends Command
                 'pengobatan'         => $row->pengobatan,
                 'pengobatan2'        => $row->pengobatan2,
                 'pelaksana'          => $row->pelaksana,
-                'tanda_tangan'       => $row->tanda_tangan,
+                'tanda_tangan'       => $tandaTangan,
                 'created_at'         => $createdAt,
                 'updated_at'         => now(),
             ]);

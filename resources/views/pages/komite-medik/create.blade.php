@@ -11,7 +11,7 @@
                         <h6 class="mb-0 font-bold text-lg">Tambah Komite Medik</h6>
                     </div>
                     <div class="flex-auto p-6">
-                        <form id="form"  action="{{ route('komite-medik.store') }}" method="POST" enctype="multipart/form-data">
+                        <form id="form" action="{{ route('komite-medik.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

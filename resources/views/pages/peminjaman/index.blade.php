@@ -44,6 +44,7 @@
                         <th class="px-6 py-3">Unit</th>
                         <th class="px-6 py-3">Tanggal</th>
                         <th class="px-6 py-3">Alat/Barang</th>
+                        <th class="px-6 py-3">Status</th>
                         <th class="px-6 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -52,9 +53,13 @@
                         <tr>
                             <td class="px-6 py-4">{{ $item->nama }}</td>
                             <td class="px-6 py-4">{{ $item->unit }}</td>
-                            <td class="px-6 py-4">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                            <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->tanggal)->timestamp }}">
+                                {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
                             </td>
                             <td class="px-6 py-4">{{ $item->barang }}</td>
+                            <td class="px-6 py-4">
+                                <x-badge.status-badge :status="$item->status" />
+                            </td>
                             <td class="px-6 py-4 space-x-2 text-center">
                                 @canAccess('peminjaman', 'update')
                                 <x-button.action href="{{ route('peminjaman.edit', $item->id) }}" icon="pen-to-square"
@@ -81,4 +86,11 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/alert-delete.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            let table = $('#datatable').DataTable();
+            table.order([2, 'desc']).draw();
+        });
+    </script>
 @endpush

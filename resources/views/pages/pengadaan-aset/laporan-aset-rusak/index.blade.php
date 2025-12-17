@@ -57,7 +57,8 @@
                             <td class="px-6 py-4">{{ $item->nama_aset }}</td>
                             <td class="px-6 py-4">{{ $item->lokasi_aset }}</td>
                             <td class="px-6 py-4">{{ $item->kondisi_aset }}</td>
-                            <td class="px-6 py-4">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
+                            <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->tanggal)->timestamp }}">
+                                {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
                             </td>
                             <td class="px-6 py-4 space-x-2 text-center">
                                 @canAccess('laporan_aset_rusak', 'update')
@@ -89,7 +90,7 @@
     <script>
         $(document).ready(function() {
             let table = $('#datatable').DataTable();
-            table.order([4, 'desc']).draw();
+            table.order([5, 'desc']).draw();
         });
     </script>
 @endpush

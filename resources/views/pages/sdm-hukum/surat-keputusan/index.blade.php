@@ -62,8 +62,8 @@
                         <tr>
                             <td class="px-6 py-4">{{ $item->file_pdf }}</td>
                             <td class="px-6 py-4">{{ $item->unit }}</td>
-                            <td class="px-6 py-4">
-                                {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y H:i') }}
+                            <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->created_at)->timestamp }}">
+                                {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}
                             </td>
                             <td class="px-6 py-4 space-x-2 text-center">
                                 @canAccess('surat_keputusan', 'update')
@@ -91,4 +91,11 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/alert-delete.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            let table = $('#datatable').DataTable();
+            table.order([2, 'desc']).draw();
+        });
+    </script>
 @endpush
