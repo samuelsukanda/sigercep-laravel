@@ -49,7 +49,7 @@
                 <tbody class="text-s text-slate-500 bg-slate-100 dark:text-white">
                     @foreach ($hardware as $item)
                         <tr>
-                            <td class="px-6 py-4">{{ $item->nama }}</td>
+                            <td class="px-6 py-4">{{ ucfirst(strtolower($item->nama)) }}</td>
                             <td class="px-6 py-4">{{ $item->unit }}</td>
                             <td class="px-6 py-4">{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
                             </td>

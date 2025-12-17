@@ -35,7 +35,7 @@
                 <tbody class="text-s text-slate-500 bg-slate-100 dark:text-white">
                     @foreach ($pelaporanIkp as $item)
                         <tr>
-                            <td class="px-6 py-4">{{ $item->nama }}</td>
+                            <td class="px-6 py-4">{{ ucfirst(strtolower($item->nama)) }}</td>
                             <td class="px-6 py-4">{{ $item->no_rm }}</td>
                             <td class="px-6 py-4"
                                 data-order="{{ \Carbon\Carbon::parse($item->tanggal_kejadian)->timestamp }}">

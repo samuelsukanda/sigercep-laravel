@@ -51,12 +51,12 @@
                 <tbody class="text-s text-slate-500 bg-slate-100 dark:text-white">
                     @foreach ($peminjaman as $item)
                         <tr>
-                            <td class="px-6 py-4">{{ $item->nama }}</td>
+                            <td class="px-6 py-4">{{ ucfirst(strtolower($item->nama)) }}</td>
                             <td class="px-6 py-4">{{ $item->unit }}</td>
                             <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->tanggal)->timestamp }}">
                                 {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
                             </td>
-                            <td class="px-6 py-4">{{ $item->barang }}</td>
+                            <td class="px-6 py-4">{{ strtolower($item->barang) }}</td>
                             <td class="px-6 py-4">
                                 <x-badge.status-badge :status="$item->status" />
                             </td>

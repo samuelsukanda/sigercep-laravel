@@ -50,12 +50,12 @@
                 <tbody class="text-s text-slate-500 bg-slate-100 dark:text-white">
                     @foreach ($mutu as $item)
                         <tr>
-                            <td class="px-6 py-4">{{ $item->nama }}</td>
+                            <td class="px-6 py-4">{{ ucfirst(strtolower($item->nama)) }}</td>
                             <td class="px-6 py-4">{{ $item->unit }}</td>
                             <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->tanggal)->timestamp }}">
                                 {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
                             </td>
-                            <td class="px-6 py-4">{{ $item->uraian }}</td>
+                            <td class="px-6 py-4">{{ strtolower($item->uraian) }}</td>
                             <td class="px-6 py-4 space-x-2 text-center">
                                 @canAccess('manajemen_risiko', 'update')
                                 <x-button.action href="{{ route('komite-mutu.manajemen-risiko.edit', $item->id) }}"
