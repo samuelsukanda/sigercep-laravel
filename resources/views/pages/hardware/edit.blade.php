@@ -66,8 +66,7 @@
                                                     'Rapikan penempatan',
                                                 ];
 
-                                                // ambil checklist dari DB (sudah disimpan dalam JSON)
-                                                $checklistData = json_decode($hardware->checklist, true) ?? [];
+                                                $checklistData = $hardware->checklist ?? [];
                                             @endphp
 
                                             @foreach ($checklistItems as $index => $item)
@@ -128,5 +127,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/js/file-upload.js') }}"></script>
+    <script src="{{ asset('assets/js/check-all.js') }}"></script>
 @endpush

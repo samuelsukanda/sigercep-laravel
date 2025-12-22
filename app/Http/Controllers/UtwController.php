@@ -50,7 +50,7 @@ class UtwController extends Controller
         $unit = $request->unit;
         $file = $request->file('file_pdf');
         $originalName = $file->getClientOriginalName();
-        $folderPath = "utw/$unit";
+        $folderPath = "utw";
         $targetPath = "$folderPath/$originalName";
 
         if (!Storage::disk('public')->exists($folderPath)) {
@@ -116,7 +116,7 @@ class UtwController extends Controller
             ? $uploadedFile->getClientOriginalName()
             : $utw->file_pdf;
 
-        $targetPath = "utw/$unit/" . $originalName;
+        $targetPath = "utw/" . $originalName;
 
         if ($uploadedFile) {
             if ($utw->file_path !== $targetPath && Storage::disk('public')->exists($utw->file_path)) {
@@ -127,7 +127,7 @@ class UtwController extends Controller
                 return back()->withErrors(['file_pdf' => 'File sudah ada untuk unit ini.']);
             }
 
-            Storage::disk('public')->putFileAs("utw/$unit", $uploadedFile, $originalName);
+            Storage::disk('public')->putFileAs("utw/", $uploadedFile, $originalName);
         } else {
             if ($utw->file_path !== $targetPath) {
                 if (!Storage::disk('public')->exists($utw->file_path)) {

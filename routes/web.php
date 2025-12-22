@@ -91,6 +91,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth'])
         ->resource('komite-mutu/pengajuan-dokumen', PengajuanDokumenController::class)
         ->names('komite-mutu.pengajuan-dokumen');
+    Route::get('/pengajuan-dokumen/file/{id}', [PengajuanDokumenController::class, 'showFile'])->name('pengajuan-dokumen.show-file');
 
     Route::middleware(['auth'])
         ->resource('komite-mutu/bank-spo', BankSpoController::class)

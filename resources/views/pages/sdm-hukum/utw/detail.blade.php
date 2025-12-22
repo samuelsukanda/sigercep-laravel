@@ -15,7 +15,7 @@
                             {{-- Nama File --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Nama File</label>
-                                <p class="text-slate-600">{{ $utw->nama_file }}</p>
+                                <p class="text-slate-600">{{ $utw->file_pdf }}</p>
                             </div>
 
                             {{-- Unit --}}
@@ -35,6 +35,7 @@
                             {{-- File UTW --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">File UTW</label>
+                                <p class="text-slate-600">{{ $utw->file_pdf }}</p>
                                 <a href="{{ route('utw.show-file', $utw->id) }}" target="_blank"
                                     class="px-2 py-1 bg-blue-500 rounded text-white hover:shadow-xs active:opacity-85">
                                     📄 Lihat File PDF

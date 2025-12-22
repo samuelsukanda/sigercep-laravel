@@ -28,8 +28,11 @@
 
                             {{-- File Mandatory Training --}}
                             <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">File Mandatory Training</label>
-                                <a href="{{ route('mandatory-training.show-file', $mandatoryTraining->id) }}" target="_blank"
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">File Mandatory
+                                    Training</label>
+                                <p class="text-slate-600">{{ $mandatoryTraining->file_pdf }}</p>
+                                <a href="{{ route('mandatory-training.show-file', $mandatoryTraining->id) }}"
+                                    target="_blank"
                                     class="px-2 py-1 bg-blue-500 rounded text-white hover:shadow-xs active:opacity-85">
                                     📄 Lihat File PDF
                                 </a>

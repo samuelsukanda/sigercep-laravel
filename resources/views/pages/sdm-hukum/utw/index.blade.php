@@ -60,7 +60,7 @@
                 <tbody class="text-s text-slate-500 bg-slate-100 dark:text-white">
                     @foreach ($utw as $item)
                         <tr>
-                            <td class="px-6 py-4">{{ $item->nama_file }}</td>
+                            <td class="px-6 py-4">{{ $item->file_pdf }}</td>
                             <td class="px-6 py-4">{{ $item->unit }}</td>
                             <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->created_at)->timestamp }}">
                                 {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}

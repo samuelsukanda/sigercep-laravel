@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('judul_dokumen');
             $table->string('nomor_revisi');
             $table->string('alasan_pengajuan');
-            $table->string('bagian_yang_direvisi');
-            $table->string('sebelum_revisi');
-            $table->string('usulan_revisi');
+            $table->string('bagian_yang_direvisi')->nullable();
+            $table->string('sebelum_revisi')->nullable();
+            $table->string('usulan_revisi')->nullable();
             $table->date('tanggal_pengajuan');
             $table->string('diajukan_oleh');
             $table->string('diperiksa_oleh');

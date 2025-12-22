@@ -27,15 +27,17 @@
                             {{-- Tanggal Lahir --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Tanggal Lahir</label>
-                                <p class="text-slate-600">{{ $pelaporanIkp->tanggal_lahir }}</p>
-                            </div> 
-                            
-                            {{-- Kelompok Umur --}}  
+                                <p class="text-slate-600">
+                                    {{ \Carbon\Carbon::parse($pelaporanIkp->tanggal_lahir)->translatedFormat('d F Y') }}
+                                </p>
+                            </div>
+
+                            {{-- Kelompok Umur --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Kelompok Umur</label>
                                 <p class="text-slate-600">{{ $pelaporanIkp->kelompok_umur }}</p>
                             </div>
-                            
+
                             {{-- Jenis Kelamin --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Jenis Kelamin</label>
@@ -51,7 +53,9 @@
                             {{-- Tanggal Masuk RS --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Tanggal Masuk RS</label>
-                                <p class="text-slate-600">{{ $pelaporanIkp->tanggal_masuk_rs }}</p>
+                                <p class="text-slate-600">
+                                    {{ \Carbon\Carbon::parse($pelaporanIkp->tanggal_masuk_rs)->translatedFormat('d F Y') }}
+                                </p>
                             </div>
 
                             {{-- Rincian Kejadian --}}
@@ -63,13 +67,16 @@
                             {{-- Tanggal Kejadian --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Tanggal Kejadian</label>
-                                <p class="text-slate-600">{{ $pelaporanIkp->tanggal_kejadian }}</p>
+                                <p class="text-slate-600">
+                                    {{ \Carbon\Carbon::parse($pelaporanIkp->tanggal_kejadian)->translatedFormat('d F Y') }}
+                                </p>
                             </div>
 
                             {{-- Waktu Kejadian --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Waktu Kejadian</label>
-                                <p class="text-slate-600">{{ $pelaporanIkp->waktu_kejadian }}</p>
+                                <p class="text-slate-600">
+                                    {{ \Carbon\Carbon::createFromFormat('H:i:s', $pelaporanIkp->waktu_kejadian)->format('H:i') }}
                             </div>
 
                             {{-- Insiden --}}
@@ -92,7 +99,8 @@
 
                             {{-- Orang Pertama Yang Melaporkan Insiden --}}
                             <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Orang Pertama Yang Melaporkan Insiden</label>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Orang Pertama Yang Melaporkan
+                                    Insiden</label>
                                 <p class="text-slate-600">{{ $pelaporanIkp->orang_pelapor }}</p>
                             </div>
 
@@ -104,7 +112,8 @@
 
                             {{-- Insiden Menyangkut Pasien --}}
                             <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Insiden Menyangkut Pasien</label>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Insiden Menyangkut
+                                    Pasien</label>
                                 <p class="text-slate-600">{{ $pelaporanIkp->insiden_pasien }}</p>
                             </div>
 
@@ -116,43 +125,50 @@
 
                             {{-- Kejadian Terjadi Pada Pasien --}}
                             <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Kejadian Terjadi Pada Pasien</label>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Kejadian Terjadi Pada
+                                    Pasien</label>
                                 <p class="text-slate-600">{{ $pelaporanIkp->jenis_spesialisasi_pasien }}</p>
                             </div>
 
                             {{-- Unit Terkait Yang Berhubungan Dengan Insiden --}}
                             <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Unit Terkait Yang Berhubungan Dengan Insiden</label>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Unit Terkait Yang Berhubungan
+                                    Dengan Insiden</label>
                                 <p class="text-slate-600">{{ $pelaporanIkp->unit_terkait }}</p>
                             </div>
 
                             {{-- Akibat Insiden Terhadap Pasien --}}
                             <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Akibat Insiden Terhadap Pasien</label>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Akibat Insiden Terhadap
+                                    Pasien</label>
                                 <p class="text-slate-600">{{ $pelaporanIkp->akibat_insiden }}</p>
                             </div>
 
                             {{-- Tindakan Yang Dilakukan Segera Setelah Kejadian Dan Hasilnya --}}
                             <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Tindakan Yang Dilakukan Segera Setelah Kejadian Dan Hasilnya</label>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Tindakan Yang Dilakukan
+                                    Segera Setelah Kejadian Dan Hasilnya</label>
                                 <p class="text-slate-600">{{ $pelaporanIkp->tindakan_yang_dilakukan }}</p>
                             </div>
 
                             {{-- Tindakan Dilakukan Oleh --}}
                             <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Tindakan Dilakukan Oleh</label>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Tindakan Dilakukan
+                                    Oleh</label>
                                 <p class="text-slate-600">{{ $pelaporanIkp->tindakan_dilakukan_oleh }}</p>
                             </div>
 
                             {{-- Apakah Kejadian Yang Sama Pernah Terjadi Di Unit Kerja Lain --}}
                             <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Apakah Kejadian Yang Sama Pernah Terjadi Di Unit Kerja Lain</label>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Apakah Kejadian Yang Sama
+                                    Pernah Terjadi Di Unit Kerja Lain</label>
                                 <p class="text-slate-600">{{ $pelaporanIkp->kejadian_serupa }}</p>
                             </div>
 
                             {{-- Grading Risiko Kejadian --}}
                             <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Grading Risiko Kejadian</label>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Grading Risiko
+                                    Kejadian</label>
                                 <p class="text-slate-600">{{ $pelaporanIkp->grading_risiko }}</p>
                             </div>
                         </div>

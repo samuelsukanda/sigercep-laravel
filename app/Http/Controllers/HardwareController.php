@@ -38,12 +38,13 @@ class HardwareController extends Controller
         ]);
 
         Hardware::create([
-            'nama'     => $validated['nama'],
-            'unit'     => $validated['unit'],
-            'lantai'   => $validated['lantai'],
-            'tanggal'  => $validated['tanggal'],
-            'checklist' => json_encode($validated['checklist']),
+            'nama'      => $validated['nama'],
+            'unit'      => $validated['unit'],
+            'lantai'    => $validated['lantai'],
+            'tanggal'   => $validated['tanggal'],
+            'checklist' => $validated['checklist'],
         ]);
+
 
         return redirect()->route('hardware.index')->with('success', 'Data berhasil ditambahkan.');
     }
@@ -73,7 +74,7 @@ class HardwareController extends Controller
             'unit'     => $validated['unit'],
             'lantai'   => $validated['lantai'],
             'tanggal'  => $validated['tanggal'],
-            'checklist' => json_encode($validated['checklist']),
+            'checklist' => $validated['checklist'],
         ]);
 
         return redirect()->route('hardware.index')->with('success', 'Data berhasil diperbarui.');

@@ -73,7 +73,7 @@
                                                 'Rapikan penempatan',
                                             ];
 
-                                            $checklistData = json_decode($hardware->checklist, true) ?? [];
+                                            $checklistData = $hardware->checklist ?? [];
                                         @endphp
 
                                         @foreach ($checklistItems as $index => $item)
@@ -94,16 +94,6 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="4" class="border px-3 py-2 text-right bg-gray-50">
-                                                <label>
-                                                    <input type="checkbox" id="check-all" class="mr-2">
-                                                    Check All
-                                                </label>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
                                 </table>
                             </div>
                         </div>

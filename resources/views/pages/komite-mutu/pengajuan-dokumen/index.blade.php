@@ -29,6 +29,7 @@
                         <th class="px-6 py-3">Jenis Dokumen</th>
                         <th class="px-6 py-3">Nomor Dokumen</th>
                         <th class="px-6 py-3">Kategori Pengajuan</th>
+                        <th class="px-6 py-3">Tanggal Pengajuan</th>
                         <th class="px-6 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -39,6 +40,10 @@
                             <td class="px-6 py-4">{{ $item->jenis_dokumen }}</td>
                             <td class="px-6 py-4">{{ $item->nomor_dokumen }}</td>
                             <td class="px-6 py-4">{{ $item->kategori_pengajuan }}</td>
+                            <td class="px-6 py-4"
+                                data-order="{{ \Carbon\Carbon::parse($item->tanggal_pengajuan)->timestamp }}">
+                                {{ \Carbon\Carbon::parse($item->tanggal_pengajuan)->translatedFormat('d F Y') }}
+                            </td>
                             <td class="px-6 py-4 space-x-2 text-center">
                                 @canAccess('pengajuan_dokumen', 'update')
                                 <x-button.action href="{{ route('komite-mutu.pengajuan-dokumen.edit', $item->id) }}"
@@ -65,4 +70,11 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/alert-delete.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            let table = $('#datatable').DataTable();
+            table.order([4, 'desc']).draw();
+        });
+    </script>
 @endpush
