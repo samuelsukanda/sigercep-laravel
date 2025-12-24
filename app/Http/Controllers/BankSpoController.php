@@ -7,13 +7,11 @@ use App\Models\BankSpo;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 
-
 class BankSpoController extends Controller
 {
-
     public function __construct()
     {
-        $this->middleware('permission:bank_spo,read')->only(['index', 'show']);
+        $this->middleware('permission:bank_spo,read')->only(['index', 'show', 'showFile']);
         $this->middleware('permission:bank_spo,create')->only(['create', 'store']);
         $this->middleware('permission:bank_spo,update')->only(['edit', 'update']);
         $this->middleware('permission:bank_spo,delete')->only(['destroy']);
@@ -21,8 +19,6 @@ class BankSpoController extends Controller
 
     public function index(Request $request)
     {
-        $bank_spo = BankSpo::all();
-
         $query = BankSpo::query();
 
         if ($request->start_date && $request->end_date) {
@@ -55,67 +51,81 @@ class BankSpoController extends Controller
         $jenisSpo = $request->jenis_spo;
         $uploadedFile = $request->file('file_pdf');
         $originalName = $uploadedFile->getClientOriginalName();
+        $filePath = "bank-spo/$originalName";
+
+        $fileExists = Storage::disk('public')->exists($filePath);
 
         if ($jenisSpo === 'SPO Utama') {
-            $existingUnits = BankSpo::where('file_pdf', $originalName)
+
+            $spoUtamaExists = BankSpo::where('file_pdf', $originalName)
                 ->where('jenis_spo', 'SPO Utama')
-                ->pluck('unit')
-                ->toArray();
+                ->exists();
 
-            $unitsToInsert = array_diff($units, $existingUnits);
-
-            if (empty($unitsToInsert)) {
+            if ($spoUtamaExists) {
                 return back()->withErrors([
-                    'file_pdf' => 'File SPO Utama ini sudah pernah diunggah untuk unit yang dipilih.'
+                    'file_pdf' => 'SPO Utama dengan file ini sudah ada.'
                 ]);
             }
 
-            foreach ($unitsToInsert as $unit) {
-                $targetPath = "bank-spo/$unit/" . $originalName;
+            if (!Storage::disk('public')->exists($filePath)) {
+                Storage::disk('public')->putFileAs('bank-spo', $uploadedFile, $originalName);
+            }
 
-                Storage::disk('public')->putFileAs("bank-spo/$unit", $uploadedFile, $originalName);
+            foreach ($units as $unit) {
+
+                $duplikat = BankSpo::where('file_pdf', $originalName)
+                    ->where('unit', $unit)
+                    ->where('jenis_spo', 'SPO Utama')
+                    ->exists();
+
+                if ($duplikat) {
+                    return back()->withErrors([
+                        'file_pdf' => "SPO Utama untuk unit {$unit} sudah ada."
+                    ]);
+                }
 
                 BankSpo::create([
-                    'file_pdf' => $originalName,
-                    'file_path' => $targetPath,
-                    'unit' => $unit,
+                    'file_pdf'  => $originalName,
+                    'file_path' => $filePath,
+                    'unit'      => $unit,
                     'jenis_spo' => 'SPO Utama',
                 ]);
             }
         }
 
         if ($jenisSpo === 'SPO Terkait') {
-            $utama = BankSpo::where('file_pdf', $originalName)
-                ->where('jenis_spo', 'SPO Utama')
-                ->first();
 
-            if (!$utama) {
-                return back()->withErrors(['file_pdf' => 'File SPO Utama tidak ditemukan. Harap unggah sebagai SPO Utama terlebih dahulu.']);
+            foreach ($units as $unit) {
+
+                $exists = BankSpo::where([
+                    'file_pdf'  => $originalName,
+                    'unit'      => $unit,
+                    'jenis_spo' => 'SPO Terkait',
+                ])->exists();
+
+                if ($exists) {
+                    return back()->withErrors([
+                        'file_pdf' => "File SPO Terkait sudah ada untuk unit $unit."
+                    ]);
+                }
             }
 
-            $duplikatUnits = BankSpo::where('file_pdf', $originalName)
-                ->where('jenis_spo', 'SPO Terkait')
-                ->whereIn('unit', $units)
-                ->pluck('unit')
-                ->toArray();
-
-            if (!empty($duplikatUnits)) {
-                return back()->withErrors([
-                    'file_pdf' => 'File SPO Terkait ini sudah pernah diunggah untuk unit: ' . implode(', ', $duplikatUnits) . '. Harap hapus terlebih dahulu jika ingin mengganti.'
-                ]);
+            if (!$fileExists) {
+                Storage::disk('public')->putFileAs('bank-spo', $uploadedFile, $originalName);
             }
 
             foreach ($units as $unit) {
                 BankSpo::create([
-                    'file_pdf' => $originalName,
-                    'file_path' => $utama->file_path,
-                    'unit' => $unit,
+                    'file_pdf'  => $originalName,
+                    'file_path' => $filePath,
+                    'unit'      => $unit,
                     'jenis_spo' => 'SPO Terkait',
                 ]);
             }
         }
 
-        return redirect()->route('komite-mutu.bank-spo.index')->with('success', 'Data berhasil disimpan.');
+        return redirect()->route('komite-mutu.bank-spo.index')
+            ->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -128,21 +138,18 @@ class BankSpoController extends Controller
     {
         $spo = BankSpo::findOrFail($id);
 
-        $filePath = $spo->file_source_id
-            ? optional(BankSpo::find($spo->file_source_id))->file_path
-            : $spo->file_path;
-
-        if (!Storage::disk('public')->exists($filePath)) {
+        if (!Storage::disk('public')->exists($spo->file_path)) {
             abort(404, 'File tidak ditemukan');
         }
 
-        $unit = $spo->unit;
-        $namaFile = $unit . '-' . pathinfo($filePath, PATHINFO_BASENAME);
-
-        return Response::make(Storage::disk('public')->get($filePath), 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . $namaFile . '"'
-        ]);
+        return Response::make(
+            Storage::disk('public')->get($spo->file_path),
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . $spo->file_pdf . '"'
+            ]
+        );
     }
 
     public function edit(string $id)
@@ -156,90 +163,88 @@ class BankSpoController extends Controller
         $bankSpo = BankSpo::findOrFail($id);
 
         $request->validate([
-            'unit' => 'required|string',
+            'unit'      => 'required|string',
             'jenis_spo' => 'required|in:SPO Utama,SPO Terkait',
-            'file_pdf' => 'nullable|file|mimes:pdf|max:20480',
+            'file_pdf'  => 'nullable|file|mimes:pdf|max:20480',
         ]);
 
-        $unit = $request->unit;
-        $jenisSpo = $request->jenis_spo;
-        $uploadedFile = $request->file('file_pdf');
-        $originalName = $uploadedFile ? $uploadedFile->getClientOriginalName() : $bankSpo->file_pdf;
+        $unitBaru  = $request->unit;
+        $jenisBaru = $request->jenis_spo;
 
-        if ($jenisSpo === 'SPO Utama') {
-            $targetPath = "bank-spo/$unit/" . $originalName;
+        $filePdf  = $bankSpo->file_pdf;
+        $filePath = $bankSpo->file_path;
 
-            if ($uploadedFile) {
-                if ($bankSpo->file_path !== $targetPath && Storage::disk('public')->exists($bankSpo->file_path)) {
-                    Storage::disk('public')->delete($bankSpo->file_path);
-                }
+        if ($request->hasFile('file_pdf')) {
 
-                if (Storage::disk('public')->exists($targetPath)) {
-                    return back()->withErrors(['file_pdf' => 'File sudah ada untuk unit ini.']);
-                }
+            $uploadedFile = $request->file('file_pdf');
+            $filePdf      = $uploadedFile->getClientOriginalName();
+            $filePath     = 'bank-spo/' . $filePdf;
 
-                Storage::disk('public')->putFileAs("bank-spo/$unit", $uploadedFile, $originalName);
-            } else {
-                if (!Storage::disk('public')->exists($bankSpo->file_path)) {
-                    return back()->withErrors(['file_pdf' => 'File SPO sebelumnya tidak ditemukan.']);
-                }
+            $duplikat = BankSpo::where('id', '!=', $bankSpo->id)
+                ->where('file_pdf', $filePdf)
+                ->where('unit', $unitBaru)
+                ->where('jenis_spo', $jenisBaru)
+                ->exists();
 
-                if (Storage::disk('public')->exists($targetPath)) {
-                    return back()->withErrors(['file_pdf' => 'File sudah ada untuk unit ini.']);
-                }
-
-                $fileContent = Storage::disk('public')->get($bankSpo->file_path);
-                Storage::disk('public')->put($targetPath, $fileContent);
+            if ($duplikat) {
+                return back()->withErrors([
+                    'file_pdf' => 'File dengan unit dan jenis SPO yang sama sudah ada.'
+                ]);
             }
 
-            $bankSpo->update([
-                'file_pdf' => $originalName,
-                'file_path' => $targetPath,
-                'unit' => $unit,
-                'jenis_spo' => 'SPO Utama',
-            ]);
+            if (!Storage::disk('public')->exists($filePath)) {
+                Storage::disk('public')->putFileAs(
+                    'bank-spo',
+                    $uploadedFile,
+                    $filePdf
+                );
+            }
+
+            $fileLamaDipakai = BankSpo::where('file_pdf', $bankSpo->file_pdf)
+                ->where('id', '!=', $bankSpo->id)
+                ->exists();
+
+            if (!$fileLamaDipakai && Storage::disk('public')->exists($bankSpo->file_path)) {
+                Storage::disk('public')->delete($bankSpo->file_path);
+            }
         }
 
-        if ($jenisSpo === 'SPO Terkait') {
-            if ($uploadedFile) {
-                return back()->withErrors(['file_pdf' => 'SPO Terkait tidak boleh mengunggah file baru.']);
-            }
+        $bankSpo->update([
+            'unit'      => $unitBaru,
+            'jenis_spo' => $jenisBaru,
+            'file_pdf'  => $filePdf,
+            'file_path' => $filePath,
+        ]);
 
-            $utama = BankSpo::where('file_pdf', $originalName)
-                ->where('jenis_spo', 'SPO Utama')
-                ->first();
-
-            if (!$utama) {
-                return back()->withErrors(['file_pdf' => 'SPO Utama tidak ditemukan untuk file ini.']);
-            }
-
-            $bankSpo->update([
-                'file_pdf' => $originalName,
-                'file_path' => $utama->file_path,
-                'unit' => $unit,
-                'jenis_spo' => 'SPO Terkait',
-            ]);
-        }
-
-        return redirect()->route('komite-mutu.bank-spo.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect()
+            ->route('komite-mutu.bank-spo.index')
+            ->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)
     {
         $bankSpo = BankSpo::findOrFail($id);
 
-        if ($bankSpo->jenis_spo === 'SPO Utama') {
-            if (Storage::disk('public')->exists($bankSpo->file_path)) {
-                Storage::disk('public')->delete($bankSpo->file_path);
-            }
+        $filePdf  = $bankSpo->file_pdf;
+        $filePath = $bankSpo->file_path;
 
-            BankSpo::where('file_pdf', $bankSpo->file_pdf)
+        if ($bankSpo->jenis_spo === 'SPO Utama') {
+
+            BankSpo::where('file_pdf', $filePdf)
                 ->where('jenis_spo', 'SPO Terkait')
                 ->delete();
         }
 
         $bankSpo->delete();
 
-        return redirect()->route('komite-mutu.bank-spo.index')->with('success', 'Data berhasil dihapus.');
+        $stillUsed = BankSpo::where('file_pdf', $filePdf)->exists();
+
+        if (!$stillUsed && Storage::disk('public')->exists($filePath)) {
+            Storage::disk('public')->delete($filePath);
+        }
+
+        return redirect()
+            ->route('komite-mutu.bank-spo.index')
+            ->with('success', 'Data berhasil dihapus.');
     }
 }

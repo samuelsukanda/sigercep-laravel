@@ -11,12 +11,14 @@
                         <h6 class="mb-0 font-bold text-lg">Tambah Bank SPO</h6>
                     </div>
                     <div class="flex-auto p-6">
-                        <form action="{{ route('komite-mutu.bank-spo.store') }}" method="POST" enctype="multipart/form-data">
+                        <form id="form" action="{{ route('komite-mutu.bank-spo.store') }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Unit --}}
-                                <x-form.select-multiple name="unit" label="Unit" :options="config('units.spo')" :selected="old('unit')" :multiple="true" required />
+                                <x-form.select-multiple name="unit" label="Unit" :options="config('units.spo')" :selected="old('unit')"
+                                    :multiple="true" required />
 
                                 {{-- Jenis SPO --}}
                                 <x-form.select name="jenis_spo" label="Jenis SPO" :options="['SPO Utama' => 'SPO Utama', 'SPO Terkait' => 'SPO Terkait']" :selected="old('jenis_spo')"
