@@ -11,10 +11,10 @@ class MandatoryTrainingController extends Controller
 
     public function __construct()
     {
-        $this->middleware('permission:kesiapan_ambulance,read')->only(['index', 'show']);
-        $this->middleware('permission:kesiapan_ambulance,create')->only(['create', 'store']);
-        $this->middleware('permission:kesiapan_ambulance,update')->only(['edit', 'update']);
-        $this->middleware('permission:kesiapan_ambulance,delete')->only(['destroy']);
+        $this->middleware('permission:mandatory_training,read')->only(['index', 'show']);
+        $this->middleware('permission:mandatory_training,create')->only(['create', 'store']);
+        $this->middleware('permission:mandatory_training,update')->only(['edit', 'update']);
+        $this->middleware('permission:mandatory_training,delete')->only(['destroy']);
     }
 
     public function index(Request $request)

@@ -8,40 +8,28 @@
             <div class="w-full max-w-full px-3 mx-auto mt-0">
                 <div class="relative flex flex-col bg-white shadow-soft-xl rounded-2xl">
                     <div class="p-6 pb-0 mb-0 bg-white rounded-t-2xl">
-                        <h6 class="mb-0 font-bold text-lg">Detail Bank SPO</h6>
+                        <h6 class="mb-0 font-bold text-lg">Detail Bank Ilmu</h6>
                     </div>
                     <div class="flex-auto p-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {{-- Nama File --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Nama File</label>
-                                <p class="text-slate-600">{{ $bankSpo->file_pdf }}</p>
-                            </div>
-
-                            {{-- Unit --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Unit</label>
-                                <p class="text-slate-600">{{ $bankSpo->unit }}</p>
-                            </div>
-
-                            {{-- Jenis SPO --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Jenis SPO</label>
-                                <p class="text-slate-600">{{ $bankSpo->jenis_spo }}</p>
+                                <p class="text-slate-600">{{ $bankIlmu->file_pdf }}</p>
                             </div>
 
                             {{-- Tanggal --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Tanggal</label>
                                 <p class="text-slate-600">
-                                    {{ \Carbon\Carbon::parse($bankSpo->tanggal)->translatedFormat('d F Y') }}
+                                    {{ \Carbon\Carbon::parse($bankIlmu->tanggal)->translatedFormat('d F Y') }}
                                 </p>
                             </div>
 
-                            {{-- File SPO --}}
+                            {{-- File PDF --}}
                             <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">File SPO</label>
-                                <a href="{{ route('bank-spo.show-file', $bankSpo->id) }}" target="_blank"
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">File PDF</label>
+                                <a href="{{ route('bank-ilmu.show-file', $bankIlmu->id) }}" target="_blank"
                                     class="px-2 py-1 bg-blue-500 rounded text-white hover:shadow-xs active:opacity-85">
                                     📄 Lihat File PDF
                                 </a>
@@ -49,7 +37,7 @@
                         </div>
 
                         <div class="mt-6">
-                            <a href="{{ route('komite-mutu.bank-spo.index') }}"
+                            <a href="{{ route('komite-mutu.bank-ilmu.index') }}"
                                 class="inline-block px-6 py-2 text-xs font-semibold text-slate-700 uppercase bg-gray-200 rounded-lg shadow-md hover:shadow-xs active:opacity-85">
                                 Kembali
                             </a>

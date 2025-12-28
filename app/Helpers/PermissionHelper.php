@@ -56,7 +56,7 @@ class PermissionHelper
         if ($level === 'admin') {
             // Menu yang restricted hanya untuk admin tertentu
             $restrictedMenus = [
-                'bank_spo', 'pengajuan_dokumen', // hanya mutu
+                'bankSpo', 'pengajuan_dokumen', // hanya mutu
                 'utw', 'peraturan_perusahaan', 'surat_keputusan', 'mandatory_training', // hanya sdm
                 'komite_medik', // hanya komdik
             ];

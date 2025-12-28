@@ -5,10 +5,10 @@
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
-            <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Bank SPO</h6>
+            <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Bank Ilmu</h6>
 
-            @canAccess('bank_spo', 'create')
-            <x-button.link href="{{ route('komite-mutu.bank-spo.create') }}">
+            @canAccess('bank_ilmu', 'create')
+            <x-button.link href="{{ route('komite-mutu.bank-ilmu.create') }}">
                 Tambah Data
             </x-button.link>
             @endcanAccess
@@ -23,7 +23,7 @@
 
         <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
             {{-- Filter Tanggal --}}
-            <form method="GET" action="{{ route('komite-mutu.bank-spo.index') }}" class="flex items-center gap-4 mb-4">
+            <form method="GET" action="{{ route('komite-mutu.bank-ilmu.index') }}" class="flex items-center gap-4 mb-4">
                 <div>
                     <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}"
                         class="border rounded px-3 py-2 w-full">
@@ -33,25 +33,6 @@
                         class="border rounded px-3 py-2 w-full">
                 </div>
             </form>
-
-            <div class="filter">
-                {{-- Filter Unit --}}
-                <select id="filter-unit"
-                    class="rounded-lg border border-gray-300 text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="">Semua Unit</option>
-                    @foreach (config('units.spo') as $unit)
-                        <option value="{{ $unit }}">{{ $unit }}</option>
-                    @endforeach
-                </select>
-
-                {{-- Filter Jenis SPO --}}
-                <select id="filter-jenis"
-                    class="rounded-lg border border-gray-300 text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="">Semua Jenis</option>
-                    <option value="SPO Utama">SPO Utama</option>
-                    <option value="SPO Terkait">SPO Terkait</option>
-                </select>
-            </div>
         </div>
 
         <div class="relative overflow-x-auto shadow-md rounded-lg px-2 dark:text-white">
@@ -60,34 +41,30 @@
                 <thead class="text-xs text-slate-500 uppercase bg-slate-100 dark:text-white">
                     <tr>
                         <th class="px-6 py-3">Nama File</th>
-                        <th class="px-6 py-3">Unit</th>
-                        <th class="px-6 py-3">Jenis SPO</th>
                         <th class="px-6 py-3">Tanggal</th>
                         <th class="px-6 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="text-s text-slate-500 bg-slate-100 dark:text-white">
-                    @foreach ($bankSpo as $item)
+                    @foreach ($bankIlmu as $item)
                         <tr>
                             <td class="px-6 py-4">{{ $item->file_pdf }}</td>
-                            <td class="px-6 py-4">{{ $item->unit }}</td>
-                            <td class="px-6 py-4">{{ $item->jenis_spo }}</td>
                             <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->created_at)->timestamp }}">
                                 {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}
                             </td>
                             <td class="px-6 py-4 space-x-2 text-center">
-                                @canAccess('bank_spo', 'update')
-                                <x-button.action href="{{ route('komite-mutu.bank-spo.edit', $item->id) }}"
+                                @canAccess('bank_ilmu', 'update')
+                                <x-button.action href="{{ route('komite-mutu.bank-ilmu.edit', $item->id) }}"
                                     icon="pen-to-square" color="emerald" title="Edit" />
                                 @endcanAccess
 
-                                @canAccess('bank_spo', 'read')
-                                <x-button.action href="{{ route('komite-mutu.bank-spo.show', $item->id) }}" icon="eye"
+                                @canAccess('bank_ilmu', 'read')
+                                <x-button.action href="{{ route('komite-mutu.bank-ilmu.show', $item->id) }}" icon="eye"
                                     color="emerald" title="Lihat Data" />
                                 @endcanAccess
 
-                                @canAccess('bank_spo', 'delete')
-                                <x-button.action href="{{ route('komite-mutu.bank-spo.destroy', $item->id) }}"
+                                @canAccess('bank_ilmu', 'delete')
+                                <x-button.action href="{{ route('komite-mutu.bank-ilmu.destroy', $item->id) }}"
                                     icon="trash" color="red" type="button" method="DELETE" title="Hapus" />
                                 @endcanAccess
                             </td>
@@ -105,7 +82,7 @@
     <script>
         $(document).ready(function() {
             let table = $('#datatable').DataTable();
-            table.order([3, 'desc']).draw();
+            table.order([1, 'desc']).draw();
         });
     </script>
 @endpush

@@ -482,6 +482,12 @@ return [
         'Reguler (5 Hari Kerja)',
     ],
 
+    'kategori_laporan' => [
+        'Kesalahan Manusia',
+        'Perilaku Berisiko',
+        'Perilaku Sembrono',
+    ],
+
     'alasan_pengajuan' => [
         'Penetapan Alur/Bisnis Proses di Unit Kerja',
         'Update/Revisi Acuan Regulasi',

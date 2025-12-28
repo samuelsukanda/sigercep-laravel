@@ -265,6 +265,11 @@ $(document).ready(function () {
         placeholder: "Pilih Jenis Alasan Pengajuan",
         allowClear: true,
     });
+
+    $("#kategori_laporan").select2({
+        placeholder: "Pilih Jenis Kategori Laporan",
+        allowClear: true,
+    });
 });
 
 // Flatpickr

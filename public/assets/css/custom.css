@@ -189,3 +189,10 @@
     font-size: 0.875rem;
     color: #6b7280;
 }
+
+.toast-mid-center {
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    position: fixed !important;
+}

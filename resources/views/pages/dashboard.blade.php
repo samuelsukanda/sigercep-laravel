@@ -418,6 +418,71 @@
                     </div>
                 </div>
             </div>
+
+            <!-- card2 -->
+            <div class="w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:w-1/4">
+                <div
+                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
+                    <div class="flex-auto p-4">
+                        <div class="flex flex-row -mx-3">
+                            <div class="flex-none w-2/3 max-w-full px-3">
+                                <div>
+                                    <p
+                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
+                                        Komite Mutu
+                                    </p>
+                                    <span class="mb-0 font-semibold text-sm dark:text-white">Bank Ilmu</span>
+                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
+                                        Total Data: {{ $totalBankIlmu }}
+                                    </h5>
+                                    <p class="mb-0 dark:text-white dark:opacity-60">
+                                        <span
+                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeBankIlmu }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="px-3 text-right basis-1/3">
+                                <div
+                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-red-600 to-orange-600">
+                                    <i class="fas fa-users text-lg text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- card3 -->
+            <div class="w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:w-1/4">
+                <div
+                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
+                    <div class="flex-auto p-4">
+                        <div class="flex flex-row -mx-3">
+                            <div class="flex-none w-2/3 max-w-full px-3">
+                                <div>
+                                    <p
+                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
+                                        Komite Mutu
+                                    </p>
+                                    <span class="mb-0 font-semibold text-sm dark:text-white">Laporan Perilaku</span>
+                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
+                                        Total Data: {{ $totalLaporanPerilaku }}
+                                    </h5>
+                                    <p class="mb-0 dark:text-white dark:opacity-60">
+                                        <span
+                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeLaporanPerilaku }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="px-3 text-right basis-1/3">
+                                <div
+                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-700 to-cyan-500 border-cyan-200">
+                                    <i class="fas fa-users text-lg text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- cards row 7 -->

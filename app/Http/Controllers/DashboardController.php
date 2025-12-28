@@ -14,6 +14,8 @@ use App\Models\Mutu;
 use App\Models\ManajemenRisiko;
 use App\Models\PelaporanIkp;
 use App\Models\PengajuanDokumen;
+use App\Models\BankIlmu;
+use App\Models\LaporanPerilaku;
 use App\Models\Visitasi;
 use App\Models\PeminjamanAset;
 use App\Models\PemindahanAset;
@@ -78,6 +80,16 @@ class DashboardController extends Controller
         $totalBankSpo = BankSpo::count();
         $latestBankSpo = BankSpo::latest('created_at')->first();
         $lastInputTimeBankSpo = $latestBankSpo ? $latestBankSpo->created_at->diffForHumans() : 'Belum ada data';
+
+        // Bank Ilmu
+        $totalBankIlmu = BankIlmu::count();
+        $latestBankIlmu = BankIlmu::latest('created_at')->first();
+        $lastInputTimeBankIlmu = $latestBankIlmu ? $latestBankIlmu->created_at->diffForHumans() : 'Belum ada data';
+
+        // Laporan Perilaku
+        $totalLaporanPerilaku = LaporanPerilaku::count();
+        $latestLaporanPerilaku = LaporanPerilaku::latest('created_at')->first();
+        $lastInputTimeLaporanPerilaku = $latestLaporanPerilaku ? $latestLaporanPerilaku->created_at->diffForHumans() : 'Belum ada data';
 
         // Manajemen Risiko
         $totalManajemenRisiko = ManajemenRisiko::count();
@@ -183,6 +195,10 @@ class DashboardController extends Controller
             'lastInputTimeMutu',
             'totalBankSpo',
             'lastInputTimeBankSpo',
+            'totalBankIlmu',
+            'lastInputTimeBankIlmu',
+            'totalLaporanPerilaku',
+            'lastInputTimeLaporanPerilaku',
             'totalManajemenRisiko',
             'lastInputTimeManajemenRisiko',
             'totalPelaporanIkp',

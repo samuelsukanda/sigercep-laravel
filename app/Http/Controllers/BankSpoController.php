@@ -28,9 +28,9 @@ class BankSpoController extends Controller
             ]);
         }
 
-        $bank_spo = $query->latest()->get();
+        $bankSpo = $query->latest()->get();
 
-        return view('pages.komite-mutu.bank-spo.index', compact('bank_spo'));
+        return view('pages.komite-mutu.bank-spo.index', compact('bankSpo'));
     }
 
     public function create()
@@ -130,32 +130,32 @@ class BankSpoController extends Controller
 
     public function show(string $id)
     {
-        $bank_spo = BankSpo::findOrFail($id);
-        return view('pages.komite-mutu.bank-spo.detail', compact('bank_spo'));
+        $bankSpo = BankSpo::findOrFail($id);
+        return view('pages.komite-mutu.bank-spo.detail', compact('bankSpo'));
     }
 
     public function showFile($id)
     {
-        $spo = BankSpo::findOrFail($id);
+        $bankSpo = BankSpo::findOrFail($id);
 
-        if (!Storage::disk('public')->exists($spo->file_path)) {
+        if (!Storage::disk('public')->exists($bankSpo->file_path)) {
             abort(404, 'File tidak ditemukan');
         }
 
         return Response::make(
-            Storage::disk('public')->get($spo->file_path),
+            Storage::disk('public')->get($bankSpo->file_path),
             200,
             [
                 'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'inline; filename="' . $spo->file_pdf . '"'
+                'Content-Disposition' => 'inline; filename="' . $bankSpo->file_pdf . '"'
             ]
         );
     }
 
     public function edit(string $id)
     {
-        $bank_spo = BankSpo::findOrFail($id);
-        return view('pages.komite-mutu.bank-spo.edit', compact('bank_spo'));
+        $bankSpo = BankSpo::findOrFail($id);
+        return view('pages.komite-mutu.bank-spo.edit', compact('bankSpo'));
     }
 
     public function update(Request $request, string $id)

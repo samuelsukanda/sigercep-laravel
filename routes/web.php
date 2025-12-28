@@ -13,6 +13,8 @@ use App\Http\Controllers\MutuController;
 use App\Http\Controllers\PelaporanIkpController;
 use App\Http\Controllers\PengajuanDokumenController;
 use App\Http\Controllers\BankSpoController;
+use App\Http\Controllers\BankIlmuController;
+use App\Http\Controllers\LaporanPerilakuController;
 use App\Http\Controllers\UtwController;
 use App\Http\Controllers\ManajemenRisikoController;
 use App\Http\Controllers\KecelakaanKerjaController;
@@ -96,11 +98,21 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth'])
         ->resource('komite-mutu/bank-spo', BankSpoController::class)
         ->names('komite-mutu.bank-spo');
+    Route::get('/bank-spo/file/{id}', [BankSpoController::class, 'showFile'])->name('bank-spo.show-file');
+
+    Route::middleware(['auth'])
+        ->resource('komite-mutu/bank-ilmu', BankIlmuController::class)
+        ->names('komite-mutu.bank-ilmu');
+    Route::get('/bank-ilmu/file/{id}', [BankIlmuController::class, 'showFile'])->name('bank-ilmu.show-file');
+
+    Route::middleware(['auth'])
+        ->resource('komite-mutu/laporan-perilaku', LaporanPerilakuController::class)
+        ->names('komite-mutu.laporan-perilaku');
+    Route::get('/laporan-perilaku/file/{id}', [LaporanPerilakuController::class, 'showFile'])->name('laporan-perilaku.show-file');
 
     Route::middleware(['auth'])
         ->resource('komite-mutu/manajemen-risiko', ManajemenRisikoController::class)
         ->names('komite-mutu.manajemen-risiko');
-    Route::get('/bank-spo/file/{id}', [BankSpoController::class, 'showFile'])->name('bank-spo.show-file');
 
     // Desain Grafis
     Route::middleware(['auth'])
