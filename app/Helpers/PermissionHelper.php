@@ -28,9 +28,10 @@ class PermissionHelper
         // 🟠 USER HAMORI
         $hamoriMenus = [
             'komplain_ipsrs', 'kesehatan_lingkungan', 'outsourcing_vendor',
-            'reservasi_ruangan', 'reservasi_kendaraan', 'desain_grafis',
-            'kecelakaan_kerja', 'mutu', 'manajemen_risiko', 'pelaporan_ikp', 'peminjaman_aset',
-            'pengembalian_aset', 'laporan_aset-rusak', 'pemindahan_aset', 'kesiapan_ambulance'
+            'reservasi_ruangan', 'reservasi_kendaraan', 
+            'desain_grafis', 'kecelakaan_kerja','kesiapan_ambulance',
+            'mutu', 'manajemen_risiko', 'pelaporan_ikp', 'pengajuan_dokumen', 'bank_ilmu', 'laporan_perilaku', 
+            'peminjaman_aset', 'pengembalian_aset', 'laporan_aset-rusak', 'pemindahan_aset',
         ];
 
         if ($username === 'hamori') {
@@ -42,9 +43,11 @@ class PermissionHelper
 
         // 🟡 ADMIN DENGAN AKSES KHUSUS
         $adminSpecificAccess = [
-            'mutu' => ['bank_spo', 'pelaporan_ikp', 'pengajuan_dokumen'],
+            'mutu' => ['mutu', 'bank_spo', 'manajemen_risiko', 'pelaporan_ikp', 'pengajuan_dokumen', 'bank_ilmu', 'laporan_perilaku'],
             'sdm'  => ['utw', 'peraturan_perusahaan', 'surat_keputusan', 'mandatory_training'],
             'komdik' => ['komite_medik'],
+            'ipsrs' => ['komplain_ipsrs', 'kesehatan_lingkungan', 'outsourcing_vendor'],
+            'desaingrafis' => ['desain_grafis'],
         ];
 
         // Jika admin memiliki akses penuh ke menu sesuai bagiannya
@@ -56,7 +59,7 @@ class PermissionHelper
         if ($level === 'admin') {
             // Menu yang restricted hanya untuk admin tertentu
             $restrictedMenus = [
-                'bankSpo', 'pengajuan_dokumen', // hanya mutu
+                'bank_spo', // hanya mutu
                 'utw', 'peraturan_perusahaan', 'surat_keputusan', 'mandatory_training', // hanya sdm
                 'komite_medik', // hanya komdik
             ];
