@@ -31,7 +31,7 @@ class PermissionHelper
             'reservasi_ruangan', 'reservasi_kendaraan', 
             'desain_grafis', 'kecelakaan_kerja','kesiapan_ambulance',
             'mutu', 'manajemen_risiko', 'pelaporan_ikp', 'pengajuan_dokumen', 'bank_ilmu', 'laporan_perilaku', 
-            'peminjaman_aset', 'pengembalian_aset', 'laporan_aset-rusak', 'pemindahan_aset',
+            'peminjaman_aset', 'pengembalian_aset', 'laporan_aset_rusak', 'pemindahan_aset',
         ];
 
         if ($username === 'hamori') {
