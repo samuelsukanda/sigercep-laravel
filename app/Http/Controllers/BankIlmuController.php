@@ -32,12 +32,12 @@ class BankIlmuController extends Controller
 
         $bankIlmu = $query->latest()->get();
 
-        return view('pages.komite-mutu.bank-ilmu.index', compact('bankIlmu'));
+        return view('pages.bank-ilmu.index', compact('bankIlmu'));
     }
 
     public function create()
     {
-        return view('pages.komite-mutu.bank-ilmu.create');
+        return view('pages.bank-ilmu.create');
     }
 
     public function store(Request $request)
@@ -62,13 +62,13 @@ class BankIlmuController extends Controller
             'file_path' => $targetPath,
         ]);
 
-        return redirect()->route('komite-mutu.bank-ilmu.index')->with('success', 'Data berhasil disimpan.');
+        return redirect()->route('bank-ilmu.index')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
     {
         $bankIlmu = bankIlmu::findOrFail($id);
-        return view('pages.komite-mutu.bank-ilmu.detail', compact('bankIlmu'));
+        return view('pages.bank-ilmu.detail', compact('bankIlmu'));
     }
 
     public function showFile($id)
@@ -90,7 +90,7 @@ class BankIlmuController extends Controller
     public function edit(string $id)
     {
         $bankIlmu = bankIlmu::findOrFail($id);
-        return view('pages.komite-mutu.bank-ilmu.edit', compact('bankIlmu'));
+        return view('pages.bank-ilmu.edit', compact('bankIlmu'));
     }
 
     public function update(Request $request, string $id)
@@ -142,7 +142,7 @@ class BankIlmuController extends Controller
             'file_path' => $targetPath,
         ]);
 
-        return redirect()->route('komite-mutu.bank-ilmu.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect()->route('bank-ilmu.index')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)
@@ -155,6 +155,6 @@ class BankIlmuController extends Controller
 
         $bankIlmu->delete();
 
-        return redirect()->route('komite-mutu.bank-ilmu.index')->with('success', 'Data berhasil dihapus.');
+        return redirect()->route('bank-ilmu.index')->with('success', 'Data berhasil dihapus.');
     }
 }

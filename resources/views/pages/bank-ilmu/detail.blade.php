@@ -37,7 +37,7 @@
                         </div>
 
                         <div class="mt-6">
-                            <a href="{{ route('komite-mutu.bank-ilmu.index') }}"
+                            <a href="{{ route('bank-ilmu.index') }}"
                                 class="inline-block px-6 py-2 text-xs font-semibold text-slate-700 uppercase bg-gray-200 rounded-lg shadow-md hover:shadow-xs active:opacity-85">
                                 Kembali
                             </a>

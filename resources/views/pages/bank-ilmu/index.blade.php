@@ -8,7 +8,7 @@
             <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Bank Ilmu</h6>
 
             @canAccess('bank_ilmu', 'create')
-            <x-button.link href="{{ route('komite-mutu.bank-ilmu.create') }}">
+            <x-button.link href="{{ route('bank-ilmu.create') }}">
                 Tambah Data
             </x-button.link>
             @endcanAccess
@@ -23,7 +23,7 @@
 
         <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
             {{-- Filter Tanggal --}}
-            <form method="GET" action="{{ route('komite-mutu.bank-ilmu.index') }}" class="flex items-center gap-4 mb-4">
+            <form method="GET" action="{{ route('bank-ilmu.index') }}" class="flex items-center gap-4 mb-4">
                 <div>
                     <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}"
                         class="border rounded px-3 py-2 w-full">
@@ -54,17 +54,17 @@
                             </td>
                             <td class="px-6 py-4 space-x-2 text-center">
                                 @canAccess('bank_ilmu', 'update')
-                                <x-button.action href="{{ route('komite-mutu.bank-ilmu.edit', $item->id) }}"
+                                <x-button.action href="{{ route('bank-ilmu.edit', $item->id) }}"
                                     icon="pen-to-square" color="emerald" title="Edit" />
                                 @endcanAccess
 
                                 @canAccess('bank_ilmu', 'read')
-                                <x-button.action href="{{ route('komite-mutu.bank-ilmu.show', $item->id) }}" icon="eye"
+                                <x-button.action href="{{ route('bank-ilmu.show', $item->id) }}" icon="eye"
                                     color="emerald" title="Lihat Data" />
                                 @endcanAccess
 
                                 @canAccess('bank_ilmu', 'delete')
-                                <x-button.action href="{{ route('komite-mutu.bank-ilmu.destroy', $item->id) }}"
+                                <x-button.action href="{{ route('bank-ilmu.destroy', $item->id) }}"
                                     icon="trash" color="red" type="button" method="DELETE" title="Hapus" />
                                 @endcanAccess
                             </td>

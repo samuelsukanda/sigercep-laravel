@@ -77,9 +77,13 @@ class DashboardController extends Controller
         $lastInputTimeMutu = $latestMutu ? $latestMutu->created_at->diffForHumans() : 'Belum ada data';
 
         // Bank SPO
-        $totalBankSpo = BankSpo::count();
-        $latestBankSpo = BankSpo::latest('created_at')->first();
-        $lastInputTimeBankSpo = $latestBankSpo ? $latestBankSpo->created_at->diffForHumans() : 'Belum ada data';
+        $totalBankSpo = BankSpo::where('jenis_spo', 'SPO Utama')->count();
+        $latestBankSpo = BankSpo::where('jenis_spo', 'SPO Utama')
+            ->latest('created_at')
+            ->first();
+        $lastInputTimeBankSpo = $latestBankSpo
+            ? $latestBankSpo->created_at->diffForHumans()
+            : 'Belum ada data';
 
         // Bank Ilmu
         $totalBankIlmu = BankIlmu::count();

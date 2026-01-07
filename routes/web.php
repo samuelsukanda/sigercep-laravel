@@ -55,6 +55,12 @@ Route::middleware('auth')->group(function () {
 
     // Pages - Views
 
+    // Bank Ilmu
+    Route::middleware(['auth'])
+        ->resource('bank-ilmu', BankIlmuController::class)
+        ->names('bank-ilmu');
+    Route::get('/bank-ilmu/file/{id}', [BankIlmuController::class, 'showFile'])->name('bank-ilmu.show-file');
+
     // Komplain
     Route::middleware(['auth'])
         ->resource('komplain/ipsrs', KomplainIpsrsController::class)
@@ -100,11 +106,6 @@ Route::middleware('auth')->group(function () {
         ->resource('komite-mutu/bank-spo', BankSpoController::class)
         ->names('komite-mutu.bank-spo');
     Route::get('/bank-spo/file/{id}', [BankSpoController::class, 'showFile'])->name('bank-spo.show-file');
-
-    Route::middleware(['auth'])
-        ->resource('komite-mutu/bank-ilmu', BankIlmuController::class)
-        ->names('komite-mutu.bank-ilmu');
-    Route::get('/bank-ilmu/file/{id}', [BankIlmuController::class, 'showFile'])->name('bank-ilmu.show-file');
 
     Route::middleware(['auth'])
         ->resource('komite-mutu/laporan-perilaku', LaporanPerilakuController::class)
