@@ -35,7 +35,7 @@
 
                                 {{-- Nomor Dokumen --}}
                                 <x-form.input name="nomor_dokumen"
-                                    label="Nomor Dokumen (Diisi Untuk Revisi Dan Pengahpusan)" :value="old('nomor_dokumen', $pengajuanDokumen->nomor_dokumen ?? '')" required />
+                                    label="Nomor Dokumen (Diisi Untuk Revisi Dan Penghapusan)" :value="old('nomor_dokumen', $pengajuanDokumen->nomor_dokumen ?? '')" required />
 
                                 {{-- Judul Dokumen --}}
                                 <x-form.input name="judul_dokumen" label="Judul Dokumen" :value="old('judul_dokumen', $pengajuanDokumen->judul_dokumen ?? '')" required />
