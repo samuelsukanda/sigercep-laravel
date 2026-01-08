@@ -57,7 +57,7 @@ class PengajuanDokumenController extends Controller
             'diajukan_oleh' => 'required|string|max:255',
             'diperiksa_oleh' => 'required|string|max:255',
             'disetujui_oleh' => 'required|string|max:255',
-            'file_pdf' => 'required|file|mimes:pdf|max:20480',
+            'file_pdf' => 'required|file|mimes:pdf,doc,docx|max:20480',
         ]);
 
         $file = $request->file('file_pdf');
@@ -101,9 +101,13 @@ class PengajuanDokumenController extends Controller
             abort(404, 'File tidak ditemukan');
         }
 
+        $filename = trim(
+            ($pengajuanDokumen->unit ? $pengajuanDokumen->unit . ' - ' : '') .
+                $pengajuanDokumen->file_pdf
+        );
+
         return response()->file($filePath, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . $pengajuanDokumen->unit . '-' . $pengajuanDokumen->file_pdf . '"'
+            'Content-Disposition' => 'inline; filename="' . $filename . '"'
         ]);
     }
 
@@ -130,7 +134,7 @@ class PengajuanDokumenController extends Controller
             'diajukan_oleh' => 'required|string|max:255',
             'diperiksa_oleh' => 'required|string|max:255',
             'disetujui_oleh' => 'required|string|max:255',
-            'file_pdf' => 'nullable|file|mimes:pdf|max:20480',
+            'file_pdf' => 'nullable|file|mimes:pdf,doc,docx|max:20480',
         ]);
 
         $pengajuanDokumen = PengajuanDokumen::findOrFail($id);

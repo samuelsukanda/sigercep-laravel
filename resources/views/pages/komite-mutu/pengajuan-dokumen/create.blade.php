@@ -77,7 +77,7 @@
                                     :value="old('disetujui_oleh', $pengajuanDokumen->disetujui_oleh ?? '')" required />
 
                                 {{-- Lampiran File SPO --}}
-                                <x-form.file-upload-pdf name="file_pdf" label="Lampiran File SPO (PDF)" />
+                                <x-form.file-upload-pdf name="file_pdf" label="Lampiran File SPO" />
                             </div>
 
                             <div class="mt-6">
