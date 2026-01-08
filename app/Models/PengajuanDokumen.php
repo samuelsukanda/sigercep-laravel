@@ -26,7 +26,7 @@ class PengajuanDokumen extends Model
         'diajukan_oleh',
         'diperiksa_oleh',
         'disetujui_oleh',
-        'file_pdf',
+        'file_spo',
         'file_path',
     ];
 }

@@ -63,6 +63,7 @@
                                                     'Bersihkan Casing bagian dalam dari debu',
                                                     'Rapihkan pengkabelan',
                                                     'Rapikan penempatan',
+                                                    'Akses Flashdisk terkontrol',
                                                 ];
                                             @endphp
                                             @foreach ($checklistItems as $index => $item)
@@ -92,6 +93,27 @@
                                             </tr>
                                         </tfoot>
                                     </table>
+
+                                    {{-- Tanda Tangan --}}
+                                    <div class="mt-6">
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Tanda Tangan:</label>
+                                        <div class="border rounded shadow-sm bg-white p-4">
+                                            <canvas id="signature-pad" class="w-1/2 h-52 rounded"
+                                                style="border: 2px solid #9e9e9e;"></canvas>
+                                            <input type="hidden" name="tanda_tangan" id="tanda_tangan">
+                                            <div class="mt-4 flex gap-2">
+                                                <button type="button" id="undo"
+                                                    class="relative p-4 mb-4 mr-1 text-white border border-solid rounded-lg bg-gradient-to-tl from-zinc-800 to-zinc-700 border-slate-100 px-4 py-2 flex items-center gap-2">
+                                                    <i class="fa fa-undo mr-1"></i> Undo
+                                                </button>
+                                                <button type="button" id="clear"
+                                                    class="relative p-4 mb-4 text-white border border-red-300 border-solid rounded-lg bg-gradient-to-tl from-red-600 to-orange-600 px-4 py-2 flex items-center gap-2">
+                                                    <i class="fa fa-trash mr-1"></i> Clear
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
 
@@ -112,4 +134,6 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/check-all.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
+    <script src="{{ asset('assets/js/signature-create.js') }}"></script>
 @endpush

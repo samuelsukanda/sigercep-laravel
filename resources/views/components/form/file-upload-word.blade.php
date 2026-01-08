@@ -17,8 +17,8 @@
             </div>
             <span id="file-name" class="text-sm text-gray-500 truncate">No File Chosen</span>
         </div>
-        <input id="{{ $name }}-upload" name="{{ $name }}" type="file" accept="application/pdf"
-            class="hidden" />
+        <input id="{{ $name }}-upload" name="{{ $name }}" type="file" accept=".doc,.docx"
+            class="hidden" {{ $attributes->has('required') ? 'required' : '' }} />
     </label>
 
     @error($name)

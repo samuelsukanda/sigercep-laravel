@@ -57,18 +57,26 @@ class PengajuanDokumenController extends Controller
             'diajukan_oleh' => 'required|string|max:255',
             'diperiksa_oleh' => 'required|string|max:255',
             'disetujui_oleh' => 'required|string|max:255',
-            'file_pdf' => 'required|file|mimes:pdf,doc,docx|max:20480',
+            'file_spo' => 'required|file|max:20480',
         ]);
 
-        $file = $request->file('file_pdf');
+        $ext = strtolower($request->file('file_spo')->getClientOriginalExtension());
+
+        if (!in_array($ext, ['doc', 'docx'])) {
+            return back()->withErrors([
+                'file_spo' => 'File harus berformat Word (.doc atau .docx)'
+            ]);
+        }
+
+        $file = $request->file('file_spo');
         $originalName = $file->getClientOriginalName();
 
-        $validated['file_pdf'] = $originalName;
+        $validated['file_spo'] = $originalName;
         $validated['file_path'] = 'pengajuan-dokumen/' . $originalName;
 
         if (Storage::disk('public')->exists($validated['file_path'])) {
             return back()->withErrors([
-                'file_pdf' => 'File dengan nama ini sudah ada.'
+                'file_spo' => 'File dengan nama ini sudah ada.'
             ]);
         }
 
@@ -103,7 +111,7 @@ class PengajuanDokumenController extends Controller
 
         $filename = trim(
             ($pengajuanDokumen->unit ? $pengajuanDokumen->unit . ' - ' : '') .
-                $pengajuanDokumen->file_pdf
+                $pengajuanDokumen->file_spo
         );
 
         return response()->file($filePath, [
@@ -134,12 +142,20 @@ class PengajuanDokumenController extends Controller
             'diajukan_oleh' => 'required|string|max:255',
             'diperiksa_oleh' => 'required|string|max:255',
             'disetujui_oleh' => 'required|string|max:255',
-            'file_pdf' => 'nullable|file|mimes:pdf,doc,docx|max:20480',
+            'file_spo' => 'nullable|file|max:20480',
         ]);
+
+        $ext = strtolower($request->file('file_spo')->getClientOriginalExtension());
+
+        if (!in_array($ext, ['doc', 'docx'])) {
+            return back()->withErrors([
+                'file_spo' => 'File harus berformat Word (.doc atau .docx)'
+            ]);
+        }
 
         $pengajuanDokumen = PengajuanDokumen::findOrFail($id);
 
-        if ($request->hasFile('file_pdf')) {
+        if ($request->hasFile('file_spo')) {
             if (
                 $pengajuanDokumen->file_path &&
                 Storage::disk('public')->exists($pengajuanDokumen->file_path)
@@ -147,9 +163,9 @@ class PengajuanDokumenController extends Controller
                 Storage::disk('public')->delete($pengajuanDokumen->file_path);
             }
 
-            $file = $request->file('file_pdf');
+            $file = $request->file('file_spo');
             $originalName = $file->getClientOriginalName();
-            $validated['file_pdf'] = $originalName;
+            $validated['file_spo'] = $originalName;
             $validated['file_path'] = 'pengajuan-dokumen/' . $originalName;
 
             Storage::disk('public')->putFileAs(

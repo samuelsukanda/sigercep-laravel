@@ -71,6 +71,7 @@
                                                 'Bersihkan Casing bagian dalam dari debu',
                                                 'Rapihkan pengkabelan',
                                                 'Rapikan penempatan',
+                                                'Akses Flashdisk terkontrol',
                                             ];
 
                                             $checklistData = $hardware->checklist ?? [];
@@ -96,6 +97,20 @@
                                     </tbody>
                                 </table>
                             </div>
+
+                            {{-- Tanda Tangan --}}
+                            @if ($hardware->tanda_tangan)
+                                <div class="mb-4">
+                                    <label class="block mb-1 text-sm font-semibold text-slate-700">Tanda Tangan</label>
+                                    <img src="{{ asset($hardware->tanda_tangan) }}" alt="Tanda Tangan"
+                                        class="border rounded max-w-xs h-auto mt-2">
+                                </div>
+                            @else
+                                <div class="mb-4">
+                                    <label class="block mb-1 text-sm font-semibold text-slate-700">Tanda Tangan</label>
+                                    <p class="text-slate-600 italic">Belum ada tanda tangan.</p>
+                                </div>
+                            @endif
                         </div>
 
                         <div class="mt-6">

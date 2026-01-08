@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Hardware;
+use Illuminate\Support\Facades\Storage;
 
 class HardwareController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('permission:hardware,read')->only(['index', 'show']);
@@ -18,7 +18,7 @@ class HardwareController extends Controller
 
     public function index()
     {
-        $hardware = Hardware::all();
+        $hardware = Hardware::latest()->get();
         return view('pages.hardware.index', compact('hardware'));
     }
 
@@ -30,23 +30,29 @@ class HardwareController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama'   => 'required|string|max:255',
-            'unit'   => 'required|string|max:255',
-            'lantai' => 'required|string|max:255',
-            'tanggal' => 'required|date',
-            'checklist' => 'nullable|array',
+            'nama'         => 'required|string|max:255',
+            'unit'         => 'required|string|max:255',
+            'lantai'       => 'required|string|max:255',
+            'tanggal'      => 'required|date',
+            'checklist'    => 'nullable|array',
+            'tanda_tangan' => 'required|string',
         ]);
 
-        Hardware::create([
-            'nama'      => $validated['nama'],
-            'unit'      => $validated['unit'],
-            'lantai'    => $validated['lantai'],
-            'tanggal'   => $validated['tanggal'],
-            'checklist' => $validated['checklist'],
-        ]);
+        if ($request->has('tanda_tangan')) {
+            $signatureData = $request->input('tanda_tangan');
+            $data = explode(',', $signatureData);
+            $decoded = base64_decode($data[1]);
 
+            $path = 'signatures/hardware/signature_' . time() . '.png';
+            Storage::disk('public')->put($path, $decoded);
 
-        return redirect()->route('hardware.index')->with('success', 'Data berhasil ditambahkan.');
+            $validated['tanda_tangan'] = 'storage/' . $path;
+        }
+
+        Hardware::create($validated);
+
+        return redirect()->route('hardware.index')
+            ->with('success', 'Data berhasil ditambahkan.');
     }
 
     public function show(Hardware $hardware)
@@ -62,27 +68,54 @@ class HardwareController extends Controller
     public function update(Request $request, Hardware $hardware)
     {
         $validated = $request->validate([
-            'nama'   => 'required|string|max:255',
-            'unit'   => 'required|string|max:255',
-            'lantai' => 'required|string|max:255',
-            'tanggal' => 'required|date',
-            'checklist' => 'nullable|array',
+            'nama'         => 'required|string|max:255',
+            'unit'         => 'required|string|max:255',
+            'lantai'       => 'required|string|max:255',
+            'tanggal'      => 'required|date',
+            'checklist'    => 'nullable|array',
+            'tanda_tangan' => 'nullable|string',
         ]);
 
-        $hardware->update([
-            'nama'     => $validated['nama'],
-            'unit'     => $validated['unit'],
-            'lantai'   => $validated['lantai'],
-            'tanggal'  => $validated['tanggal'],
-            'checklist' => $validated['checklist'],
-        ]);
+        if ($request->filled('tanda_tangan')) {
+            $signatureData = $request->input('tanda_tangan');
+            $data = explode(',', $signatureData);
+            $decoded = base64_decode($data[1]);
 
-        return redirect()->route('hardware.index')->with('success', 'Data berhasil diperbarui.');
+            $path = 'signatures/hardware/signature_' . time() . '.png';
+            Storage::disk('public')->put($path, $decoded);
+
+            if (
+                $hardware->tanda_tangan &&
+                Storage::disk('public')->exists(str_replace('storage/', '', $hardware->tanda_tangan))
+            ) {
+                Storage::disk('public')->delete(
+                    str_replace('storage/', '', $hardware->tanda_tangan)
+                );
+            }
+
+            $validated['tanda_tangan'] = 'storage/' . $path;
+        } else {
+            $validated['tanda_tangan'] = $hardware->tanda_tangan;
+        }
+
+        $hardware->update($validated);
+
+        return redirect()->route('hardware.index')
+            ->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(Hardware $hardware)
     {
+        if ($hardware->tanda_tangan) {
+            $path = str_replace('storage/', '', $hardware->tanda_tangan);
+            if (Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            }
+        }
+
         $hardware->delete();
-        return redirect()->route('hardware.index')->with('success', 'Data berhasil dihapus.');
+
+        return redirect()->route('hardware.index')
+            ->with('success', 'Data berhasil dihapus.');
     }
 }

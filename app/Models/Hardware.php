@@ -17,6 +17,7 @@ class Hardware extends Model
         'lantai',
         'tanggal',
         'checklist',
+        'tanda_tangan',
     ];
 
     protected $casts = [
