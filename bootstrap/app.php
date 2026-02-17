@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use App\Http\Middleware\CheckPermission;
+use App\Http\Middleware\CheckRole;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -13,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function ($middleware) {
         $middleware->alias([
             'permission' => CheckPermission::class,
+            'role' => CheckRole::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -29,7 +29,7 @@ $(document).ready(function () {
             const startDateStr = $("#start_date").val();
             const endDateStr = $("#end_date").val();
             const dateColumnIndex = parseInt(
-                $("#datatable").data("date-column")
+                $("#datatable").data("date-column"),
             );
 
             if (!startDateStr && !endDateStr) return true;
@@ -270,33 +270,57 @@ $(document).ready(function () {
         placeholder: "Pilih Jenis Kategori Laporan",
         allowClear: true,
     });
+
+    $("#urgency").select2({
+        placeholder: "Pilih Jenis Urgensi",
+        allowClear: true,
+    });
+
+    $("#category").select2({
+        placeholder: "Pilih Jenis Kategori",
+        allowClear: true,
+    });
+
+    $("#approval_status").select2({
+        placeholder: "Pilih Status Approval",
+        allowClear: true,
+    });
+
 });
 
 // Flatpickr
 flatpickr("#tanggal", {
-    dateFormat: "Y-m-d",
-    allowInput: true,
+    dateFormat: "d-m-Y",
+    allowInput: false,
 });
 
 flatpickr("#tanggal_lahir", {
-    dateFormat: "Y-m-d",
-    allowInput: true,
+    dateFormat: "d-m-Y",
+    allowInput: false,
 });
 
 flatpickr("#tanggal_masuk_rs", {
-    dateFormat: "Y-m-d",
-    allowInput: true,
+    dateFormat: "d-m-Y",
+    allowInput: false,
 });
 
 flatpickr("#tanggal_kejadian", {
-    dateFormat: "Y-m-d",
-    allowInput: true,
+    dateFormat: "d-m-Y",
+    allowInput: false,
 });
 
 flatpickr("#tanggal_pengajuan", {
-    dateFormat: "Y-m-d",
-    allowInput: true,
+    dateFormat: "d-m-Y",
+    allowInput: false,
 });
+
+flatpickr("#estimated_completion", {
+    enableTime: true,
+    dateFormat: "d-m-Y H:i",
+    time_24hr: true,
+    allowInput: false
+});
+
 
 flatpickr("#waktu_kejadian", {
     enableTime: true,

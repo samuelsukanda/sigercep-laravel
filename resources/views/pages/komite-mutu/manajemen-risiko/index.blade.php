@@ -23,7 +23,7 @@
 
         <div class="flex justify-end items-center mb-4 flex-wrap gap-2">
             {{-- Filter Tanggal --}}
-            <form method="GET" action="{{ route('komplain.ipsrs.index') }}" class="flex items-center gap-4 mb-4">
+            <form method="GET" action="{{ route('komite-mutu.manajemen-risiko.index') }}" class="flex items-center gap-4 mb-4">
                 <div>
                     <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}"
                         class="border rounded px-3 py-2 w-full">

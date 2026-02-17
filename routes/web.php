@@ -4,6 +4,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\AdminTicketController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\DesainGrafisController;
 use App\Http\Controllers\KomplainIpsrsController;
 use App\Http\Controllers\KomplainOutsourcingVendorController;
@@ -54,6 +57,27 @@ Route::middleware('auth')->group(function () {
     })->name('settings');
 
     // Pages - Views
+
+    // Ticket
+    // User routes
+    Route::resource('helpdesk', TicketController::class)
+        ->only(['create', 'store', 'index', 'show']);
+
+    // Admin routes
+    Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->name('admin.')->group(function () {
+        // Manajemen tiket untuk superadmin
+        Route::resource('helpdesk', AdminTicketController::class)
+            ->except(['create', 'store']); // hanya index, show, edit, update, destroy
+        // Approval dan update status
+        Route::put('helpdesk/{ticket}/approve', [AdminTicketController::class, 'approve'])->name('helpdesk.approve');
+        Route::put('helpdesk/{ticket}/update-status', [AdminTicketController::class, 'updateStatus'])->name('helpdesk.update-status');
+    });
+
+    // Report routes
+    Route::middleware(['auth', 'role:superadmin'])->prefix('reports')->name('reports.')->group(function () {
+        Route::get('summary', [ReportController::class, 'summary'])->name('summary');
+        Route::get('export', [ReportController::class, 'export'])->name('export');
+    });
 
     // Bank Ilmu
     Route::middleware(['auth'])

@@ -3,14 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    use Notifiable;
+
     protected $fillable = [
         'username',
         'name',
         'password',
-        'level',
+        'role',
     ];
 
     protected $hidden = [
@@ -21,4 +24,14 @@ class User extends Authenticatable
     protected $casts = [
         'password' => 'hashed',
     ];
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
+    public function approvals()
+    {
+        return $this->hasMany(TicketApproval::class, 'admin_id');
+    }
 }

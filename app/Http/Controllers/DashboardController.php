@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use App\Models\Ticket;
 use App\Models\KomplainIpsrs;
 use App\Models\KomplainOutsourcingVendor;
 use App\Models\KesehatanLingkungan;
@@ -36,6 +38,12 @@ class DashboardController extends Controller
 
     public function index()
     {
+
+        // Tiket
+        $totalTickets = Ticket::where('user_id', Auth::id())->count();
+        $latestTicket = Ticket::where('user_id', Auth::id())->latest('created_at')->first();
+        $lastInputTimeTicket = $latestTicket ? $latestTicket->created_at->diffForHumans() : 'Belum ada data';
+
         // Komplain IPSRS
         $totalKomplainIpsrs = KomplainIpsrs::count();
         $latestIpsrs = KomplainIpsrs::latest('created_at')->first();
@@ -181,6 +189,8 @@ class DashboardController extends Controller
         $lastInputTimeHardware = $latestHardware ? $latestHardware->created_at->diffForHumans() : 'Belum ada data';
 
         return view('pages.dashboard', compact(
+            'totalTickets',
+            'lastInputTimeTicket',
             'totalKomplainIpsrs',
             'lastInputTimeIpsrs',
             'totalKomplainOutsourcingVendor',

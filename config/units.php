@@ -493,4 +493,30 @@ return [
         'Update/Revisi Acuan Regulasi',
         'Update/Revisi Langkah Prosedur',
     ],
+
+    'category' => [
+        'Hardware',
+        'Software',
+        'Jaringan',
+        'Printer',
+        'SIMRS',
+    ],
+
+    'urgency' => [
+        'Low' => 'Low',
+        'Medium' => 'Medium',
+        'High' => 'High',
+        'Critical' => 'Critical',
+    ],
+
+    'approval_status' => [
+        'In Progress',
+        'Closed',
+    ],
+
+    'status' => [
+        'Approved',
+        'Rejected',
+        'Need Clarification',
+    ],
 ];

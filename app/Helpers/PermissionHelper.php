@@ -12,10 +12,10 @@ class PermissionHelper
         if (!$user) return false;
 
         $username = strtolower($user->username);
-        $level = strtolower($user->level);
+        $role = strtolower($user->role);
 
         // 🟢 SUPERADMIN → akses penuh ke semua menu
-        if ($level === 'superadmin') {
+        if ($role === 'superadmin') {
             return true;
         }
 
@@ -56,7 +56,7 @@ class PermissionHelper
         }
 
         // 🔵 SEMUA ADMIN (selain hamori)
-        if ($level === 'admin') {
+        if ($role === 'admin') {
             // Menu yang restricted hanya untuk admin tertentu
             $restrictedMenus = [
                 'bank_spo', // hanya mutu
