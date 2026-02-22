@@ -90,6 +90,7 @@ class AdminTicketController extends Controller
 
         if (in_array($request->approval_status, ['Rejected', 'Need Clarification'])) {
             $ticket->status = 'Closed';
+            $ticket->resolved_at = now();
             $ticket->save();
 
             TicketUpdate::create([
@@ -113,6 +114,11 @@ class AdminTicketController extends Controller
         ]);
 
         $ticket->status = $request->status;
+
+        if ($request->status == 'Closed') {
+            $ticket->resolved_at = now();
+        }
+
         $ticket->save();
 
         $update = TicketUpdate::create([

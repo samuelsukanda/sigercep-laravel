@@ -16,135 +16,160 @@
                         <h6 class="mb-0 font-bold text-lg">Informasi Tiket</h6>
                     </div>
                     <div class="flex-auto p-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {{-- No. Tiket --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">No. Tiket</label>
+                        <div class="flex flex-wrap -mx-3">
+
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
+                                <label class="block mb-1 text-sm font-semibold" style="color: #7664E4 !important;">No.
+                                    Tiket</label>
                                 <p class="text-slate-600">{{ $ticket->ticket_number }}</p>
                             </div>
 
-                            {{-- Nama Pelapor --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Nama Pelapor</label>
-                                <p class="text-slate-600">{{ $ticket->user->name }}</p>
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
+                                <label class="block mb-1 text-sm font-semibold" style="color: #7664E4 !important;">Nama
+                                    Pelapor</label>
+                                <p class="text-slate-600">{{ auth()->user()->name }}</p>
                             </div>
 
-                            {{-- Divisi --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Divisi</label>
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
+                                <label class="block mb-1 text-sm font-semibold"
+                                    style="color: #7664E4 !important;">Divisi</label>
                                 <p class="text-slate-600">{{ $ticket->unit }}</p>
                             </div>
 
-                            {{-- Tanggal/Jam --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Tanggal/Jam</label>
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
+                                <label class="block mb-1 text-sm font-semibold"
+                                    style="color: #7664E4 !important;">Tanggal/Jam</label>
                                 <p class="text-slate-600">
                                     {{ \Carbon\Carbon::parse($ticket->created_at)->translatedFormat('d F Y H:i') }}
                                 </p>
                             </div>
 
-                            {{-- Kategori --}}
-                            <div class="md:col-span-2">
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Kategori</label>
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
+                                <label class="block mb-1 text-sm font-semibold"
+                                    style="color: #7664E4 !important;">Kategori</label>
                                 <p class="text-slate-600">{{ $ticket->category }}</p>
                             </div>
 
-                            {{-- Tingkat Urgensi --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Tingkat Urgensi</label>
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
+                                <label class="block mb-1 text-sm font-semibold" style="color: #7664E4 !important;">Tingkat
+                                    Urgensi</label>
                                 <p class="text-slate-600">{{ $ticket->urgency }}</p>
                             </div>
 
-                            {{-- Status Tiket --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Status Tiket</label>
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
+                                <label class="block mb-1 text-sm font-semibold" style="color: #7664E4 !important;">Status
+                                    Tiket</label>
                                 <p class="text-slate-600">{{ $ticket->status ?? '-' }}</p>
                             </div>
 
-                            {{-- Deskripsi --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Deskripsi</label>
+                            <div class="w-full px-3 mb-4">
+                                <label class="block mb-1 text-sm font-semibold"
+                                    style="color: #7664E4 !important;">Deskripsi</label>
                                 <p class="text-slate-600">{{ $ticket->description }}</p>
                             </div>
 
-                            {{-- Lampiran Pendukung --}}
-                            <div class="md:col-span-2">
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Lampiran Pendukung</label>
+                            <div class="w-full px-3">
+                                <label class="block mb-1 text-sm font-semibold" style="color: #7664E4 !important;">Lampiran
+                                    Pendukung</label>
                                 @if ($ticket->attachment)
-                                    <img src="{{ asset('storage/' . $ticket->attachment) }}" alt="Foto ticket"
-                                        class="mt-2 h-24 rounded shadow-md object-cover border border-gray-200 w-1/2" />
+                                    <img src="{{ asset('storage/' . $ticket->attachment) }}"
+                                        class="mt-2 h-24 rounded shadow-md object-cover border border-gray-200 w-1/3" />
                                 @else
                                     <p class="mt-2 text-sm text-slate-600">Tidak ada lampiran pendukung</p>
                                 @endif
                             </div>
-                        </div>
 
+                        </div>
                     </div>
+
                 </div>
 
                 {{-- Approval Tiket --}}
                 <div class="relative flex flex-col bg-white shadow-soft-xl rounded-2xl mb-4">
                     <div class="p-6 pb-0 mb-0 bg-white rounded-t-2xl">
-                        <h6 class="mb-0 font-bold text-lg">Approval Tiket</h6>
+                        <h6 class="mb-0 font-bold text-lg">Informasi Approval</h6>
                     </div>
                     <div class="flex-auto p-6">
                         @if ($ticket->approval)
                             {{-- Tampilkan hasil approval --}}
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {{-- Analisa IT --}}
-                                <div>
-                                    <label class="block mb-1 text-sm font-semibold text-slate-700">Analisa IT</label>
-                                    <p class="text-slate-600">{{ $ticket->approval->analysis }}</p>
-                                </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full table-fixed border border-gray-300 text-sm rounded-lg overflow-hidden">
+                                    <tbody class="divide-y divide-gray-300">
 
-                                {{-- Tindakan / Rencana --}}
-                                <div>
-                                    <label class="block mb-1 text-sm font-semibold text-slate-700">Tindakan /
-                                        Rencana</label>
-                                    <p class="text-slate-600">{{ $ticket->approval->action_plan }}</p>
-                                </div>
+                                        <tr>
+                                            <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
+                                                style="color: #7664E4 !important;">
+                                                Analisa IT
+                                            </td>
+                                            <td class="w-3/4 px-4 py-3 align-top">
+                                                {{ $ticket->approval->analysis }}
+                                            </td>
+                                        </tr>
 
-                                {{-- Estimasi Penyelesaian --}}
-                                <div>
-                                    <label class="block mb-1 text-sm font-semibold text-slate-700">
-                                        Estimasi Penyelesaian
-                                    </label>
-                                    <p class="text-slate-600">
-                                        {{ $ticket->approval->duration }}
-                                    </p>
-                                </div>
+                                        <tr>
+                                            <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
+                                                style="color: #7664E4 !important;">
+                                                Tindakan / Rencana
+                                            </td>
+                                            <td class="w-3/4 px-4 py-3 align-top">
+                                                {{ $ticket->approval->action_plan }}
+                                            </td>
+                                        </tr>
 
-                                {{-- Tanggal Approval --}}
-                                <div>
-                                    <label class="block mb-1 text-sm font-semibold text-slate-700">Tanggal Approval</label>
-                                    <p class="text-slate-600">
-                                        {{ \Carbon\Carbon::parse($ticket->approval->approved_at)->translatedFormat('d F Y H:i') }}
-                                    </p>
-                                </div>
+                                        <tr>
+                                            <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
+                                                style="color: #7664E4 !important;">
+                                                Estimasi Penyelesaian
+                                            </td>
+                                            <td class="w-3/4 px-4 py-3 align-top">
+                                                {{ $ticket->approval->duration }}
+                                            </td>
+                                        </tr>
 
-                                {{-- Tanggal Selesai --}}
-                                <div>
-                                    <label class="block mb-1 text-sm font-semibold text-slate-700">Tanggal
-                                        Selesai</label>
-                                    <p class="text-slate-600">
-                                        {{ \Carbon\Carbon::parse($ticket->approval->estimated_completion)->translatedFormat('d F Y H:i') }}
-                                    </p>
-                                </div>
+                                        <tr>
+                                            <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
+                                                style="color: #7664E4 !important;">
+                                                Tanggal Approval
+                                            </td>
+                                            <td class="w-3/4 px-4 py-3 align-top">
+                                                {{ \Carbon\Carbon::parse($ticket->approval->approved_at)->translatedFormat('d F Y H:i') }}
+                                            </td>
+                                        </tr>
 
-                                {{-- Approved By --}}
-                                <div>
-                                    <label class="block mb-1 text-sm font-semibold text-slate-700">Approved By</label>
-                                    <p class="text-slate-600">{{ $ticket->approval->approved_by }}</p>
-                                </div>
+                                        <tr>
+                                            <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
+                                                style="color: #7664E4 !important;">
+                                                Tanggal Selesai
+                                            </td>
+                                            <td class="w-3/4 px-4 py-3 align-top">
+                                                {{ \Carbon\Carbon::parse($ticket->resolved_at)->translatedFormat('d F Y H:i') }}
+                                            </td>
+                                        </tr>
 
-                                {{-- Catatan Approval --}}
-                                @if ($ticket->approval->approval_note)
-                                    <div>
-                                        <label class="block mb-1 text-sm font-semibold text-slate-700">Catatan
-                                            Approval</label>
-                                        <p class="text-slate-600">{{ $ticket->approval->approval_note }}</p>
-                                    </div>
-                                @endif
+                                        <tr>
+                                            <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
+                                                style="color: #7664E4 !important;">
+                                                Approved By
+                                            </td>
+                                            <td class="w-3/4 px-4 py-3 align-top">
+                                                {{ $ticket->approval->approved_by }}
+                                            </td>
+                                        </tr>
+
+                                        @if ($ticket->approval->approval_note)
+                                            <tr>
+                                                <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
+                                                    style="color: #7664E4 !important;">
+                                                    Catatan Approval
+                                                </td>
+                                                <td class="w-3/4 px-4 py-3 align-top">
+                                                    {{ $ticket->approval->approval_note }}
+                                                </td>
+                                            </tr>
+                                        @endif
+
+                                    </tbody>
+                                </table>
                             </div>
                         @else
                             {{-- Form Approval --}}
@@ -153,7 +178,7 @@
                                 @csrf
                                 @method('PUT')
 
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                     {{-- Nama Pelapor --}}
                                     <x-form.input name="analysis" label="Analisa IT" :value="old('analysis', $tickets->analysis ?? '')" required />
 
@@ -170,13 +195,11 @@
                                     <x-form.select name="approval_status" id="approval_status" label="Status Approval"
                                         :options="config('units.status')" :selected="old('approval_status', $tickets->approval_status ?? '')" required />
 
-                                    <div id="approval_note_container">
-                                        <x-form.textarea name="approval_note" label="Catatan Approval" :value="old('approval_note', $tickets->approval_note ?? '')" />
-
-                                        <p class="text-red-500 text-sm mt-1" id="note_requirement">Opsional, namun wajib
-                                            diisi
-                                            jika status Rejected / Need Clarification.</p>
+                                    <div id="approval_note_container" class="hidden md:col-span-2">
+                                        <x-form.textarea name="approval_note" id="approval_note" label="Catatan Approval"
+                                            :value="old('approval_note', $tickets->approval_note ?? '')" />
                                     </div>
+
                                 </div>
 
                                 <x-button.submit type="submit">Simpan</x-button.submit>
@@ -208,7 +231,8 @@
                                         required />
 
                                     {{-- Catatan Penanganan --}}
-                                    <x-form.textarea name="note" label="Catatan Penanganan" :value="old('note', $tickets->note ?? '')" required />
+                                    <x-form.textarea name="note" label="Catatan Penanganan" :value="old('note', $tickets->note ?? '')"
+                                        required />
 
                                     <div class="mt-6">
                                         <x-button.submit type="submit">Update</x-button.submit>
@@ -275,25 +299,28 @@
         @push('scripts')
             <script>
                 $(document).ready(function() {
-                    $(document).on('change', '#approval_status', function() {
-                        let val = $(this).val();
+
+                    function toggleApprovalNote() {
+                        let val = $('#approval_status').val();
+                        let container = $('#approval_note_container');
                         let noteField = $('#approval_note');
-                        let noteReq = $('#note_requirement');
 
                         if (val === 'Rejected' || val === 'Need Clarification') {
+                            container.removeClass('hidden');
                             noteField.prop('required', true);
-                            noteReq.html(
-                                '<strong class="text-red-500">Wajib diisi!</strong> Alasan rejection atau permintaan klarifikasi.'
-                            );
                         } else {
+                            container.addClass('hidden');
                             noteField.prop('required', false);
-                            noteReq.html('Opsional, disarankan diisi.');
+                            noteField.val('');
                         }
+                    }
+
+                    $('#approval_status').on('change', function() {
+                        toggleApprovalNote();
                     });
 
-                    if ($('#approval_status').val()) {
-                        $('#approval_status').trigger('change');
-                    }
+                    toggleApprovalNote();
+
                 });
             </script>
         @endpush

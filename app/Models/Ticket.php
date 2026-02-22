@@ -16,6 +16,7 @@ class Ticket extends Model
 
     protected $casts = [
         'created_at' => 'datetime',
+        'resolved_at' => 'datetime',
     ];
 
     public function user()

@@ -16,69 +16,70 @@
                         <h6 class="mb-0 font-bold text-lg">Informasi Tiket</h6>
                     </div>
                     <div class="flex-auto p-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {{-- No. Tiket --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">No. Tiket</label>
+                        <div class="flex flex-wrap -mx-3">
+
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
+                                <label class="block mb-1 text-sm font-semibold" style="color: #7664E4 !important;">No.
+                                    Tiket</label>
                                 <p class="text-slate-600">{{ $ticket->ticket_number }}</p>
                             </div>
 
-                            {{-- Nama Pelapor --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Nama Pelapor</label>
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
+                                <label class="block mb-1 text-sm font-semibold" style="color: #7664E4 !important;">Nama
+                                    Pelapor</label>
                                 <p class="text-slate-600">{{ auth()->user()->name }}</p>
                             </div>
 
-                            {{-- Divisi --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Divisi</label>
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
+                                <label class="block mb-1 text-sm font-semibold"
+                                    style="color: #7664E4 !important;">Divisi</label>
                                 <p class="text-slate-600">{{ $ticket->unit }}</p>
                             </div>
 
-                            {{-- Tanggal/Jam --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Tanggal/Jam</label>
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
+                                <label class="block mb-1 text-sm font-semibold"
+                                    style="color: #7664E4 !important;">Tanggal/Jam</label>
                                 <p class="text-slate-600">
                                     {{ \Carbon\Carbon::parse($ticket->created_at)->translatedFormat('d F Y H:i') }}
                                 </p>
                             </div>
 
-                            {{-- Kategori --}}
-                            <div class="md:col-span-2">
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Kategori</label>
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
+                                <label class="block mb-1 text-sm font-semibold"
+                                    style="color: #7664E4 !important;">Kategori</label>
                                 <p class="text-slate-600">{{ $ticket->category }}</p>
                             </div>
 
-                            {{-- Tingkat Urgensi --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Tingkat Urgensi</label>
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
+                                <label class="block mb-1 text-sm font-semibold" style="color: #7664E4 !important;">Tingkat
+                                    Urgensi</label>
                                 <p class="text-slate-600">{{ $ticket->urgency }}</p>
                             </div>
 
-                            {{-- Status Tiket --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Status Tiket</label>
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
+                                <label class="block mb-1 text-sm font-semibold" style="color: #7664E4 !important;">Status
+                                    Tiket</label>
                                 <p class="text-slate-600">{{ $ticket->status ?? '-' }}</p>
                             </div>
 
-                            {{-- Deskripsi --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Deskripsi</label>
+                            <div class="w-full px-3 mb-4">
+                                <label class="block mb-1 text-sm font-semibold"
+                                    style="color: #7664E4 !important;">Deskripsi</label>
                                 <p class="text-slate-600">{{ $ticket->description }}</p>
                             </div>
 
-                            {{-- Lampiran Pendukung --}}
-                            <div class="md:col-span-2">
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Lampiran Pendukung</label>
+                            <div class="w-full px-3">
+                                <label class="block mb-1 text-sm font-semibold" style="color: #7664E4 !important;">Lampiran
+                                    Pendukung</label>
                                 @if ($ticket->attachment)
-                                    <img src="{{ asset('storage/' . $ticket->attachment) }}" alt="Foto ticket"
-                                        class="mt-2 h-24 rounded shadow-md object-cover border border-gray-200 w-1/2" />
+                                    <img src="{{ asset('storage/' . $ticket->attachment) }}"
+                                        class="mt-2 h-24 rounded shadow-md object-cover border border-gray-200 w-1/3" />
                                 @else
                                     <p class="mt-2 text-sm text-slate-600">Tidak ada lampiran pendukung</p>
                                 @endif
                             </div>
-                        </div>
 
+                        </div>
                     </div>
                 </div>
 
@@ -89,87 +90,101 @@
                     </div>
                     <div class="flex-auto p-6">
                         @if ($ticket->approval)
+                            {{-- Tampilkan hasil approval --}}
+                            <div class="overflow-x-auto">
+                                <table class="w-full table-fixed border border-gray-300 text-sm rounded-lg overflow-hidden">
+                                    <tbody class="divide-y divide-gray-300">
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {{-- Status Approval --}}
-                                <div>
-                                    <label class="block mb-1 text-sm font-semibold text-slate-700">
-                                        Status Approval
-                                    </label>
-                                    <p class="text-slate-600">{{ $ticket->approval->approval_status }}</p>
-                                </div>
+                                        <tr>
+                                            <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
+                                                style="color: #7664E4 !important;">
+                                                Analisa IT
+                                            </td>
+                                            <td class="w-3/4 px-4 py-3 align-top">
+                                                {{ $ticket->approval->analysis }}
+                                            </td>
+                                        </tr>
 
-                                {{-- Approved By --}}
-                                <div>
-                                    <label class="block mb-1 text-sm font-semibold text-slate-700">
-                                        Approved By
-                                    </label>
-                                    <p class="text-slate-600">{{ $ticket->approval->approved_by }}</p>
-                                </div>
+                                        <tr>
+                                            <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
+                                                style="color: #7664E4 !important;">
+                                                Tindakan / Rencana
+                                            </td>
+                                            <td class="w-3/4 px-4 py-3 align-top">
+                                                {{ $ticket->approval->action_plan }}
+                                            </td>
+                                        </tr>
 
-                                {{-- Tanggal/Jam --}}
-                                <div>
-                                    <label class="block mb-1 text-sm font-semibold text-slate-700">Tanggal/Jam</label>
-                                    <p class="text-slate-600">
-                                        {{ \Carbon\Carbon::parse($ticket->approval->approved_at)->translatedFormat('d F Y H:i') }}
-                                    </p>
-                                </div>
+                                        <tr>
+                                            <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
+                                                style="color: #7664E4 !important;">
+                                                Estimasi Penyelesaian
+                                            </td>
+                                            <td class="w-3/4 px-4 py-3 align-top">
+                                                {{ $ticket->approval->duration }}
+                                            </td>
+                                        </tr>
 
-                                {{-- Estimasi Penyelesaian --}}
-                                <div>
-                                    <label class="block mb-1 text-sm font-semibold text-slate-700">
-                                        Estimasi Penyelesaian
-                                    </label>
-                                    <p class="text-slate-600">
-                                        {{ $ticket->approval->duration }}
-                                    </p>
-                                </div>
+                                        <tr>
+                                            <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
+                                                style="color: #7664E4 !important;">
+                                                Tanggal Approval
+                                            </td>
+                                            <td class="w-3/4 px-4 py-3 align-top">
+                                                {{ \Carbon\Carbon::parse($ticket->approval->approved_at)->translatedFormat('d F Y H:i') }}
+                                            </td>
+                                        </tr>
 
-                                {{-- Tanggal Selesai --}}
-                                <div>
-                                    <label class="block mb-1 text-sm font-semibold text-slate-700">Tanggal
-                                        Selesai</label>
-                                    <p class="text-slate-600">
-                                        {{ \Carbon\Carbon::parse($ticket->approval->estimated_completion)->translatedFormat('d F Y H:i') }}
-                                    </p>
-                                </div>
+                                        <tr>
+                                            <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
+                                                style="color: #7664E4 !important;">
+                                                Tanggal Selesai
+                                            </td>
+                                            <td class="w-3/4 px-4 py-3 align-top">
+                                                {{ \Carbon\Carbon::parse($ticket->resolved_at)->translatedFormat('d F Y H:i') }}
+                                            </td>
+                                        </tr>
 
-                                {{-- Analisa IT --}}
-                                <div class="md:col-span-2">
-                                    <label class="block mb-1 text-sm font-semibold text-slate-700">
-                                        Analisa IT
-                                    </label>
-                                    <p class="text-slate-600">{{ $ticket->approval->analysis }}</p>
-                                </div>
+                                        <tr>
+                                            <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
+                                                style="color: #7664E4 !important;">
+                                                Approved By
+                                            </td>
+                                            <td class="w-3/4 px-4 py-3 align-top">
+                                                {{ $ticket->approval->approved_by }}
+                                            </td>
+                                        </tr>
 
-                                {{-- Tindakan / Rencana --}}
-                                <div class="md:col-span-2">
-                                    <label class="block mb-1 text-sm font-semibold text-slate-700">
-                                        Tindakan / Rencana
-                                    </label>
-                                    <p class="text-slate-600">
-                                        {{ $ticket->approval->action_plan }}
-                                    </p>
-                                </div>
+                                        @if ($ticket->approval->approval_note)
+                                            <tr>
+                                                <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
+                                                    style="color: #7664E4 !important;">
+                                                    Catatan Approval
+                                                </td>
+                                                <td class="w-3/4 px-4 py-3 align-top">
+                                                    {{ $ticket->approval->approval_note }}
+                                                </td>
+                                            </tr>
+                                        @endif
 
-                                {{-- Catatan Approval --}}
-                                @if ($ticket->approval->approval_note)
-                                    <div class="md:col-span-2">
-                                        <label class="block mb-1 text-sm font-semibold text-slate-700">
-                                            Catatan Approval
-                                        </label>
-                                        <p class="text-slate-600">
-                                            {{ $ticket->approval->approval_note }}
-                                        </p>
-                                    </div>
-                                @endif
+                                    </tbody>
+                                </table>
                             </div>
+
+                            @if (!$ticket->updates || $ticket->updates->count() == 0)
+                                <div class="mt-6">
+                                    <a href="{{ route('helpdesk.index') }}"
+                                        class="ml-2 inline-block px-6 py-2 text-xs font-semibold text-slate-700 uppercase bg-gray-200 rounded-lg shadow-md hover:shadow-xs active:opacity-85">
+                                        Kembali
+                                    </a>
+                                </div>
+                            @endif
                         @else
                             <p class="text-slate-600">Tiket belum diproses oleh tim IT.</p>
 
                             <div class="mt-6">
                                 <a href="{{ route('helpdesk.index') }}"
-                                    class="inline-block px-6 py-2 text-xs font-semibold text-slate-700 uppercase bg-gray-200 rounded-lg shadow-md hover:shadow-xs active:opacity-85">
+                                    class="ml-2 inline-block px-6 py-2 text-xs font-semibold text-slate-700 uppercase bg-gray-200 rounded-lg shadow-md hover:shadow-xs active:opacity-85">
                                     Kembali
                                 </a>
                             </div>

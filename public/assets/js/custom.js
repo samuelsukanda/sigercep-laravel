@@ -294,6 +294,16 @@ flatpickr("#tanggal", {
     allowInput: false,
 });
 
+flatpickr("#periode_dari", {
+    dateFormat: "d-m-Y",
+    allowInput: false,
+});
+
+flatpickr("#periode_sampai", {
+    dateFormat: "d-m-Y",
+    allowInput: false,
+});
+
 flatpickr("#tanggal_lahir", {
     dateFormat: "d-m-Y",
     allowInput: false,

@@ -20,7 +20,7 @@
                                         class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
                                         Helpdesk
                                     </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Bank Ilmu</span>
+                                    <span class="mb-0 font-semibold text-sm dark:text-white">IT Helpdesk</span>
                                     <h5 class="mb-0 font-bold text-sm dark:text-white">
                                         Total Data: {{ $totalTickets }}
                                     </h5>

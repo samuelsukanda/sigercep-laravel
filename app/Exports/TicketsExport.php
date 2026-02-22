@@ -61,7 +61,7 @@ class TicketsExport implements FromCollection, WithHeadings, WithMapping, Should
             $ticket->status,
             $ticket->approval->approval_status ?? 'Pending',
             $ticket->approval->approved_by ?? '-',
-            $ticket->approval ? $ticket->approval->estimated_completion->format('d-m-Y H:i') : '-',
+            $ticket->approval ? $ticket->approval->duration : '-', 
             $ticket->resolved_at ? $ticket->resolved_at->format('d-m-Y') : '-',
         ];
     }
