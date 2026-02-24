@@ -41,7 +41,7 @@
                                 {{ ucfirst($ticket->user->name) }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $ticket->unit }}
+                                {{ $ticket->unit_name}}
                             </td>
                             <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($ticket->created_at)->timestamp }}">
                                 {{ \Carbon\Carbon::parse($ticket->created_at)->translatedFormat('d F Y H:i') }}

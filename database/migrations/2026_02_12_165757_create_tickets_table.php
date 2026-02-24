@@ -16,7 +16,7 @@ return new class extends Migration
                 ->constrained('users')
                 ->restrictOnDelete()
                 ->cascadeOnUpdate();
-            $table->string('unit');
+            $table->string('unit_name');
             $table->enum('category', ['Hardware', 'Printer', 'Jaringan', 'Software', 'SIMRS']);
             $table->text('description');
             $table->enum('urgency', ['Low', 'Medium', 'High', 'Critical']);

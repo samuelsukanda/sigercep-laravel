@@ -68,12 +68,15 @@ class AuthController extends Controller
         $apiUser = $result['data']['user'];
         $token   = $result['data']['access_token'];
 
+        $unitId = data_get($apiUser, 'karyawan.unit.id');
+
         $user = User::updateOrCreate(
             ['email' => $apiUser['email']],
             [
-                'name' => $apiUser['name'],
+                'name'     => $apiUser['name'],
                 'username' => $apiUser['name'],
                 'password' => bcrypt($request->password),
+                'unit_id'  => $unitId,
             ]
         );
 

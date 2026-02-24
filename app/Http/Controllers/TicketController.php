@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Notifications\NewTicketNotification;
 
-
 class TicketController extends Controller
 {
 
@@ -22,7 +21,7 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'unit'       => 'required|string',
+            'unit_name'  => 'required|string',
             'category'   => 'required|in:Hardware,Printer,Jaringan,Software,SIMRS',
             'description' => 'required|string|min:5',
             'urgency'    => 'required|in:Low,Medium,High,Critical',
@@ -32,7 +31,7 @@ class TicketController extends Controller
         $ticket = new Ticket();
         $ticket->ticket_number = TicketHelper::generateTicketNumber();
         $ticket->user_id       = Auth::id();
-        $ticket->unit          = $request->unit;
+        $ticket->unit_name     = $request->unit_name;
         $ticket->category      = $request->category;
         $ticket->description   = $request->description;
         $ticket->urgency       = $request->urgency;

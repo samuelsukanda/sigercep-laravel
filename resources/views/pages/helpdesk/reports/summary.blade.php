@@ -199,7 +199,7 @@
                                         <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">
                                             {{ ucfirst($ticket->user->name) ?? '-' }}
                                         </td>
-                                        <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">{{ $ticket->unit }}
+                                        <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">{{ $ticket->unit_name }}
                                         </td>
                                         <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">
                                             {{ $ticket->category }}</td>

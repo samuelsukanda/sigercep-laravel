@@ -40,9 +40,14 @@ class DashboardController extends Controller
     {
 
         // Tiket
-        $totalTickets = Ticket::where('user_id', Auth::id())->count();
-        $latestTicket = Ticket::where('user_id', Auth::id())->latest('created_at')->first();
-        $lastInputTimeTicket = $latestTicket ? $latestTicket->created_at->diffForHumans() : 'Belum ada data';
+        // Admin
+        $totalTicketsAdmin = Ticket::count();
+        $latestTicketAdmin = Ticket::latest('created_at')->first();
+        $lastInputTimeTicketAdmin = $latestTicketAdmin ? $latestTicketAdmin->created_at->diffForHumans() : 'Belum ada data';
+        // Users
+        $totalTicketsUser = Ticket::where('user_id', Auth::id())->count();
+        $latestTicketUser = Ticket::where('user_id', Auth::id())->latest('created_at')->first();
+        $lastInputTimeTicketUser = $latestTicketUser ? $latestTicketUser->created_at->diffForHumans() : 'Belum ada data';
 
         // Komplain IPSRS
         $totalKomplainIpsrs = KomplainIpsrs::count();
@@ -189,8 +194,10 @@ class DashboardController extends Controller
         $lastInputTimeHardware = $latestHardware ? $latestHardware->created_at->diffForHumans() : 'Belum ada data';
 
         return view('pages.dashboard', compact(
-            'totalTickets',
-            'lastInputTimeTicket',
+            'totalTicketsAdmin',
+            'totalTicketsUser',
+            'lastInputTimeTicketAdmin',
+            'lastInputTimeTicketUser',
             'totalKomplainIpsrs',
             'lastInputTimeIpsrs',
             'totalKomplainOutsourcingVendor',

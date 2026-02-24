@@ -14,21 +14,41 @@
                     class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
                     <div class="flex-auto p-4">
                         <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Helpdesk
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">IT Helpdesk</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalTickets }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeTicket }}</span>
-                                    </p>
+                            @if (auth()->user()->role == 'superadmin')
+                                <div class="flex-none w-2/3 max-w-full px-3">
+                                    <div>
+                                        <p
+                                            class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
+                                            Helpdesk
+                                        </p>
+                                        <span class="mb-0 font-semibold text-sm dark:text-white">IT Helpdesk</span>
+                                        <h5 class="mb-0 font-bold text-sm dark:text-white">
+                                            Total Data: {{ $totalTicketsAdmin }}
+                                        </h5>
+                                        <p class="mb-0 dark:text-white dark:opacity-60">
+                                            <span
+                                                class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeTicketAdmin }}</span>
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
+                            @else
+                                <div class="flex-none w-2/3 max-w-full px-3">
+                                    <div>
+                                        <p
+                                            class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
+                                            Helpdesk
+                                        </p>
+                                        <span class="mb-0 font-semibold text-sm dark:text-white">IT Helpdesk</span>
+                                        <h5 class="mb-0 font-bold text-sm dark:text-white">
+                                            Total Data: {{ $totalTicketsUser }}
+                                        </h5>
+                                        <p class="mb-0 dark:text-white dark:opacity-60">
+                                            <span
+                                                class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeTicketUser }}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            @endif
                             <div class="px-3 text-right basis-1/3">
                                 <div
                                     class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-500 to-violet-500">
