@@ -15,5 +15,7 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <!-- Laravel Toast -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+{{-- Alphine JS --}}
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 {{-- Custom JS --}}
 <script src="{{ asset('assets/js/custom.js') }}"></script>

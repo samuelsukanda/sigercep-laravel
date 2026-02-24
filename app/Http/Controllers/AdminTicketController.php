@@ -52,6 +52,7 @@ class AdminTicketController extends Controller
         ]);
 
         $ticket->update($request->only('category', 'description', 'urgency', 'unit'));
+
         return redirect()->route('admin.helpdesk.index')->with('success', 'Tiket diperbarui.');
     }
 

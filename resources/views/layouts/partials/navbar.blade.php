@@ -47,6 +47,66 @@
                     </div>
                 </li>
 
+                <!-- Notifikasi Dropdown -->
+                {{-- @auth
+                    <div class="relative ml-3" x-data="{ open: false }">
+                        <button @click="open = !open"
+                            class="relative p-1 text-gray-600 hover:text-gray-900 focus:outline-none">
+                            <span class="sr-only">Notifikasi</span>
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                            </svg>
+                            @php $unreadCount = auth()->user()->unreadNotifications->count(); @endphp
+                            @if ($unreadCount > 0)
+                                <span
+                                    class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                                    {{ $unreadCount }}
+                                </span>
+                            @endif
+                        </button>
+
+                        <!-- Dropdown Notifikasi -->
+                        <div x-show="open" @click.away="open = false"
+                            class="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg overflow-hidden z-20 border border-gray-200"
+                            style="display: none;">
+                            <div class="py-2">
+                                <div class="px-4 py-2 text-sm font-semibold text-gray-700 border-b">Notifikasi</div>
+                                <div class="max-h-96 overflow-y-auto">
+                                    @forelse(auth()->user()->unreadNotifications as $notification)
+                                        <div class="px-4 py-3 hover:bg-gray-50 border-b last:border-0">
+                                            <div class="flex justify-between items-start">
+                                                <a href="{{ $notification->data['url'] ?? '#' }}?notif_id={{ $notification->id }}"
+                                                    class="block px-4 py-3 hover:bg-gray-50 border-b last:border-0"
+                                                    onclick="event.preventDefault(); markAndRedirect('{{ $notification->id }}', '{{ $notification->data['url'] ?? '#' }}');">
+                                                    <div class="flex justify-between items-start">
+                                                        <span
+                                                            class="text-sm text-gray-800">{{ $notification->data['message'] }}</span>
+                                                    </div>
+                                                </a>
+                                                <small
+                                                    class="text-xs text-gray-500">{{ $notification->created_at->diffForHumans() }}</small>
+                                            </div>
+                                            <div class="mt-1">
+                                                <a href="{{ route('notifications.read', $notification->id) }}"
+                                                    class="text-xs text-blue-600 hover:underline">Tandai sudah dibaca</a>
+                                            </div>
+                                        </div>
+                                    @empty
+                                        <div class="px-4 py-3 text-sm text-gray-500 text-center">Tidak ada notifikasi baru
+                                        </div>
+                                    @endforelse
+                                </div>
+                                @if (auth()->user()->unreadNotifications->count() > 0)
+                                    <div class="px-4 py-2 border-t">
+                                        <a href="{{ route('notifications.read-all') }}"
+                                            class="text-xs text-blue-600 hover:underline">Tandai semua sudah dibaca</a>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endauth --}}
                 {{-- Settings --}}
                 {{-- <li class="flex items-center px-2">
                     <a href="javascript:;" class="p-0 text-sm transition-all ease-nav-brand"

@@ -16,7 +16,7 @@
                             @csrf
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama Pelapor --}}
-                                <x-form.input name="nama_pelapor" label="Nama Pelapor" :value="auth()->user()->name" readonly />
+                                <x-form.input name="nama_pelapor" label="Nama Pelapor" :value="ucfirst(auth()->user()->name)" readonly />
 
                                 {{-- Unit --}}
                                 <x-form.select name="unit" label="Unit" :options="config('units.units')" :selected="old('unit', $tickets->unit ?? '')" required />

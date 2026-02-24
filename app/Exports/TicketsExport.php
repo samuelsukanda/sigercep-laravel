@@ -54,14 +54,14 @@ class TicketsExport implements FromCollection, WithHeadings, WithMapping, Should
         return [
             $ticket->ticket_number,
             $ticket->created_at->format('d-m-Y H:i'),
-            $ticket->user->name,
+            ucwords(strtolower($ticket->user->name)),
             $ticket->unit,
             $ticket->category,
             $ticket->description,
             $ticket->status,
             $ticket->approval->approval_status ?? 'Pending',
             $ticket->approval->approved_by ?? '-',
-            $ticket->approval ? $ticket->approval->duration : '-', 
+            $ticket->approval ? $ticket->approval->duration : '-',
             $ticket->resolved_at ? $ticket->resolved_at->format('d-m-Y') : '-',
         ];
     }

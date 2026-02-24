@@ -7,6 +7,9 @@ use App\Helpers\TicketHelper;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Notifications\NewTicketNotification;
+
 
 class TicketController extends Controller
 {
@@ -44,6 +47,11 @@ class TicketController extends Controller
         }
 
         $ticket->save();
+
+        $admins = User::where('role', 'superadmin')->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new NewTicketNotification($ticket));
+        }
 
         return redirect()->route('helpdesk.index')
             ->with('success', 'Tiket berhasil dibuat. Nomor tiket: ' . $ticket->ticket_number);

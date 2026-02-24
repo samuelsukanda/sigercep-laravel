@@ -31,7 +31,18 @@ class TicketApprovalNotification extends Notification
         return [
             'ticket_number' => $this->ticket->ticket_number,
             'approval_status' => $this->approval->approval_status,
-            'message' => 'Tiket ' . $this->ticket->ticket_number . ' telah di' . $this->approval->approval_status,
+            'message' => 'Tiket ' . $this->ticket->ticket_number . '  ' . $this->approval->approval_status,
+            'url' => route('helpdesk.show', $this->ticket->id),
+        ];
+    }
+
+    public function toDatabase($notifiable)
+    {
+        return [
+            'ticket_number' => $this->ticket->ticket_number,
+            'approval_status' => $this->approval->approval_status,
+            'message' => 'Tiket ' . $this->ticket->ticket_number . ' ' . $this->approval->approval_status,
+            'url' => route('helpdesk.show', $this->ticket->id),
         ];
     }
 }

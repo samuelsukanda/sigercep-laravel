@@ -197,7 +197,7 @@
                                             {{ $ticket->created_at->format('d-m-Y H:i') }}
                                         </td>
                                         <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">
-                                            {{ $ticket->user->name ?? '-' }}
+                                            {{ ucfirst($ticket->user->name) ?? '-' }}
                                         </td>
                                         <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">{{ $ticket->unit }}
                                         </td>

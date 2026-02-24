@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\AdminTicketController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\DesainGrafisController;
 use App\Http\Controllers\KomplainIpsrsController;
 use App\Http\Controllers\KomplainOutsourcingVendorController;
@@ -42,7 +43,8 @@ Route::get('/', function () {
 });
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])
+    ->middleware('throttle:5,1');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
@@ -77,6 +79,13 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth', 'role:superadmin'])->prefix('reports')->name('reports.')->group(function () {
         Route::get('summary', [ReportController::class, 'summary'])->name('summary');
         Route::get('export', [ReportController::class, 'export'])->name('export');
+    });
+
+    // Notifikasi
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+        Route::get('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+        Route::get('/notifications/{id}/go', [NotificationController::class, 'go'])->name('notifications.go');
     });
 
     // Bank Ilmu

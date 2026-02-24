@@ -27,7 +27,7 @@
                             <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
                                 <label class="block mb-1 text-sm font-semibold" style="color: #7664E4 !important;">Nama
                                     Pelapor</label>
-                                <p class="text-slate-600">{{ auth()->user()->name }}</p>
+                                <p class="text-slate-600">{{ ucfirst($ticket->user->name) }}</p>
                             </div>
 
                             <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
