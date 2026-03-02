@@ -81,6 +81,17 @@
                                 <span class="ml-1">Helpdesk</span>
                             </a>
                         </li>
+                        @if (auth()->user()->unit_id == 8)
+                            <li class="w-full">
+                                <a href="{{ route('reports.summary') }}"
+                                    class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                                    <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                                        <i class="fas fa-list text-sm leading-normal"></i>
+                                    </div>
+                                    <span class="ml-1">Laporan</span>
+                                </a>
+                            </li>
+                        @endif
                     @endif
                 </ul>
             </li>

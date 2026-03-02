@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->unsignedBigInteger('unit_id')->nullable()->after('password');
+            $table->string('unit_name')->nullable()->after('unit_id');
         });
     }
 
@@ -17,6 +18,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('unit_id');
+            $table->dropColumn('unit_name');
         });
     }
 };

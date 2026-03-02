@@ -15,8 +15,13 @@ class CheckRole
         }
 
         $user = Auth::user();
+
         if (!in_array($user->role, $roles)) {
             abort(403, 'Unauthorized access.');
+        }
+
+        if ($user->role === 'user' && $user->unit_id != 8) {
+            abort(403, 'Anda tidak memiliki akses ke menu laporan.');
         }
 
         return $next($request);

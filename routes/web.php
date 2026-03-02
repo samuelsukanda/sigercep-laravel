@@ -76,7 +76,7 @@ Route::middleware('auth')->group(function () {
     });
 
     // Report routes
-    Route::middleware(['auth', 'role:superadmin'])->prefix('reports')->name('reports.')->group(function () {
+    Route::middleware(['auth', 'role:superadmin,user'])->prefix('reports')->name('reports.')->group(function () {
         Route::get('summary', [ReportController::class, 'summary'])->name('summary');
         Route::get('export', [ReportController::class, 'export'])->name('export');
     });

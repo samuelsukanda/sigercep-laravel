@@ -19,7 +19,7 @@
                                 <x-form.input name="nama_pelapor" label="Nama Pelapor" :value="ucfirst(auth()->user()->name)" readonly />
 
                                 {{-- Unit --}}
-                                <x-form.input name="unit_name" label="Unit" :value="data_get(session('hris_user'), 'karyawan.unit.name')" readonly />
+                                <x-form.input name="unit_name" label="Unit" :value="auth()->user()->unit_name ?? '-'" readonly />
 
                                 {{-- Kategori --}}
                                 <x-form.select name="category" id="category" label="Kategori" :options="config('units.category')"
