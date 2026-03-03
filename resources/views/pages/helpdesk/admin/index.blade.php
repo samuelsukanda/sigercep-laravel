@@ -120,7 +120,7 @@
     <script>
         $(document).ready(function() {
             let table = $('#datatable').DataTable();
-            table.order([1, 'desc']).draw();
+            table.order([3, 'desc']).draw();
         });
     </script>
 @endpush
