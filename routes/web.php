@@ -66,7 +66,7 @@ Route::middleware('auth')->group(function () {
         ->only(['create', 'store', 'index', 'show']);
 
     // Admin routes
-    Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::middleware(['auth', 'role:superadmin,user'])->prefix('admin')->name('admin.')->group(function () {
         // Manajemen tiket untuk superadmin
         Route::resource('helpdesk', AdminTicketController::class)
             ->except(['create', 'store']); // hanya index, show, edit, update, destroy
