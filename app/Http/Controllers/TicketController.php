@@ -23,7 +23,7 @@ class TicketController extends Controller
         $request->validate([
             'unit_name'  => 'required|string',
             'category'   => 'required|in:Hardware,Printer,Jaringan,Software,SIMRS',
-            'description' => 'required|string|min:5',
+            'description' => 'required|string',
             'urgency'    => 'required|in:Low,Medium,High,Critical',
             'attachment' => 'nullable|file|mimes:jpg,png,jpeg,doc,docx,xls,xlsx,pdf|max:2048'
         ]);

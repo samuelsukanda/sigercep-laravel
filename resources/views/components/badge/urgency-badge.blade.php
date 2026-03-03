@@ -1,15 +1,23 @@
 @props(['urgency'])
 
 @php
-    $color = match ($urgency) {
-        'Low' => 'text-emerald-500 font-semibold',
-        'Medium' => 'text-orange-500 font-semibold',
-        'High' => 'text-red font-semibold',
-        'Critical' => 'text-dark font-semibold',
-        default => 'text-gray-500 font-semibold',
+    $bgColor = match (trim(strtolower($urgency))) {
+        'low' => '#10b981',       // hijau
+        'medium' => '#eab308',    // kuning
+        'high' => '#f97316',      // orange
+        'critical' => '#ef4444',  // merah
+        default => '#6b7280',     // abu
     };
 @endphp
 
-<span class="{{ $color }}">
+<span style="
+    background-color: {{ $bgColor }};
+    color: #ffffff;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+">
     {{ $urgency ?? '-' }}
 </span>

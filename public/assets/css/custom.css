@@ -261,3 +261,29 @@
         width: 100%;
     }
 }
+
+/* Urgency Colors */
+.urgency-low {
+    color: #10b981 !important;
+    font-weight: 600;
+}
+
+.urgency-medium {
+    color: #eab308; /* yellow-500 */
+    font-weight: 600;
+}
+
+.urgency-high {
+    color: #f97316; /* orange-500 */
+    font-weight: 600;
+}
+
+.urgency-critical {
+    color: #ef4444; /* red-500 */
+    font-weight: 600;
+}
+
+.urgency-default {
+    color: #6b7280; /* gray-500 */
+    font-weight: 600;
+}

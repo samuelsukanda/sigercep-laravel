@@ -30,6 +30,7 @@
                         <th class="px-6 py-3">Kategori</th>
                         <th class="px-6 py-3">Tingkat Urgensi</th>
                         <th class="px-6 py-3">Status Tiket</th>
+                        <th class="px-6 py-3">Status Approval</th>
                         <th class="px-6 py-3">Aksi</th>
                     </tr>
                 </thead>
@@ -41,7 +42,7 @@
                                 {{ ucfirst($ticket->user->name) }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $ticket->unit_name}}
+                                {{ $ticket->unit_name }}
                             </td>
                             <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($ticket->created_at)->timestamp }}">
                                 {{ \Carbon\Carbon::parse($ticket->created_at)->translatedFormat('d F Y H:i') }}
@@ -51,7 +52,10 @@
                                 <x-badge.urgency-badge :urgency="$ticket->urgency" />
                             </td>
                             <td class="px-6 py-4">
-                                <x-badge.status-badge :status="$ticket->status" />
+                                <x-badge.status-ticket-badge :status="$ticket->status" />
+                            </td>
+                            <td class="px-6 py-4">
+                                <x-badge.status-approval-badge :status="$ticket->approval?->approval_status ?? 'Pending'" />
                             </td>
                             <td class="px-6 py-4 space-x-2 text-center">
                                 <x-button.action href="{{ route('helpdesk.show', $ticket->id) }}" icon="eye"

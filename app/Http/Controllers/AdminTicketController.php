@@ -89,18 +89,18 @@ class AdminTicketController extends Controller
         $approval->approved_by = Auth::user()->name;
         $approval->save();
 
-        if (in_array($request->approval_status, ['Rejected', 'Need Clarification'])) {
-            $ticket->status = 'Closed';
-            $ticket->resolved_at = now();
-            $ticket->save();
+        // if (in_array($request->approval_status, ['Rejected', 'Need Clarification'])) {
+        //     $ticket->status = 'Closed';
+        //     $ticket->resolved_at = now();
+        //     $ticket->save();
 
-            TicketUpdate::create([
-                'ticket_id' => $ticket->id,
-                'user_id' => Auth::id(),
-                'status' => 'Closed',
-                'note' => 'Tiket ditutup otomatis karena status approval: ' . $request->approval_status . '. Catatan: ' . ($request->approval_note ?? ''),
-            ]);
-        }
+        //     TicketUpdate::create([
+        //         'ticket_id' => $ticket->id,
+        //         'user_id' => Auth::id(),
+        //         'status' => 'Closed',
+        //         'note' => 'Tiket ditutup otomatis karena status approval: ' . $request->approval_status . '. Catatan: ' . ($request->approval_note ?? ''),
+        //     ]);
+        // }
 
         $ticket->user->notify(new TicketApprovalNotification($ticket, $approval));
 

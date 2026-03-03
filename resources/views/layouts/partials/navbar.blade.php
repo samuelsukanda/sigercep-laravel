@@ -29,7 +29,7 @@
                     <div class="flex items-center space-x-3">
                         @if (Auth::check())
                             <span class="text-sm font-semibold uppercase"
-                                style="color: #7664E4 !important;">{{ Auth::user()->name }}</span>
+                                style="color: #7664E4 !important;">{{ ucwords(str_replace('.', ' ', Auth::user()->name)) }}</span>
                         @endif
                     </div>
                 </li>

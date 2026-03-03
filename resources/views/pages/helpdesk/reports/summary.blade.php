@@ -197,48 +197,25 @@
                                             {{ $ticket->created_at->format('d-m-Y H:i') }}
                                         </td>
                                         <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">
-                                            {{ ucfirst($ticket->user->name) ?? '-' }}
+                                            {{ ucwords(str_replace('.', ' ', $ticket->user->name)) ?? '-' }}
                                         </td>
-                                        <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">{{ $ticket->unit_name }}
+                                        <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">
+                                            {{ $ticket->unit_name }}
                                         </td>
                                         <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">
                                             {{ $ticket->category }}</td>
                                         <td class="py-3 px-3 text-gray-500 max-w-[200px] truncate text-s">
                                             {{ \Str::limit($ticket->description, 40) }}
                                         </td>
-                                        <td class="py-3 px-3 whitespace-nowrap text-s">
-                                            @if ($ticket->status == 'Open')
-                                                <span
-                                                    class="px-2 py-1 bg-cyan-50 text-cyan-700 rounded-md text-s font-medium">Open</span>
-                                            @elseif ($ticket->status == 'In Progress')
-                                                <span
-                                                    class="px-2 py-1 bg-blue-50 text-blue-700 rounded-md text-s font-medium">In
-                                                    Progress</span>
-                                            @else
-                                                <span
-                                                    class="px-2 py-1 bg-gray-100 text-gray-600 rounded-md text-s font-medium">Closed</span>
-                                            @endif
+                                        <td class="py-3 px-3 whitespace-nowrap text-s text-gray-600">
+                                            {{ $ticket->status ?? 'Closed' }}
                                         </td>
-                                        <td class="py-3 px-3 whitespace-nowrap text-s">
-                                            @if ($ticket->approval)
-                                                @if ($ticket->approval->approval_status == 'Approved')
-                                                    <span
-                                                        class="px-2 py-1 bg-green-50 text-green-700 rounded-md text-s font-medium">Approved</span>
-                                                @elseif ($ticket->approval->approval_status == 'Rejected')
-                                                    <span
-                                                        class="px-2 py-1 bg-red-50 text-red-600 rounded-md text-s font-medium">Rejected</span>
-                                                @else
-                                                    <span
-                                                        class="px-2 py-1 bg-amber-50 text-amber-700 rounded-md text-s font-medium">Need
-                                                        Clarification</span>
-                                                @endif
-                                            @else
-                                                <span
-                                                    class="px-2 py-1 bg-gray-100 text-gray-500 rounded-md text-s font-medium">Pending</span>
-                                            @endif
+                                        <td class="py-3 px-3 whitespace-nowrap text-s text-gray-600">
+                                            {{ $ticket->approval?->approval_status ?? 'Pending' }}
                                         </td>
                                         <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">
-                                            {{ $ticket->approval->approved_by ?? '-' }}</td>
+                                            {{ $ticket->approval?->approved_by ? ucwords(str_replace('.', ' ', $ticket->approval?->approved_by)) : '-' }}
+                                        </td>
                                         <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">
                                             {{ $ticket->approval->duration ?? '-' }}</td>
                                         <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">

@@ -152,7 +152,7 @@
                                                 Approved By
                                             </td>
                                             <td class="w-3/4 px-4 py-3 align-top">
-                                                {{ $ticket->approval->approved_by }}
+                                                {{ ucwords(str_replace('.', ' ', $ticket->approval->approved_by)) }}
                                             </td>
                                         </tr>
 
@@ -214,7 +214,11 @@
                 </div>
 
                 {{-- Update Status Penanganan  --}}
-                @if ($ticket->approval && $ticket->approval->approval_status == 'Approved' && $ticket->status != 'Closed')
+                @php
+                    $allowedStatus = ['Approved', 'Need Clarification', 'Rejected'];
+                @endphp
+
+                @if ($ticket->approval && in_array($ticket->approval->approval_status, $allowedStatus) && $ticket->status != 'Closed')
                     <div class="relative flex flex-col bg-white shadow-soft-xl rounded-2xl mb-4">
                         <div class="p-6 pb-0 mb-0 bg-white rounded-t-2xl">
                             <h6 class="mb-0 font-bold text-lg">Update Status Penanganan</h6>

@@ -151,7 +151,7 @@
                                                 Approved By
                                             </td>
                                             <td class="w-3/4 px-4 py-3 align-top">
-                                                {{ $ticket->approval->approved_by }}
+                                                {{ ucwords(str_replace('.', ' ', $ticket->approval->approved_by)) }}
                                             </td>
                                         </tr>
 
