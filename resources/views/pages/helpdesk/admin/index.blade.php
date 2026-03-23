@@ -10,10 +10,10 @@
         </div>
 
         {{-- TABLE --}}
-        <div class="relative overflow-x-auto shadow-md rounded-lg px-2 dark:text-white">
+        <div class="relative overflow-x-auto shadow-md rounded-lg px-2 bg-white dark:text-white">
             <table id="datatable" data-date-column="3"
                 class="min-w-full divide-y divide-gray-200 dark:divide-white-200 dark:text-white">
-                <thead class="text-xs text-slate-500 uppercase bg-slate-100 dark:text-white">
+                <thead class="text-xs text-slate-500 uppercase bg-white dark:text-white">
                     <tr>
                         <th class="px-6 py-3">No. Tiket</th>
                         <th class="px-6 py-3">Nama</th>
@@ -27,7 +27,7 @@
                     </tr>
                 </thead>
 
-                <tbody class="text-s text-slate-500 bg-slate-100">
+                <tbody class="text-s text-slate-500 bg-white">
                     @foreach ($tickets as $ticket)
                         <tr>
                             <td class="px-6 py-4 font-semibold">{{ $ticket->ticket_number }}</td>

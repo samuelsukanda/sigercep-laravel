@@ -6,10 +6,10 @@
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex flex-wrap -mx-3">
             <div class="w-full max-w-full px-3 mx-auto mt-0">
-                <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex justify-content-between align-items-center">
                     <h3>Detail Tiket #{{ $ticket->ticket_number }}</h3>
                 </div>
-                <div class="relative flex flex-col bg-white shadow-soft-xl rounded-2xl mb-4">
+                <div class="relative flex flex-col bg-white shadow-soft-xl rounded-2xl">
 
                     {{-- Informasi Tiket --}}
                     <div class="p-6 pb-0 mb-0 bg-white rounded-t-2xl">
@@ -18,58 +18,58 @@
                     <div class="flex-auto p-6">
                         <div class="flex flex-wrap -mx-3">
 
-                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
-                                <label class="block mb-1 text-sm font-semibold" style="color: #7664E4 !important;">No.
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3">
+                                <label class="block  text-sm font-semibold" style="color: #7664E4 !important;">No.
                                     Tiket</label>
                                 <p class="text-slate-600">{{ $ticket->ticket_number }}</p>
                             </div>
 
-                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
-                                <label class="block mb-1 text-sm font-semibold" style="color: #7664E4 !important;">Nama
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3">
+                                <label class="block  text-sm font-semibold" style="color: #7664E4 !important;">Nama
                                     Pelapor</label>
                                 <p class="text-slate-600"> {{ ucfirst($ticket->user->name) }}</p>
                             </div>
 
-                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
-                                <label class="block mb-1 text-sm font-semibold"
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3">
+                                <label class="block  text-sm font-semibold"
                                     style="color: #7664E4 !important;">Divisi</label>
                                 <p class="text-slate-600">{{ $ticket->unit_name }}</p>
                             </div>
 
-                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
-                                <label class="block mb-1 text-sm font-semibold"
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3">
+                                <label class="block  text-sm font-semibold"
                                     style="color: #7664E4 !important;">Tanggal/Jam</label>
                                 <p class="text-slate-600">
                                     {{ \Carbon\Carbon::parse($ticket->created_at)->translatedFormat('d F Y H:i') }}
                                 </p>
                             </div>
 
-                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
-                                <label class="block mb-1 text-sm font-semibold"
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3">
+                                <label class="block  text-sm font-semibold"
                                     style="color: #7664E4 !important;">Kategori</label>
                                 <p class="text-slate-600">{{ $ticket->category }}</p>
                             </div>
 
-                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
-                                <label class="block mb-1 text-sm font-semibold" style="color: #7664E4 !important;">Tingkat
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3">
+                                <label class="block  text-sm font-semibold" style="color: #7664E4 !important;">Tingkat
                                     Urgensi</label>
                                 <p class="text-slate-600">{{ $ticket->urgency }}</p>
                             </div>
 
-                            <div class="w-full md:w-1/2 xl:w-1/3 px-3 mb-4">
-                                <label class="block mb-1 text-sm font-semibold" style="color: #7664E4 !important;">Status
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3">
+                                <label class="block  text-sm font-semibold" style="color: #7664E4 !important;">Status
                                     Tiket</label>
                                 <p class="text-slate-600">{{ $ticket->status ?? '-' }}</p>
                             </div>
 
-                            <div class="w-full px-3 mb-4">
-                                <label class="block mb-1 text-sm font-semibold"
+                            <div class="w-full px-3">
+                                <label class="block  text-sm font-semibold"
                                     style="color: #7664E4 !important;">Deskripsi</label>
                                 <p class="text-slate-600">{{ $ticket->description }}</p>
                             </div>
 
                             <div class="w-full px-3">
-                                <label class="block mb-1 text-sm font-semibold" style="color: #7664E4 !important;">Lampiran
+                                <label class="block  text-sm font-semibold" style="color: #7664E4 !important;">Lampiran
                                     Pendukung</label>
                                 @if ($ticket->attachment)
                                     <img src="{{ asset('storage/' . $ticket->attachment) }}"
@@ -85,7 +85,7 @@
                 </div>
 
                 {{-- Approval Tiket --}}
-                <div class="relative flex flex-col bg-white shadow-soft-xl rounded-2xl mb-4">
+                <div class="relative flex flex-col bg-white shadow-soft-xl rounded-2xl">
                     <div class="p-6 pb-0 mb-0 bg-white rounded-t-2xl">
                         <h6 class="mb-0 font-bold text-lg">Informasi Approval</h6>
                     </div>
@@ -215,11 +215,11 @@
 
                 {{-- Update Status Penanganan  --}}
                 @php
-                    $allowedStatus = ['Approved', 'Need Clarification', 'Rejected'];
+                    $allowedStatus = ['Need Clarification'];
                 @endphp
 
                 @if ($ticket->approval && in_array($ticket->approval->approval_status, $allowedStatus) && $ticket->status != 'Closed')
-                    <div class="relative flex flex-col bg-white shadow-soft-xl rounded-2xl mb-4">
+                    <div class="relative flex flex-col bg-white shadow-soft-xl rounded-2xl">
                         <div class="p-6 pb-0 mb-0 bg-white rounded-t-2xl">
                             <h6 class="mb-0 font-bold text-lg">Update Status Penanganan</h6>
                         </div>
@@ -264,7 +264,7 @@
                         <div class="flex-auto p-6">
                             <div class="space-y-4">
                                 @foreach ($ticket->updates as $update)
-                                    <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 mb-4">
+                                    <div class="p-4 bg-gray-50 rounded-xl border border-gray-200">
                                         <div class="flex flex-wrap items-center gap-2 mb-2">
                                             <span class="px-2 py-1 text-xs font-semibold bg-gray-300 rounded">
                                                 {{ $update->created_at->format('d-m-Y H:i') }}

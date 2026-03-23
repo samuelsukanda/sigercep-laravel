@@ -1,5 +1,6 @@
 <!-- Navbar -->
-<nav class="relative flex flex-wrap items-center justify-between px-0 py-2 mx-6 transition-all ease-in shadow-none duration-250 rounded-2xl lg:flex-nowrap lg:justify-start"
+<nav x-data="{ notifOpen: false, logoutOpen: false }"
+    class="relative flex flex-wrap items-center justify-between px-0 py-2 mx-6 transition-all ease-in shadow-none duration-250 rounded-2xl lg:flex-nowrap lg:justify-start"
     navbar-main navbar-scroll="false">
     <div class="mt-4 flex items-center justify-between w-full px-4 flex-wrap-inherit">
 
@@ -28,8 +29,8 @@
                 <li class="flex items-center h-full cursor-pointer">
                     <div class="flex items-center space-x-3">
                         @if (Auth::check())
-                            <span class="text-sm font-semibold uppercase"
-                                style="color: #7664E4 !important;">{{ ucwords(str_replace('.', ' ', Auth::user()->name)) }}</span>
+                        <span class="text-sm font-semibold uppercase"
+                            style="color: #7664E4 !important;">{{ ucwords(str_replace('.', ' ', Auth::user()->name)) }}</span>
                         @endif
                     </div>
                 </li>
@@ -41,72 +42,121 @@
                 <li class="flex items-center h-full pr-2 cursor-pointer">
                     <div class="flex items-center space-x-3">
                         @if (Auth::check())
-                            <span class="text-sm font-semibold uppercase"
-                                style="color: #7664E4 !important;">{{ Auth::user()->role }}</span>
+                        <span class="text-sm font-semibold uppercase"
+                            style="color: #7664E4 !important;">{{ Auth::user()->role }}</span>
                         @endif
                     </div>
                 </li>
 
-                <!-- Notifikasi Dropdown -->
-                {{-- @auth
-                    <div class="relative ml-3" x-data="{ open: false }">
-                        <button @click="open = !open"
-                            class="relative p-1 text-gray-600 hover:text-gray-900 focus:outline-none">
-                            <span class="sr-only">Notifikasi</span>
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                            </svg>
-                            @php $unreadCount = auth()->user()->unreadNotifications->count(); @endphp
-                            @if ($unreadCount > 0)
-                                <span
-                                    class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                                    {{ $unreadCount }}
-                                </span>
-                            @endif
-                        </button>
+                <!-- Notifikasi -->
+                @auth
+                <li class="relative flex items-center px-2" @click="notifOpen = !notifOpen; logoutOpen = false">
 
-                        <!-- Dropdown Notifikasi -->
-                        <div x-show="open" @click.away="open = false"
-                            class="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg overflow-hidden z-20 border border-gray-200"
-                            style="display: none;">
-                            <div class="py-2">
-                                <div class="px-4 py-2 text-sm font-semibold text-gray-700 border-b">Notifikasi</div>
-                                <div class="max-h-96 overflow-y-auto">
-                                    @forelse(auth()->user()->unreadNotifications as $notification)
-                                        <div class="px-4 py-3 hover:bg-gray-50 border-b last:border-0">
-                                            <div class="flex justify-between items-start">
-                                                <a href="{{ $notification->data['url'] ?? '#' }}?notif_id={{ $notification->id }}"
-                                                    class="block px-4 py-3 hover:bg-gray-50 border-b last:border-0"
-                                                    onclick="event.preventDefault(); markAndRedirect('{{ $notification->id }}', '{{ $notification->data['url'] ?? '#' }}');">
-                                                    <div class="flex justify-between items-start">
-                                                        <span
-                                                            class="text-sm text-gray-800">{{ $notification->data['message'] }}</span>
-                                                    </div>
-                                                </a>
-                                                <small
-                                                    class="text-xs text-gray-500">{{ $notification->created_at->diffForHumans() }}</small>
-                                            </div>
-                                            <div class="mt-1">
-                                                <a href="{{ route('notifications.read', $notification->id) }}"
-                                                    class="text-xs text-blue-600 hover:underline">Tandai sudah dibaca</a>
-                                            </div>
-                                        </div>
-                                    @empty
-                                        <div class="px-4 py-3 text-sm text-gray-500 text-center">Tidak ada notifikasi baru
-                                        </div>
-                                    @endforelse
-                                </div>
-                                @if (auth()->user()->unreadNotifications->count() > 0)
-                                    <div class="px-4 py-2 border-t">
-                                        <a href="{{ route('notifications.read-all') }}"
-                                            class="text-xs text-blue-600 hover:underline">Tandai semua sudah dibaca</a>
-                                    </div>
-                                @endif
+                    <!-- BUTTON NOTIF -->
+                    <a href="javascript:;" @click="open = !open"
+                        class="block p-0 text-sm transition-all ease-nav-brand relative"
+                        style="color: #7664E4 !important;">
+
+                        <!-- ICON BELL -->
+                        <i class="far fa-bell bell-anim"></i>
+
+                        @php $unreadCount = auth()->user()->unreadNotifications->count(); @endphp
+
+                        <!-- 🔴 DOT -->
+                        @if ($unreadCount > 0)
+                        <span
+                            style="
+                                    position: absolute;
+                                    top: -2px;
+                                    right: -4px;
+                                    width: 6px;
+                                    height: 6px;
+                                    background: red;
+                                    border-radius: 50%;
+                                "></span>
+                        @endif
+
+                    </a>
+
+                    <!-- DROPDOWN -->
+                    <div x-show="notifOpen" @click.away="notifOpen = false"
+                        x-transition:enter="transition ease-out duration-100"
+                        x-transition:enter-start="opacity-0 translate-y-2 scale-95"
+                        x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                        x-transition:leave-end="opacity-0 translate-y-2 scale-95"
+                        class="bg-white rounded-xl shadow-xl border border-gray-200 z-50"
+                        style="display:none; position:fixed; top:70px; right:20px; width:360px;">
+
+                        <div class="py-2">
+
+                            <div class="px-5 py-3 text-sm font-semibold text-gray-700 border-b">
+                                Notifikasi
                             </div>
+
+                            <div class="max-h-96 overflow-y-auto">
+
+                                @forelse(auth()->user()->unreadNotifications as $notification)
+                                <div class="px-5 py-4 hover:bg-gray-50 border-b last:border-0">
+
+                                    <div class="flex items-start">
+
+                                        <!-- DOT ITEM -->
+                                        <div
+                                            style="width:8px; height:8px; background:red; border-radius:50%; margin-top:6px; margin-right:10px;">
+                                        </div>
+
+                                        <div style="flex:1;">
+                                            <a href="{{ $notification->data['url'] ?? '#' }}"
+                                                onclick="event.preventDefault(); markAndRedirect('{{ $notification->id }}', '{{ $notification->data['url'] ?? '#' }}');">
+
+                                                <div class="text-sm text-gray-800 font-medium">
+                                                    {{ $notification->data['message'] }}
+                                                </div>
+
+                                                <div class="text-xs text-gray-500 mt-1">
+                                                    {{ $notification->created_at->diffForHumans() }}
+                                                </div>
+                                            </a>
+
+                                            <div class="mt-2">
+                                                <a href="{{ route('notifications.read', $notification->id) }}"
+                                                    class="text-xs text-gray-500"
+                                                    onmouseover="this.style.color='#2563eb'"
+                                                    onmouseout="this.style.color='#6b7280'">
+                                                    Tandai sudah dibaca
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                @empty
+                                <div class="px-3 py-2 text-sm text-gray-500 text-center">
+                                    Tidak ada notifikasi
+                                </div>
+                                @endforelse
+
+                            </div>
+
+                            @if ($unreadCount > 0)
+                            <div class="px-2 py-1 border-t">
+                                <a href="{{ route('notifications.read-all') }}" class="text-xs text-gray-500"
+                                    onmouseover="this.style.color='#2563eb'"
+                                    onmouseout="this.style.color='#6b7280'">
+                                    Tandai semua sudah dibaca
+                                </a>
+                            </div>
+                            @endif
+
                         </div>
                     </div>
-                @endauth --}}
+
+                </li>
+                @endauth
+
                 {{-- Settings --}}
                 {{-- <li class="flex items-center px-2">
                     <a href="javascript:;" class="p-0 text-sm transition-all ease-nav-brand"
@@ -120,40 +170,53 @@
                     <p class="hidden transform-dropdown-show"></p>
 
                     <!-- Tombol ikon dropdown -->
-                    <a href="javascript:;" dropdown-logout-trigger
+                    <a href="javascript:;" @click="logoutOpen = !logoutOpen; notifOpen = false"
+                        x-transition:enter="transition ease-out duration-100"
+                        x-transition:enter-start="opacity-0 translate-y-2 scale-95"
+                        x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                        x-transition:leave-end="opacity-0 translate-y-2 scale-95"
                         class="block p-0 text-sm transition-all ease-nav-brand" aria-expanded="false"
                         style="color: #7664E4 !important;">
-                        <i class="cursor-pointer fa fa-power-off"></i>
+                        <i class="fa fa-power-off"></i>
                     </a>
 
                     <!-- Dropdown Menu -->
-                    <ul dropdown-logout-menu
-                        class="text-sm transform-dropdown before:font-awesome before:leading-default before:duration-350 before:ease lg:shadow-3xl duration-250 min-w-44 before:sm:right-8 before:text-5.5 pointer-events-none absolute right-0 top-0 z-50 origin-top list-none rounded-lg border-0 border-transparent dark:shadow-dark-xl dark:bg-slate-850 bg-white px-2 py-2 text-left text-slate-500 opacity-0 transition-all before:absolute before:right-2 before:top-0 before:z-50 before:content-['\f0d8'] sm:-mr-6 lg:mt-2 lg:block">
+                    <ul x-show="logoutOpen" @click.away="logoutOpen = false" x-transition
+                        class="bg-white rounded-lg shadow-lg z-50"
+                        style="
+                            display:none;
+                            position: fixed;
+                            top: 70px;
+                            right: 20px;
+                            min-width: 160px;
+                        ">
 
                         <!-- Item Setting -->
                         {{-- <li class="relative">
                             <a href="{{ route('roles.index') }}"
-                                class="dark:hover:bg-slate-900 ease py-1.2 clear-both block w-full whitespace-nowrap rounded-lg px-4 duration-300 hover:bg-gray-200 hover:text-slate-700 lg:transition-colors text-sm font-semibold dark:text-white">
-                                <i class="fas fa-cog mr-2"></i>
-                                Settings
-                            </a>
-                        </li> --}}
+                        class="dark:hover:bg-slate-900 ease py-1.2 clear-both block w-full whitespace-nowrap rounded-lg px-4 duration-300 hover:bg-gray-200 hover:text-slate-700 lg:transition-colors text-sm font-semibold dark:text-white">
+                        <i class="fas fa-cog mr-2"></i>
+                        Settings
+                        </a>
+                </li> --}}
 
-                        <!-- Item Logout -->
-                        <li class="relative">
-                            <a href="{{ route('logout') }}"
-                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                                class="dark:hover:bg-slate-900 ease py-1.2 clear-both block w-full whitespace-nowrap rounded-lg px-4 duration-300 hover:bg-gray-200 hover:text-slate-700 lg:transition-colors text-sm font-semibold dark:text-white">
-                                <i class="fas fa-right-from-bracket mr-2"></i>
-                                Logout
-                            </a>
+                <!-- Item Logout -->
+                <li class="relative">
+                    <a href="{{ route('logout') }}"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                        class="dark:hover:bg-slate-900 ease py-1.2 clear-both block w-full whitespace-nowrap rounded-lg px-4 duration-300 hover:bg-gray-200 hover:text-slate-700 lg:transition-colors text-sm font-semibold dark:text-white">
+                        <i class="fas fa-right-from-bracket mr-2"></i>
+                        Logout
+                    </a>
 
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                                @csrf
-                            </form>
-                        </li>
-                    </ul>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                        @csrf
+                    </form>
                 </li>
+            </ul>
+            </li>
 
         </div>
     </div>

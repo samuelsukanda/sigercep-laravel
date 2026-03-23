@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
 use App\Models\User;
 
 class AuthController extends Controller
@@ -36,10 +35,11 @@ class AuthController extends Controller
         }
 
         // 🔹 Login ke HRIS API
-        $response = Http::post('http://hrisdummy.hamori:8084/api/login', [
+        $response = Http::withoutVerifying()->get('https://hris.rs-hamori.co.id/api/login', [
             'email' => $request->username,
             'password' => $request->password,
         ]);
+        dd($response->status());
 
         if (!$response->successful() || !$response->json('success')) {
             return back()->withErrors([
@@ -82,7 +82,7 @@ class AuthController extends Controller
         if ($token) {
             try {
                 Http::withToken($token)
-                    ->post(' http://hrisdummy.hamori:8084/api/logout');
+                    ->post(' https://hris.rs-hamori.co.id/api/logout');
             } catch (\Exception $e) {
             }
         }
