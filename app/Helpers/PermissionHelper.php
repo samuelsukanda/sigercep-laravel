@@ -34,7 +34,7 @@ class PermissionHelper
             'peminjaman_aset', 'pengembalian_aset', 'laporan_aset_rusak', 'pemindahan_aset',
         ];
 
-        if ($username === 'hamori') {
+        if ($role === 'user') {
             if (in_array($menu, $hamoriMenus)) {
                 return in_array($action, ['create', 'read']);
             }

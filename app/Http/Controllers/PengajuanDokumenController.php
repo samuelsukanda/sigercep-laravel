@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PengajuanDokumen;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class PengajuanDokumenController extends Controller
 {
@@ -85,6 +86,9 @@ class PengajuanDokumenController extends Controller
             $file,
             $originalName
         );
+
+        $tanggal_pengajuan = Carbon::createFromFormat('d-m-Y', $request->tanggal_pengajuan)->format('Y-m-d');
+        $validated['tanggal_pengajuan'] = $tanggal_pengajuan;
 
         PengajuanDokumen::create($validated);
 

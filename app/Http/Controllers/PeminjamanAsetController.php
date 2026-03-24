@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PeminjamanAset;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class PeminjamanAsetController extends Controller
 {
@@ -66,6 +67,9 @@ class PeminjamanAsetController extends Controller
             $pathBarcode = $fileBarcode->storeAs('images/peminjaman-aset/foto-barcode', $namaFileBarcode, 'public');
             $validated['foto_barcode'] = $pathBarcode;
         }
+
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
 
         PeminjamanAset::create($validated);
 

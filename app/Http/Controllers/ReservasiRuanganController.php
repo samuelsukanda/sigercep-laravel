@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ReservasiRuangan;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class ReservasiRuanganController extends Controller
 {
@@ -68,6 +69,9 @@ class ReservasiRuanganController extends Controller
             return back()->withErrors(['Maaf, waktu yang anda inputkan sudah ada yang mendaftar.'])->withInput();
         }
 
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
+
         ReservasiRuangan::create($validated);
 
         return redirect()->route('reservasi.ruangan.index')
@@ -116,6 +120,9 @@ class ReservasiRuanganController extends Controller
             return back()->withErrors(['Maaf, waktu yang anda inputkan sudah ada yang mendaftar.'])->withInput();
         }
 
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
+        
         $reservasi = ReservasiRuangan::findOrFail($id);
         $reservasi->update($validated);
 

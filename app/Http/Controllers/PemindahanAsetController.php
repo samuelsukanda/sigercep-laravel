@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PemindahanAset;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class PemindahanAsetController extends Controller
 {
@@ -67,6 +68,9 @@ class PemindahanAsetController extends Controller
             $validated['foto_barcode'] = $pathBarcode;
         }
 
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
+
         PemindahanAset::create($validated);
 
         return redirect()->route('pengadaan-aset.pemindahan-aset.index')->with('success', 'Data berhasil disimpan.');
@@ -96,6 +100,9 @@ class PemindahanAsetController extends Controller
             'foto_barang' => 'nullable|image|mimes:jpg,jpeg,png',
             'foto_barcode' => 'nullable|image|mimes:jpg,jpeg,png',
         ]);
+
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
 
         $pengadaan = PemindahanAset::findOrFail($id);
 

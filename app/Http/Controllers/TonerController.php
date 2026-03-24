@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Toner;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class TonerController extends Controller
 {
@@ -63,6 +64,9 @@ class TonerController extends Controller
             $validated['tanda_tangan'] = 'storage/' . $path;
         }
 
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
+
         Toner::create($validated);
 
         return redirect()->route('toner.index')->with('success', 'Data berhasil disimpan.');
@@ -110,6 +114,9 @@ class TonerController extends Controller
         } else {
             $validated['tanda_tangan'] = $toner->tanda_tangan;
         }
+
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
 
         $toner->update($validated);
 

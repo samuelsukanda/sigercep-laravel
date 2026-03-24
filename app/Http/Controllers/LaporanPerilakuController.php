@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\LaporanPerilaku;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class LaporanPerilakuController extends Controller
 {
@@ -68,6 +69,9 @@ class LaporanPerilakuController extends Controller
             $file,
             $originalName
         );
+
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
 
         LaporanPerilaku::create($validated);
 
@@ -137,6 +141,9 @@ class LaporanPerilakuController extends Controller
                 $originalName
             );
         }
+
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
 
         $laporanPerilaku->update($validated);
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\LaporanAsetRusak;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class LaporanAsetRusakController extends Controller
 {
@@ -68,6 +69,9 @@ class LaporanAsetRusakController extends Controller
             $validated['foto_barcode'] = $pathBarcode;
         }
 
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
+
         LaporanAsetRusak::create($validated);
 
         return redirect()->route('pengadaan-aset.laporan-aset-rusak.index')->with('success', 'Data berhasil disimpan.');
@@ -114,6 +118,9 @@ class LaporanAsetRusakController extends Controller
             $pathBarcode = $fileBarcode->storeAs('images/laporan-aset-rusak/foto-barcode', $namaFileBarcode, 'public');
             $validated['foto_barcode'] = $pathBarcode;
         }
+
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
 
         $pengadaan->update($validated);
 

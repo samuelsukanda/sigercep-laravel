@@ -285,7 +285,6 @@ $(document).ready(function () {
         placeholder: "Pilih Status Approval",
         allowClear: true,
     });
-
 });
 
 // Flatpickr
@@ -328,9 +327,8 @@ flatpickr("#estimated_completion", {
     enableTime: true,
     dateFormat: "d-m-Y H:i",
     time_24hr: true,
-    allowInput: false
+    allowInput: false,
 });
-
 
 flatpickr("#waktu_kejadian", {
     enableTime: true,

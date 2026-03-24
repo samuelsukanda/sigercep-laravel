@@ -61,6 +61,9 @@ class KomplainIpsrsController extends Controller
             $validated['foto'] = $path;
         }
 
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
+
         KomplainIpsrs::create($validated);
 
         return redirect()->route('komplain.ipsrs.index')->with('success', 'Data berhasil disimpan.');

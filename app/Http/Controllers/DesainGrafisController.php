@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\DesainGrafis;
+use Carbon\Carbon;
 
 class DesainGrafisController extends Controller
 {
@@ -62,6 +63,8 @@ class DesainGrafisController extends Controller
             $validated['menit'] = null;
             $validated['detik'] = null;
         }
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
 
         DesainGrafis::create($validated);
 
@@ -108,6 +111,9 @@ class DesainGrafisController extends Controller
             $updateData['menit'] = null;
             $updateData['detik'] = null;
         }
+
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
 
         $desain->update($updateData);
 

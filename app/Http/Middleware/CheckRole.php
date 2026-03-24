@@ -20,8 +20,8 @@ class CheckRole
             abort(403, 'Unauthorized access.');
         }
 
-        if ($user->role === 'user' && $user->unit_id != 8) {
-            abort(403, 'Anda tidak memiliki akses ke menu laporan.');
+        if ($user->role === 'user' && $user->unit != 'Teknologi Informasi') {
+            abort(403, 'Anda tidak memiliki akses ke menu ini.');
         }
 
         return $next($request);

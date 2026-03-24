@@ -6,9 +6,12 @@
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex justify-between items-center mb-4">
             <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Reservasi Ruangan</h6>
+
+            @canAccess('reservasi_ruangan', 'create')
             <x-button.link href="{{ route('reservasi.ruangan.create') }}">
                 Tambah Data
             </x-button.link>
+            @endcanAccess
         </div>
 
         @if (session('success'))
@@ -61,7 +64,7 @@
                             </td>
                             <td class="px-6 py-4">{{ $item->ruang }}</td>
                             <td class="px-6 py-4">
-                                <x-badge.approval-badge :approval="$item->approval" />
+                                <x-badge.status-approval-badge :status="$item->approval" />
                             </td>
                             <td class="px-6 py-4 space-x-2 text-center">
                                 @canAccess('reservasi_ruangan', 'update')

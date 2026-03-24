@@ -35,11 +35,10 @@ class AuthController extends Controller
         }
 
         // 🔹 Login ke HRIS API
-        $response = Http::withoutVerifying()->get('https://hris.rs-hamori.co.id/api/login', [
+        $response = Http::withoutVerifying()->post('https://hris.rs-hamori.co.id/api/login', [
             'email' => $request->username,
             'password' => $request->password,
         ]);
-        dd($response->status());
 
         if (!$response->successful() || !$response->json('success')) {
             return back()->withErrors([
@@ -51,8 +50,7 @@ class AuthController extends Controller
         $apiUser = $result['data']['user'];
         $token   = $result['data']['access_token'];
 
-        $unitId   = data_get($apiUser, 'karyawan.unit.id');
-        $unitName = data_get($apiUser, 'karyawan.unit.name');
+        $unit = data_get($apiUser, 'karyawan.unit.name');
 
         $user = User::updateOrCreate(
             ['email' => $apiUser['email']],
@@ -60,8 +58,7 @@ class AuthController extends Controller
                 'name'       => $apiUser['name'],
                 'username'   => $apiUser['name'],
                 'password'   => bcrypt($request->password),
-                'unit_id'    => $unitId,
-                'unit_name'  => $unitName,
+                'unit'  => $unit,
             ]
         );
 

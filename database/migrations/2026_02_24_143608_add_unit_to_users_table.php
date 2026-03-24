@@ -9,16 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('unit_id')->nullable()->after('password');
-            $table->string('unit_name')->nullable()->after('unit_id');
+            $table->string('unit')->nullable()->after('password');
         });
     }
 
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('unit_id');
-            $table->dropColumn('unit_name');
+            $table->dropColumn('unit');
         });
     }
 };

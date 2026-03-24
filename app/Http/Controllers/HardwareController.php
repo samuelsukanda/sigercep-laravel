@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Hardware;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class HardwareController extends Controller
 {
@@ -48,6 +49,9 @@ class HardwareController extends Controller
 
             $validated['tanda_tangan'] = 'storage/' . $path;
         }
+
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
 
         Hardware::create($validated);
 
@@ -97,6 +101,9 @@ class HardwareController extends Controller
         } else {
             $validated['tanda_tangan'] = $hardware->tanda_tangan;
         }
+
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
 
         $hardware->update($validated);
 

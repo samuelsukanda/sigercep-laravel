@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\KesiapanAmbulance;
+use Carbon\Carbon;
 
 class KesiapanAmbulanceController extends Controller
 {
@@ -66,6 +67,9 @@ class KesiapanAmbulanceController extends Controller
             unset($data["{$field}_input"]);
         }
 
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
+
         KesiapanAmbulance::create($data);
 
         return redirect()->route('kesiapan-ambulance.index')->with('success', 'Data berhasil disimpan.');
@@ -123,6 +127,9 @@ class KesiapanAmbulanceController extends Controller
 
             unset($data["{$field}_input"]);
         }
+
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
 
         $ambulance->update($data);
 

@@ -17,14 +17,15 @@ class UserSeeder extends Seeder
                 'username' => 'admin',
                 'email' => 'admin@gmail.com',
                 'password' => Hash::make('ithmr'),
+                'unit' => 'IT',
                 'role' => 'superadmin',
             ],
             [
                 'name' => 'Hamori',
                 'username' => 'hamori',
-                'unit_name' => 'hamori',
                 'email' => 'hamori@gmail.com',
                 'password' => Hash::make('hamori'),
+                'unit' => 'Hamori',
                 'role' => 'user',
             ],
             [
@@ -32,6 +33,7 @@ class UserSeeder extends Seeder
                 'username' => 'komdik',
                 'email' => 'komdik@gmail.com',
                 'password' => Hash::make('komdikhmr123'),
+                'unit' => 'Komite Medik',
                 'role' => 'admin',
             ],
             [
@@ -39,6 +41,7 @@ class UserSeeder extends Seeder
                 'username' => 'ipsrs',
                 'email' => 'ipsrs@gmail.com',
                 'password' => Hash::make('ipsrshmr123'),
+                'unit' => 'IPSRS',
                 'role' => 'admin',
             ],
             [
@@ -46,6 +49,7 @@ class UserSeeder extends Seeder
                 'username' => 'sdm',
                 'email' => 'sdm@gmail.com',
                 'password' => Hash::make('sdm24$'),
+                'unit' => 'SDM',
                 'role' => 'admin',
             ],
             [
@@ -53,6 +57,7 @@ class UserSeeder extends Seeder
                 'username' => 'mutu',
                 'email' => 'mutu@gmail.com',
                 'password' => Hash::make('mutuhmr123'),
+                'unit' => 'MUTU',
                 'role' => 'admin',
             ],
             [
@@ -60,6 +65,7 @@ class UserSeeder extends Seeder
                 'username' => 'desaingrafis',
                 'email' => 'desaingrafis@gmail.com',
                 'password' => Hash::make('hamori24$'),
+                'unit' => 'Desain Grafis',
                 'role' => 'admin',
             ],
         ];

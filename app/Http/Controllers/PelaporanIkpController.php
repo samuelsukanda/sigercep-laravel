@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PelaporanIkp;
+use Carbon\Carbon;
 
 class PelaporanIkpController extends Controller
 {
@@ -56,6 +57,15 @@ class PelaporanIkpController extends Controller
             'grading_risiko' => 'required|string|max:100',
         ]);
 
+        $tanggal_lahir = Carbon::createFromFormat('d-m-Y', $request->tanggal_lahir)->format('Y-m-d');
+        $validated['tanggal_lahir'] = $tanggal_lahir;
+
+        $tanggal_masuk_rs = Carbon::createFromFormat('d-m-Y', $request->tanggal_masuk_rs)->format('Y-m-d');
+        $validated['tanggal_masuk_rs'] = $tanggal_masuk_rs;
+
+        $tanggal_kejadian = Carbon::createFromFormat('d-m-Y', $request->tanggal_kejadian)->format('Y-m-d');
+        $validated['tanggal_kejadian'] = $tanggal_kejadian;
+
         PelaporanIkp::create($validated);
 
         return redirect()->route('komite-mutu.pelaporan-ikp.index')->with('success', 'Data berhasil disimpan.');
@@ -80,13 +90,13 @@ class PelaporanIkpController extends Controller
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'no_rm' => 'required|string|max:100',
-            'tanggal_lahir' => 'required|string|max:50',
+            'tanggal_lahir' => 'required|date',
             'kelompok_umur' => 'required|string|max:50',
             'jenis_kelamin' => 'required|string|max:20',
             'penanggung_jawab' => 'required|string|max:255',
-            'tanggal_masuk_rs' => 'required|string|max:50',
+            'tanggal_masuk_rs' => 'required|date',
             'rincian_kejadian' => 'required|string|max:500',
-            'tanggal_kejadian' => 'required|string|max:50',
+            'tanggal_kejadian' => 'required|date',
             'waktu_kejadian' => 'required|string|max:50',
             'insiden' => 'required|string|max:255',
             'kronologis_kejadian' => 'required|string|max:1000',
@@ -103,6 +113,15 @@ class PelaporanIkpController extends Controller
             'kejadian_serupa' => 'required|string|max:255',
             'grading_risiko' => 'required|string|max:100',
         ]);
+
+        $tanggal_lahir = Carbon::createFromFormat('d-m-Y', $request->tanggal_lahir)->format('Y-m-d');
+        $validated['tanggal_lahir'] = $tanggal_lahir;
+
+        $tanggal_masuk_rs = Carbon::createFromFormat('d-m-Y', $request->tanggal_masuk_rs)->format('Y-m-d');
+        $validated['tanggal_masuk_rs'] = $tanggal_masuk_rs;
+
+        $tanggal_kejadian = Carbon::createFromFormat('d-m-Y', $request->tanggal_kejadian)->format('Y-m-d');
+        $validated['tanggal_kejadian'] = $tanggal_kejadian;
 
         $pelaporanIkp->update($validated);
 
