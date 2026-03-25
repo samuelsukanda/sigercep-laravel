@@ -37,6 +37,7 @@ use App\Http\Controllers\MandatoryTrainingController;
 use App\Http\Controllers\SuratKeputusanController;
 use App\Http\Controllers\KomiteMedikController;
 use App\Http\Controllers\HardwareController;
+use App\Http\Controllers\ReservasiRuanganController as ControllersReservasiRuanganController;
 
 Route::get('/', function () {
     return redirect('/login');
