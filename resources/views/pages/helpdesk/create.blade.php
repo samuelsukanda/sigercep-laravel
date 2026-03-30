@@ -16,24 +16,16 @@
                             @csrf
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama Pelapor --}}
-                                <x-form.input name="nama_pelapor" label="Nama Pelapor" :value="ucfirst(auth()->user()->name)" readonly />
+                                <x-form.input name="name" label="Nama Pelapor" :value="ucfirst(auth()->user()->name)" readonly />
 
                                 {{-- Unit --}}
                                 <x-form.input name="unit_name" label="Unit" :value="auth()->user()->unit ?? '-'" readonly />
 
-                                {{-- Kategori --}}
-                                <x-form.select name="category" id="category" label="Kategori" :options="config('units.category')"
-                                    :selected="old('category', $tickets->category ?? '')" required />
-
                                 {{-- Deskripsi --}}
                                 <x-form.textarea name="description" label="Deskripsi" :value="old('description', $tickets->description ?? '')" required />
 
-                                {{-- Tingkat Urgensi --}}
-                                <x-form.select name="urgency" label="Tingkat Urgensi" :options="config('units.urgency')" :selected="old('urgency', $tickets->urgency ?? '')"
-                                    required />
-
                                 {{-- Lampiran --}}
-                                <x-form.file-upload name="attachment" label="Lampiran Pendukung" :current="$tickets->attachment ?? null" />
+                                <x-form.multi-file-upload name="attachment" label="Lampiran Pendukung" :current="$tickets->attachment ?? null" />
                             </div>
 
                             <div class="mt-6">
@@ -53,4 +45,5 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/file-upload.js') }}"></script>
+    <script src="{{ asset('assets/js/multi-upload-file.js') }}"></script>
 @endpush

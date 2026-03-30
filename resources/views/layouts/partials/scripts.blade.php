@@ -1,6 +1,4 @@
 {{-- Argon Dashboard JS --}}
-<script src="{{ asset('assets/js/navbar-dropdown.js') }}"></script>
-<script src="{{ asset('assets/js/fixed-plugin.js') }}"></script>
 <script src="{{ asset('assets/js/sidenav-burger.js') }}"></script>
 <script src="{{ asset('assets/js/toggle-dropdown.js') }}"></script>
 {{-- Jquery --}}

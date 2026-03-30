@@ -40,12 +40,12 @@
                             <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($ticket->created_at)->timestamp }}">
                                 {{ \Carbon\Carbon::parse($ticket->created_at)->translatedFormat('d F Y H:i') }}
                             </td>
-                            <td class="px-6 py-4">{{ $ticket->category }}</td>
+                            <td class="px-6 py-4">{{ $ticket->category ?? '-' }}</td>
                             <td class="px-6 py-4">
                                 <x-badge.urgency-badge :urgency="$ticket->urgency" />
                             </td>
                             <td class="px-6 py-4">
-                                <x-badge.status-ticket-badge :status="$ticket->status" />
+                                <x-badge.status-badge :status="$ticket->status" />
                             </td>
                             <td class="px-6 py-4">
                                 <x-badge.status-approval-badge :status="$ticket->approval?->approval_status ?? 'Pending'" />

@@ -179,6 +179,9 @@ class PengajuanDokumenController extends Controller
             );
         }
 
+        $tanggal_pengajuan = Carbon::createFromFormat('d-m-Y', $request->tanggal_pengajuan)->format('Y-m-d');
+        $validated['tanggal_pengajuan'] = $tanggal_pengajuan;
+
         $pengajuanDokumen->update($validated);
 
         return redirect()

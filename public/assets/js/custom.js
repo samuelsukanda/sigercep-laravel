@@ -328,6 +328,7 @@ flatpickr("#estimated_completion", {
     dateFormat: "d-m-Y H:i",
     time_24hr: true,
     allowInput: false,
+    defaultDate: new Date() 
 });
 
 flatpickr("#waktu_kejadian", {

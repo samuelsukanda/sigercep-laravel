@@ -6,18 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
     public function up()
     {
         Schema::table('tickets', function (Blueprint $table) {
-            $table->timestamp('resolved_at')->nullable()->after('status');
+            $table->string('name')->after('user_id');
         });
     }
 
     public function down()
     {
         Schema::table('tickets', function (Blueprint $table) {
-            $table->dropColumn('resolved_at');
+            $table->dropColumn('name');
         });
     }
 };

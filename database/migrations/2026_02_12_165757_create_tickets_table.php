@@ -17,9 +17,9 @@ return new class extends Migration
                 ->restrictOnDelete()
                 ->cascadeOnUpdate();
             $table->string('unit_name');
-            $table->enum('category', ['Hardware', 'Printer', 'Jaringan', 'Software', 'SIMRS']);
+            $table->enum('category', ['Hardware', 'Jaringan', 'Software', 'SIMRS'])->nullable();
             $table->text('description');
-            $table->enum('urgency', ['Low', 'Medium', 'High', 'Critical']);
+            $table->enum('urgency', ['Low', 'Medium', 'High', 'Critical'])->nullable();
             $table->string('attachment')->nullable();
             $table->enum('status', ['Open', 'In Progress', 'Closed'])->default('Open');
             $table->softDeletes();

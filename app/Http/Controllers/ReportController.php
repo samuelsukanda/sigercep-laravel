@@ -15,6 +15,15 @@ class ReportController extends Controller
 
     public function summary(Request $request)
     {
+
+        $isFiltered = $request->hasAny([
+            'periode_dari',
+            'periode_sampai',
+            'kategori',
+            'status_tiket',
+            'status_approval'
+        ]);
+
         $validator = Validator::make($request->all(), [
             'periode_dari'   => 'nullable|date_format:d-m-Y',
             'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
@@ -36,7 +45,9 @@ class ReportController extends Controller
             ? Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay()
             : now()->endOfMonth();
 
-        $query = Ticket::with(['user', 'approval'])->whereBetween('created_at', [$start, $end]);
+        $query = Ticket::with(['user', 'approval'])->filter($request);
+
+        $tickets = $isFiltered ? $query->get() : collect();
 
         if ($request->filled('kategori')) {
             $query->where('category', $request->kategori);
@@ -62,7 +73,7 @@ class ReportController extends Controller
         $totalOpen = $tickets->where('status', 'Open')->count();
         $totalInProgress = $tickets->where('status', 'In Progress')->count();
         $totalClosed = $tickets->where('status', 'Closed')->count();
-        $totalResolved = $tickets->filter(fn($t) => !is_null($t->resolved_at))->count();
+        $totalResolved = $totalResolved = $tickets->where('status', 'Done')->count();
 
         // Rata-rata waktu penyelesaian (berdasarkan resolved_at)
         $avgResolution = Ticket::where('status', 'Closed')
@@ -83,6 +94,7 @@ class ReportController extends Controller
 
         return view('pages.helpdesk.reports.summary', compact(
             'tickets',
+            'isFiltered',
             'totalTickets',
             'totalApproved',
             'totalRejected',
@@ -99,6 +111,6 @@ class ReportController extends Controller
 
     public function export(Request $request)
     {
-        return Excel::download(new TicketsExport($request), 'laporan_helpdesk_' . date('YmdHis') . '.xlsx');
+        return Excel::download(new TicketsExport($request), 'laporan_helpdesk_' . date('YmdHi') . '.xlsx');
     }
 }

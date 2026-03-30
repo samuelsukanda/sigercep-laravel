@@ -498,7 +498,6 @@ return [
         'Hardware',
         'Software',
         'Jaringan',
-        'Printer',
         'SIMRS',
     ],
 
@@ -511,7 +510,7 @@ return [
 
     'approval_status' => [
         'In Progress',
-        'Closed',
+        'Done',
     ],
 
     'status' => [

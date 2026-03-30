@@ -118,6 +118,9 @@ class PeminjamanAsetController extends Controller
             $validated['foto_barcode'] = $pathBarcode;
         }
 
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
+
         $pengadaan->update($validated);
 
         return redirect()->route('pengadaan-aset.peminjaman-aset.index')->with('success', 'Data berhasil diperbarui.');

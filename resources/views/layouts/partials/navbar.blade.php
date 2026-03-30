@@ -106,7 +106,7 @@
                                     Notifikasi
                                 </div>
 
-                                <div class="max-h-96 overflow-y-auto">
+                                <div style="max-height: 400px; overflow-y: auto;">
 
                                     @forelse(auth()->user()->unreadNotifications as $notification)
                                         <div class="px-5 py-4 hover:bg-gray-50 border-b last:border-0">
@@ -119,8 +119,7 @@
                                                 </div>
 
                                                 <div style="flex:1;">
-                                                    <a href="{{ $notification->data['url'] ?? '#' }}"
-                                                        onclick="markAndRedirect(event, '{{ $notification->id }}', '{{ $notification->data['url'] ?? '#' }}');">
+                                                    <a href="{{ route('notifications.go', $notification->id) }}">
 
                                                         <div class="text-sm text-gray-800 font-medium">
                                                             {{ $notification->data['message'] }}
@@ -240,12 +239,19 @@
             event.preventDefault();
 
             fetch('/notifications/read/' + id, {
-                method: 'GET',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
-            }).then(() => {
-                window.location.href = url;
+                    method: 'GET',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(() => {
+                    // hapus elemen notif dari DOM
+                    event.target.closest('.border-b').remove();
+
+                    window.location.href = url;
+                });
+            .catch(() => {
+                window.location.href = url; // fallback tetap redirect
             });
         }
 

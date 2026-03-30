@@ -23,6 +23,10 @@ class TicketApprovalNotification extends Notification
 
     public function via($notifiable)
     {
+        if ($this->approval->approval_status === 'Approved') {
+            return [];
+        }
+
         return ['database'];
     }
 

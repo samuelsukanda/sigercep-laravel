@@ -70,11 +70,18 @@ class AdminTicketController extends Controller
         $request->validate([
             'analysis' => 'required',
             'action_plan' => 'required',
-            'estimated_completion' => 'required|date|after_or_equal:now',
+            'estimated_completion' => 'nullable|date|after_or_equal:now',
+            'category'   => 'required|in:Hardware,Jaringan,Software,SIMRS',
+            'urgency'    => 'required|in:Low,Medium,High,Critical',
             'approval_status' => 'required|in:Approved,Rejected,Need Clarification',
             'approval_note' => 'required_if:approval_status,Rejected,Need Clarification'
         ], [
             'estimated_completion.after_or_equal' => 'Estimasi penyelesaian tidak boleh kurang dari waktu approval.'
+        ]);
+
+        $ticket->update([
+            'category' => $request->category,
+            'urgency' => $request->urgency,
         ]);
 
         $approval = new TicketApproval();
@@ -87,20 +94,25 @@ class AdminTicketController extends Controller
         $approval->approval_note = $request->approval_note;
         $approval->approved_at = now();
         $approval->approved_by = Auth::user()->name;
+
         $approval->save();
 
-        // if (in_array($request->approval_status, ['Rejected', 'Need Clarification'])) {
-        //     $ticket->status = 'Closed';
-        //     $ticket->resolved_at = now();
-        //     $ticket->save();
+        if ($request->approval_status == 'Approved') {
+            $ticket->status = 'Done';
+        } elseif ($request->approval_status == 'Rejected') {
+            $ticket->status = 'Closed';
+        }
 
-        //     TicketUpdate::create([
-        //         'ticket_id' => $ticket->id,
-        //         'user_id' => Auth::id(),
-        //         'status' => 'Closed',
-        //         'note' => 'Tiket ditutup otomatis karena status approval: ' . $request->approval_status . '. Catatan: ' . ($request->approval_note ?? ''),
-        //     ]);
-        // }
+        if (in_array($request->approval_status, ['Approved', 'Rejected'])) {
+            $ticket->resolved_at = now();
+            $ticket->save();
+
+            TicketUpdate::create([
+                'ticket_id' => $ticket->id,
+                'user_id' => Auth::id(),
+                'status' => $ticket->status,
+            ]);
+        }
 
         $ticket->user->notify(new TicketApprovalNotification($ticket, $approval));
 
@@ -110,13 +122,13 @@ class AdminTicketController extends Controller
     public function updateStatus(Request $request, Ticket $ticket)
     {
         $request->validate([
-            'status' => 'required|in:In Progress,Closed',
+            'status' => 'required|in:In Progress,Closed,Done',
             'note' => 'required'
         ]);
 
         $ticket->status = $request->status;
 
-        if ($request->status == 'Closed') {
+        if (in_array($request->status, ['Closed', 'Done'])) {
             $ticket->resolved_at = now();
         }
 

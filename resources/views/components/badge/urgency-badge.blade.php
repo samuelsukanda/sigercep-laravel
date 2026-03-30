@@ -1,18 +1,21 @@
 @props(['urgency'])
 
 @php
-    $bgColor = match (trim(strtolower($urgency))) {
-        'low' => '#10b981',       // hijau
-        'medium' => '#eab308',    // kuning
-        'high' => '#f97316',      // orange
-        'critical' => '#ef4444',  // merah
-        default => '#6b7280',     // abu
+    $value = trim(strtolower($urgency ?? ''));
+
+    $bgColor = match ($value) {
+        'low' => '#10b981',
+        'medium' => '#eab308',
+        'high' => '#f97316',
+        'critical' => '#ef4444',
+        default => null,
     };
+
+    $isEmpty = !$urgency || $urgency === '-';
 @endphp
 
 <span style="
-    background-color: {{ $bgColor }};
-    color: #ffffff;
+    {{ !$isEmpty ? "background-color: $bgColor; color:#fff;" : "color:#6b7280;" }}
     padding: 4px 12px;
     border-radius: 9999px;
     font-size: 12px;

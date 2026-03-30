@@ -107,6 +107,9 @@ class KomplainOutsourcingVendorController extends Controller
             $validated['foto'] = $path;
         }
 
+        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
+        $validated['tanggal'] = $tanggal;
+
         $komplain->update($validated);
 
         return redirect()->route('komplain.outsourcing-vendor.index')->with('success', 'Data berhasil diperbarui.');

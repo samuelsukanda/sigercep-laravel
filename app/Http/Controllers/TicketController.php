@@ -21,16 +21,22 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'name'  => 'required|string',
             'unit_name'  => 'required|string',
-            'category'   => 'required|in:Hardware,Printer,Jaringan,Software,SIMRS',
+            'category'   => 'nullable|in:Hardware,Printer,Jaringan,Software,SIMRS',
             'description' => 'required|string',
-            'urgency'    => 'required|in:Low,Medium,High,Critical',
-            'attachment' => 'nullable|file|mimes:jpg,png,jpeg,doc,docx,xls,xlsx,pdf|max:2048'
+            'urgency'    => 'nullable|in:Low,Medium,High,Critical',
+            'attachment' => 'nullable|array',
+            'attachment.*' => 'file|mimes:jpg,png,jpeg,doc,docx,xls,xlsx,pdf|max:2048'
+        ], [
+            'attachment.max' => 'Ukuran file terlalu besar! Maksimal 2 MB.',
+            'attachment.mimes' => 'Format file harus jpg, png, jpeg, doc, docx, xls, xlsx, atau pdf.'
         ]);
 
         $ticket = new Ticket();
         $ticket->ticket_number = TicketHelper::generateTicketNumber();
         $ticket->user_id       = Auth::id();
+        $ticket->name          = Auth::user()->name;
         $ticket->unit_name     = $request->unit_name;
         $ticket->category      = $request->category;
         $ticket->description   = $request->description;
@@ -38,11 +44,21 @@ class TicketController extends Controller
         $ticket->status        = 'Open';
 
         if ($request->hasFile('attachment')) {
-            $file = $request->file('attachment');
-            $extension = $file->getClientOriginalExtension();
-            $filename = 'helpdesk-' . $ticket->ticket_number . '-' . Carbon::now()->format('YmdHis') . '.' . $extension;
-            $path = $file->storeAs('images/helpdesk', $filename, 'public');
-            $ticket->attachment = $path;
+
+            $paths = [];
+
+            foreach ($request->file('attachment') as $file) {
+                $extension = $file->getClientOriginalExtension();
+
+                $filename = 'helpdesk-' . $ticket->ticket_number . '-' . now()->format('YmdHis') . '-' . uniqid() . '.' . $extension;
+
+                $path = $file->storeAs('images/helpdesk', $filename, 'public');
+
+                $paths[] = $path;
+            }
+
+            // simpan ke DB (json)
+            $ticket->attachment = $paths;
         }
 
         $ticket->save();
