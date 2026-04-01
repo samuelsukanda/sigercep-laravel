@@ -9,7 +9,7 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-    protected string $hrisBaseUrl = 'http://192.168.10.102:8000/api';
+    protected string $hrisBaseUrl = 'https://hris.rs-hamori.co.id/api';
 
     public function showLoginForm()
     {
