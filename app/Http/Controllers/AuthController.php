@@ -35,10 +35,18 @@ class AuthController extends Controller
         }
 
         // 🔹 Login ke HRIS API
-        $response = Http::withoutVerifying()->post('https://hris.rs-hamori.co.id/api/login', [
-            'email' => $request->username,
-            'password' => $request->password,
-        ]);
+        try {
+            $response = Http::timeout(5)
+                ->withoutVerifying()
+                ->post('https://hris.rs-hamori.co.id/api/login', [
+                    'email' => $request->username,
+                    'password' => $request->password,
+                ]);
+        } catch (\Exception $e) {
+            return back()->withErrors([
+                'username' => 'Server HRIS tidak bisa diakses, coba lagi nanti.'
+            ]);
+        }
 
         if (!$response->successful() || !$response->json('success')) {
             return back()->withErrors([
@@ -79,7 +87,7 @@ class AuthController extends Controller
         if ($token) {
             try {
                 Http::withToken($token)
-                    ->post(' https://hris.rs-hamori.co.id/api/logout');
+                    ->post('https://hris.rs-hamori.co.id/api/logout');
             } catch (\Exception $e) {
             }
         }

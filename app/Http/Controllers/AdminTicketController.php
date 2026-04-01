@@ -70,13 +70,11 @@ class AdminTicketController extends Controller
         $request->validate([
             'analysis' => 'required',
             'action_plan' => 'required',
-            'estimated_completion' => 'nullable|date|after_or_equal:now',
+            'estimated_completion' => 'nullable|date',
             'category'   => 'required|in:Hardware,Jaringan,Software,SIMRS',
             'urgency'    => 'required|in:Low,Medium,High,Critical',
             'approval_status' => 'required|in:Approved,Rejected,Need Clarification',
             'approval_note' => 'required_if:approval_status,Rejected,Need Clarification'
-        ], [
-            'estimated_completion.after_or_equal' => 'Estimasi penyelesaian tidak boleh kurang dari waktu approval.'
         ]);
 
         $ticket->update([
