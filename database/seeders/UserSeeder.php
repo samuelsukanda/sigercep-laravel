@@ -21,14 +21,6 @@ class UserSeeder extends Seeder
                 'role' => 'superadmin',
             ],
             [
-                'name' => 'Hamori',
-                'username' => 'hamori',
-                'email' => 'hamori@gmail.com',
-                'password' => Hash::make('hamori'),
-                'unit' => 'Hamori',
-                'role' => 'user',
-            ],
-            [
                 'name' => 'Komite Medik',
                 'username' => 'komdik',
                 'email' => 'komdik@gmail.com',

@@ -112,7 +112,9 @@ class AdminTicketController extends Controller
             ]);
         }
 
-        $ticket->user->notify(new TicketApprovalNotification($ticket, $approval));
+        if ($ticket->user) {
+            $ticket->user->notify(new TicketApprovalNotification($ticket, $approval));
+        }
 
         return redirect()->back()->with('success', 'Approval berhasil disimpan.');
     }

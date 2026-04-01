@@ -13,18 +13,21 @@ class User extends Authenticatable
         'name',
         'username',
         'email',
-        'password',
         'unit',
+        'role',
+        'nik',
+        'jabatan',
+        'status_karyawan',
     ];
 
     protected $hidden = [
-        'password',
         'remember_token',
     ];
 
     protected $casts = [
-        'password' => 'hashed',
+        'email_verified_at' => 'datetime',
     ];
+
 
     public function tickets()
     {

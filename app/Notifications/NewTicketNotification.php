@@ -7,7 +7,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Messages\DatabaseMessage;
 
 class NewTicketNotification extends Notification implements ShouldQueue
 {
@@ -17,7 +16,7 @@ class NewTicketNotification extends Notification implements ShouldQueue
 
     public function __construct(Ticket $ticket)
     {
-        $this->ticket = $ticket;
+        $this->ticket = $ticket->load('user');
     }
 
     public function via($notifiable)
@@ -31,7 +30,7 @@ class NewTicketNotification extends Notification implements ShouldQueue
             'ticket_id' => $this->ticket->id,
             'ticket_number' => $this->ticket->ticket_number,
             'user_name' => $this->ticket->user->name ?? 'Unknown',
-            'unit' => $this->ticket->unit,
+            'unit' => $this->ticket->unit_name,
             'category' => $this->ticket->category,
             'urgency' => $this->ticket->urgency,
             'message' => 'Tiket baru diajukan: ' . $this->ticket->ticket_number,
@@ -56,7 +55,7 @@ class NewTicketNotification extends Notification implements ShouldQueue
             'ticket_id' => $this->ticket->id,
             'ticket_number' => $this->ticket->ticket_number,
             'user_name' => $this->ticket->user->name ?? 'Unknown',
-            'unit' => $this->ticket->unit,
+            'unit' => $this->ticket->unit_name,
             'category' => $this->ticket->category,
             'urgency' => $this->ticket->urgency,
             'message' => 'Tiket baru diajukan: ' . $this->ticket->ticket_number,

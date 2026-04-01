@@ -63,9 +63,14 @@ class TicketController extends Controller
 
         $ticket->save();
 
-        $admins = User::where('role', 'superadmin')->get();
-        foreach ($admins as $admin) {
-            $admin->notify(new NewTicketNotification($ticket));
+        $itUsers = User::where('unit', 'Teknologi Informasi')->get();
+
+        if ($itUsers->isEmpty()) {
+            logger()->warning('Tidak ada IT untuk menerima notifikasi.');
+        }
+
+        foreach ($itUsers as $user) {
+            $user->notify(new NewTicketNotification($ticket));
         }
 
         return redirect()->route('helpdesk.index')

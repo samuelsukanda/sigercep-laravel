@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use App\Models\User;
 
 class AuthController extends Controller
 {
+    protected string $hrisBaseUrl = 'http://192.168.10.102:8000/api';
+
     public function showLoginForm()
     {
         return view('auth.login');
@@ -22,30 +23,25 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        $remember = $request->has('remember');
+        $remember = $request->boolean('remember');
 
-        $localUser = User::where('username', $request->username)
-            ->orWhere('email', $request->username)
-            ->first();
+        $usernameInput = trim($request->username);
 
-        // 🔹 Login lokal
-        if ($localUser && Hash::check($request->password, $localUser->password)) {
-            Auth::login($localUser, $remember);
-            return redirect()->intended('/dashboard');
+        if (!str_contains($usernameInput, '@')) {
+            $usernameInput .= '@rs-hamori.co.id';
         }
 
-        // 🔹 Login ke HRIS API
         try {
             $response = Http::timeout(5)
                 ->withoutVerifying()
-                ->post('https://hris.rs-hamori.co.id/api/login', [
-                    'email' => $request->username,
+                ->post($this->hrisBaseUrl . '/login', [
+                    'email' => $usernameInput,
                     'password' => $request->password,
                 ]);
         } catch (\Exception $e) {
             return back()->withErrors([
-                'username' => 'Server HRIS tidak bisa diakses, coba lagi nanti.'
-            ]);
+                'username' => 'Server HRIS sedang sibuk, coba lagi nanti.'
+            ])->onlyInput('username');
         }
 
         if (!$response->successful() || !$response->json('success')) {
@@ -58,16 +54,27 @@ class AuthController extends Controller
         $apiUser = $result['data']['user'];
         $token   = $result['data']['access_token'];
 
-        $unit = data_get($apiUser, 'karyawan.unit.name');
+        $statusKaryawan = data_get($apiUser, 'karyawan.status');
+
+        if ($statusKaryawan !== 'active') {
+            return back()->withErrors([
+                'username' => 'Karyawan sudah resign atau akun tidak aktif.'
+            ])->onlyInput('username');
+        }
+
+        $userData = [
+            'name'            => data_get($apiUser, 'user.name', $apiUser['name']),
+            'username'        => $apiUser['email'],
+            'email'           => $apiUser['email'],
+            'nik'             => data_get($apiUser, 'karyawan.nik'),
+            'unit'            => data_get($apiUser, 'karyawan.unit.name'),
+            'jabatan'         => data_get($apiUser, 'karyawan.jabatan.name'),
+            'status_karyawan' => $statusKaryawan,
+        ];
 
         $user = User::updateOrCreate(
-            ['email' => $apiUser['email']],
-            [
-                'name'       => $apiUser['name'],
-                'username'   => $apiUser['name'],
-                'password'   => bcrypt($request->password),
-                'unit'  => $unit,
-            ]
+            ['email' => $userData['email']],
+            $userData
         );
 
         session([
@@ -87,7 +94,8 @@ class AuthController extends Controller
         if ($token) {
             try {
                 Http::withToken($token)
-                    ->post('https://hris.rs-hamori.co.id/api/logout');
+                    ->withoutVerifying()
+                    ->post($this->hrisBaseUrl . '/logout');
             } catch (\Exception $e) {
             }
         }

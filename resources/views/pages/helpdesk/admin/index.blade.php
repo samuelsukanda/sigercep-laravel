@@ -32,7 +32,7 @@
                         <tr>
                             <td class="px-6 py-4 font-semibold">{{ $ticket->ticket_number }}</td>
                             <td class="px-6 py-4">
-                                {{ ucwords(str_replace('.', ' ', $ticket->user->name)) }}
+                                {{ ucwords(str_replace('.', ' ', $ticket->name)) }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $ticket->unit_name }}
