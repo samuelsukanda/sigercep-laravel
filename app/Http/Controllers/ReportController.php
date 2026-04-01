@@ -73,14 +73,19 @@ class ReportController extends Controller
         $totalOpen = $tickets->where('status', 'Open')->count();
         $totalInProgress = $tickets->where('status', 'In Progress')->count();
         $totalClosed = $tickets->where('status', 'Closed')->count();
-        $totalResolved = $totalResolved = $tickets->where('status', 'Done')->count();
+        $totalDone = $totalDone = $tickets->where('status', 'Done')->count();
 
         // Rata-rata waktu penyelesaian (berdasarkan resolved_at)
-        $avgResolution = Ticket::where('status', 'Closed')
+        $avgResolution = Ticket::where('status', 'Done')
             ->whereNotNull('resolved_at')
             ->whereBetween('resolved_at', [$start, $end])
-            ->selectRaw('avg(TIMESTAMPDIFF(HOUR, created_at, resolved_at) / 24) as avg_resolution')
-            ->value('avg_resolution') ?? 0;
+            ->selectRaw('avg(TIMESTAMPDIFF(SECOND, created_at, resolved_at)) as avg_seconds')
+            ->value('avg_seconds') ?? 0;
+
+        $avgResolutionDays = $avgResolution / 86400;
+
+        $hours = floor($avgResolution / 3600);
+        $minutes = floor(($avgResolution % 3600) / 60);
 
         // Rekap per kategori
         $categoryRecap = $tickets->groupBy('category')->map->count();
@@ -90,7 +95,7 @@ class ReportController extends Controller
 
         // Rekap per status tiket
         $statusRecap = $tickets->groupBy('status')->map->count();
-        $statusRecap['Resolved'] = $totalResolved;
+        $statusRecap['Done'] = $totalDone;
 
         return view('pages.helpdesk.reports.summary', compact(
             'tickets',
@@ -105,7 +110,10 @@ class ReportController extends Controller
             'avgResolution',
             'categoryRecap',
             'statusRecap',
-            'approvalRecap'
+            'approvalRecap',
+            'avgResolutionDays',
+            'hours',
+            'minutes',
         ));
     }
 

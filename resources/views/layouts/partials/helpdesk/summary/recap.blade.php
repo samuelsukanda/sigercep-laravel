@@ -61,11 +61,17 @@
                     'Open' => ['color' => 'text-cyan-600', 'bg' => 'bg-cyan-50'],
                     'In Progress' => ['color' => 'text-blue-600', 'bg' => 'bg-blue-50'],
                     'Closed' => ['color' => 'text-gray-500', 'bg' => 'bg-gray-100'],
-                    'Resolved' => ['color' => 'text-green-600', 'bg' => 'bg-green-50'],
+                    'Done' => ['color' => 'text-green-600', 'bg' => 'bg-green-50'],
                     'Rata-rata Penyelesaian' => [
                         'color' => 'text-purple-600',
                         'bg' => 'bg-purple-50',
-                        'value' => number_format($avgResolution, 2) . ' Hari',
+                        'value' =>
+                            number_format($avgResolutionDays, 2) .
+                            ' Hari (± ' .
+                            $hours .
+                            ' jam ' .
+                            $minutes .
+                            ' menit)',
                     ],
                 ];
                 $statusData = $statusRecap ?? [];

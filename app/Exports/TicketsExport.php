@@ -41,7 +41,7 @@ class TicketsExport implements FromCollection, WithHeadings, WithMapping, Should
                 'Status Approval',
                 'Approved By',
                 'Estimasi Penyelesaian',
-                'Tanggal Selesai',
+                'Tanggal/Jam Selesai',
             ]
         ];
     }
@@ -59,7 +59,7 @@ class TicketsExport implements FromCollection, WithHeadings, WithMapping, Should
             $ticket->approval?->approval_status ?? 'Pending',
             $ticket->approval?->approved_by ?? '-',
             $ticket->approval?->duration ?? '-',
-            $ticket->resolved_at ? $ticket->resolved_at->format('d-m-Y') : '-',
+            $ticket->resolved_at ? $ticket->resolved_at->format('d-m-Y H:i') : '-',
         ];
     }
 
@@ -75,9 +75,6 @@ class TicketsExport implements FromCollection, WithHeadings, WithMapping, Should
 
                 $sheet = $event->sheet->getDelegate();
 
-                // ========================
-                // 🔷 JUDUL
-                // ========================
                 $sheet->mergeCells('A1:K1');
                 $sheet->setCellValue('A1', 'Laporan Helpdesk IT');
 
@@ -94,9 +91,6 @@ class TicketsExport implements FromCollection, WithHeadings, WithMapping, Should
 
                 $sheet->getRowDimension(1)->setRowHeight(30);
 
-                // ========================
-                // 🔷 HEADER
-                // ========================
                 $sheet->getStyle('A2:K2')->applyFromArray([
                     'font' => [
                         'bold' => true,
@@ -117,15 +111,9 @@ class TicketsExport implements FromCollection, WithHeadings, WithMapping, Should
                     ],
                 ]);
 
-                // ========================
-                // 🔥 AUTO FILTER + FREEZE
-                // ========================
                 $sheet->setAutoFilter('A2:K2');
                 $sheet->freezePane('A3');
 
-                // ========================
-                // 🔷 DATA (SEMUA CENTER + MIDDLE)
-                // ========================
                 $highestRow = $sheet->getHighestRow();
 
                 $sheet->getStyle("A3:K{$highestRow}")->applyFromArray([
@@ -135,9 +123,6 @@ class TicketsExport implements FromCollection, WithHeadings, WithMapping, Should
                     ],
                 ]);
 
-                // ========================
-                // 🦓 ZEBRA ROW
-                // ========================
                 for ($row = 3; $row <= $highestRow; $row++) {
                     if ($row % 2 == 0) {
                         $sheet->getStyle("A{$row}:K{$row}")->applyFromArray([
@@ -149,9 +134,6 @@ class TicketsExport implements FromCollection, WithHeadings, WithMapping, Should
                     }
                 }
 
-                // ========================
-                // 🔷 BORDER
-                // ========================
                 $sheet->getStyle("A2:K{$highestRow}")
                     ->getBorders()
                     ->getAllBorders()
