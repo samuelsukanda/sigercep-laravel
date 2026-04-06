@@ -55,7 +55,7 @@
                         $user = auth()->user();
                     @endphp
 
-                    @if ($user->role == 'superadmin' || ($user->role == 'user' && $user->unit == 'Teknologi Informasi'))
+                    @if (strtolower($user->unit) == 'teknologi informasi')
                         <li class="w-full">
                             <a href="{{ route('admin.helpdesk.index') }}"
                                 class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">

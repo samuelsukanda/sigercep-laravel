@@ -5,23 +5,18 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\PermissionHelper;
 
 class CheckRole
 {
-    public function handle(Request $request, Closure $next, ...$roles)
+    public function handle(Request $request, Closure $next, $menu, $action)
     {
         if (!Auth::check()) {
             return redirect('login');
         }
 
-        $user = Auth::user();
-
-        if (!in_array($user->role, $roles)) {
+        if (!PermissionHelper::canAccess($menu, $action)) {
             abort(403, 'Unauthorized access.');
-        }
-
-        if ($user->role === 'user' && $user->unit != 'Teknologi Informasi') {
-            abort(403, 'Anda tidak memiliki akses ke menu ini.');
         }
 
         return $next($request);
