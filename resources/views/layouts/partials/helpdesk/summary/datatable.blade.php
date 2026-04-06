@@ -66,7 +66,7 @@
                                 {{ $ticket->created_at->format('d-m-Y H:i') }}
                             </td>
                             <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">
-                                {{ ucwords(str_replace('.', ' ', $ticket->user->name)) ?? '-' }}
+                                {{ ucwords(str_replace('.', ' ', $ticket->name)) ?? '-' }}
                             </td>
                             <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">
                                 {{ $ticket->unit_name }}
