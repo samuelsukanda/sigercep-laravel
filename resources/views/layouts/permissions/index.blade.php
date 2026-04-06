@@ -1,10 +1,44 @@
 @extends('layouts.app')
 
-@section('title', 'Manajemen Hak Akses')
+@section('title', 'SIGERCEP')
 
 {{-- Styles --}}
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/permissions.css') }}">
+    <style>
+        .perm-search-input:focus {
+            border-color: #7664E4 !important;
+            box-shadow: 0 0 0 3px rgba(118, 100, 228, 0.1);
+        }
+
+        .perm-search-clear:hover {
+            color: #ef4444 !important;
+        }
+
+        .search-highlight {
+            background-color: #fef3c7;
+            color: #b45309;
+            border-radius: 4px;
+            padding: 0 2px;
+            font-weight: 500;
+        }
+
+        .perm-table tbody tr.hidden-row {
+            display: none;
+        }
+
+        .search-empty-result {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+        }
+
+        .search-empty-result i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -54,6 +88,23 @@
             </div>
         </div>
 
+        {{-- ═══ Search Bar ═══ --}}
+        <div class="perm-search-container" style="margin-bottom: 1.5rem; width: 100%;">
+            <div class="perm-search-wrapper" style="position: relative; width: 100%;">
+                <i class="fas fa-search"
+                    style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 1rem;"></i>
+                <input type="text" id="searchMenuInput" class="perm-search-input"
+                    placeholder="Cari menu berdasarkan nama..."
+                    style="width: 100%; padding: 12px 50px 12px 48px; border: 1px solid #e2e8f0; border-radius: 12px; background: white; font-size: 0.9rem; outline: none; transition: all 0.2s;">
+                <button type="button" id="clearSearchBtn" class="perm-search-clear"
+                    style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #9ca3af; display: none;">
+                    <i class="fas fa-times-circle" style="font-size: 1rem;"></i>
+                </button>
+            </div>
+            <div id="searchInfo" style="margin-top: 8px; font-size: 0.75rem; color: #6b7280; display: none;">
+                <span id="searchResultCount"></span>
+            </div>
+        </div>
         {{-- ═══ Table Card ═══ --}}
         <div class="perm-card">
             <table class="perm-table">
@@ -77,7 +128,7 @@
                             $badgeClass = match ($p->action) {
                                 'create' => 'badge-create',
                                 'read' => 'badge-read',
-                                'update' => 'badge-update', 
+                                'update' => 'badge-update',
                                 'delete' => 'badge-delete',
                                 default => 'badge-read',
                             };
@@ -153,12 +204,6 @@
         </div>
 
     </div>{{-- end .perm-page --}}
-
-
-    {{-- ═══════════════════════════════════════════════════════
-     SIDE PANEL — Kelola Rules
-     Data rules di-embed sebagai JSON untuk operasi client-side
-     ═══════════════════════════════════════════════════════ --}}
 
     {{-- Overlay --}}
     <div class="rule-panel-overlay" id="rulePanelOverlay" onclick="closeRulePanel()"></div>
@@ -339,227 +384,6 @@
 </script>
 @endsection
 
-
 @push('scripts')
-    <script>
-        (function() {
-            'use strict';
-
-            /* ── Data ── */
-            var permissionsData = JSON.parse(document.getElementById('permissionsData').textContent);
-            var activePerm = null;
-            var activeTab = 'list';
-            var ruleCounter = 1;
-
-            /* ═══ SIDE PANEL ═══ */
-            window.openRulePanel = function(permId, menu, action) {
-                activePerm = permissionsData.find(function(p) {
-                    return p.id === permId;
-                });
-                if (!activePerm) return;
-
-                document.getElementById('panelTitle').textContent = 'Kelola Rules — ' + menu;
-                document.getElementById('panelMenuChip').textContent = menu;
-                document.getElementById('panelActionBadge').textContent = action.toUpperCase();
-
-                var addRuleForm = document.getElementById('addRuleForm');
-                addRuleForm.action = '/permissions/' + permId + '/add-rule';
-
-                switchTab('list');
-                renderRuleList();
-
-                document.getElementById('rulePanelOverlay').classList.add('open');
-                document.getElementById('rulePanel').classList.add('open');
-            };
-
-            window.closeRulePanel = function() {
-                document.getElementById('rulePanelOverlay').classList.remove('open');
-                document.getElementById('rulePanel').classList.remove('open');
-                activePerm = null;
-                clearAddForm();
-            };
-
-            window.switchTab = function(tab) {
-                activeTab = tab;
-                document.getElementById('tabBtnList').classList.toggle('active', tab === 'list');
-                document.getElementById('tabBtnAdd').classList.toggle('active', tab === 'add');
-                document.getElementById('sectionList').classList.toggle('active', tab === 'list');
-                document.getElementById('sectionAdd').classList.toggle('active', tab === 'add');
-                document.getElementById('btnSaveRule').style.display = tab === 'add' ? 'inline-flex' : 'none';
-            };
-
-            function renderRuleList() {
-    var container = document.getElementById('ruleListContainer');
-    var rules = activePerm ? activePerm.rules : [];
-
-    document.getElementById('tabCountBadge').textContent = rules.length;
-
-    if (rules.length === 0) {
-        container.innerHTML =
-            '<div class="rule-list-empty">' +
-            '<i class="fas fa-users-slash"></i>' +
-            '<p>Belum ada rule.<br>Semua user dapat mengakses menu ini.</p>' +
-            '</div>';
-        return;
-    }
-
-    container.innerHTML = rules.map(function(r) {
-        var parts = [];
-        
-        // ✅ UNIT - HURUF BESAR SEMUA
-        if (r.unit) parts.push('<span class="rule-meta-chip"><i class="fas fa-building"></i>' + 
-            esc(r.unit.toUpperCase()) + '</span>');  // <-- tambah .toUpperCase()
-        
-        // ✅ JABATAN - HURUF BESAR SEMUA
-        if (r.jabatan) parts.push('<span class="rule-meta-chip"><i class="fas fa-user-tie"></i>' + 
-            esc(r.jabatan.toUpperCase()) + '</span>');  // <-- tambah .toUpperCase()
-
-        var icon = r.unit ? 'fa-building' : (r.jabatan ? 'fa-user-tie' : 'fa-user');
-        
-        // ✅ NAMA USER - Format: raden.ibnu -> Ibnu Raden
-        var formattedName = '';
-        if (r.name) {
-            formattedName = formatUserName(r.name);
-        }
-        
-        var nameRow = formattedName ?
-            '<div class="rule-name-main"><i class="fas fa-user" style="font-size:10px;margin-right:3px;color:var(--muted)"></i>' +
-            esc(formattedName) + '</div>' :
-            '';
-
-        return '<div class="rule-list-item" id="rule-item-' + r.id + '">' +
-            '<div class="rule-list-icon"><i class="fas ' + icon + '"></i></div>' +
-            '<div class="rule-list-meta">' +
-            (parts.length ? '<div class="rule-list-meta-row">' + parts.join(
-                '<span class="rule-meta-sep">·</span>') + '</div>' : '') +
-            nameRow +
-            (!parts.length && !r.name ?
-                '<span style="font-size:.72rem;color:var(--hint);font-style:italic">Rule tanpa detail</span>' :
-                '') +
-            '</div>' +
-            '<form action="/permissions/delete-rule/' + r.id +
-            '" method="POST" style="display:inline;margin:0">' +
-            '<input type="hidden" name="_token" value="{{ csrf_token() }}">' +
-            '<input type="hidden" name="_method" value="DELETE">' +
-            '<button type="submit" class="btn-rule-delete" title="Hapus rule" ' +
-            'onclick="return confirm(\'Hapus rule ini?\')">' +
-            '<i class="fas fa-trash-can"></i>' +
-            '</button>' +
-            '</form>' +
-            '</div>';
-    }).join('');
-}
-
-// ✅ TAMBAHKAN FUNGSI INI untuk format nama user
-function formatUserName(name) {
-    if (!name) return '';
-    
-    // Jika nama mengandung titik (format: raden.ibnu)
-    if (name.includes('.')) {
-        return name.split('.')
-            .map(function(part) {
-                return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
-            })
-            .join(' ');
-    }
-    
-    // Jika sudah dalam format normal, tetap capitalize tiap kata
-    return name.split(' ')
-        .map(function(word) {
-            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-        })
-        .join(' ');
-}
-
-            window.submitAddRule = function() {
-                var unit = document.getElementById('pf-unit').value.trim();
-                var jabatan = document.getElementById('pf-jabatan').value.trim();
-                var name = document.getElementById('pf-name').value.trim();
-                if (!unit && !jabatan && !name) {
-                    alert('Isi minimal satu field (Unit, Jabatan, atau Nama User).');
-                    return;
-                }
-                document.getElementById('addRuleForm').submit();
-            };
-
-            function clearAddForm() {
-                document.getElementById('pf-unit').value = '';
-                document.getElementById('pf-jabatan').value = '';
-                document.getElementById('pf-name').value = '';
-            }
-
-            function esc(str) {
-                return String(str)
-                    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-            }
-
-            /* ═══ MODAL Tambah Permission ═══ */
-            window.openPermModal = function() {
-                document.getElementById('permModalOverlay').classList.add('open');
-                setTimeout(function() {
-                    document.getElementById('inp-menu').focus();
-                }, 80);
-            };
-            window.closePermModal = function() {
-                document.getElementById('permModalOverlay').classList.remove('open');
-                resetPermForm();
-            };
-            window.handleModalOverlayClick = function(e) {
-                if (e.target === document.getElementById('permModalOverlay')) closePermModal();
-            };
-
-            function resetPermForm() {
-                document.getElementById('permForm').reset();
-                document.getElementById('modalRulesRows').innerHTML =
-                    '<div class="modal-rule-row">' +
-                    '<input type="text" name="rules[0][unit]"    placeholder="Unit">' +
-                    '<input type="text" name="rules[0][jabatan]" placeholder="Jabatan">' +
-                    '<input type="text" name="rules[0][name]"    placeholder="Nama user">' +
-                    '<div></div>' +
-                    '</div>';
-                ruleCounter = 1;
-            }
-            window.addModalRuleRow = function() {
-                var c = document.getElementById('modalRulesRows');
-                var d = document.createElement('div');
-                d.className = 'modal-rule-row';
-                d.innerHTML =
-                    '<input type="text" name="rules[' + ruleCounter + '][unit]"    placeholder="Unit">' +
-                    '<input type="text" name="rules[' + ruleCounter + '][jabatan]" placeholder="Jabatan">' +
-                    '<input type="text" name="rules[' + ruleCounter + '][name]"    placeholder="Nama user">' +
-                    '<button type="button" class="btn-rm-row-modal" ' +
-                    'onclick="this.closest(\'.modal-rule-row\').remove()">' +
-                    '<i class="fas fa-xmark"></i>' +
-                    '</button>';
-                c.appendChild(d);
-                d.querySelector('input').focus();
-                ruleCounter++;
-            };
-
-            /* ═══ ESC ═══ */
-            document.addEventListener('keydown', function(e) {
-                if (e.key !== 'Escape') return;
-                if (document.getElementById('rulePanel').classList.contains('open')) {
-                    closeRulePanel();
-                    return;
-                }
-                if (document.getElementById('permModalOverlay').classList.contains('open')) {
-                    closePermModal();
-                }
-            });
-
-            /* ═══ Auto-dismiss alerts ═══ */
-            document.querySelectorAll('.perm-alert').forEach(function(el) {
-                setTimeout(function() {
-                    el.style.transition = 'opacity .5s';
-                    el.style.opacity = '0';
-                    setTimeout(function() {
-                        el.remove();
-                    }, 500);
-                }, 4000);
-            });
-
-        })();
-    </script>
+    <script src="{{ asset('assets/js/permissions.js') }}"></script>
 @endpush
