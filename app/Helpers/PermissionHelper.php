@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use Illuminate\Support\Facades\Auth;
+use App\Models\Permission;
 
 class PermissionHelper
 {
@@ -16,121 +17,73 @@ class PermissionHelper
         $jabatan = strtolower(trim($user->jabatan ?? ''));
 
         // ===============================
-        // 🟢 SUPERADMIN
+        // 🟢 1. SUPERADMIN (WILDCARD)
         // ===============================
-        $superadminUsers = [
-            'sammuel',
-            'raden.ibnu',
-            'iyan.hermawan',
-            'novit.adriansyah',
-            'deden eka nugraha'
-        ];
+        $hasWildcard = Permission::where('menu', '*')
+            ->where('action', '*')
+            ->whereHas('rules', function ($q) use ($unit, $jabatan, $name) {
+                $q->where(function ($q2) use ($unit) {
+                    $q2->whereNull('unit')
+                        ->orWhereRaw('LOWER(unit) = ?', [$unit]);
+                })->where(function ($q2) use ($jabatan) {
+                    $q2->whereNull('jabatan')
+                        ->orWhereRaw('LOWER(jabatan) = ?', [$jabatan]);
+                })->where(function ($q2) use ($name) {
+                    $q2->whereNull('name')
+                        ->orWhereRaw('LOWER(name) = ?', [$name]);
+                });
+            })
+            ->exists();
 
-        if (
-            $unit === 'teknologi informasi' &&
-            in_array($jabatan, [
-                'spv it',
-                'operasional it technical support',
-                'it infrastruktur',
-                'pengembangan sistem'
-            ]) &&
-            in_array($name, $superadminUsers)
-        ) {
-            return true;
-        }
+        if ($hasWildcard) return true;
 
         // ===============================
-        // 🛑 MENU KHUSUS
+        // 🔵 2. MANAGE
         // ===============================
-        $superadminOnlyMenus = ['toner', 'visitasi', 'peminjaman', 'hardware'];
-        if (in_array($menu, $superadminOnlyMenus)) {
-            return $action === 'read';
-        }
+        $hasManage = Permission::where('menu', $menu)
+            ->where('action', 'manage')
+            ->whereHas('rules', function ($q) use ($unit, $jabatan, $name) {
+                $q->where(function ($q2) use ($unit) {
+                    $q2->whereNull('unit')
+                        ->orWhereRaw('LOWER(unit) = ?', [$unit]);
+                })->where(function ($q2) use ($jabatan) {
+                    $q2->whereNull('jabatan')
+                        ->orWhereRaw('LOWER(jabatan) = ?', [$jabatan]);
+                })->where(function ($q2) use ($name) {
+                    $q2->whereNull('name')
+                        ->orWhereRaw('LOWER(name) = ?', [$name]);
+                });
+            })
+            ->exists();
+
+        if ($hasManage) return true;
 
         // ===============================
-        // 🟠 SEMUA USER
+        // 🟠 3. EXACT
         // ===============================
-        $allUsers = [
-            'komplain_ipsrs','kesehatan_lingkungan','outsourcing_vendor',
-            'reservasi_ruangan','reservasi_kendaraan','desain_grafis',
-            'kecelakaan_kerja','kesiapan_ambulance','mutu',
-            'manajemen_risiko','pelaporan_ikp','pengajuan_dokumen',
-            'bank_ilmu','laporan_perilaku','peminjaman_aset',
-            'pengembalian_aset','laporan_aset_rusak','pemindahan_aset',
-        ];
+        $permission = Permission::where('menu', $menu)
+            ->where('action', $action)
+            ->first();
 
-        if (in_array($menu, $allUsers)) {
-            return in_array($action, ['create', 'read']);
-        }
+        if (!$permission) return false;
 
-        // ===============================
-        // 🟡 ADMIN SPESIFIK
-        // ===============================
-        $adminSpecificAccess = [
-            'mutu' => [
-                'unit' => ['mutu'],
-                'jabatan' => ['staf mutu', 'ketua mutu'],
-                'users' => ['pupu.pujiawati', 'indah.pertiwi'],
-                'menus' => [
-                    'mutu','bank_spo','manajemen_risiko',
-                    'pelaporan_ikp','pengajuan_dokumen',
-                    'bank_ilmu','laporan_perilaku'
-                ]
-            ],
-            'sdm' => [
-                'unit' => ['sdm'],
-                'jabatan' => [
-                    'manajer sdm dan hukum',
-                    'spv sdm dan hukum',
-                    'staf sdm',
-                    'staf diklat dan pengembangan',
-                    'staf hukum dan hubungan industrial'
-                ],
-                'users' => [
-                    'novia.firstania',
-                    'jatu.priya',
-                    'rifaldi.zakhari',
-                    'ruri.kemala',
-                    'muhamad.fajar'
-                ],
-                'menus' => [
-                    'utw','peraturan_perusahaan',
-                    'surat_keputusan','mandatory_training'
-                ]
-            ],
-            'komite_medik' => [
-                'unit' => ['komite medik'],
-                'jabatan' => ['staf komite medik'],
-                'users' => ['meliana.fatimah'],
-                'menus' => ['komite_medik']
-            ],
-        ];
+        return $permission->rules()
+            ->where(function ($q) use ($unit, $jabatan, $name) {
+                $q->where(function ($q2) use ($unit) {
+                    $q2->whereNull('unit')
+                        ->orWhereRaw('LOWER(unit) = ?', [$unit]);
+                });
 
-        foreach ($adminSpecificAccess as $config) {
-            if (
-                in_array($unit, $config['unit']) &&
-                in_array($jabatan, $config['jabatan']) &&
-                in_array($name, $config['users']) &&
-                in_array($menu, $config['menus'])
-            ) {
-                return in_array($action, ['create', 'read', 'update', 'delete']);
-            }
-        }
+                $q->where(function ($q2) use ($jabatan) {
+                    $q2->whereNull('jabatan')
+                        ->orWhereRaw('LOWER(jabatan) = ?', [$jabatan]);
+                });
 
-        // ===============================
-        // 🔵 DEFAULT USER
-        // ===============================
-        $restrictedMenus = [
-            'bank_spo',
-            'utw','peraturan_perusahaan',
-            'surat_keputusan','mandatory_training',
-            'komite_medik',
-        ];
-
-        if (in_array($menu, $restrictedMenus)) {
-            return $action === 'read';
-        }
-
-        return $action === 'read';
+                $q->where(function ($q2) use ($name) {
+                    $q2->whereNull('name')
+                        ->orWhereRaw('LOWER(name) = ?', [$name]);
+                });
+            })
+            ->exists();
     }
 }

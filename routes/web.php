@@ -37,7 +37,6 @@ use App\Http\Controllers\MandatoryTrainingController;
 use App\Http\Controllers\SuratKeputusanController;
 use App\Http\Controllers\KomiteMedikController;
 use App\Http\Controllers\HardwareController;
-use App\Http\Controllers\ReservasiRuanganController as ControllersReservasiRuanganController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -63,11 +62,12 @@ Route::middleware('auth')->group(function () {
 
     // Ticket
     // User routes
-    Route::resource('helpdesk', TicketController::class)
+    Route::middleware(['auth', 'permission:helpdesk,create'])
+        ->resource('helpdesk', TicketController::class)
         ->only(['create', 'store', 'index', 'show']);
 
     // Admin routes
-    Route::middleware(['auth', 'role:superadmin,user'])->prefix('admin')->name('admin.')->group(function () {
+    Route::middleware(['auth', 'permission:helpdesk,manage'])->prefix('admin')->name('admin.')->group(function () {
         // Manajemen tiket untuk superadmin
         Route::resource('helpdesk', AdminTicketController::class)
             ->except(['create', 'store']); // hanya index, show, edit, update, destroy
@@ -77,7 +77,7 @@ Route::middleware('auth')->group(function () {
     });
 
     // Report routes
-    Route::middleware(['auth', 'role:superadmin,user'])->prefix('reports')->name('reports.')->group(function () {
+    Route::middleware(['auth', 'permission:helpdesk,manage'])->prefix('reports')->name('reports.')->group(function () {
         Route::get('summary', [ReportController::class, 'summary'])->name('summary');
         Route::get('export', [ReportController::class, 'export'])->name('export');
     });
