@@ -141,7 +141,9 @@ class AdminTicketController extends Controller
             'note' => $request->note
         ]);
 
-        $ticket->user->notify(new TicketStatusUpdatedNotification($update));
+        if ($ticket->user) {
+            $ticket->user->notify(new TicketStatusUpdatedNotification($update));
+        };
 
         return back()->with('success', 'Status tiket diperbarui.');
     }

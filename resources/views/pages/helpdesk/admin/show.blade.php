@@ -26,11 +26,13 @@
         </div>
     </div>
 
+    @push('scripts')
+        <script src="{{ asset('assets/js/preview.js') }}"></script>
+    @endpush
+
     @if (!$ticket->approval)
         @push('scripts')
-            <script src="{{ asset('assets/js/preview.js') }}"></script>
             <script src="{{ asset('assets/js/toggle-approval.js') }}"></script>
         @endpush
     @endif
 @endsection
-

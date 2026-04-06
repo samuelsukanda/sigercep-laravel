@@ -9,8 +9,8 @@ class TicketHelper
     public static function generateTicketNumber()
     {
         $month = now()->format('m');
-        $year = now()->format('y');
-        $prefix = $month . '-' . $year; // contoh: 02-26
+        $year = now()->format('Y');
+        $prefix = $month . '-' . $year;
 
         $lastTicket = Ticket::where('ticket_number', 'LIKE', "%-{$prefix}")
             ->orderBy('id', 'desc')

@@ -43,7 +43,7 @@
                     <div class="flex items-center space-x-3">
                         @if (Auth::check())
                             <span class="text-sm font-semibold uppercase"
-                                style="color: #7664E4 !important;">{{ Auth::user()->role }}</span>
+                                style="color: #7664E4 !important;">{{ Auth::user()->unit }}</span>
                         @endif
                     </div>
                 </li>

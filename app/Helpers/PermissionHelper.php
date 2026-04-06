@@ -11,69 +11,126 @@ class PermissionHelper
         $user = Auth::user();
         if (!$user) return false;
 
-        $username = strtolower($user->username);
-        $role = strtolower($user->role);
+        $name = strtolower(trim($user->name ?? ''));
+        $unit = strtolower(trim($user->unit ?? ''));
+        $jabatan = strtolower(trim($user->jabatan ?? ''));
 
-        // 🟢 SUPERADMIN → akses penuh ke semua menu
-        if ($role === 'superadmin') {
+        // ===============================
+        // 🟢 SUPERADMIN
+        // ===============================
+        $superadminUsers = [
+            'sammuel',
+            'raden.ibnu',
+            'iyan.hermawan',
+            'novit.adriansyah',
+            'deden eka nugraha'
+        ];
+
+        if (
+            $unit === 'teknologi informasi' &&
+            in_array($jabatan, [
+                'spv it',
+                'operasional it technical support',
+                'it infrastruktur',
+                'pengembangan sistem'
+            ]) &&
+            in_array($name, $superadminUsers)
+        ) {
             return true;
         }
 
-        // 🛑 MENU KHUSUS hanya bisa diakses penuh oleh superadmin
+        // ===============================
+        // 🛑 MENU KHUSUS
+        // ===============================
         $superadminOnlyMenus = ['toner', 'visitasi', 'peminjaman', 'hardware'];
         if (in_array($menu, $superadminOnlyMenus)) {
             return $action === 'read';
         }
 
-        // 🟠 USER HAMORI
-        $hamoriMenus = [
-            'komplain_ipsrs', 'kesehatan_lingkungan', 'outsourcing_vendor',
-            'reservasi_ruangan', 'reservasi_kendaraan', 
-            'desain_grafis', 'kecelakaan_kerja','kesiapan_ambulance',
-            'mutu', 'manajemen_risiko', 'pelaporan_ikp', 'pengajuan_dokumen', 'bank_ilmu', 'laporan_perilaku', 
-            'peminjaman_aset', 'pengembalian_aset', 'laporan_aset_rusak', 'pemindahan_aset',
+        // ===============================
+        // 🟠 SEMUA USER
+        // ===============================
+        $allUsers = [
+            'komplain_ipsrs','kesehatan_lingkungan','outsourcing_vendor',
+            'reservasi_ruangan','reservasi_kendaraan','desain_grafis',
+            'kecelakaan_kerja','kesiapan_ambulance','mutu',
+            'manajemen_risiko','pelaporan_ikp','pengajuan_dokumen',
+            'bank_ilmu','laporan_perilaku','peminjaman_aset',
+            'pengembalian_aset','laporan_aset_rusak','pemindahan_aset',
         ];
 
-        if ($role === 'user') {
-            if (in_array($menu, $hamoriMenus)) {
-                return in_array($action, ['create', 'read']);
-            }
-            return $action === 'read';
-        }
-
-        // 🟡 ADMIN DENGAN AKSES KHUSUS
-        $adminSpecificAccess = [
-            'mutu' => ['mutu', 'bank_spo', 'manajemen_risiko', 'pelaporan_ikp', 'pengajuan_dokumen', 'bank_ilmu', 'laporan_perilaku'],
-            'sdm'  => ['utw', 'peraturan_perusahaan', 'surat_keputusan', 'mandatory_training'],
-            'komdik' => ['komite_medik'],
-            'ipsrs' => ['komplain_ipsrs', 'kesehatan_lingkungan', 'outsourcing_vendor'],
-            'desaingrafis' => ['desain_grafis'],
-        ];
-
-        // Jika admin memiliki akses penuh ke menu sesuai bagiannya
-        if (isset($adminSpecificAccess[$username]) && in_array($menu, $adminSpecificAccess[$username])) {
-            return in_array($action, ['create', 'read', 'update', 'delete']);
-        }
-
-        // 🔵 SEMUA ADMIN (selain hamori)
-        if ($role === 'admin') {
-            // Menu yang restricted hanya untuk admin tertentu
-            $restrictedMenus = [
-                'bank_spo', // hanya mutu
-                'utw', 'peraturan_perusahaan', 'surat_keputusan', 'mandatory_training', // hanya sdm
-                'komite_medik', // hanya komdik
-            ];
-
-            // Jika menu termasuk restricted, hanya boleh read
-            if (in_array($menu, $restrictedMenus)) {
-                return $action === 'read';
-            }
-
-            // Admin biasa bisa create + read di semua menu lain
+        if (in_array($menu, $allUsers)) {
             return in_array($action, ['create', 'read']);
         }
 
-        // 🔘 DEFAULT: hanya read
+        // ===============================
+        // 🟡 ADMIN SPESIFIK
+        // ===============================
+        $adminSpecificAccess = [
+            'mutu' => [
+                'unit' => ['mutu'],
+                'jabatan' => ['staf mutu', 'ketua mutu'],
+                'users' => ['pupu.pujiawati', 'indah.pertiwi'],
+                'menus' => [
+                    'mutu','bank_spo','manajemen_risiko',
+                    'pelaporan_ikp','pengajuan_dokumen',
+                    'bank_ilmu','laporan_perilaku'
+                ]
+            ],
+            'sdm' => [
+                'unit' => ['sdm'],
+                'jabatan' => [
+                    'manajer sdm dan hukum',
+                    'spv sdm dan hukum',
+                    'staf sdm',
+                    'staf diklat dan pengembangan',
+                    'staf hukum dan hubungan industrial'
+                ],
+                'users' => [
+                    'novia.firstania',
+                    'jatu.priya',
+                    'rifaldi.zakhari',
+                    'ruri.kemala',
+                    'muhamad.fajar'
+                ],
+                'menus' => [
+                    'utw','peraturan_perusahaan',
+                    'surat_keputusan','mandatory_training'
+                ]
+            ],
+            'komite_medik' => [
+                'unit' => ['komite medik'],
+                'jabatan' => ['staf komite medik'],
+                'users' => ['meliana.fatimah'],
+                'menus' => ['komite_medik']
+            ],
+        ];
+
+        foreach ($adminSpecificAccess as $config) {
+            if (
+                in_array($unit, $config['unit']) &&
+                in_array($jabatan, $config['jabatan']) &&
+                in_array($name, $config['users']) &&
+                in_array($menu, $config['menus'])
+            ) {
+                return in_array($action, ['create', 'read', 'update', 'delete']);
+            }
+        }
+
+        // ===============================
+        // 🔵 DEFAULT USER
+        // ===============================
+        $restrictedMenus = [
+            'bank_spo',
+            'utw','peraturan_perusahaan',
+            'surat_keputusan','mandatory_training',
+            'komite_medik',
+        ];
+
+        if (in_array($menu, $restrictedMenus)) {
+            return $action === 'read';
+        }
+
         return $action === 'read';
     }
 }

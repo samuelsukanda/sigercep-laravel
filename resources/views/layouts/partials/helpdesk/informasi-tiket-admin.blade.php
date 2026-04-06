@@ -1,5 +1,6 @@
 {{-- Informasi Tiket --}}
 <div class="relative flex flex-col bg-white shadow-soft-xl rounded-2xl mb-4">
+
     <div class="p-6 pb-0 mb-0 bg-white rounded-t-2xl">
         <h6 class="mb-0 font-bold text-lg">Informasi Tiket</h6>
     </div>
@@ -68,8 +69,8 @@
                                 @else
                                     <div
                                         style="position:absolute; top:0; left:0; width:100%; height:100%;
-                                        display:flex; flex-direction:column; align-items:center; justify-content:center;
-                                        background:#f3f4f6; font-size:12px; color:#555;">
+                                                        display:flex; flex-direction:column; align-items:center; justify-content:center;
+                                                        background:#f3f4f6; font-size:12px; color:#555;">
                                         📄 {{ $ext }}
                                     </div>
                                 @endif
@@ -85,73 +86,72 @@
                 {{-- MODAL --}}
                 <div x-show="show" x-cloak x-transition.opacity @click.self="closeModal()"
                     style="
-                                position: fixed;
-                                inset: 0;
-                                background: rgba(0,0,0,0.9);
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                z-index: 9999;
-                                padding: 20px;
-                            ">
+                    position: fixed;
+                    inset: 0;
+                    background: rgba(0,0,0,0.9);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 9999;
+                    padding: 20px;
+                    ">
 
                     <div
                         style="
-                                    position: relative;
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                    width: 100%;
-                                    height: 100%;
-                                ">
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 100%;
+                        height: 100%;
+                        ">
 
                         {{-- CLOSE BUTTON --}}
                         <button @click="closeModal()"
                             style="
-                                        position: absolute;
-                                        top: 20px;
-                                        right: 20px;
-                                        background: rgba(255,255,255,0.9);
-                                        border-radius: 50%;
-                                        width: 40px;
-                                        height: 40px;
-                                        border: none;
-                                        cursor: pointer;
-                                        font-size: 18px;
-                                        font-weight: bold;
-                                        z-index: 10;
-                                    ">
+                            position: absolute;
+                            top: 20px;
+                            right: 20px;
+                            background: rgba(255,255,255,0.9);
+                            border-radius: 50%;
+                            width: 40px;
+                            height: 40px;
+                            border: none;
+                            cursor: pointer;
+                            font-size: 18px;
+                            font-weight: bold;
+                            z-index: 10;
+                            ">
                             ✕
                         </button>
 
                         {{-- IMAGE --}}
                         <img x-show="isImage" :src="fileUrl"
                             style="
-                                        max-width: 90%;
-                                        max-height: 85vh;
-                                        object-fit: contain;
-                                        border-radius: 10px;
-                                        display: block;
-                                        margin: auto;
-                                        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-                                    ">
+                            max-width: 90%;
+                            max-height: 85vh;
+                            object-fit: contain;
+                            border-radius: 10px;
+                            display: block;
+                            margin: auto;
+                            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+                            ">
 
                         {{-- NON IMAGE --}}
                         <iframe x-show="!isImage" :src="fileUrl"
                             style="
-                                    width: 90vw;
-                                    height: 85vh;
-                                    background: white;
-                                    border-radius: 10px;
-                                    border: none;
-                                ">
+                            width: 90vw;
+                            height: 85vh;
+                            background: white;
+                            border-radius: 10px;
+                            border: none;
+                            ">
                         </iframe>
 
                     </div>
                 </div>
 
             </div>
-
         </div>
     </div>
 </div>
