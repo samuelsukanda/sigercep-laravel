@@ -38,28 +38,7 @@ class PermissionHelper
         if ($hasWildcard) return true;
 
         // ===============================
-        // 🔵 2. MANAGE
-        // ===============================
-        $hasManage = Permission::where('menu', $menu)
-            ->where('action', 'manage')
-            ->whereHas('rules', function ($q) use ($unit, $jabatan, $name) {
-                $q->where(function ($q2) use ($unit) {
-                    $q2->whereNull('unit')
-                        ->orWhereRaw('LOWER(unit) = ?', [$unit]);
-                })->where(function ($q2) use ($jabatan) {
-                    $q2->whereNull('jabatan')
-                        ->orWhereRaw('LOWER(jabatan) = ?', [$jabatan]);
-                })->where(function ($q2) use ($name) {
-                    $q2->whereNull('name')
-                        ->orWhereRaw('LOWER(name) = ?', [$name]);
-                });
-            })
-            ->exists();
-
-        if ($hasManage) return true;
-
-        // ===============================
-        // 🟠 3. EXACT
+        // 🟠 2. CEK EXACT PERMISSION
         // ===============================
         $permission = Permission::where('menu', $menu)
             ->where('action', $action)
@@ -72,14 +51,10 @@ class PermissionHelper
                 $q->where(function ($q2) use ($unit) {
                     $q2->whereNull('unit')
                         ->orWhereRaw('LOWER(unit) = ?', [$unit]);
-                });
-
-                $q->where(function ($q2) use ($jabatan) {
+                })->where(function ($q2) use ($jabatan) {
                     $q2->whereNull('jabatan')
                         ->orWhereRaw('LOWER(jabatan) = ?', [$jabatan]);
-                });
-
-                $q->where(function ($q2) use ($name) {
+                })->where(function ($q2) use ($name) {
                     $q2->whereNull('name')
                         ->orWhereRaw('LOWER(name) = ?', [$name]);
                 });

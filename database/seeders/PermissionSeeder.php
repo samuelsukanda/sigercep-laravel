@@ -37,30 +37,10 @@ class PermissionSeeder extends Seeder
             'menu' => '*',
             'action' => '*'
         ]);
-
         $super->rules()->createMany($superRules);
 
         // ===============================
-        // 🔴 SUPERADMIN ONLY MENU
-        // ===============================
-        $superMenus = ['toner', 'visitasi', 'hardware', 'peminjaman'];
-
-        foreach ($superMenus as $menu) {
-
-            $p = Permission::create([
-                'menu' => $menu,
-                'action' => 'manage'
-            ]);
-            $p->rules()->createMany($superRules);
-
-            Permission::create([
-                'menu' => $menu,
-                'action' => 'read'
-            ])->rules()->createMany($superRules);
-        }
-
-        // ===============================
-        // 🟠 SEMUA USER (CREATE + READ)
+        // 📋 DAFTAR SEMUA MENU
         // ===============================
         $allMenus = [
             'komplain_ipsrs',
@@ -84,38 +64,34 @@ class PermissionSeeder extends Seeder
             'helpdesk'
         ];
 
+        // ===============================
+        // 🟠 SEMUA USER (HANYA CREATE DAN READ)
+        // ===============================
+        $basicActions = ['create', 'read'];
+
         foreach ($allMenus as $menu) {
-
-            // CREATE
-            Permission::create([
-                'menu' => $menu,
-                'action' => 'create'
-            ])->rules()->create([
-                'unit' => null,
-                'jabatan' => null,
-                'name' => null
-            ]);
-
-            // READ
-            Permission::create([
-                'menu' => $menu,
-                'action' => 'read'
-            ])->rules()->create([
-                'unit' => null,
-                'jabatan' => null,
-                'name' => null
-            ]);
+            foreach ($basicActions as $action) {
+                Permission::create([
+                    'menu' => $menu,
+                    'action' => $action
+                ])->rules()->create([
+                    'unit' => null,
+                    'jabatan' => null,
+                    'name' => null
+                ]);
+            }
         }
 
         // ===============================
-        // 🟢 SEMUA USER (READ ONLY)
+        // 📖 READ ONLY MENU (TANPA CREATE, UPDATE, DELETE)
         // ===============================
         $readOnlyMenus = [
             'bank_spo',
             'utw',
             'peraturan_perusahaan',
             'surat_keputusan',
-            'mandatory_training'
+            'mandatory_training',
+            'komite_medik',
         ];
 
         foreach ($readOnlyMenus as $menu) {
@@ -130,17 +106,21 @@ class PermissionSeeder extends Seeder
         }
 
         // ===============================
-        // 🔵 ADMIN HELP DESK (IT)
+        // 🔵 ADMIN HELP DESK (IT) - FULL AKSES
         // ===============================
-        Permission::create([
-            'menu' => 'helpdesk',
-            'action' => 'manage'
-        ])->rules()->create([
-            'unit' => 'teknologi informasi'
-        ]);
+        $fullActions = ['create', 'read', 'update', 'delete'];
+
+        foreach ($fullActions as $action) {
+            Permission::create([
+                'menu' => 'helpdesk',
+                'action' => $action
+            ])->rules()->create([
+                'unit' => 'teknologi informasi'
+            ]);
+        }
 
         // ===============================
-        // 🟡 REPORT
+        // 📊 REPORT - READ ONLY UNTUK UNIT IT
         // ===============================
         Permission::create([
             'menu' => 'reports',
@@ -150,7 +130,7 @@ class PermissionSeeder extends Seeder
         ]);
 
         // ===============================
-        // 🔴 MUTU
+        // 🔴 MUTU - FULL AKSES UNTUK MENU TERTENTU
         // ===============================
         $mutuMenus = [
             'mutu',
@@ -162,18 +142,23 @@ class PermissionSeeder extends Seeder
             'laporan_perilaku'
         ];
 
+        $mutuRules = [
+            ['unit' => 'mutu', 'jabatan' => 'ketua mutu', 'name' => 'pupu.pujiawati'],
+            ['unit' => 'mutu', 'jabatan' => 'staf mutu', 'name' => 'indah.pertiwi'],
+        ];
+
         foreach ($mutuMenus as $menu) {
-            Permission::create([
-                'menu' => $menu,
-                'action' => 'manage'
-            ])->rules()->createMany([
-                ['unit' => 'mutu', 'jabatan' => 'ketua mutu', 'name' => 'pupu.pujiawati'],
-                ['unit' => 'mutu', 'jabatan' => 'staf mutu', 'name' => 'indah.pertiwi'],
-            ]);
+            foreach ($fullActions as $action) {
+                $permission = Permission::create([
+                    'menu' => $menu,
+                    'action' => $action
+                ]);
+                $permission->rules()->createMany($mutuRules);
+            }
         }
 
         // ===============================
-        // 🟣 SDM
+        // 🟣 SDM - FULL AKSES UNTUK MENU TERTENTU
         // ===============================
         $sdmMenus = [
             'utw',
@@ -182,29 +167,72 @@ class PermissionSeeder extends Seeder
             'mandatory_training'
         ];
 
+        $sdmRules = [
+            ['unit' => 'sdm', 'jabatan' => 'manajer sdm dan hukum', 'name' => 'jatu.priya'],
+            ['unit' => 'sdm', 'jabatan' => 'spv sdm dan hukum', 'name' => 'ruri.kemala'],
+            ['unit' => 'sdm', 'jabatan' => 'staf sdm', 'name' => 'novia.firstania'],
+            ['unit' => 'sdm', 'jabatan' => 'staf diklat dan pengembangan', 'name' => 'rifaldi.zakhari'],
+            ['unit' => 'sdm', 'jabatan' => 'staf hukum dan hubungan industrial', 'name' => 'muhamad.fajar'],
+        ];
+
         foreach ($sdmMenus as $menu) {
-            Permission::create([
-                'menu' => $menu,
-                'action' => 'manage'
-            ])->rules()->createMany([
-                ['unit' => 'sdm', 'jabatan' => 'manajer sdm dan hukum', 'name' => 'jatu.priya'],
-                ['unit' => 'sdm', 'jabatan' => 'spv sdm dan hukum', 'name' => 'ruri.kemala'],
-                ['unit' => 'sdm', 'jabatan' => 'staf sdm', 'name' => 'novia.firstania'],
-                ['unit' => 'sdm', 'jabatan' => 'staf diklat dan pengembangan', 'name' => 'rifaldi.zakhari'],
-                ['unit' => 'sdm', 'jabatan' => 'staf hukum dan hubungan industrial', 'name' => 'muhamad.fajar'],
+            foreach ($fullActions as $action) {
+                $permission = Permission::create([
+                    'menu' => $menu,
+                    'action' => $action
+                ]);
+                $permission->rules()->createMany($sdmRules);
+            }
+        }
+
+        // ===============================
+        // 🟤 KOMITE MEDIK - FULL AKSES (TIM KHUSUS)
+        // ===============================
+        // HAPUS KOMITE MEDIK DARI READ ONLY DAN BUAT FULL AKSES UNTUK TIMNYA
+        $komiteRules = [
+            ['unit' => 'komite medik', 'jabatan' => 'staf komite medik', 'name' => 'meliana.fatimah']
+        ];
+
+        foreach ($fullActions as $action) {
+            $permission = Permission::create([
+                'menu' => 'komite_medik',
+                'action' => $action
+            ]);
+            $permission->rules()->createMany($komiteRules);
+        }
+        
+        // ===============================
+        // 🔐 PERMISSION MANAGEMENT - HANYA UNTUK SAMMUEL
+        // ===============================
+        $permManagementActions = ['read', 'create', 'update', 'delete'];
+
+        foreach ($permManagementActions as $action) {
+            $permission = Permission::create([
+                'menu' => 'permissions',
+                'action' => $action
+            ]);
+
+            // Hanya untuk user sammuel dari IT Operasional
+            $permission->rules()->create([
+                'unit' => 'teknologi informasi',
+                'jabatan' => 'operasional it technical support',
+                'name' => 'sammuel'
             ]);
         }
 
         // ===============================
-        // 🟤 KOMITE MEDIK
+        // 🟡 SUPERADMIN ONLY MENU (HANYA SUPERADMIN YANG BISA)
         // ===============================
-        Permission::create([
-            'menu' => 'komite_medik',
-            'action' => 'manage'
-        ])->rules()->create([
-            'unit' => 'komite medik',
-            'jabatan' => 'staf komite medik',
-            'name' => 'meliana.fatimah'
-        ]);
+        $superOnlyMenus = ['toner', 'visitasi', 'hardware', 'peminjaman'];
+
+        foreach ($superOnlyMenus as $menu) {
+            foreach ($fullActions as $action) {
+                $permission = Permission::create([
+                    'menu' => $menu,
+                    'action' => $action
+                ]);
+                $permission->rules()->createMany($superRules);
+            }
+        }
     }
 }

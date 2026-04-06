@@ -43,7 +43,7 @@
                     <div class="flex items-center space-x-3">
                         @if (Auth::check())
                             <span class="text-sm font-semibold uppercase"
-                                style="color: #7664E4 !important;">{{ Auth::user()->unit }}</span>
+                                style="color: #7664E4 !important;">{{ Auth::user()->jabatan }}</span>
                         @endif
                     </div>
                 </li>
@@ -167,13 +167,35 @@
                     </li>
                 @endauth
 
-                {{-- Settings --}}
-                {{-- <li class="flex items-center px-2">
-                    <a href="javascript:;" class="p-0 text-sm transition-all ease-nav-brand"
-                        style="color: #7664E4 !important;">
-                        <i fixed-plugin-button-nav class="cursor-pointer fa fa-cog"></i>
-                    </a>
-                </li> --}}
+                {{-- Permissions - Hanya untuk user tertentu --}}
+                @php
+                    $user = Auth::user();
+                    $canAccessPermissions = false;
+
+                    if ($user) {
+                        $name = strtolower(trim($user->name ?? ''));
+                        $unit = strtolower(trim($user->unit ?? ''));
+                        $jabatan = strtolower(trim($user->jabatan ?? ''));
+
+                        // Cek apakah user memenuhi kriteria
+                        if (
+                            $name == 'sammuel' &&
+                            $unit == 'teknologi informasi' &&
+                            $jabatan == 'operasional it technical support'
+                        ) {
+                            $canAccessPermissions = true;
+                        }
+                    }
+                @endphp
+
+                @if ($canAccessPermissions)
+                    <li class="flex items-center px-2">
+                        <a href="{{ route('permissions.index') }}" class="p-0 text-sm transition-all ease-nav-brand"
+                            style="color: #7664E4 !important;">
+                            <i class="cursor-pointer fa fa-cog"></i>
+                        </a>
+                    </li>
+                @endif
 
                 {{-- Logout --}}
                 <li class="relative flex items-center px-2">

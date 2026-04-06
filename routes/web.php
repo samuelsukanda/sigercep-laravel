@@ -37,6 +37,7 @@ use App\Http\Controllers\MandatoryTrainingController;
 use App\Http\Controllers\SuratKeputusanController;
 use App\Http\Controllers\KomiteMedikController;
 use App\Http\Controllers\HardwareController;
+use App\Http\Controllers\PermissionController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -54,9 +55,28 @@ Route::middleware('auth')->group(function () {
         return view('app');
     })->name('app');
 
-    Route::get('/settings', function () {
-        return view('settings');
-    })->name('settings');
+    // Permission Management Routes
+    Route::middleware(['auth'])->prefix('permissions')->name('permissions.')->group(function () {
+        Route::get('/', [PermissionController::class, 'index'])
+            ->name('index')
+            ->middleware('permission:permissions,read');  // ✅ Tambah middleware
+
+        Route::post('/', [PermissionController::class, 'store'])
+            ->name('store')
+            ->middleware('permission:permissions,create');
+
+        Route::delete('/{permission}', [PermissionController::class, 'destroy'])
+            ->name('destroy')
+            ->middleware('permission:permissions,delete');
+
+        Route::post('/{permission}/add-rule', [PermissionController::class, 'addRule'])
+            ->name('add-rule')
+            ->middleware('permission:permissions,create');
+
+        Route::delete('/rule/{rule}', [PermissionController::class, 'deleteRule'])
+            ->name('delete-rule')
+            ->middleware('permission:permissions,delete');
+    });
 
     // Pages - Views
 
