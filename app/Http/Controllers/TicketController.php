@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use App\Helpers\TicketHelper;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -21,54 +20,35 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'  => 'required|string',
-            'unit_name'  => 'required|string',
-            'category'   => 'nullable|in:Hardware,Printer,Jaringan,Software,SIMRS',
+            'category'    => 'nullable|in:Hardware,Printer,Jaringan,Software,SIMRS',
             'description' => 'required|string',
-            'urgency'    => 'nullable|in:Low,Medium,High,Critical',
-            'attachment' => 'nullable|array',
+            'urgency'     => 'nullable|in:Low,Medium,High,Critical',
+            'attachment'  => 'nullable|array',
             'attachment.*' => 'file|mimes:jpg,png,jpeg,doc,docx,xls,xlsx,pdf|max:2048'
-        ], [
-            'attachment.max' => 'Ukuran file terlalu besar! Maksimal 2 MB.',
-            'attachment.mimes' => 'Format file harus jpg, png, jpeg, doc, docx, xls, xlsx, atau pdf.'
         ]);
 
         $ticket = new Ticket();
         $ticket->ticket_number = TicketHelper::generateTicketNumber();
-        $ticket->user_id       = Auth::id();
-        $ticket->name          = Auth::user()->name;
-        $ticket->unit_name     = $request->unit_name;
+        $ticket->user_id       = Auth::id(); 
         $ticket->category      = $request->category;
         $ticket->description   = $request->description;
         $ticket->urgency       = $request->urgency;
         $ticket->status        = 'Open';
 
         if ($request->hasFile('attachment')) {
-
             $paths = [];
-
             foreach ($request->file('attachment') as $file) {
                 $extension = $file->getClientOriginalExtension();
-
                 $filename = 'helpdesk-' . $ticket->ticket_number . '-' . now()->format('YmdHis') . '-' . uniqid() . '.' . $extension;
-
                 $path = $file->storeAs('images/helpdesk', $filename, 'public');
-
                 $paths[] = $path;
             }
-
-            // simpan ke DB (json)
             $ticket->attachment = $paths;
         }
 
         $ticket->save();
 
         $itUsers = User::where('unit', 'Teknologi Informasi')->get();
-
-        if ($itUsers->isEmpty()) {
-            logger()->warning('Tidak ada IT untuk menerima notifikasi.');
-        }
-
         foreach ($itUsers as $user) {
             $user->notify(new NewTicketNotification($ticket));
         }

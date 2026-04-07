@@ -344,9 +344,9 @@
                     </div>
                     <div class="modal-rules-rows" id="modalRulesRows">
                         <div class="modal-rule-row">
+                            <input type="text" name="rules[0][name]" placeholder="Nama user">
                             <input type="text" name="rules[0][unit]" placeholder="Unit">
                             <input type="text" name="rules[0][jabatan]" placeholder="Jabatan">
-                            <input type="text" name="rules[0][name]" placeholder="Nama user">
                             <div></div>
                         </div>
                     </div>

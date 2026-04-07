@@ -29,6 +29,73 @@
         </div>
     </div>
 
+    {{-- Tabel Rekap Tindakan Admin --}}
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-4">
+        <div class="p-6 pb-0 mb-0 bg-white rounded-t-2xl">
+            <h6 class="mb-0 font-bold text-lg">Rekap Tindakan Admin</h6>
+        </div>
+        <div class="pb-5 pt-2 border-gray-200 mt-2">
+            <div class="overflow-x-auto px-4">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nama Admin</th>
+                            <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase">Approved</th>
+                            <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase">Rejected</th>
+                            <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase">Need
+                                Clarification</th>
+                            <th class="px-3 py-2 text-center text-xs font-medium text-gray-500 uppercase">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @forelse ($adminActionsRecap ?? [] as $adminName => $actions)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-3 py-2 font-medium text-gray-800">
+                                    {{ ucwords(str_replace('.', ' ', $adminName)) }}</td>
+                                <td class="px-3 py-2 text-center text-green-600 font-semibold">
+                                    {{ $actions['Approved'] ?? 0 }}
+                                </td>
+                                <td class="px-3 py-2 text-center text-red-600 font-semibold">
+                                    {{ $actions['Rejected'] ?? 0 }}
+                                </td>
+                                <td class="px-3 py-2 text-center text-yellow-600 font-semibold">
+                                    {{ $actions['Need Clarification'] ?? 0 }}
+                                </td>
+                                <td class="px-3 py-2 text-center font-bold text-gray-800">
+                                    {{ ($actions['Approved'] ?? 0) + ($actions['Rejected'] ?? 0) + ($actions['Need Clarification'] ?? 0) }}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="px-3 py-4 text-center text-gray-400">Belum ada tindakan admin
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                    @if (!empty($adminActionsRecap))
+                        <tfoot class="bg-gray-50 font-semibold">
+                            <tr>
+                                <td class="px-3 py-2 text-gray-700">Total</td>
+                                <td class="px-3 py-2 text-center text-green-700">
+                                    {{ collect($adminActionsRecap)->sum(fn($a) => $a['Approved'] ?? 0) }}
+                                </td>
+                                <td class="px-3 py-2 text-center text-red-700">
+                                    {{ collect($adminActionsRecap)->sum(fn($a) => $a['Rejected'] ?? 0) }}
+                                </td>
+                                <td class="px-3 py-2 text-center text-yellow-700">
+                                    {{ collect($adminActionsRecap)->sum(fn($a) => $a['Need Clarification'] ?? 0) }}
+                                </td>
+                                <td class="px-3 py-2 text-center text-gray-800">
+                                    {{ collect($adminActionsRecap)->sum(fn($a) => ($a['Approved'] ?? 0) + ($a['Rejected'] ?? 0) + ($a['Need Clarification'] ?? 0)) }}
+                                </td>
+                            </tr>
+                        </tfoot>
+                    @endif
+                </table>
+            </div>
+        </div>
+    </div>
+
     {{-- Rekap Kategori --}}
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-4">
         <div class="p-6 pb-0 mb-0 bg-white rounded-t-2xl">

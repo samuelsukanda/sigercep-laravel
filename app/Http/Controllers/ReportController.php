@@ -93,6 +93,34 @@ class ReportController extends Controller
         // Rekap per status approval
         $approvalRecap = $ticket_approvals->groupBy('approval_status')->map->count();
 
+        // Rekap per admin berdasarkan tindakan approval
+        $adminActionsRecap = [];
+        foreach ($ticket_approvals as $approval) {
+            if ($approval && $approval->approved_by) {
+                $adminName = $approval->approved_by;
+                $status = $approval->approval_status;
+
+                if (!isset($adminActionsRecap[$adminName])) {
+                    $adminActionsRecap[$adminName] = [
+                        'Approved' => 0,
+                        'Rejected' => 0,
+                        'Need Clarification' => 0,
+                    ];
+                }
+
+                if (isset($adminActionsRecap[$adminName][$status])) {
+                    $adminActionsRecap[$adminName][$status]++;
+                }
+            }
+        }
+
+        $adminActionsRecapWithNames = [];
+        foreach ($adminActionsRecap as $adminId => $actions) {
+            $admin = \App\Models\User::find($adminId);
+            $adminName = $admin ? $admin->name : 'Admin ID: ' . $adminId;
+            $adminActionsRecapWithNames[$adminName] = $actions;
+        }
+
         // Rekap per status tiket
         $statusRecap = $tickets->groupBy('status')->map->count();
         $statusRecap['Done'] = $totalDone;
@@ -114,6 +142,7 @@ class ReportController extends Controller
             'avgResolutionDays',
             'hours',
             'minutes',
+            'adminActionsRecap',
         ));
     }
 
