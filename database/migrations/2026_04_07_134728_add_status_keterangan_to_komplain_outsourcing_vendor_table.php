@@ -10,7 +10,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('komplain_outsourcing_vendor', function (Blueprint $table) {
-            $table->enum('status', ['Pending', 'On Progress', 'Done'])->after('foto')->nullable();
+            $table->enum('status', ['Pending', 'In Progress', 'Done'])->after('foto')->nullable();
+            $table->string('keterangan')->after('status')->nullable();
         });
     }
 

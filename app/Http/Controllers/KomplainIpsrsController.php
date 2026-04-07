@@ -50,8 +50,6 @@ class KomplainIpsrsController extends Controller
             'tanggal' => 'required|date',
             'kendala' => 'required|string',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png',
-            'status' => 'nullable|in:Pending,On Progress,Done',
-            'keterangan' => 'nullable|string|max:255',
         ]);
 
         if ($request->hasFile('foto')) {
@@ -90,7 +88,7 @@ class KomplainIpsrsController extends Controller
             'tanggal' => 'required|date',
             'kendala' => 'required|string',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png',
-            'status' => 'nullable|in:Pending,On Progress,Done',
+            'status' => 'nullable|in:Pending,In Progress,Done',
             'keterangan' => 'nullable|string|max:255',
         ]);
 

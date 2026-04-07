@@ -21,5 +21,6 @@ class KomplainOutsourcingVendor extends Model
         'area',
         'foto',
         'status',
+        'keterangan',
     ];
 }

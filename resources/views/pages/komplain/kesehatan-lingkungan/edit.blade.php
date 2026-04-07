@@ -19,28 +19,32 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama --}}
-                                <x-form.input name="nama" label="Nama" :value="old('nama', $komplain->nama ?? '')" required />
+                                <x-form.input name="nama" label="Nama" :value="old('nama', $komplain->nama ?? '')" required readonly />
 
                                 {{-- Unit --}}
-                                <x-form.select name="unit" label="Unit" :options="config('units.units')" :selected="old('unit', $komplain->unit ?? '')" required />
+                                <x-form.select name="unit" label="Unit" :options="config('units.units')" :selected="old('unit', $komplain->unit ?? '')" required readonly />
 
                                 {{-- Tanggal --}}
                                 <x-form.input name="tanggal" label="Tanggal" :value="old('tanggal', $komplain->tanggal ?? '')" id="tanggal"
-                                    placeholder="Pilih Tanggal" required />
+                                    placeholder="Pilih Tanggal" required readonly />
 
                                 {{-- Lokasi Masalah --}}
-                                <x-form.input name="lokasi_masalah" label="Lokasi Masalah" :value="old('lokasi_masalah', $komplain->lokasi_masalah ?? '')" required />
+                                <x-form.input name="lokasi_masalah" label="Lokasi Masalah" :value="old('lokasi_masalah', $komplain->lokasi_masalah ?? '')" required readonly />
 
                                 {{-- Jenis Hama --}}
-                                <x-form.input name="jenis_hama" label="Jenis Hama" :value="old('jenis_hama', $komplain->jenis_hama ?? '')" required />
+                                <x-form.input name="jenis_hama" label="Jenis Hama" :value="old('jenis_hama', $komplain->jenis_hama ?? '')" required readonly />
 
                                 {{-- Dokumentasi --}}
                                 <x-form.file-upload label="Dokumentasi" name="dokumentasi"
                                     preview="{{ $komplain->dokumentasi ?? null }}" />
 
                                 {{-- Status --}}
-                                <x-form.select label="Status" name="status" :options="['Pending', 'On Progress', 'Done']" :selected="old('status', $komplain->status)"
+                                <x-form.select label="Status" name="status" :options="['Pending', 'In Progress', 'Done']" :selected="old('status', $komplain->status)"
                                     placeholder="Pilih Status" />
+
+                                {{-- Keterangan --}}
+                                <x-form.input label="Keterangan" name="keterangan"
+                                    value="{{ old('keterangan', $komplain->keterangan) }}" class="md:col-span-2" />
                             </div>
 
                             <div class="mt-6">

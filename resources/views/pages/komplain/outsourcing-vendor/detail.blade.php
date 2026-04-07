@@ -65,6 +65,12 @@
                                 <p class="text-slate-600">{{ $komplain->status ?? '-' }}</p>
                             </div>
 
+                            {{-- Keterangan --}}
+                            <div class="md:col-span-2">
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Keterangan</label>
+                                <p class="text-slate-600">{{ $komplain->keterangan ?? '-' }}</p>
+                            </div>
+
                             {{-- Foto --}}
                             @if ($komplain->foto)
                                 <div class="md:col-span-2">

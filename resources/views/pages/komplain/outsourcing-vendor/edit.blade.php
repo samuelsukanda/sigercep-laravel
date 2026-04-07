@@ -19,39 +19,43 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama --}}
                                 <x-form.input label="Nama" name="nama" value="{{ old('nama', $komplain->nama) }}"
-                                    required />
+                                    required readonly />
 
                                 {{-- Unit --}}
                                 <x-form.select label="Unit" name="unit" :options="config('units.units')" :selected="old('unit', $komplain->unit)"
-                                    placeholder="Pilih Unit" required />
+                                    placeholder="Pilih Unit" required readonly />
 
                                 {{-- Tujuan Unit --}}
                                 <x-form.select label="Ditujukan Ke Unit" name="tujuan_unit" :options="config('units.tujuanUnitsOutsourcing')"
-                                    :selected="old('tujuan_unit', $komplain->tujuan_unit)" placeholder="Pilih Unit" required />
+                                    :selected="old('tujuan_unit', $komplain->tujuan_unit)" placeholder="Pilih Unit" required readonly />
 
                                 {{-- Tanggal --}}
                                 <x-form.input label="Tanggal" name="tanggal"
-                                    value="{{ old('tanggal', $komplain->tanggal) }}" id="tanggal" required />
+                                    value="{{ old('tanggal', $komplain->tanggal) }}" id="tanggal" required readonly />
 
                                 {{-- Jam --}}
                                 <x-form.input label="Jam" name="jam" type="time"
-                                    value="{{ old('jam', $komplain->jam) }}" required />
+                                    value="{{ old('jam', $komplain->jam) }}" required readonly />
 
                                 {{-- Kendala --}}
                                 <x-form.textarea label="Kendala Atau Pengaduan Di Lapangan" name="kendala" rows="5"
-                                    required>{{ old('kendala', $komplain->kendala) }}</x-form.textarea>
+                                    required readonly>{{ old('kendala', $komplain->kendala) }}</x-form.textarea>
 
                                 {{-- Area --}}
                                 <x-form.input name="area" label="Area Komplain Yang Di Laporkan" :value="old('area', $komplain->area ?? '')"
-                                    required />
+                                    required readonly />
 
                                 {{-- Foto --}}
                                 <x-form.file-upload label="Foto Komplain/Kerusakan/Kendala Di Lapangan" name="foto"
                                     preview="{{ $komplain->foto ?? null }}" />
 
                                 {{-- Status --}}
-                                <x-form.select label="Status" name="status" :options="['Pending', 'On Progress', 'Done']" :selected="old('status', $komplain->status)"
+                                <x-form.select label="Status" name="status" :options="['Pending', 'In Progress', 'Done']" :selected="old('status', $komplain->status)"
                                     placeholder="Pilih Status" />
+
+                                {{-- Keterangan --}}
+                                <x-form.input label="Keterangan" name="keterangan"
+                                    value="{{ old('keterangan', $komplain->keterangan) }}" class="md:col-span-2" />
                             </div>
 
                             <div class="mt-6">

@@ -9,7 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('kesehatan_lingkungan', function (Blueprint $table) {
-            $table->enum('status', ['Pending', 'On Progress', 'Done'])->after('dokumentasi')->nullable();
+            $table->enum('status', ['Pending', 'In Progress', 'Done'])->after('dokumentasi')->nullable();
+            $table->string('keterangan')->after('status')->nullable();
         });
     }
 
