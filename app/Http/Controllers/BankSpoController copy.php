@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\BankSpo;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
+use Yajra\DataTables\Facades\DataTables;
 
 class BankSpoController extends Controller
 {
@@ -19,115 +20,17 @@ class BankSpoController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $columns = ['file_pdf', 'unit', 'jenis_spo', 'created_at'];
+        $query = BankSpo::query();
 
-            $query = BankSpo::query();
-
-            // Filter tanggal
-            if ($request->start_date && $request->end_date) {
-                $query->whereBetween('created_at', [
-                    $request->start_date . ' 00:00:00',
-                    $request->end_date . ' 23:59:59'
-                ]);
-            }
-
-            // Filter unit
-            if ($request->unit) {
-                $query->where('unit', $request->unit);
-            }
-
-            // Filter jenis SPO
-            if ($request->jenis_spo) {
-                $query->where('jenis_spo', $request->jenis_spo);
-            }
-
-            // Search
-            if ($request->has('search') && !empty($request->search['value'])) {
-                $search = $request->search['value'];
-                $query->where(function ($q) use ($search) {
-                    $q->where('file_pdf', 'like', "%{$search}%")
-                        ->orWhere('unit', 'like', "%{$search}%")
-                        ->orWhere('jenis_spo', 'like', "%{$search}%");
-                });
-            }
-
-            // Total records
-            $totalRecords = $query->count();
-
-            // Ordering
-            if ($request->has('order')) {
-                $orderColumn = $columns[$request->order[0]['column']];
-                $orderDir = $request->order[0]['dir'];
-                $query->orderBy($orderColumn, $orderDir);
-            } else {
-                $query->orderBy('created_at', 'desc');
-            }
-
-            // Pagination
-            $start = $request->start ?? 0;
-            $length = $request->length ?? 50;
-            $records = $query->skip($start)->take($length)->get();
-
-            // Ambil permission di luar loop (fix error)
-            $user = auth()->user();
-            $canUpdate = $user && $user->can('bank_spo.update');
-            $canRead = $user && $user->can('bank_spo.read');
-            $canDelete = $user && $user->can('bank_spo.delete');
-
-            // Prepare data
-            $data = [];
-
-            foreach ($records as $item) {
-                $buttons = '';
-
-                if ($canUpdate) {
-                    $buttons .= '<a href="' . route('komite-mutu.bank-spo.edit', $item->id) . '" 
-                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-emerald-500 rounded-lg hover:bg-emerald-600 mr-1">
-                        <i class="fas fa-pen-to-square mr-1"></i> Edit
-                    </a>';
-                }
-
-                if ($canRead) {
-                    $buttons .= '<a href="' . route('komite-mutu.bank-spo.show', $item->id) . '" 
-                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 mr-1">
-                        <i class="fas fa-eye mr-1"></i> Lihat
-                    </a>';
-                }
-
-                if ($canDelete) {
-                    $buttons .= '<button type="button" 
-                        onclick="confirmDelete(' . $item->id . ')"
-                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600">
-                        <i class="fas fa-trash mr-1"></i> Hapus
-                    </button>';
-
-                    $buttons .= '<form id="delete-form-' . $item->id . '" 
-                        action="' . route('komite-mutu.bank-spo.destroy', $item->id) . '" 
-                        method="POST" style="display:none">
-                        ' . csrf_field() . '
-                        ' . method_field('DELETE') . '
-                    </form>';
-                }
-
-                $data[] = [
-                    'file_pdf' => $item->file_pdf,
-                    'unit' => $item->unit,
-                    'jenis_spo' => $item->jenis_spo,
-                    'tanggal_formatted' => \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y'),
-                    'aksi' => $buttons
-                ];
-            }
-
-            return response()->json([
-                'draw' => intval($request->draw),
-                'recordsTotal' => $totalRecords,
-                'recordsFiltered' => $totalRecords,
-                'data' => $data
+        if ($request->start_date && $request->end_date) {
+            $query->whereBetween('created_at', [
+                $request->start_date . ' 00:00:00',
+                $request->end_date . ' 23:59:59'
             ]);
         }
 
-        $bankSpo = BankSpo::latest()->get();
+        $bankSpo = $query->latest()->get();
+
         return view('pages.komite-mutu.bank-spo.index', compact('bankSpo'));
     }
 

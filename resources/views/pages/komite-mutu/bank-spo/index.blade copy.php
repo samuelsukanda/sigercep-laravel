@@ -23,7 +23,7 @@
 
         <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
             {{-- Filter Tanggal --}}
-            <div class="flex items-center gap-4 mb-4">
+            <form method="GET" action="{{ route('komite-mutu.bank-spo.index') }}" class="flex items-center gap-4 mb-4">
                 <div>
                     <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}"
                         class="border rounded px-3 py-2 w-full">
@@ -32,9 +32,9 @@
                     <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}"
                         class="border rounded px-3 py-2 w-full">
                 </div>
-            </div>
+            </form>
 
-            <div class="filter flex gap-2">
+            <div class="filter">
                 {{-- Filter Unit --}}
                 <select id="filter-unit"
                     class="rounded-lg border border-gray-300 text-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -55,7 +55,7 @@
         </div>
 
         <div class="relative overflow-x-auto shadow-md rounded-lg px-2 dark:text-white">
-            <table id="datatable" 
+            <table id="datatable" data-date-column="3"
                 class="min-w-full divide-y divide-gray-200 dark:divide-white-200 dark:text-white">
                 <thead class="text-xs text-slate-500 uppercase bg-slate-100 dark:text-white">
                     <tr>
@@ -66,86 +66,46 @@
                         <th class="px-6 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
+                <tbody class="text-s text-slate-500 bg-slate-100 dark:text-white">
+                    @foreach ($bankSpo as $item)
+                        <tr>
+                            <td class="px-6 py-4">{{ $item->file_pdf }}</td>
+                            <td class="px-6 py-4">{{ $item->unit }}</td>
+                            <td class="px-6 py-4">{{ $item->jenis_spo }}</td>
+                            <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->created_at)->timestamp }}">
+                                {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}
+                            </td>
+                            <td class="px-6 py-4 space-x-2 text-center">
+                                @canAccess('bank_spo', 'update')
+                                <x-button.action href="{{ route('komite-mutu.bank-spo.edit', $item->id) }}"
+                                    icon="pen-to-square" color="emerald" title="Edit" />
+                                @endcanAccess
+
+                                @canAccess('bank_spo', 'read')
+                                <x-button.action href="{{ route('komite-mutu.bank-spo.show', $item->id) }}" icon="eye"
+                                    color="emerald" title="Lihat Data" />
+                                @endcanAccess
+
+                                @canAccess('bank_spo', 'delete')
+                                <x-button.action href="{{ route('komite-mutu.bank-spo.destroy', $item->id) }}"
+                                    icon="trash" color="red" type="button" method="DELETE" title="Hapus" />
+                                @endcanAccess
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
             </table>
         </div>
     </div>
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/alert-delete.js') }}"></script>
+    <script src="{{ asset('assets/js/alert-delete.js') }}"></script>
 
-<script>
-function confirmDelete(id) {
-    Swal.fire({
-        title: 'Apakah Anda yakin?',
-        text: "Data yang dihapus tidak dapat dikembalikan!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Ya, hapus!',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            document.getElementById('delete-form-' + id).submit();
-        }
-    });
-}
-
-$(document).ready(function() {
-    // Cek apakah DataTable sudah diinisialisasi
-    if ($.fn.DataTable.isDataTable('#datatable')) {
-        // Jika sudah, hancurkan dulu
-        $('#datatable').DataTable().destroy();
-    }
-    
-    // Inisialisasi DataTable
-    let table = $('#datatable').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: '{{ route("komite-mutu.bank-spo.index") }}',
-            type: 'GET',
-            data: function(d) {
-                d.start_date = $('#start_date').val();
-                d.end_date = $('#end_date').val();
-                d.unit = $('#filter-unit').val();
-                d.jenis_spo = $('#filter-jenis').val();
-            }
-        },
-        columns: [
-            { data: 'file_pdf', name: 'file_pdf' },
-            { data: 'unit', name: 'unit' },
-            { data: 'jenis_spo', name: 'jenis_spo' },
-            { data: 'tanggal_formatted', name: 'created_at' },
-            { data: 'aksi', name: 'aksi', orderable: false, searchable: false }
-        ],
-        order: [[3, 'desc']],
-        pageLength: 50,
-        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Semua"]],
-        language: {
-            processing: "Memproses...",
-            search: "Cari:",
-            lengthMenu: "Tampilkan _MENU_ data",
-            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-            infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
-            infoFiltered: "(disaring dari _MAX_ total data)",
-            loadingRecords: "Memuat...",
-            zeroRecords: "Tidak ada data yang ditemukan",
-            emptyTable: "Tidak ada data",
-            paginate: {
-                first: "Pertama",
-                previous: "Sebelumnya",
-                next: "Selanjutnya",
-                last: "Terakhir"
-            }
-        }
-    });
-    
-    // Reload table saat filter berubah
-    $('#start_date, #end_date, #filter-unit, #filter-jenis').on('change', function() {
-        table.ajax.reload();
-    });
-});
-</script>
+    <script>
+        $(document).ready(function() {
+            let table = $('#datatable').DataTable();
+            table.order([3, 'desc']).draw();
+        });
+    </script>
 @endpush

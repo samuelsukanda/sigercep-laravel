@@ -59,7 +59,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth'])->prefix('permissions')->name('permissions.')->group(function () {
         Route::get('/', [PermissionController::class, 'index'])
             ->name('index')
-            ->middleware('permission:permissions,read');  // ✅ Tambah middleware
+            ->middleware('permission:permissions,read');
 
         Route::post('/', [PermissionController::class, 'store'])
             ->name('store')
