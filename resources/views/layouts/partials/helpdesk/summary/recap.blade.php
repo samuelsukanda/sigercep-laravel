@@ -2,7 +2,7 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 
     {{-- Rekap Status Approval --}}
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-4">
+    {{-- <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-4">
         <div class="p-6 pb-0 mb-0 bg-white rounded-t-2xl">
             <h6 class="mb-0 font-bold text-lg">Rekap Status Approval</h6>
         </div>
@@ -21,13 +21,12 @@
                 </div>
             @endforeach
 
-            {{-- Total seluruh tiket --}}
             <div class="flex justify-between items-center py-2.5 mt-2 pt-2">
                 <span class="text-sm font-bold text-gray-800">Total Tiket Masuk</span>
                 <span class="text-sm font-bold text-gray-900">{{ $totalTickets }}</span>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     {{-- Tabel Rekap Tindakan Admin --}}
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-4">

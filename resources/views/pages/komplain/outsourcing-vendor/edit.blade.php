@@ -48,6 +48,10 @@
                                 {{-- Foto --}}
                                 <x-form.file-upload label="Foto Komplain/Kerusakan/Kendala Di Lapangan" name="foto"
                                     preview="{{ $komplain->foto ?? null }}" />
+
+                                {{-- Status --}}
+                                <x-form.select label="Status" name="status" :options="['Pending', 'On Progress', 'Done']" :selected="old('status', $komplain->status)"
+                                    placeholder="Pilih Status" />
                             </div>
 
                             <div class="mt-6">

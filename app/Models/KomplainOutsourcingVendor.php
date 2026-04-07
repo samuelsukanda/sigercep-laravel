@@ -10,7 +10,7 @@ class KomplainOutsourcingVendor extends Model
     use HasFactory;
 
     protected $table = 'komplain_outsourcing_vendor';
-    
+
     protected $fillable = [
         'nama',
         'unit',
@@ -20,5 +20,6 @@ class KomplainOutsourcingVendor extends Model
         'kendala',
         'area',
         'foto',
+        'status',
     ];
 }

@@ -18,5 +18,6 @@ class KesehatanLingkungan extends Model
         'lokasi_masalah',
         'jenis_hama',
         'dokumentasi',
+        'status',
     ];
 }

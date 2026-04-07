@@ -59,6 +59,12 @@
                                 <p class="text-slate-600">{{ $komplain->area }}</p>
                             </div>
 
+                            {{-- Status --}}
+                            <div>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Status</label>
+                                <p class="text-slate-600">{{ $komplain->status ?? '-' }}</p>
+                            </div>
+
                             {{-- Foto --}}
                             @if ($komplain->foto)
                                 <div class="md:col-span-2">

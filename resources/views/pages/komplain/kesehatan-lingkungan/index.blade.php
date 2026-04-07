@@ -45,6 +45,7 @@
                         <th class="px-6 py-3">Tanggal</th>
                         <th class="px-6 py-3">Lokasi Masalah</th>
                         <th class="px-6 py-3">Jenis Hama</th>
+                        <th class="px-6 py-3">Status</th>
                         <th class="px-6 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -58,6 +59,9 @@
                             </td>
                             <td class="px-6 py-4">{{ strtolower($item->lokasi_masalah) }}</td>
                             <td class="px-6 py-4">{{ strtolower($item->jenis_hama) }}</td>
+                            <td class="px-6 py-4">
+                                <x-badge.status-badge :status="$item->status" />
+                            </td>
                             <td class="px-6 py-4 space-x-2 text-center">
                                 @canAccess('kesehatan_lingkungan', 'update')
                                 <x-button.action href="{{ route('komplain.kesehatan-lingkungan.edit', $item->id) }}"

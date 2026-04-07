@@ -46,6 +46,7 @@
                         <th class="px-6 py-3">Jam</th>
                         <th class="px-6 py-3">Tanggal</th>
                         <th class="px-6 py-3">Kendala</th>
+                        <th class="px-6 py-3">Status</th>
                         <th class="px-6 py-3">Aksi</th>
                     </tr>
                 </thead>
@@ -61,6 +62,9 @@
                                 {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
                             </td>
                             <td class="px-6 py-4">{{ strtolower($item->kendala) }}</td>
+                            <td class="px-6 py-4">
+                                <x-badge.status-badge :status="$item->status" />
+                            </td>
                             <td class="px-6 py-4 space-x-2 text-center">
                                 @canAccess('outsourcing_vendor', 'update')
                                 <x-button.action href="{{ route('komplain.outsourcing-vendor.edit', $item->id) }}"

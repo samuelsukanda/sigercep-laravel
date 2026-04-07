@@ -263,17 +263,17 @@ return [
     ],
 
     'tujuanUnitsIpsrs' => [
-        'Maintenance',
-        'Kesehatan Lingkungan',
+        'AC',
         'Elektromedis (Atem)',
+        'Maintenance (MEP)',
     ],
 
     'tujuanUnitsOutsourcing' => [
-        'SJS',
+        'ISS',
         'Laundry',
-        'Security ATALIAN',
-        'Parkir Berlian',
-        'Tata Graha (Taman)',
+        'Security',
+        'Parkir',
+        'Taman',
     ],
 
     'ruang' => [

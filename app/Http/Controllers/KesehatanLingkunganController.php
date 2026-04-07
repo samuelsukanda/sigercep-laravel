@@ -88,6 +88,7 @@ class KesehatanLingkunganController extends Controller
             'lokasi_masalah' => 'required|string',
             'jenis_hama' => 'required|string',
             'dokumentasi' => 'nullable|image|mimes:jpg,jpeg,png',
+            'status' => 'nullable|in:Pending,On Progress,Done',
         ]);
 
         $komplain = KesehatanLingkungan::findOrFail($id);

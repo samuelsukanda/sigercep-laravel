@@ -52,6 +52,7 @@ class KomplainOutsourcingVendorController extends Controller
             'kendala' => 'required|string',
             'area' => 'required|string|max:100',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png',
+            'status' => 'nullable|in:Pending,On Progress,Done',
         ]);
 
         if ($request->hasFile('foto')) {
@@ -92,6 +93,7 @@ class KomplainOutsourcingVendorController extends Controller
             'kendala' => 'required|string',
             'area' => 'required|string|max:100',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png',
+            'status' => 'nullable|in:Pending,On Progress,Done',
         ]);
 
         $komplain = KomplainOutsourcingVendor::findOrFail($id);
