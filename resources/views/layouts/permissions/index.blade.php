@@ -58,13 +58,14 @@
         {{-- ═══ Alerts ═══ --}}
         @if (session('success'))
             <div class="perm-alert perm-alert-success">
-                <i class="fas fa-circle-check"></i>
+                <i class="fas fa-circle-check" style="font-size: 1rem; margin-top: 1px;"></i>
                 <span>{{ session('success') }}</span>
             </div>
         @endif
+
         @if (session('error'))
             <div class="perm-alert perm-alert-error">
-                <i class="fas fa-circle-exclamation"></i>
+                <i class="fas fa-circle-exclamation" style="font-size: 1rem; margin-top: 1px;"></i>
                 <span>{{ session('error') }}</span>
             </div>
         @endif
@@ -251,6 +252,15 @@
                     <input type="hidden" name="_method" value="POST">
 
                     <div class="pf-group">
+                        <label class="pf-label" for="pf-name">
+                            <i class="fas fa-user" style="margin-right:4px"></i>Nama User
+                        </label>
+                        <input type="text" id="pf-name" name="name" class="pf-input"
+                            placeholder="Contoh: Budi Santoso">
+                        <div class="pf-hint">Isi jika ingin memberikan akses ke user tertentu saja</div>
+                    </div>
+
+                    <div class="pf-group">
                         <label class="pf-label" for="pf-unit">
                             <i class="fas fa-building" style="margin-right:4px"></i>Unit / Divisi
                         </label>
@@ -266,15 +276,6 @@
                         <input type="text" id="pf-jabatan" name="jabatan" class="pf-input"
                             placeholder="Contoh: Manager, Staff, Supervisor">
                         <div class="pf-hint">Kosongkan jika tidak perlu filter jabatan</div>
-                    </div>
-
-                    <div class="pf-group">
-                        <label class="pf-label" for="pf-name">
-                            <i class="fas fa-user" style="margin-right:4px"></i>Nama User (spesifik)
-                        </label>
-                        <input type="text" id="pf-name" name="name" class="pf-input"
-                            placeholder="Contoh: Budi Santoso">
-                        <div class="pf-hint">Isi jika ingin memberikan akses ke user tertentu saja</div>
                     </div>
 
                     <div

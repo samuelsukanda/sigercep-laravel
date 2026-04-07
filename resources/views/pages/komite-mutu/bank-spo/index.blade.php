@@ -23,14 +23,14 @@
 
         <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
             {{-- Filter Tanggal --}}
-            <div class="flex items-center gap-4 mb-4">
+            <div class="flex items-center gap-4">
                 <div>
                     <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}"
-                        class="border rounded px-3 py-2 w-full">
+                        class="border rounded px-3 py-2">
                 </div>
                 <div>
                     <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}"
-                        class="border rounded px-3 py-2 w-full">
+                        class="border rounded px-3 py-2">
                 </div>
             </div>
 
@@ -55,8 +55,7 @@
         </div>
 
         <div class="relative overflow-x-auto shadow-md rounded-lg px-2 dark:text-white">
-            <table id="datatable" 
-                class="min-w-full divide-y divide-gray-200 dark:divide-white-200 dark:text-white">
+            <table id="datatable" class="min-w-full divide-y divide-gray-200 dark:divide-white-200 dark:text-white">
                 <thead class="text-xs text-slate-500 uppercase bg-slate-100 dark:text-white">
                     <tr>
                         <th class="px-6 py-3">Nama File</th>
@@ -72,80 +71,161 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/alert-delete.js') }}"></script>
+    <script>
+        window.confirmDelete = function(id) {
+            const form = document.getElementById('delete-form-' + id);
+            const confirmMessage = "Yakin ingin menghapus?";
 
-<script>
-function confirmDelete(id) {
-    Swal.fire({
-        title: 'Apakah Anda yakin?',
-        text: "Data yang dihapus tidak dapat dikembalikan!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Ya, hapus!',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            document.getElementById('delete-form-' + id).submit();
-        }
-    });
-}
+            toastr.clear();
 
-$(document).ready(function() {
-    // Cek apakah DataTable sudah diinisialisasi
-    if ($.fn.DataTable.isDataTable('#datatable')) {
-        // Jika sudah, hancurkan dulu
-        $('#datatable').DataTable().destroy();
-    }
-    
-    // Inisialisasi DataTable
-    let table = $('#datatable').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: '{{ route("komite-mutu.bank-spo.index") }}',
-            type: 'GET',
-            data: function(d) {
-                d.start_date = $('#start_date').val();
-                d.end_date = $('#end_date').val();
-                d.unit = $('#filter-unit').val();
-                d.jenis_spo = $('#filter-jenis').val();
+            toastr.options = {
+                "closeButton": false,
+                "progressBar": true,
+                "timeOut": 0,
+                "extendedTimeOut": 0,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "tapToDismiss": false,
+                "onShown": function() {
+                    const toastEl = document.querySelector('.toast-warning');
+
+                    if (toastEl && !toastEl.querySelector('.action-area')) {
+                        const actionArea = document.createElement('div');
+                        actionArea.className = 'mt-3 mb-3 d-flex justify-content-center gap-2 action-area';
+
+                        actionArea.innerHTML = `
+                            <button class="btn btn-sm btn-outline-light" id="confirmDeleteBtn" style="font-weight:bold; min-width:80px;">Ya, Hapus</button>
+                            <button class="btn btn-sm text-white" id="cancelDeleteBtn" style="text-decoration:none; font-weight:bold;">Batal</button>
+                        `;
+                        toastEl.appendChild(actionArea);
+
+                        document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+                            form.submit();
+                        });
+
+                        document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+                            toastr.remove();
+                        });
+                    }
+                }
+            };
+
+            toastr.warning(confirmMessage, "Konfirmasi Hapus");
+        };
+
+        $(document).ready(function() {
+            if ($.fn.DataTable.isDataTable('#datatable')) {
+                $('#datatable').DataTable().destroy();
+                $('#datatable tbody').empty();
             }
-        },
-        columns: [
-            { data: 'file_pdf', name: 'file_pdf' },
-            { data: 'unit', name: 'unit' },
-            { data: 'jenis_spo', name: 'jenis_spo' },
-            { data: 'tanggal_formatted', name: 'created_at' },
-            { data: 'aksi', name: 'aksi', orderable: false, searchable: false }
-        ],
-        order: [[3, 'desc']],
-        pageLength: 50,
-        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Semua"]],
-        language: {
-            processing: "Memproses...",
-            search: "Cari:",
-            lengthMenu: "Tampilkan _MENU_ data",
-            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-            infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
-            infoFiltered: "(disaring dari _MAX_ total data)",
-            loadingRecords: "Memuat...",
-            zeroRecords: "Tidak ada data yang ditemukan",
-            emptyTable: "Tidak ada data",
-            paginate: {
-                first: "Pertama",
-                previous: "Sebelumnya",
-                next: "Selanjutnya",
-                last: "Terakhir"
-            }
-        }
-    });
-    
-    // Reload table saat filter berubah
-    $('#start_date, #end_date, #filter-unit, #filter-jenis').on('change', function() {
-        table.ajax.reload();
-    });
-});
-</script>
+
+            let table = $('#datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '{{ route('komite-mutu.bank-spo.index') }}',
+                    type: 'GET',
+                    data: function(d) {
+                        d.start_date = $('#start_date').val();
+                        d.end_date = $('#end_date').val();
+                        d.unit = $('#filter-unit').val();
+                        d.jenis_spo = $('#filter-jenis').val();
+                    }
+                },
+                columns: [{
+                        data: 'file_pdf',
+                        name: 'file_pdf'
+                    },
+                    {
+                        data: 'unit',
+                        name: 'unit'
+                    },
+                    {
+                        data: 'jenis_spo',
+                        name: 'jenis_spo'
+                    },
+                    {
+                        data: 'tanggal_formatted',
+                        name: 'created_at'
+                    },
+                    {
+                        data: null,
+                        name: 'aksi',
+                        orderable: false,
+                        searchable: false,
+                        render: function(data, type, row) {
+                            let buttons = '<div class="flex justify-center items-center">';
+
+                            // Tombol Edit
+                            if (row.can_update) {
+                                buttons += `
+                                    <a href="{{ url('komite-mutu/bank-spo') }}/${row.id}/edit" 
+                                    class="text-slate-700 hover:text-slate-900 hover:opacity-80 transition-all" 
+                                    title="Edit">
+                                        <i class="fas fa-edit text-sm"></i>
+                                    </a>`;
+                            }
+
+                            if (row.can_read) {
+                                buttons += `
+                                <a href="{{ url('komite-mutu/bank-spo') }}/${row.id}" 
+                                class="p-1 text-slate-700 hover:text-slate-900 hover:opacity-80 transition-all" 
+                                title="Lihat Data">
+                                    <i class="fas fa-eye text-sm"></i>
+                                </a>`;
+                            }
+
+                            if (row.can_delete) {
+                                buttons += `
+                                <button type="button" 
+                                        onclick="window.confirmDelete(${row.id})"
+                                        class="p-0.5 text-red-600 hover:text-red-700 hover:opacity-80 transition-all" 
+                                        title="Hapus">
+                                    <i class="fas fa-trash text-sm"></i>
+                                </button>
+                                <form id="delete-form-${row.id}" 
+                                        action="{{ url('komite-mutu/bank-spo') }}/${row.id}" 
+                                        method="POST" style="display:none">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>`;
+                            }
+
+                            buttons += '</div>';
+                            return buttons;
+                        }
+                    }
+                ],
+                order: [
+                    [3, 'desc']
+                ],
+                pageLength: 10,
+                lengthMenu: [
+                    [10, 25, 50, 100],
+                    [10, 25, 50, 100]
+                ],
+                language: {
+                    processing: "Memproses...",
+                    search: "Cari:",
+                    lengthMenu: "Tampilkan _MENU_ data",
+                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                    infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
+                    infoFiltered: "(disaring dari _MAX_ total data)",
+                    loadingRecords: "Memuat...",
+                    zeroRecords: "Tidak ada data yang ditemukan",
+                    emptyTable: "Tidak ada data",
+                    paginate: {
+                        first: "Pertama",
+                        previous: "Sebelumnya",
+                        next: "Selanjutnya",
+                        last: "Terakhir"
+                    }
+                }
+            });
+
+            $('#start_date, #end_date, #filter-unit, #filter-jenis').on('change', function() {
+                table.ajax.reload();
+            });
+        });
+    </script>
 @endpush

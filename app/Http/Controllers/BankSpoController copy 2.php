@@ -72,34 +72,31 @@ class BankSpoController extends Controller
             $records = $query->skip($start)->take($length)->get();
 
             // Ambil permission di luar loop (fix error)
-            $user = Auth::user();
             $canUpdate = PermissionHelper::canAccess('bank_spo', 'update');
             $canRead = PermissionHelper::canAccess('bank_spo', 'read');
             $canDelete = PermissionHelper::canAccess('bank_spo', 'delete');
 
-
             // Prepare data
             $data = [];
-
             foreach ($records as $item) {
-                // Simpan data untuk digunakan di blade
                 $data[] = [
-                    'file_pdf' => $item->file_pdf,
-                    'unit' => $item->unit,
-                    'jenis_spo' => $item->jenis_spo,
+                    'id'                => $item->id,
+                    'file_pdf'          => $item->file_pdf,
+                    'unit'              => $item->unit,
+                    'jenis_spo'         => $item->jenis_spo,
                     'tanggal_formatted' => \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y'),
-                    'id' => $item->id,
-                    'can_update' => $canUpdate,
-                    'can_read' => $canRead,
-                    'can_delete' => $canDelete
+                    // Tambahkan flag permission ke setiap row
+                    'can_update'        => $canUpdate,
+                    'can_read'          => $canRead,
+                    'can_delete'        => $canDelete,
                 ];
             }
 
             return response()->json([
-                'draw' => intval($request->draw),
-                'recordsTotal' => $totalRecords,
+                'draw'            => intval($request->draw),
+                'recordsTotal'    => $totalRecords,
                 'recordsFiltered' => $totalRecords,
-                'data' => $data
+                'data'            => $data
             ]);
         }
 
