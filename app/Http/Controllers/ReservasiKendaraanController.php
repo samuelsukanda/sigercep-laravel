@@ -74,9 +74,6 @@ class ReservasiKendaraanController extends Controller
             return back()->withErrors(['Maaf, waktu yang anda inputkan sudah ada yang mendaftar.'])->withInput();
         }
 
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
-
         ReservasiKendaraan::create($validated);
 
         return redirect()->route('reservasi.kendaraan.index')
@@ -128,9 +125,6 @@ class ReservasiKendaraanController extends Controller
         if ($isOverlap) {
             return back()->withErrors(['Maaf, waktu yang anda inputkan sudah ada yang mendaftar.'])->withInput();
         }
-
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
 
         $reservasi = ReservasiKendaraan::findOrFail($id);
         $reservasi->update($validated);

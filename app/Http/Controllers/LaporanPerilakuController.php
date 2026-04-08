@@ -70,9 +70,6 @@ class LaporanPerilakuController extends Controller
             $originalName
         );
 
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
-
         LaporanPerilaku::create($validated);
 
         return redirect()
@@ -141,9 +138,6 @@ class LaporanPerilakuController extends Controller
                 $originalName
             );
         }
-
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
 
         $laporanPerilaku->update($validated);
 

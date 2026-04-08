@@ -63,9 +63,6 @@ class DesainGrafisController extends Controller
             $validated['menit'] = null;
             $validated['detik'] = null;
         }
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
-
         DesainGrafis::create($validated);
 
         return redirect()->route('desain-grafis.index')->with('success', 'Data berhasil disimpan.');
@@ -111,9 +108,6 @@ class DesainGrafisController extends Controller
             $updateData['menit'] = null;
             $updateData['detik'] = null;
         }
-
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
 
         $desain->update($updateData);
 

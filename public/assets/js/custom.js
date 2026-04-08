@@ -289,37 +289,37 @@ $(document).ready(function () {
 
 // Flatpickr
 flatpickr("#tanggal", {
-    dateFormat: "d-m-Y",
+    dateFormat: "Y-m-d",
     allowInput: false,
 });
 
 flatpickr("#periode_dari", {
-    dateFormat: "d-m-Y",
+    dateFormat: "Y-m-d",
     allowInput: false,
 });
 
 flatpickr("#periode_sampai", {
-    dateFormat: "d-m-Y",
+    dateFormat: "Y-m-d",
     allowInput: false,
 });
 
 flatpickr("#tanggal_lahir", {
-    dateFormat: "d-m-Y",
+    dateFormat: "Y-m-d",
     allowInput: false,
 });
 
 flatpickr("#tanggal_masuk_rs", {
-    dateFormat: "d-m-Y",
+    dateFormat: "Y-m-d",
     allowInput: false,
 });
 
 flatpickr("#tanggal_kejadian", {
-    dateFormat: "d-m-Y",
+    dateFormat: "Y-m-d",
     allowInput: false,
 });
 
 flatpickr("#tanggal_pengajuan", {
-    dateFormat: "d-m-Y",
+    dateFormat: "Y-m-d",
     allowInput: false,
 });
 

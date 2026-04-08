@@ -64,9 +64,6 @@ class PeminjamanController extends Controller
             $validated['tanda_tangan'] = 'storage/' . $path;
         }
 
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
-
         Peminjaman::create($validated);
 
         return redirect()->route('peminjaman.index')->with('success', 'Data berhasil disimpan.');
@@ -114,9 +111,6 @@ class PeminjamanController extends Controller
         } else {
             $validated['tanda_tangan'] = $peminjaman->tanda_tangan;
         }
-
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
 
         $peminjaman->update($validated);
 

@@ -75,9 +75,6 @@ class KecelakaanKerjaController extends Controller
             $validated['tanda_tangan'] = 'storage/' . $path;
         }
 
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
-
         KecelakaanKerja::create($validated);
 
         return redirect()->route('kecelakaan-kerja.index')->with('success', 'Data berhasil disimpan.');
@@ -136,9 +133,6 @@ class KecelakaanKerjaController extends Controller
         } else {
             $validated['tanda_tangan'] = $k3rs->tanda_tangan;
         }
-
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
 
         $k3rs->update($validated);
 

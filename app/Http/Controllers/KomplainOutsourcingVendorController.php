@@ -61,9 +61,6 @@ class KomplainOutsourcingVendorController extends Controller
             $validated['foto'] = $path;
         }
 
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
-
         KomplainOutsourcingVendor::create($validated);
 
         return redirect()->route('komplain.outsourcing-vendor.index')->with('success', 'Data berhasil disimpan.');
@@ -108,9 +105,6 @@ class KomplainOutsourcingVendorController extends Controller
             $path = $file->storeAs('images/komplain-outsourcing-vendor', $namaFile, 'public');
             $validated['foto'] = $path;
         }
-
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
 
         $komplain->update($validated);
 

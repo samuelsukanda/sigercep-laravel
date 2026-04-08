@@ -46,9 +46,6 @@ class VisitasiController extends Controller
             $validated['foto'] = $path;
         }
 
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
-
         Visitasi::create($validated);
 
         return redirect()->route('visitasi.index')
@@ -89,9 +86,6 @@ class VisitasiController extends Controller
             $path = $file->storeAs('images/visitasi', $namaFile, 'public');
             $validated['foto'] = $path;
         }
-
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
 
         $visitasi->update($validated);
 

@@ -50,9 +50,6 @@ class HardwareController extends Controller
             $validated['tanda_tangan'] = 'storage/' . $path;
         }
 
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
-
         Hardware::create($validated);
 
         return redirect()->route('hardware.index')
@@ -101,9 +98,6 @@ class HardwareController extends Controller
         } else {
             $validated['tanda_tangan'] = $hardware->tanda_tangan;
         }
-
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
 
         $hardware->update($validated);
 

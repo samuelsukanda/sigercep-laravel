@@ -18,7 +18,7 @@
                             @method('PUT')
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                               {{-- Nama --}}
+                                {{-- Nama --}}
                                 <x-form.input name="nama" label="Nama" :value="old('nama', $komplain->nama ?? '')" readonly />
 
                                 {{-- Unit --}}
@@ -31,7 +31,7 @@
                                 {{-- Tanggal --}}
                                 <x-form.input label="Tanggal" name="tanggal"
                                     value="{{ old('tanggal', $komplain->tanggal) }}" id="tanggal"
-                                    placeholder="Pilih Tanggal" required readonly />
+                                    placeholder="Pilih Tanggal" readonly />
 
                                 {{-- Kendala --}}
                                 <x-form.textarea label="Kendala Atau Pengaduan Di Lapangan" name="kendala" rows="5"

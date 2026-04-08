@@ -53,9 +53,6 @@ class ManajemenRisikoController extends Controller
             'keterangan' => 'nullable|string|max:255',
         ]);
 
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
-
         ManajemenRisiko::create($validated);
 
         return redirect()->route('komite-mutu.manajemen-risiko.index')
@@ -88,9 +85,6 @@ class ManajemenRisikoController extends Controller
             'nilai' => 'required|integer|min:1|max:25',
             'keterangan' => 'nullable|string|max:255',
         ]);
-
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
 
         $mutu->update($validated);
 

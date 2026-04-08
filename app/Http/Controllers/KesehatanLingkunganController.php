@@ -59,9 +59,6 @@ class KesehatanLingkunganController extends Controller
             $validated['dokumentasi'] = $path;
         }
 
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
-
         KesehatanLingkungan::create($validated);
 
         return redirect()->route('komplain.kesehatan-lingkungan.index')->with('success', 'Data berhasil disimpan.');
@@ -104,9 +101,6 @@ class KesehatanLingkunganController extends Controller
             $path = $file->storeAs('images/kesehatan-lingkungan', $namaFile, 'public');
             $validated['dokumentasi'] = $path;
         }
-
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
 
         $komplain->update($validated);
 

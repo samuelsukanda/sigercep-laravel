@@ -68,9 +68,6 @@ class PengembalianAsetController extends Controller
             $validated['foto_barcode'] = $pathBarcode;
         }
 
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
-
         PengembalianAset::create($validated);
 
         return redirect()->route('pengadaan-aset.pengembalian-aset.index')->with('success', 'Data berhasil disimpan.');
@@ -122,9 +119,6 @@ class PengembalianAsetController extends Controller
             $pathBarcode = $fileBarcode->storeAs('images/pengembalian-aset/foto-barcode', $namaFileBarcode, 'public');
             $validated['foto_barcode'] = $pathBarcode;
         }
-
-        $tanggal = Carbon::createFromFormat('d-m-Y', $request->tanggal)->format('Y-m-d');
-        $validated['tanggal'] = $tanggal;
 
         $pengadaan->update($validated);
 
