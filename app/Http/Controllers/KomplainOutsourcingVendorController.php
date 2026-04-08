@@ -84,13 +84,13 @@ class KomplainOutsourcingVendorController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'nama' => 'required|string|max:50',
-            'unit' => 'required|string|max:50',
-            'tujuan_unit' => 'required|string|max:50',
-            'jam' => 'required',
-            'tanggal' => 'required|date',
-            'kendala' => 'required|string',
-            'area' => 'required|string|max:100',
+            'nama' => 'nullable|string|max:50',
+            'unit' => 'nullable|string|max:50',
+            'tujuan_unit' => 'nullable|string|max:50',
+            'jam' => 'nullable',
+            'tanggal' => 'nullable|date',
+            'kendala' => 'nullable|string',
+            'area' => 'nullable|string|max:100',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png',
             'status' => 'nullable|in:Pending,In Progress,Done',
             'keterangan' => 'nullable|string|max:255',

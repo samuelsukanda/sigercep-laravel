@@ -42,7 +42,7 @@
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                             <i class="fas fa-ticket relative top-0 text-sm leading-normal text-orange-500"></i>
                         </div>
-                        <span class="ml-1 duration-300 ease">Helpdesk</span>
+                        <span class="ml-1 duration-300 ease">Helpdesk IT</span>
                     </div>
                     <i class="fas fa-chevron-down text-sm transition-transform duration-200"></i>
                 </a>

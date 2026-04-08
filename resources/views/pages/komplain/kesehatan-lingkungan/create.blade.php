@@ -17,10 +17,10 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama --}}
-                                <x-form.input name="nama" label="Nama" :value="old('nama', $komplain->nama ?? '')" required />
+                                <x-form.input name="nama" label="Nama" :value="ucfirst(auth()->user()->name)" readonly />
 
                                 {{-- Unit --}}
-                                <x-form.select name="unit" label="Unit" :options="config('units.units')" :selected="old('unit', $komplain->unit ?? '')" required />
+                                <x-form.input-otomatis name="unit" label="Unit" :value="auth()->user()->unit ?? '-'" readonly />
 
                                 {{-- Tanggal --}}
                                 <x-form.input name="tanggal" label="Tanggal" :value="old('tanggal', $komplain->tanggal ?? '')" id="tanggal"
@@ -33,8 +33,7 @@
                                 <x-form.input name="jenis_hama" label="Jenis Hama" :value="old('jenis_hama', $komplain->jenis_hama ?? '')" required />
 
                                 {{-- Dokumentasi --}}
-                                <x-form.file-upload name="dokumentasi" label="Dokumentasi"
-                                    :current="$komplain->dokumentasi ?? null" />
+                                <x-form.file-upload name="dokumentasi" label="Dokumentasi" :current="$komplain->dokumentasi ?? null" />
                             </div>
 
                             <div class="mt-6">

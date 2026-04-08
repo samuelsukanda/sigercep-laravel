@@ -82,11 +82,11 @@ class KomplainIpsrsController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'nama' => 'required|string|max:50',
-            'unit' => 'required|string|max:50',
-            'tujuan_unit' => 'required|string|max:50',
-            'tanggal' => 'required|date',
-            'kendala' => 'required|string',
+            'nama' => 'nullable|string|max:50',
+            'unit' => 'nullable|string|max:50',
+            'tujuan_unit' => 'nullable|string|max:50',
+            'tanggal' => 'nullable|date',
+            'kendala' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png',
             'status' => 'nullable|in:Pending,In Progress,Done',
             'keterangan' => 'nullable|string|max:255',

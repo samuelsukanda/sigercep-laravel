@@ -1,20 +1,31 @@
 @props([
-    'label' => '',
-    'name',
+    'name', 
+    'label', 
     'rows' => 3,
-    'required' => false,
+    'readonly' => false,
+    'required' => false
 ])
 
-<div {{ $attributes->merge(['class' => '']) }}>
-    @if ($label)
-        <label for="{{ $name }}"
-            class="block text-sm font-semibold mb-2 text-slate-700">{{ $label }} :</label>
-    @endif
-
-    <textarea id="{{ $name }}" name="{{ $name }}" rows="{{ $rows }}" {{ $required ? 'required' : '' }}
-        class="block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-700 placeholder-gray-500 focus:border-blue-500 focus:outline-none">{{ old($name, $slot) }}</textarea>
-
+<div class="mb-4">
+    <label for="{{ $name }}" class="block text-sm font-semibold mb-2 text-slate-700 dark:text-white">
+        {{ $label }} :
+        @if($required)
+            <span class="text-red-500">*</span>
+        @endif
+    </label>
+    
+    <textarea 
+        id="{{ $name }}" 
+        name="{{ $name }}" 
+        rows="{{ $rows }}"
+        {{ $readonly ? 'readonly' : '' }}
+        {{ $required ? 'required' : '' }}
+        {{ $attributes->merge([
+            'class' => 'focus:shadow-primary-outline text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 px-3 py-2 font-normal outline-none transition-all placeholder:text-gray-500 focus:outline-none focus:border-blue-500 ' . ($readonly ? 'bg-gray-50 text-gray-600 cursor-not-allowed' : '')
+        ]) }}
+    >{{ $slot }}</textarea>
+    
     @error($name)
-        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
     @enderror
 </div>

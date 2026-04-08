@@ -19,20 +19,20 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama --}}
-                                <x-form.input name="nama" label="Nama" :value="old('nama', $komplain->nama ?? '')" required readonly />
+                                <x-form.input name="nama" label="Nama" :value="ucfirst(auth()->user()->name)" readonly />
 
                                 {{-- Unit --}}
-                                <x-form.select name="unit" label="Unit" :options="config('units.units')" :selected="old('unit', $komplain->unit ?? '')" required readonly />
+                                <x-form.input-otomatis name="unit" label="Unit" :value="auth()->user()->unit ?? '-'" readonly />
 
                                 {{-- Tanggal --}}
                                 <x-form.input name="tanggal" label="Tanggal" :value="old('tanggal', $komplain->tanggal ?? '')" id="tanggal"
-                                    placeholder="Pilih Tanggal" required readonly />
+                                    placeholder="Pilih Tanggal" readonly />
 
                                 {{-- Lokasi Masalah --}}
-                                <x-form.input name="lokasi_masalah" label="Lokasi Masalah" :value="old('lokasi_masalah', $komplain->lokasi_masalah ?? '')" required readonly />
+                                <x-form.input name="lokasi_masalah" label="Lokasi Masalah" :value="old('lokasi_masalah', $komplain->lokasi_masalah ?? '')" readonly />
 
                                 {{-- Jenis Hama --}}
-                                <x-form.input name="jenis_hama" label="Jenis Hama" :value="old('jenis_hama', $komplain->jenis_hama ?? '')" required readonly />
+                                <x-form.input name="jenis_hama" label="Jenis Hama" :value="old('jenis_hama', $komplain->jenis_hama ?? '')" readonly />
 
                                 {{-- Dokumentasi --}}
                                 <x-form.file-upload label="Dokumentasi" name="dokumentasi"

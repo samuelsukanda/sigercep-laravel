@@ -16,5 +16,5 @@
 @endphp
 
 <span class="{{ $color }}">
-    {{ $status ?? '-' }}
+    {{ $status ?? 'Pending' }}
 </span>

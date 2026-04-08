@@ -17,10 +17,10 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama --}}
-                                <x-form.input name="nama" label="Nama" :value="old('nama', $komplain->nama ?? '')" required />
+                                <x-form.input name="nama" label="Nama" :value="ucfirst(auth()->user()->name)" readonly />
 
                                 {{-- Unit --}}
-                                <x-form.select name="unit" label="Unit" :options="config('units.units')" :selected="old('unit', $komplain->unit ?? '')" required />
+                                <x-form.input-otomatis name="unit" label="Unit" :value="auth()->user()->unit ?? '-'" readonly />
 
                                 {{-- Tujuan Unit --}}
                                 <x-form.select name="tujuan_unit" label="Ditujukan Ke Unit" :options="config('units.tujuanUnitsOutsourcing')"
