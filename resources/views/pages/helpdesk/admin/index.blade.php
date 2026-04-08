@@ -1,74 +1,63 @@
 {{-- resources/views/admin/helpdesk/index.blade.php --}}
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+{{-- Style --}}
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/loading.css') }}">
+@endpush
 
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
-        <div class="flex justify-between items-center mb-4">
-            <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Tiket Helpdesk</h6>
-        </div>
+        <div class="flex flex-wrap -mx-3">
+            <div class="w-full max-w-full px-3 mx-auto mt-0">
+                {{-- Header --}}
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3>Daftar Tiket Helpdesk</h3>
+                </div>
 
-        {{-- TABLE --}}
-        <div class="relative overflow-x-auto shadow-md rounded-lg px-2 bg-white dark:text-white">
-            <table id="datatable" data-date-column="3"
-                class="min-w-full divide-y divide-gray-200 dark:divide-white-200 dark:text-white">
-                <thead class="text-xs text-slate-500 uppercase bg-white dark:text-white">
-                    <tr>
-                        <th class="px-6 py-3">No. Tiket</th>
-                        <th class="px-6 py-3">Nama</th>
-                        <th class="px-6 py-3">Divisi</th>
-                        <th class="px-6 py-3">Tanggal/Jam</th>
-                        <th class="px-6 py-3">Kategori</th>
-                        <th class="px-6 py-3">Tingkat Urgensi</th>
-                        <th class="px-6 py-3">Status Tiket</th>
-                        <th class="px-6 py-3">Status Approval</th>
-                        <th class="px-6 py-3">Aksi</th>
-                    </tr>
-                </thead>
+                {{-- Filter Section --}}
+                @include('layouts.partials.helpdesk.admin.filter')
 
-                <tbody class="text-s text-slate-500 bg-white">
-                    @foreach ($tickets as $ticket)
-                        <tr>
-                            <td class="px-6 py-4 font-semibold">{{ $ticket->ticket_number }}</td>
-                            <td class="px-6 py-4">
-                                {{ ucwords(str_replace('.', ' ', $ticket->user->name ?? '-')) }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ $ticket->user->unit ?? '-' }}
-                            </td>
-                            <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($ticket->created_at)->timestamp }}">
-                                {{ \Carbon\Carbon::parse($ticket->created_at)->translatedFormat('d F Y H:i') }}
-                            </td>
-                            <td class="px-6 py-4">{{ $ticket->category ?? '-' }}</td>
-                            <td class="px-6 py-4">
-                                <x-badge.urgency-badge :urgency="$ticket->urgency" />
-                            </td>
-                            <td class="px-6 py-4">
-                                <x-badge.status-badge :status="$ticket->status" />
-                            </td>
-                            <td class="px-6 py-4">
-                                <x-badge.status-approval-badge :status="$ticket->approval?->approval_status ?? 'Pending'" />
-                            </td>
-                            <td class="px-6 py-4 space-x-2 text-center">
-                                <x-button.action href="{{ route('admin.helpdesk.show', $ticket->id) }}" icon="eye"
-                                    color="emerald" title="Lihat Data" />
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                {{-- DataTable --}}
+                @include('layouts.partials.helpdesk.admin.datatable')
+
+                {{-- Loading Overlay --}}
+                @include('layouts.partials.helpdesk.admin.loading-overlay')
+            </div>
         </div>
     </div>
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/js/alert-delete.js') }}"></script>
-
+    <script src="{{ asset('assets/js/datatable-admin.js') }}"></script>
+    <script src="{{ asset('assets/js/loading-filter.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            let table = $('#datatable').DataTable();
-            table.order([3, 'desc']).draw();
+        $.fn.dataTable.ext.errMode = "none";
+
+        // Filter
+        document.addEventListener("DOMContentLoaded", function() {
+            var dari = flatpickr("input[name='periode_dari']", {
+                dateFormat: "d-m-Y",
+                allowInput: false,
+                onChange: function(selectedDates, dateStr, instance) {
+                    sampai.set("minDate", dateStr);
+                },
+            });
+
+            var sampai = flatpickr("input[name='periode_sampai']", {
+                dateFormat: "d-m-Y",
+                allowInput: false,
+                onChange: function(selectedDates, dateStr, instance) {
+                    dari.set("maxDate", dateStr);
+                },
+            });
+            const dariValue = "{{ request('periode_dari', now()->startOfMonth()->format('d-m-Y')) }}";
+            const sampaiValue = "{{ request('periode_sampai', now()->format('d-m-Y')) }}";
+
+            dari.setDate(dariValue);
+            sampai.setDate(sampaiValue);
+            sampai.set("minDate", dariValue);
+            dari.set("maxDate", sampaiValue);
         });
     </script>
 @endpush

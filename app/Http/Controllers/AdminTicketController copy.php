@@ -9,85 +9,29 @@ use App\Models\TicketUpdate;
 use App\Notifications\TicketApprovalNotification;
 use App\Notifications\TicketStatusUpdatedNotification;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Carbon\Carbon;
 
 class AdminTicketController extends Controller
 {
     public function index(Request $request)
     {
-        // Cek apakah ada filter yang diapply
-        $isFiltered = $request->hasAny([
-            'periode_dari',
-            'periode_sampai',
-            'kategori',
-            'urgency',
-            'status_tiket',
-            'status_approval'
-        ]);
-
-        // Validasi periode tanggal
-        $validator = Validator::make($request->all(), [
-            'periode_dari'   => 'nullable|date_format:d-m-Y',
-            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
-        ], [
-            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('admin.helpdesk.index')
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        // Set periode default
-        $start = $request->filled('periode_dari')
-            ? Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay()
-            : now()->startOfMonth();
-
-        $end = $request->filled('periode_sampai')
-            ? Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay()
-            : now()->endOfMonth();
-
-        // Query dengan relasi
         $query = Ticket::with(['user', 'approval']);
 
-        // Apply filter jika ada
-        if ($request->filled('periode_dari')) {
-            $query->whereDate('created_at', '>=', $start);
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
         }
-        if ($request->filled('periode_sampai')) {
-            $query->whereDate('created_at', '<=', $end);
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
         }
-        if ($request->filled('kategori')) {
-            $query->where('category', $request->kategori);
-        }
-        if ($request->filled('urgency')) {
-            $query->where('urgency', $request->urgency);
-        }
-        if ($request->filled('status_tiket')) {
-            $query->where('status', $request->status_tiket);
-        }
-        if ($request->filled('status_approval')) {
-            if ($request->status_approval == 'Pending') {
-                $query->whereDoesntHave('approval');
-            } else {
-                $query->whereHas('approval', function ($q) use ($request) {
-                    $q->where('approval_status', $request->status_approval);
-                });
-            }
+        if ($request->filled('approval_status')) {
+            $query->whereHas('approval', function ($q) use ($request) {
+                $q->where('approval_status', $request->approval_status);
+            });
         }
 
-        // Ambil data dengan pagination
         $tickets = $query->orderBy('created_at', 'desc')->paginate(15);
-        
-        // Tambahkan query string ke pagination
-        $tickets->appends($request->query());
-
-        return view('pages.helpdesk.admin.index', compact('tickets', 'isFiltered'));
+        return view('pages.helpdesk.admin.index', compact('tickets'));
     }
 
-    // Method lainnya tetap sama seperti sebelumnya
     public function edit(Ticket $ticket)
     {
         return view('pages.helpdesk.admin.edit', compact('ticket'));
@@ -127,7 +71,7 @@ class AdminTicketController extends Controller
             'analysis' => 'required',
             'action_plan' => 'required',
             'estimated_completion' => 'nullable|date',
-            'category'   => 'required|in:Hardware,Printer,Jaringan,Software,SIMRS',
+            'category'   => 'required|in:Hardware,Jaringan,Software,SIMRS',
             'urgency'    => 'required|in:Low,Medium,High,Critical',
             'approval_status' => 'required|in:Approved,Rejected,Need Clarification',
             'approval_note' => 'required_if:approval_status,Rejected,Need Clarification'
@@ -166,8 +110,6 @@ class AdminTicketController extends Controller
                 'user_id' => Auth::id(),
                 'status' => $ticket->status,
             ]);
-        } else {
-            $ticket->save();
         }
 
         if ($ticket->user) {
