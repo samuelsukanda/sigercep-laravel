@@ -18,10 +18,10 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama --}}
-                                <x-form.input name="nama" label="Nama" :value="old('nama', $komplain->nama ?? '')" required />
+                                <x-form.input name="nama" label="Nama" :value="old('nama', $komplain->nama ?? '')" readonly />
 
                                 {{-- Unit --}}
-                                <x-form.input name="unit" label="Unit" :value="old('unit', $komplain->unit ?? '')" required />
+                                <x-form.input-otomatis name="unit" label="Unit" :value="old('unit', $komplain->unit ?? '')" readonly />
 
                                 {{-- Tujuan Unit --}}
                                 <x-form.select label="Ditujukan Ke Unit" name="tujuan_unit" :options="config('units.tujuanUnitsOutsourcing')"

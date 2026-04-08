@@ -19,10 +19,10 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama --}}
-                                <x-form.input name="nama" label="Nama" :value="old('nama', $komplain->nama ?? '')" required />
+                                <x-form.input name="nama" label="Nama" :value="old('nama', $komplain->nama ?? '')" readonly />
 
                                 {{-- Unit --}}
-                                <x-form.input name="unit" label="Unit" :value="old('unit', $komplain->unit ?? '')" required />
+                                <x-form.input-otomatis name="unit" label="Unit" :value="old('unit', $komplain->unit ?? '')" readonly />
 
                                 {{-- Tanggal --}}
                                 <x-form.input name="tanggal" label="Tanggal" :value="old('tanggal', $komplain->tanggal ?? '')" id="tanggal"
