@@ -16,7 +16,6 @@ class AdminTicketController extends Controller
 {
     public function index(Request $request)
     {
-        // Cek apakah ada filter yang diapply
         $isFiltered = $request->hasAny([
             'periode_dari',
             'periode_sampai',
@@ -26,7 +25,6 @@ class AdminTicketController extends Controller
             'status_approval'
         ]);
 
-        // Validasi periode tanggal
         $validator = Validator::make($request->all(), [
             'periode_dari'   => 'nullable|date_format:d-m-Y',
             'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
@@ -40,7 +38,6 @@ class AdminTicketController extends Controller
                 ->withInput();
         }
 
-        // Set periode default
         $start = $request->filled('periode_dari')
             ? Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay()
             : now()->startOfMonth();
@@ -49,10 +46,8 @@ class AdminTicketController extends Controller
             ? Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay()
             : now()->endOfMonth();
 
-        // Query dengan relasi
         $query = Ticket::with(['user', 'approval']);
 
-        // Apply filter jika ada
         if ($request->filled('periode_dari')) {
             $query->whereDate('created_at', '>=', $start);
         }
@@ -78,16 +73,13 @@ class AdminTicketController extends Controller
             }
         }
 
-        // Ambil data dengan pagination
         $tickets = $query->orderBy('created_at', 'desc')->paginate(15);
         
-        // Tambahkan query string ke pagination
         $tickets->appends($request->query());
 
         return view('pages.helpdesk.admin.index', compact('tickets', 'isFiltered'));
     }
 
-    // Method lainnya tetap sama seperti sebelumnya
     public function edit(Ticket $ticket)
     {
         return view('pages.helpdesk.admin.edit', compact('ticket'));

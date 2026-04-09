@@ -8,9 +8,60 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Notifications\NewTicketNotification;
+use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class TicketController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        $isFiltered = $request->hasAny([
+            'periode_dari',
+            'periode_sampai',
+            'kategori',
+            'urgency',
+            'status_tiket',
+            'status_approval'
+        ]);
+
+        $validator = Validator::make($request->all(), [
+            'periode_dari'   => 'nullable|date_format:d-m-Y',
+            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
+        ], [
+            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('helpdesk.index')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $start = $request->filled('periode_dari')
+            ? Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay()
+            : now()->startOfMonth();
+
+        $end = $request->filled('periode_sampai')
+            ? Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay()
+            : now()->endOfMonth();
+
+        $query = Ticket::with(['user', 'approval'])
+            ->where('user_id', Auth::id());
+
+        if ($request->filled('periode_dari')) {
+            $query->whereDate('created_at', '>=', $start);
+        }
+        if ($request->filled('periode_sampai')) {
+            $query->whereDate('created_at', '<=', $end);
+        }
+
+        $tickets = $query->orderBy('created_at', 'desc')->paginate(15);
+
+        $tickets->appends($request->query());
+
+        return view('pages.helpdesk.index', compact('tickets', 'isFiltered'));
+    }
 
     public function create()
     {
@@ -29,7 +80,7 @@ class TicketController extends Controller
 
         $ticket = new Ticket();
         $ticket->ticket_number = TicketHelper::generateTicketNumber();
-        $ticket->user_id       = Auth::id(); 
+        $ticket->user_id       = Auth::id();
         $ticket->category      = $request->category;
         $ticket->description   = $request->description;
         $ticket->urgency       = $request->urgency;
@@ -55,15 +106,6 @@ class TicketController extends Controller
 
         return redirect()->route('helpdesk.index')
             ->with('success', 'Tiket berhasil dibuat. Nomor tiket: ' . $ticket->ticket_number);
-    }
-
-    public function index()
-    {
-        $tickets = Ticket::where('user_id', Auth::id())
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
-
-        return view('pages.helpdesk.index', compact('tickets'));
     }
 
     public function show($id)
