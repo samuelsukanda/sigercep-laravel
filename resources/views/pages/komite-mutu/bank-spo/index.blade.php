@@ -29,8 +29,6 @@
                 {{-- DataTable --}}
                 @include('layouts.partials.komite-mutu.bank-spo.datatable')
 
-                {{-- Loading Overlay --}}
-                @include('layouts.partials.komite-mutu.bank-spo.loading-overlay')
             </div>
         </div>
     </div>
@@ -39,6 +37,7 @@
 @push('scripts')
     <script src="{{ asset('assets/js/datatable/datatable-bank-spo.js') }}"></script>
     <script src="{{ asset('assets/js/loading-filter.js') }}"></script>
+    <script src="{{ asset('assets/js/alert-delete-bank-spo.js') }}"></script>
     <script>
         $.fn.dataTable.ext.errMode = "none";
 
@@ -47,7 +46,7 @@
             var dari = flatpickr("input[name='periode_dari']", {
                 dateFormat: "d-m-Y",
                 allowInput: false,
-                onChange: function(selectedDates, dateStr, instance) {
+                onChange: function(selectedDates, dateStr) {
                     sampai.set("minDate", dateStr);
                 },
             });
@@ -60,7 +59,7 @@
                 },
             });
 
-            const dariValue = "{{ request('periode_dari', now()->startOfMonth()->format('d-m-Y')) }}";
+            const dariValue = "{{ request('periode_dari') }}";
             const sampaiValue = "{{ request('periode_sampai', now()->format('d-m-Y')) }}";
 
             dari.setDate(dariValue);

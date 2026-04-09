@@ -39,7 +39,7 @@
 @push('scripts')
     <script src="{{ asset('assets/js/datatable/datatable-komplain-ipsrs.js') }}"></script>
     <script src="{{ asset('assets/js/loading-filter.js') }}"></script>
-
+    <script src="{{ asset('assets/js/alert-delete.js') }}"></script>
     <script>
         $.fn.dataTable.ext.errMode = "none";
 

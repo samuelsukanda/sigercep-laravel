@@ -156,10 +156,12 @@ Route::middleware('auth')->group(function () {
         ->names('komite-mutu.pengajuan-dokumen');
     Route::get('/pengajuan-dokumen/file/{id}', [PengajuanDokumenController::class, 'showFile'])->name('pengajuan-dokumen.show-file');
 
-    Route::middleware(['auth'])
-        ->resource('komite-mutu/bank-spo', BankSpoController::class)
-        ->names('komite-mutu.bank-spo');
-    Route::get('/bank-spo/file/{id}', [BankSpoController::class, 'showFile'])->name('bank-spo.show-file');
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/komite-mutu/bank-spo/file/{id}', [BankSpoController::class, 'showFile'])
+            ->name('bank-spo.show-file');
+        Route::resource('komite-mutu/bank-spo', BankSpoController::class)
+            ->names('komite-mutu.bank-spo');
+    });
 
     Route::middleware(['auth'])
         ->resource('komite-mutu/laporan-perilaku', LaporanPerilakuController::class)

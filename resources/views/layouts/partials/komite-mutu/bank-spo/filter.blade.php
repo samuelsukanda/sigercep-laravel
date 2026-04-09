@@ -8,8 +8,7 @@
                     <label class="text-xs font-semibold text-gray-600 mb-1.5">Periode Dari</label>
                     <input type="text" name="periode_dari"
                         class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent flatpickr"
-                        value="{{ request('periode_dari', now()->startOfMonth()->format('d-m-Y')) }}"
-                        placeholder="Pilih tanggal">
+                        value="{{ request('periode_dari') }}" placeholder="Pilih tanggal">
                 </div>
 
                 {{-- Periode Sampai --}}
@@ -25,22 +24,24 @@
                     $units = config('units.spo', []);
                 @endphp
 
-                <div class="flex flex-col mr-1" style="min-width:148px; flex:1 1 148px; max-width:210px;">
+                <div class="flex flex-col mr-1" style="min-width:148px; flex:1 1 148px; max-width:200px;">
                     <label class="text-xs font-semibold text-gray-600 mb-1.5">Unit</label>
                     <select id="unit" name="unit"
-                        class="select2 w-full border-gray-300 text-gray-700 outline-none transition-all" required>
-                        <option disabled selected>Pilih Unit</option>
+                        class="select2 w-full border-gray-300 text-gray-700 outline-none transition-all">
+                        <option value="">Semua Unit</option>
                         @foreach ($units as $unit)
-                            <option value="{{ $unit }}">{{ $unit }}</option>
+                            <option value="{{ $unit }}" {{ request('unit') == $unit ? 'selected' : '' }}>
+                                {{ $unit }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
 
                 {{-- Jenis SPO --}}
-                <div class="flex flex-col mr-1" style="min-width:148px; flex:1 1 148px; max-width:180px;">
+                <div class="flex flex-col mr-1" style="min-width:148px; flex:1 1 148px; max-width:175px;">
                     <label class="text-xs font-semibold text-gray-600 mb-1.5">Jenis SPO</label>
                     <select id="jenis_spo" name="jenis_spo"
-                        class="select2 w-full border-gray-300 text-gray-700 outline-none transition-all" required>
+                        class="select2 w-full border-gray-300 text-gray-700 outline-none transition-all">
                         <option disabled selected>Pilih Jenis SPO</option>
                         <option value="SPO Utama" {{ request('jenis_spo') == 'SPO Utama' ? 'selected' : '' }}>SPO Utama
                         </option>
