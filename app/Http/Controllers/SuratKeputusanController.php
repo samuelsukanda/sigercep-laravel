@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SuratKeputusan;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class SuratKeputusanController extends Controller
 {
@@ -19,20 +21,55 @@ class SuratKeputusanController extends Controller
 
     public function index(Request $request)
     {
-        $suratKeputusan = SuratKeputusan::all();
+        // Cek apakah ada filter yang diapply
+        $isFiltered = $request->hasAny([
+            'periode_dari',
+            'periode_sampai',
+            'nama_file',
+            'unit'
+        ]);
+
+        // Validasi periode tanggal
+        $validator = Validator::make($request->all(), [
+            'periode_dari'   => 'nullable|date_format:d-m-Y',
+            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
+        ], [
+            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('sdm-hukum.surat-keputusan.index')
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         $query = SuratKeputusan::query();
 
-        if ($request->start_date && $request->end_date) {
-            $query->whereBetween('created_at', [
-                $request->start_date . ' 00:00:00',
-                $request->end_date . ' 23:59:59'
-            ]);
+        // Filter periode
+        if ($request->filled('periode_dari')) {
+            $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
+            $query->whereDate('created_at', '>=', $startDate);
         }
 
-        $suratKeputusan = $query->latest()->get();
+        if ($request->filled('periode_sampai')) {
+            $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
+            $query->whereDate('created_at', '<=', $endDate);
+        }
 
-        return view('pages.sdm-hukum.surat-keputusan.index', compact('suratKeputusan'));
+        // Filter nama file
+        if ($request->filled('nama_file')) {
+            $query->where('file_pdf', 'like', '%' . $request->nama_file . '%');
+        }
+
+        // Filter unit
+        if ($request->filled('unit')) {
+            $query->where('unit', $request->unit);
+        }
+
+        // Ambil data dengan sorting terbaru
+        $suratKeputusan = $query->orderBy('created_at', 'desc')->get();
+
+        return view('pages.sdm-hukum.surat-keputusan.index', compact('suratKeputusan', 'isFiltered'));
     }
 
     public function create()

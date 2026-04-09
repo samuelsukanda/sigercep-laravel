@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PengajuanDokumen;
 use Illuminate\Support\Facades\Storage;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class PengajuanDokumenController extends Controller
 {
@@ -20,20 +20,32 @@ class PengajuanDokumenController extends Controller
 
     public function index(Request $request)
     {
-        $pengajuanDokumen = PengajuanDokumen::all();
+        $isFiltered = $request->hasAny([
+            'periode_dari',
+            'periode_sampai',
+            'judul_dokumen',
+            'jenis_dokumen',
+            'kategori_pengajuan'
+        ]);
+
+        $validator = Validator::make($request->all(), [
+            'periode_dari'   => 'nullable|date_format:d-m-Y',
+            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
+        ], [
+            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('komite-mutu.pengajuan-dokumen.index')
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         $query = PengajuanDokumen::query();
 
-        if ($request->start_date && $request->end_date) {
-            $query->whereBetween('created_at', [
-                $request->start_date . ' 00:00:00',
-                $request->end_date . ' 23:59:59'
-            ]);
-        }
+        $pengajuanDokumen = $query->orderBy('tanggal_pengajuan', 'desc')->get();
 
-        $pengajuanDokumen = $query->latest()->get();
-
-        return view('pages.komite-mutu.pengajuan-dokumen.index', compact('pengajuanDokumen'));
+        return view('pages.komite-mutu.pengajuan-dokumen.index', compact('pengajuanDokumen', 'isFiltered'));
     }
 
     public function create()
@@ -146,17 +158,17 @@ class PengajuanDokumenController extends Controller
             'file_spo' => 'nullable|file|max:20480',
         ]);
 
-        $ext = strtolower($request->file('file_spo')->getClientOriginalExtension());
-
-        if (!in_array($ext, ['doc', 'docx'])) {
-            return back()->withErrors([
-                'file_spo' => 'File harus berformat Word (.doc atau .docx)'
-            ]);
-        }
-
         $pengajuanDokumen = PengajuanDokumen::findOrFail($id);
 
         if ($request->hasFile('file_spo')) {
+            $ext = strtolower($request->file('file_spo')->getClientOriginalExtension());
+
+            if (!in_array($ext, ['doc', 'docx'])) {
+                return back()->withErrors([
+                    'file_spo' => 'File harus berformat Word (.doc atau .docx)'
+                ]);
+            }
+
             if (
                 $pengajuanDokumen->file_path &&
                 Storage::disk('public')->exists($pengajuanDokumen->file_path)

@@ -34,7 +34,7 @@
 
 
 @push('scripts')
-    <script src="{{ asset('assets/js/datatable-summary.js') }}"></script>
+    <script src="{{ asset('assets/js/datatable/datatable-summary.js') }}"></script>
     <script src="{{ asset('assets/js/loading-filter.js') }}"></script>
     <script>
         $.fn.dataTable.ext.errMode = "none";

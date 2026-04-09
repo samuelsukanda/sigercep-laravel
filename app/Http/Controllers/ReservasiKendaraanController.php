@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ReservasiKendaraan;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class ReservasiKendaraanController extends Controller
 {
@@ -19,20 +20,39 @@ class ReservasiKendaraanController extends Controller
 
     public function index(Request $request)
     {
-        $reservasi = ReservasiKendaraan::all();
+        $isFiltered = $request->hasAny([
+            'periode_dari',
+            'periode_sampai',
+        ]);
+
+        $validator = Validator::make($request->all(), [
+            'periode_dari'   => 'nullable|date_format:d-m-Y',
+            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
+        ], [
+            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('reservasi.kendaraan.index')
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         $query = ReservasiKendaraan::query();
 
-        if ($request->start_date && $request->end_date) {
-            $query->whereBetween('created_at', [
-                $request->start_date . ' 00:00:00',
-                $request->end_date . ' 23:59:59'
-            ]);
+        if ($request->filled('periode_dari')) {
+            $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
+            $query->whereDate('tanggal', '>=', $startDate);
         }
 
-        $reservasi = $query->latest()->get();
+        if ($request->filled('periode_sampai')) {
+            $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
+            $query->whereDate('tanggal', '<=', $endDate);
+        }
 
-        return view('pages.reservasi.kendaraan.index', compact('reservasi'));
+        $reservasi = $query->orderBy('tanggal', 'desc')->orderBy('jam_berangkat', 'asc')->get();
+
+        return view('pages.reservasi.kendaraan.index', compact('reservasi', 'isFiltered'));
     }
 
     public function create()
@@ -112,6 +132,7 @@ class ReservasiKendaraanController extends Controller
         ]);
 
         $isOverlap = ReservasiKendaraan::where('id', '<>', $id)
+            ->where('jenis_kendaraan', $validated['jenis_kendaraan'])
             ->where('tanggal', $validated['tanggal'])
             ->where(function ($query) use ($validated) {
                 $query->whereBetween('jam_berangkat', [$validated['jam_berangkat'], $validated['jam_pulang']])

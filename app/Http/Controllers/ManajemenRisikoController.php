@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ManajemenRisiko;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class ManajemenRisikoController extends Controller
 {
@@ -19,20 +20,39 @@ class ManajemenRisikoController extends Controller
 
     public function index(Request $request)
     {
-        $mutu = ManajemenRisiko::all();
+        $isFiltered = $request->hasAny([
+            'periode_dari',
+            'periode_sampai',
+        ]);
+
+        $validator = Validator::make($request->all(), [
+            'periode_dari'   => 'nullable|date_format:d-m-Y',
+            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
+        ], [
+            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('komite-mutu.manajemen-risiko.index')
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         $query = ManajemenRisiko::query();
 
-        if ($request->start_date && $request->end_date) {
-            $query->whereBetween('created_at', [
-                $request->start_date . ' 00:00:00',
-                $request->end_date . ' 23:59:59'
-            ]);
+        if ($request->filled('periode_dari')) {
+            $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
+            $query->whereDate('tanggal', '>=', $startDate);
         }
 
-        $mutu = $query->latest()->get();
+        if ($request->filled('periode_sampai')) {
+            $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
+            $query->whereDate('tanggal', '<=', $endDate);
+        }
 
-        return view('pages.komite-mutu.manajemen-risiko.index', compact('mutu'));
+        $mutu = $query->orderBy('tanggal', 'desc')->get();
+
+        return view('pages.komite-mutu.manajemen-risiko.index', compact('mutu', 'isFiltered'));
     }
 
     public function create()
@@ -47,7 +67,7 @@ class ManajemenRisikoController extends Controller
             'unit' => 'required|string|max:50',
             'tanggal' => 'required|date',
             'uraian' => 'required|string|max:255',
-            'dampak' => 'required|integer|min:1|max:25',
+            'dampak' => 'required|integer|min:1|max:5',
             'kemungkinan' => 'required|integer|min:1|max:5',
             'nilai' => 'required|integer',
             'keterangan' => 'nullable|string|max:255',

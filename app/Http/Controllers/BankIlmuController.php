@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\BankIlmu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class BankIlmuController extends Controller
 {
@@ -19,20 +20,44 @@ class BankIlmuController extends Controller
 
     public function index(Request $request)
     {
-        $bankIlmu = BankIlmu::all();
+        $isFiltered = $request->hasAny([
+            'periode_dari',
+            'periode_sampai',
+            'nama_file'
+        ]);
+
+        $validator = Validator::make($request->all(), [
+            'periode_dari'   => 'nullable|date_format:d-m-Y',
+            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
+        ], [
+            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('bank-ilmu.index')
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         $query = BankIlmu::query();
 
-        if ($request->start_date && $request->end_date) {
-            $query->whereBetween('created_at', [
-                $request->start_date . ' 00:00:00',
-                $request->end_date . ' 23:59:59'
-            ]);
+        if ($request->filled('periode_dari')) {
+            $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
+            $query->whereDate('created_at', '>=', $startDate);
         }
 
-        $bankIlmu = $query->latest()->get();
+        if ($request->filled('periode_sampai')) {
+            $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
+            $query->whereDate('created_at', '<=', $endDate);
+        }
 
-        return view('pages.bank-ilmu.index', compact('bankIlmu'));
+        if ($request->filled('nama_file')) {
+            $query->where('file_pdf', 'like', '%' . $request->nama_file . '%');
+        }
+
+        $bankIlmu = $query->orderBy('created_at', 'desc')->get();
+
+        return view('pages.bank-ilmu.index', compact('bankIlmu', 'isFiltered'));
     }
 
     public function create()
@@ -57,7 +82,7 @@ class BankIlmuController extends Controller
 
         Storage::disk('public')->putFileAs($folderPath, $file, $originalName);
 
-        bankIlmu::create([
+        BankIlmu::create([
             'file_pdf' => $originalName,
             'file_path' => $targetPath,
         ]);
@@ -67,13 +92,13 @@ class BankIlmuController extends Controller
 
     public function show(string $id)
     {
-        $bankIlmu = bankIlmu::findOrFail($id);
+        $bankIlmu = BankIlmu::findOrFail($id);
         return view('pages.bank-ilmu.detail', compact('bankIlmu'));
     }
 
     public function showFile($id)
     {
-        $bankIlmu = bankIlmu::findOrFail($id);
+        $bankIlmu = BankIlmu::findOrFail($id);
 
         $filePath = storage_path("app/public/{$bankIlmu->file_path}");
 
@@ -83,19 +108,19 @@ class BankIlmuController extends Controller
 
         return response()->file($filePath, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . $bankIlmu->unit . '-' . $bankIlmu->file_pdf . '"'
+            'Content-Disposition' => 'inline; filename="' . $bankIlmu->file_pdf . '"'
         ]);
     }
 
     public function edit(string $id)
     {
-        $bankIlmu = bankIlmu::findOrFail($id);
+        $bankIlmu = BankIlmu::findOrFail($id);
         return view('pages.bank-ilmu.edit', compact('bankIlmu'));
     }
 
     public function update(Request $request, string $id)
     {
-        $bankIlmu = bankIlmu::findOrFail($id);
+        $bankIlmu = BankIlmu::findOrFail($id);
 
         $request->validate([
             'file_pdf' => 'nullable|file|mimes:pdf|max:20480',
@@ -147,7 +172,7 @@ class BankIlmuController extends Controller
 
     public function destroy(string $id)
     {
-        $bankIlmu = bankIlmu::findOrFail($id);
+        $bankIlmu = BankIlmu::findOrFail($id);
 
         if (Storage::disk('public')->exists($bankIlmu->file_path)) {
             Storage::disk('public')->delete($bankIlmu->file_path);

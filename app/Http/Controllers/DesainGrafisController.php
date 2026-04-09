@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\DesainGrafis;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class DesainGrafisController extends Controller
 {
@@ -18,20 +19,39 @@ class DesainGrafisController extends Controller
 
     public function index(Request $request)
     {
-        $desain = DesainGrafis::all();
+        $isFiltered = $request->hasAny([
+            'periode_dari',
+            'periode_sampai',
+        ]);
+
+        $validator = Validator::make($request->all(), [
+            'periode_dari'   => 'nullable|date_format:d-m-Y',
+            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
+        ], [
+            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('desain-grafis.index')
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         $query = DesainGrafis::query();
 
-        if ($request->start_date && $request->end_date) {
-            $query->whereBetween('created_at', [
-                $request->start_date . ' 00:00:00',
-                $request->end_date . ' 23:59:59'
-            ]);
+        if ($request->filled('periode_dari')) {
+            $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
+            $query->whereDate('tanggal', '>=', $startDate);
         }
 
-        $desain = $query->latest()->get();
+        if ($request->filled('periode_sampai')) {
+            $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
+            $query->whereDate('tanggal', '<=', $endDate);
+        }
 
-        return view('pages.desain-grafis.index', compact('desain'));
+        $desain = $query->orderBy('tanggal', 'desc')->get();
+
+        return view('pages.desain-grafis.index', compact('desain', 'isFiltered'));
     }
 
     public function create()
@@ -63,6 +83,7 @@ class DesainGrafisController extends Controller
             $validated['menit'] = null;
             $validated['detik'] = null;
         }
+
         DesainGrafis::create($validated);
 
         return redirect()->route('desain-grafis.index')->with('success', 'Data berhasil disimpan.');
@@ -114,11 +135,9 @@ class DesainGrafisController extends Controller
         return redirect()->route('desain-grafis.index')->with('success', 'Data berhasil diperbarui.');
     }
 
-
     public function destroy(string $id)
     {
         $desain = DesainGrafis::findOrFail($id);
-
         $desain->delete();
 
         return redirect()->route('desain-grafis.index')->with('success', 'Data berhasil dihapus.');

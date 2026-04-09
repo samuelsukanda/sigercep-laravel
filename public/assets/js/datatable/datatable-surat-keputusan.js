@@ -1,11 +1,11 @@
-// public/assets/js/datatable-admin.js
+// public/assets/js/datatable-surat-keputusan.js
 $(document).ready(function() {
-    $("#ticketTable").DataTable({
+    $("#suratKeputusanTable").DataTable({
         responsive: true,
-        pageLength: 15,
+        pageLength: 10,
         lengthMenu: [
-            [10, 15, 25, 50, 100, -1],
-            [10, 15, 25, 50, 100, "Semua"],
+            [10, 25, 50, 100, -1],
+            [10, 25, 50, 100, "Semua"]
         ],
         language: {
             search: "Cari:",
@@ -17,11 +17,11 @@ $(document).ready(function() {
                 first: "Pertama",
                 last: "Terakhir",
                 next: "Selanjutnya",
-                previous: "Sebelumnya",
+                previous: "Sebelumnya"
             },
             zeroRecords: "Tidak ada data yang ditemukan",
-            emptyTable: "Tidak ada data tersedia",
+            emptyTable: "Tidak ada data tersedia"
         },
-        order: [[3, "desc"]], // Urutkan berdasarkan kolom tanggal (index ke-3)
+        order: [[2, "desc"]]
     });
 });

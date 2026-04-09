@@ -1,77 +1,72 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+@section('title', 'SIGERCEP - Daftar Laporan Perilaku')
+
+{{-- Style --}}
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/loading.css') }}">
+@endpush
 
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
-        <div class="flex justify-between items-center mb-4">
-            <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Laporan Perilaku</h6>
+        <div class="flex flex-wrap -mx-3">
+            <div class="w-full max-w-full px-3 mx-auto mt-0">
+                {{-- Header --}}
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3>Daftar Laporan Perilaku</h3>
+                </div>
 
-            @canAccess('laporan_perilaku', 'create')
-            <x-button.link href="{{ route('komite-mutu.laporan-perilaku.create') }}">
-                Tambah Data
-            </x-button.link>
-            @endcanAccess
-        </div>
+                @if (session('success'))
+                    <div
+                        class="relative text-s w-full p-4 mb-4 text-white border border-blue-300 border-solid rounded-lg bg-gradient-to-tl from-blue-500 to-violet-500">
+                        {{ session('success') }}
+                    </div>
+                @endif
 
-        @if (session('success'))
-            <div
-                class="relative text-s w-full p-4 mb-4 text-white border border-blue-300 border-solid rounded-lg bg-gradient-to-tl from-blue-500 to-violet-500">
-                {{ session('success') }}
+                {{-- Filter Section --}}
+                @include('layouts.partials.komite-mutu.laporan-perilaku.filter')
+
+                {{-- DataTable --}}
+                @include('layouts.partials.komite-mutu.laporan-perilaku.datatable')
+
+                {{-- Loading Overlay --}}
+                @include('layouts.partials.komite-mutu.laporan-perilaku.loading-overlay')
             </div>
-        @endif
-
-        <div class="relative overflow-x-auto shadow-md rounded-lg px-2 dark:text-white">
-            <table id="datatable" class="min-w-full divide-y divide-gray-200 dark:divide-white-200 dark:text-white">
-                <thead class="text-xs text-slate-500 uppercase bg-slate-100 dark:text-white">
-                    <tr>
-                        <th class="px-6 py-3">Nama</th>
-                        <th class="px-6 py-3">NIK</th>
-                        <th class="px-6 py-3">Unit</th>
-                        <th class="px-6 py-3">Tanggal</th>
-                        <th class="px-6 py-3 text-center">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="text-s text-slate-500 bg-slate-100 dark:text-white">
-                    @foreach ($laporanPerilaku as $item)
-                        <tr>
-                            <td class="px-6 py-4">{{ $item->nama }}</td>
-                            <td class="px-6 py-4">{{ $item->nik }}</td>
-                            <td class="px-6 py-4">{{ $item->unit }}</td>
-                            <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->tanggal)->timestamp }}">
-                                {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
-                            </td>
-                            <td class="px-6 py-4 space-x-2 text-center">
-                                @canAccess('laporan_perilaku', 'update')
-                                <x-button.action href="{{ route('komite-mutu.laporan-perilaku.edit', $item->id) }}"
-                                    icon="pen-to-square" color="emerald" title="Edit" />
-                                @endcanAccess
-
-                                @canAccess('laporan_perilaku', 'read')
-                                <x-button.action href="{{ route('komite-mutu.laporan-perilaku.show', $item->id) }}"
-                                    icon="eye" color="emerald" title="Lihat Data" />
-                                @endcanAccess
-
-                                @canAccess('laporan_perilaku', 'delete')
-                                <x-button.action href="{{ route('komite-mutu.laporan-perilaku.destroy', $item->id) }}"
-                                    icon="trash" color="red" type="button" method="DELETE" title="Hapus" />
-                                @endcanAccess
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
         </div>
     </div>
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/js/alert-delete.js') }}"></script>
-
+    <script src="{{ asset('assets/js/datatable/datatable-laporan-perilaku.js') }}"></script>
+    <script src="{{ asset('assets/js/loading-filter.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            let table = $('#datatable').DataTable();
-            table.order([3, 'desc']).draw();
+        $.fn.dataTable.ext.errMode = "none";
+
+        // Filter
+        document.addEventListener("DOMContentLoaded", function() {
+            var dari = flatpickr("input[name='periode_dari']", {
+                dateFormat: "d-m-Y",
+                allowInput: false,
+                onChange: function(selectedDates, dateStr, instance) {
+                    sampai.set("minDate", dateStr);
+                },
+            });
+
+            var sampai = flatpickr("input[name='periode_sampai']", {
+                dateFormat: "d-m-Y",
+                allowInput: false,
+                onChange: function(selectedDates, dateStr, instance) {
+                    dari.set("maxDate", dateStr);
+                },
+            });
+
+            const dariValue = "{{ request('periode_dari', now()->startOfMonth()->format('d-m-Y')) }}";
+            const sampaiValue = "{{ request('periode_sampai', now()->format('d-m-Y')) }}";
+
+            dari.setDate(dariValue);
+            sampai.setDate(sampaiValue);
+            sampai.set("minDate", dariValue);
+            dari.set("maxDate", sampaiValue);
         });
     </script>
 @endpush

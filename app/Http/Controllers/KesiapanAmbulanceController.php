@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\KesiapanAmbulance;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class KesiapanAmbulanceController extends Controller
 {
@@ -17,10 +18,41 @@ class KesiapanAmbulanceController extends Controller
         $this->middleware('permission:kesiapan_ambulance,delete')->only(['destroy']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $ambulance = KesiapanAmbulance::all();
-        return view('pages.kesiapan-ambulance.index', compact('ambulance'));
+        $isFiltered = $request->hasAny([
+            'periode_dari',
+            'periode_sampai',
+        ]);
+
+        $validator = Validator::make($request->all(), [
+            'periode_dari'   => 'nullable|date_format:d-m-Y',
+            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
+        ], [
+            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('kesiapan-ambulance.index')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $query = KesiapanAmbulance::query();
+
+        if ($request->filled('periode_dari')) {
+            $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
+            $query->whereDate('tanggal', '>=', $startDate);
+        }
+
+        if ($request->filled('periode_sampai')) {
+            $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
+            $query->whereDate('tanggal', '<=', $endDate);
+        }
+
+        $ambulance = $query->orderBy('tanggal', 'desc')->get();
+
+        return view('pages.kesiapan-ambulance.index', compact('ambulance', 'isFiltered'));
     }
 
     public function create()

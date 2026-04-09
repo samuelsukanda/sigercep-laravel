@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PelaporanIkp;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class PelaporanIkpController extends Controller
 {
@@ -17,10 +18,41 @@ class PelaporanIkpController extends Controller
         $this->middleware('permission:pelaporan_ikp,delete')->only(['destroy']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $pelaporanIkp = PelaporanIkp::all();
-        return view('pages.komite-mutu.pelaporan-ikp.index', compact('pelaporanIkp'));
+        $isFiltered = $request->hasAny([
+            'periode_dari',
+            'periode_sampai',
+        ]);
+
+        $validator = Validator::make($request->all(), [
+            'periode_dari'   => 'nullable|date_format:d-m-Y',
+            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
+        ], [
+            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('komite-mutu.pelaporan-ikp.index')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $query = PelaporanIkp::query();
+
+        if ($request->filled('periode_dari')) {
+            $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
+            $query->whereDate('tanggal_kejadian', '>=', $startDate);
+        }
+
+        if ($request->filled('periode_sampai')) {
+            $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
+            $query->whereDate('tanggal_kejadian', '<=', $endDate);
+        }
+
+        $pelaporanIkp = $query->orderBy('tanggal_kejadian', 'desc')->get();
+
+        return view('pages.komite-mutu.pelaporan-ikp.index', compact('pelaporanIkp', 'isFiltered'));
     }
 
     public function create()

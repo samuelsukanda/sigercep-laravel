@@ -1,0 +1,27 @@
+// public/assets/js/datatable-utw.js
+$(document).ready(function () {
+    $("#utwTable").DataTable({
+        responsive: true,
+        pageLength: 10,
+        lengthMenu: [
+            [10, 25, 50, 100, -1],
+            [10, 25, 50, 100, "Semua"],
+        ],
+        language: {
+            search: "Cari:",
+            lengthMenu: "Tampilkan _MENU_ data",
+            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+            infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
+            infoFiltered: "(difilter dari _MAX_ total data)",
+            paginate: {
+                first: "Pertama",
+                last: "Terakhir",
+                next: "Selanjutnya",
+                previous: "Sebelumnya",
+            },
+            zeroRecords: "Tidak ada data yang ditemukan",
+            emptyTable: "Tidak ada data tersedia",
+        },
+        order: [[2, "desc"]],
+    });
+});
