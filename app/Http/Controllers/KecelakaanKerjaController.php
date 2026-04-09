@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\KecelakaanKerja;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class KecelakaanKerjaController extends Controller
 {
@@ -19,20 +21,39 @@ class KecelakaanKerjaController extends Controller
 
     public function index(Request $request)
     {
-        $k3rs = KecelakaanKerja::all();
+        $isFiltered = $request->hasAny([
+            'periode_dari',
+            'periode_sampai',
+        ]);
+
+        $validator = Validator::make($request->all(), [
+            'periode_dari'   => 'nullable|date_format:d-m-Y',
+            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
+        ], [
+            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('kecelakaan-kerja.index')
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         $query = KecelakaanKerja::query();
 
-        if ($request->start_date && $request->end_date) {
-            $query->whereBetween('created_at', [
-                $request->start_date . ' 00:00:00',
-                $request->end_date . ' 23:59:59'
-            ]);
+        if ($request->filled('periode_dari')) {
+            $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
+            $query->whereDate('tanggal', '>=', $startDate);
         }
 
-        $k3rs = $query->latest()->get();
+        if ($request->filled('periode_sampai')) {
+            $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
+            $query->whereDate('tanggal', '<=', $endDate);
+        }
 
-        return view('pages.kecelakaan-kerja.index', compact('k3rs'));
+        $k3rs = $query->orderBy('tanggal', 'desc')->orderBy('jam', 'desc')->get();
+
+        return view('pages.kecelakaan-kerja.index', compact('k3rs', 'isFiltered'));
     }
 
     public function create()

@@ -18,7 +18,15 @@
                     <td class="px-6 py-4 font-medium">{{ ucfirst(strtolower($item->nama)) }}</td>
                     <td class="px-6 py-4">{{ $item->unit }}</td>
                     <td class="px-6 py-4">{{ $item->no_hp }}</td>
-                    <td class="px-6 py-4">{{ \Carbon\Carbon::createFromFormat('H:i:s', $item->jam)->format('H:i') }} WIB
+                    <td class="px-6 py-4">
+                        @php
+                            try {
+                                $jamDisplay = \Carbon\Carbon::createFromFormat('H:i:s', $item->jam)->format('H:i');
+                            } catch (\Exception $e) {
+                                $jamDisplay = $item->jam ?? '-';
+                            }
+                        @endphp
+                        {{ $jamDisplay }} WIB
                     </td>
                     <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->tanggal)->timestamp }}">
                         <div class="flex flex-col">
@@ -53,7 +61,7 @@
                     <td colspan="8" class="px-6 py-8 text-center text-gray-500">
                         <div class="flex flex-col items-center gap-2">
                             <i class="fas fa-inbox text-4xl text-gray-400"></i>
-                            <p>Tidak ada data kecelakaan kerja ditemukan</p>
+                            <p>Tidak ada data kesiapan ambulance ditemukan</p>
                         </div>
                     </td>
                 </tr>

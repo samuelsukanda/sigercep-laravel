@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Visitasi;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class VisitasiController extends Controller
 {
@@ -18,10 +19,41 @@ class VisitasiController extends Controller
         $this->middleware('permission:visitasi,delete')->only(['destroy']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $visitasi = Visitasi::all();
-        return view('pages.visitasi.index', compact('visitasi'));
+        $isFiltered = $request->hasAny([
+            'periode_dari',
+            'periode_sampai',
+        ]);
+
+        $validator = Validator::make($request->all(), [
+            'periode_dari'   => 'nullable|date_format:d-m-Y',
+            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
+        ], [
+            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('visitasi.index')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $query = Visitasi::query();
+
+        if ($request->filled('periode_dari')) {
+            $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
+            $query->whereDate('tanggal', '>=', $startDate);
+        }
+
+        if ($request->filled('periode_sampai')) {
+            $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
+            $query->whereDate('tanggal', '<=', $endDate);
+        }
+
+        $visitasi = $query->orderBy('tanggal', 'desc')->get();
+
+        return view('pages.visitasi.index', compact('visitasi', 'isFiltered'));
     }
 
     public function create()

@@ -1,96 +1,72 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+@section('title', 'SIGERCEP - Daftar Laporan Aset Rusak')
+
+{{-- Style --}}
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/loading.css') }}">
+@endpush
 
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
-        <div class="flex justify-between items-center mb-4">
-            <h6 class="text-xl font-bold text-slate-700 dark:text-white">Daftar Laporan Aset Rusak</h6>
+        <div class="flex flex-wrap -mx-3">
+            <div class="w-full max-w-full px-3 mx-auto mt-0">
+                {{-- Header --}}
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3>Daftar Laporan Aset Rusak</h3>
+                </div>
 
-            @canAccess('laporan_aset_rusak', 'create')
-            <x-button.link href="{{ route('pengadaan-aset.laporan-aset-rusak.create') }}">
-                Tambah Data
-            </x-button.link>
-            @endcanAccess
-        </div>
+                @if (session('success'))
+                    <div
+                        class="relative text-s w-full p-4 mb-4 text-white border border-blue-300 border-solid rounded-lg bg-gradient-to-tl from-blue-500 to-violet-500">
+                        {{ session('success') }}
+                    </div>
+                @endif
 
-        @if (session('success'))
-            <div
-                class="relative text-s w-full p-4 mb-4 text-white border border-blue-300 border-solid rounded-lg bg-gradient-to-tl from-blue-500 to-violet-500">
-                {{ session('success') }}
+                {{-- Filter Section --}}
+                @include('layouts.partials.pengadaan-aset.laporan-aset-rusak.filter')
+
+                {{-- DataTable --}}
+                @include('layouts.partials.pengadaan-aset.laporan-aset-rusak.datatable')
+
+                {{-- Loading Overlay --}}
+                @include('layouts.partials.pengadaan-aset.laporan-aset-rusak.loading-overlay')
             </div>
-        @endif
-
-        <div class="flex justify-end items-center mb-4 flex-wrap gap-2">
-            {{-- Filter Tanggal --}}
-            <form method="GET" action="{{ route('pengadaan-aset.laporan-aset-rusak.index') }}" class="flex items-center gap-4 mb-4">
-                <div>
-                    <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}"
-                        class="border rounded px-3 py-2 w-full">
-                </div>
-                <div>
-                    <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}"
-                        class="border rounded px-3 py-2 w-full">
-                </div>
-            </form>
-        </div>
-
-        <div class="relative overflow-x-auto shadow-md rounded-lg px-2 dark:text-white">
-            <table id="datatable" data-date-column="5"
-                class="min-w-full divide-y divide-gray-200 dark:divide-white-200 dark:text-white">
-                <thead class="text-xs text-slate-500 uppercase bg-slate-100 dark:text-white">
-                    <tr>
-                        <th class="px-6 py-3">Nama</th>
-                        <th class="px-6 py-3">Unit</th>
-                        <th class="px-6 py-3">Nama Aset</th>
-                        <th class="px-6 py-3">Lokasi Aset</th>
-                        <th class="px-6 py-3">Kondisi Aset</th>
-                        <th class="px-6 py-3">Tanggal</th>
-                        <th class="px-6 py-3 text-center">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="text-s text-slate-500 bg-slate-100 dark:text-white">
-                    @foreach ($pengadaan as $item)
-                        <tr>
-                            <td class="px-6 py-4">{{ ucfirst(strtolower($item->nama)) }}</td>
-                            <td class="px-6 py-4">{{ $item->unit }}</td>
-                            <td class="px-6 py-4">{{ strtolower($item->nama_aset) }}</td>
-                            <td class="px-6 py-4">{{ strtolower($item->lokasi_aset) }}</td>
-                            <td class="px-6 py-4">{{ strtolower($item->kondisi_aset) }}</td>
-                            <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->tanggal)->timestamp }}">
-                                {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
-                            </td>
-                            <td class="px-6 py-4 space-x-2 text-center">
-                                @canAccess('laporan_aset_rusak', 'update')
-                                <x-button.action href="{{ route('pengadaan-aset.laporan-aset-rusak.edit', $item->id) }}"
-                                    icon="pen-to-square" color="emerald" title="Edit" />
-                                @endcanAccess
-
-                                @canAccess('laporan_aset_rusak', 'read')
-                                <x-button.action href="{{ route('pengadaan-aset.laporan-aset-rusak.show', $item->id) }}"
-                                    icon="eye" color="emerald" title="Lihat Data" />
-                                @endcanAccess
-
-                                @canAccess('laporan_aset_rusak', 'delete')
-                                <x-button.action href="{{ route('pengadaan-aset.laporan-aset-rusak.destroy', $item->id) }}"
-                                    icon="trash" color="red" type="button" method="DELETE" title="Hapus" />
-                                @endcanAccess
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
         </div>
     </div>
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/js/alert-delete.js') }}"></script>
-
+    <script src="{{ asset('assets/js/datatable/datatable-laporan-aset-rusak.js') }}"></script>
+    <script src="{{ asset('assets/js/loading-filter.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            let table = $('#datatable').DataTable();
-            table.order([5, 'desc']).draw();
+        $.fn.dataTable.ext.errMode = "none";
+
+        // Filter
+        document.addEventListener("DOMContentLoaded", function() {
+            var dari = flatpickr("input[name='periode_dari']", {
+                dateFormat: "d-m-Y",
+                allowInput: false,
+                onChange: function(selectedDates, dateStr, instance) {
+                    sampai.set("minDate", dateStr);
+                },
+            });
+
+            var sampai = flatpickr("input[name='periode_sampai']", {
+                dateFormat: "d-m-Y",
+                allowInput: false,
+                onChange: function(selectedDates, dateStr, instance) {
+                    dari.set("maxDate", dateStr);
+                },
+            });
+
+            const dariValue = "{{ request('periode_dari', now()->startOfMonth()->format('d-m-Y')) }}";
+            const sampaiValue = "{{ request('periode_sampai', now()->format('d-m-Y')) }}";
+
+            dari.setDate(dariValue);
+            sampai.setDate(sampaiValue);
+            sampai.set("minDate", dariValue);
+            dari.set("maxDate", sampaiValue);
         });
     </script>
 @endpush

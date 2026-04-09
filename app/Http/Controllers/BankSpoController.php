@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\BankSpo;
-use App\Helpers\PermissionHelper;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class BankSpoController extends Controller
 {
@@ -21,90 +21,53 @@ class BankSpoController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $columns = ['file_pdf', 'unit', 'jenis_spo', 'created_at'];
+        $isFiltered = $request->hasAny([
+            'periode_dari',
+            'periode_sampai',
+            'unit',
+            'jenis_spo'
+        ]);
 
-            $query = BankSpo::query();
+        $validator = Validator::make($request->all(), [
+            'periode_dari'   => 'nullable|date_format:d-m-Y',
+            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
+        ], [
+            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
+        ]);
 
-            // Filter tanggal
-            if ($request->start_date && $request->end_date) {
-                $query->whereBetween('created_at', [
-                    $request->start_date . ' 00:00:00',
-                    $request->end_date . ' 23:59:59'
-                ]);
+        if ($validator->fails()) {
+            return redirect()->route('komite-mutu.bank-spo.index')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $query = BankSpo::query();
+
+        if ($isFiltered) {
+            if ($request->filled('periode_dari')) {
+                $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
+                $query->whereDate('created_at', '>=', $startDate);
             }
 
-            // Filter unit
-            if ($request->unit) {
+            if ($request->filled('periode_sampai')) {
+                $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
+                $query->whereDate('created_at', '<=', $endDate);
+            }
+
+            if ($request->filled('unit')) {
                 $query->where('unit', $request->unit);
             }
 
-            // Filter jenis SPO
-            if ($request->jenis_spo) {
+            if ($request->filled('jenis_spo')) {
                 $query->where('jenis_spo', $request->jenis_spo);
             }
 
-            // Search
-            if ($request->has('search') && !empty($request->search['value'])) {
-                $search = $request->search['value'];
-                $query->where(function ($q) use ($search) {
-                    $q->where('file_pdf', 'like', "%{$search}%")
-                        ->orWhere('unit', 'like', "%{$search}%")
-                        ->orWhere('jenis_spo', 'like', "%{$search}%");
-                });
-            }
-
-            // Total records
-            $totalRecords = $query->count();
-
-            // Ordering
-            if ($request->has('order')) {
-                $orderColumn = $columns[$request->order[0]['column']];
-                $orderDir = $request->order[0]['dir'];
-                $query->orderBy($orderColumn, $orderDir);
-            } else {
-                $query->orderBy('created_at', 'desc');
-            }
-
-            // Pagination
-            $start = $request->start ?? 0;
-            $length = $request->length ?? 50;
-            $records = $query->skip($start)->take($length)->get();
-
-            // Ambil permission di luar loop (fix error)
-            $user = Auth::user();
-            $canUpdate = PermissionHelper::canAccess('bank_spo', 'update');
-            $canRead = PermissionHelper::canAccess('bank_spo', 'read');
-            $canDelete = PermissionHelper::canAccess('bank_spo', 'delete');
-
-
-            // Prepare data
-            $data = [];
-
-            foreach ($records as $item) {
-                // Simpan data untuk digunakan di blade
-                $data[] = [
-                    'file_pdf' => $item->file_pdf,
-                    'unit' => $item->unit,
-                    'jenis_spo' => $item->jenis_spo,
-                    'tanggal_formatted' => \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y'),
-                    'id' => $item->id,
-                    'can_update' => $canUpdate,
-                    'can_read' => $canRead,
-                    'can_delete' => $canDelete
-                ];
-            }
-
-            return response()->json([
-                'draw' => intval($request->draw),
-                'recordsTotal' => $totalRecords,
-                'recordsFiltered' => $totalRecords,
-                'data' => $data
-            ]);
+            $bankSpo = $query->orderBy('created_at', 'desc')->get();
+        } else {
+            $bankSpo = collect();
         }
 
-        $bankSpo = BankSpo::latest()->get();
-        return view('pages.komite-mutu.bank-spo.index', compact('bankSpo'));
+        return view('pages.komite-mutu.bank-spo.index', compact('bankSpo', 'isFiltered'));
     }
 
     public function create()

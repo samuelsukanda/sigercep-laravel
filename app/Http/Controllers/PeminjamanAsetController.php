@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\PeminjamanAset;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class PeminjamanAsetController extends Controller
 {
@@ -20,20 +21,40 @@ class PeminjamanAsetController extends Controller
 
     public function index(Request $request)
     {
-        $pengadaan = PeminjamanAset::all();
+        // Cek apakah ada filter yang diapply
+        $isFiltered = $request->hasAny([
+            'periode_dari',
+            'periode_sampai',
+        ]);
+
+        $validator = Validator::make($request->all(), [
+            'periode_dari'   => 'nullable|date_format:d-m-Y',
+            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
+        ], [
+            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('pengadaan-aset.peminjaman-aset.index')
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         $query = PeminjamanAset::query();
 
-        if ($request->start_date && $request->end_date) {
-            $query->whereBetween('created_at', [
-                $request->start_date . ' 00:00:00',
-                $request->end_date . ' 23:59:59'
-            ]);
+        if ($request->filled('periode_dari')) {
+            $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
+            $query->whereDate('tanggal', '>=', $startDate);
         }
 
-        $pengadaan = $query->latest()->get();
+        if ($request->filled('periode_sampai')) {
+            $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
+            $query->whereDate('tanggal', '<=', $endDate);
+        }
 
-        return view('pages.pengadaan-aset.peminjaman-aset.index', compact('pengadaan'));
+        $pengadaan = $query->orderBy('tanggal', 'desc')->get();
+
+        return view('pages.pengadaan-aset.peminjaman-aset.index', compact('pengadaan', 'isFiltered'));
     }
 
     public function create()
@@ -102,6 +123,11 @@ class PeminjamanAsetController extends Controller
         $pengadaan = PeminjamanAset::findOrFail($id);
 
         if ($request->hasFile('foto_barang')) {
+            // Hapus foto lama jika ada
+            if ($pengadaan->foto_barang && Storage::disk('public')->exists($pengadaan->foto_barang)) {
+                Storage::disk('public')->delete($pengadaan->foto_barang);
+            }
+
             $fileBarang = $request->file('foto_barang');
             $namaFileBarang = 'foto-barang-' . now()->format('YmdHis') . '.' . $fileBarang->getClientOriginalExtension();
             $pathBarang = $fileBarang->storeAs('images/peminjaman-aset/foto-barang', $namaFileBarang, 'public');
@@ -109,6 +135,11 @@ class PeminjamanAsetController extends Controller
         }
 
         if ($request->hasFile('foto_barcode')) {
+            // Hapus foto lama jika ada
+            if ($pengadaan->foto_barcode && Storage::disk('public')->exists($pengadaan->foto_barcode)) {
+                Storage::disk('public')->delete($pengadaan->foto_barcode);
+            }
+
             $fileBarcode = $request->file('foto_barcode');
             $namaFileBarcode = 'foto-barcode-' . now()->format('YmdHis') . '.' . $fileBarcode->getClientOriginalExtension();
             $pathBarcode = $fileBarcode->storeAs('images/peminjaman-aset/foto-barcode', $namaFileBarcode, 'public');
