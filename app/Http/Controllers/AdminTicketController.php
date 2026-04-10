@@ -73,9 +73,7 @@ class AdminTicketController extends Controller
             }
         }
 
-        $tickets = $query->orderBy('created_at', 'desc')->paginate(15);
-        
-        $tickets->appends($request->query());
+        $tickets = $query->orderBy('created_at', 'desc')->get();
 
         return view('pages.helpdesk.admin.index', compact('tickets', 'isFiltered'));
     }

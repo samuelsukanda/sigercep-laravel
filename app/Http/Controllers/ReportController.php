@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Ticket;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
@@ -46,7 +45,6 @@ class ReportController extends Controller
             : now()->endOfMonth();
 
         $query = Ticket::with(['user', 'approval'])->filter($request);
-
         $tickets = $isFiltered ? $query->get() : collect();
 
         if ($request->filled('kategori')) {
