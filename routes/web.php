@@ -19,6 +19,7 @@ use App\Http\Controllers\PelaporanIkpController;
 use App\Http\Controllers\PengajuanDokumenController;
 use App\Http\Controllers\BankSpoController;
 use App\Http\Controllers\BankIlmuController;
+use App\Http\Controllers\DokumenITController;
 use App\Http\Controllers\LaporanPerilakuController;
 use App\Http\Controllers\UtwController;
 use App\Http\Controllers\ManajemenRisikoController;
@@ -112,6 +113,12 @@ Route::middleware('auth')->group(function () {
         ->resource('bank-ilmu', BankIlmuController::class)
         ->names('bank-ilmu');
     Route::get('/bank-ilmu/file/{id}', [BankIlmuController::class, 'showFile'])->name('bank-ilmu.show-file');
+
+    // Dokumen IT
+    Route::middleware(['auth'])
+        ->resource('dokumen-it', DokumenITController::class)
+        ->names('dokumen-it');
+    Route::get('/dokumen-it/file/{id}', [DokumenITController::class, 'showFile'])->name('dokumen-it.show-file');
 
     // Komplain
     Route::middleware(['auth'])

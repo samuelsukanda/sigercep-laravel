@@ -18,19 +18,24 @@
                                 <p class="text-slate-600">{{ $peraturanPerusahaan->file_pdf }}</p>
                             </div>
 
-                            {{-- Tanggal --}}
+                            {{-- Tanggal Upload --}}
                             <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Tanggal</label>
-                                <p class="text-slate-600">
-                                    {{ \Carbon\Carbon::parse($peraturanPerusahaan->tanggal)->translatedFormat('d F Y') }}
-                                </p>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Tanggal Upload</label>
+                                <div class="flex flex-col mb-4">
+                                    <span>{{ \Carbon\Carbon::parse($peraturanPerusahaan->created_at)->translatedFormat('d F Y') }}</span>
+                                    <span
+                                        class="text-xs text-gray-400">{{ \Carbon\Carbon::parse($peraturanPerusahaan->created_at)->format('H:i') }}
+                                        WIB</span>
+                                </div>
                             </div>
 
                             {{-- File Peraturan Perusahaan --}}
                             <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">File Peraturan Perusahaan</label>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">File Peraturan
+                                    Perusahaan</label>
                                 <p class="text-slate-600">{{ $peraturanPerusahaan->file_pdf }}</p>
-                                <a href="{{ route('peraturan-perusahaan.show-file', $peraturanPerusahaan->id) }}" target="_blank"
+                                <a href="{{ route('peraturan-perusahaan.show-file', $peraturanPerusahaan->id) }}"
+                                    target="_blank"
                                     class="px-2 py-1 bg-blue-500 rounded text-white hover:shadow-xs active:opacity-85">
                                     📄 Lihat File PDF
                                 </a>

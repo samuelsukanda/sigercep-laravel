@@ -737,7 +737,11 @@
     font-family: "Open Sans", sans-serif !important;
     font-size: 0.82rem !important;
     font-weight: 600 !important;
-    transition: background var(--tr), border-color var(--tr), color var(--tr), transform var(--tr) !important;
+    transition:
+        background var(--tr),
+        border-color var(--tr),
+        color var(--tr),
+        transform var(--tr) !important;
     box-shadow: 0 1px 4px rgba(108, 71, 255, 0.12) !important;
     line-height: 1 !important;
 }
@@ -1009,7 +1013,11 @@
     font-family: "Open Sans", sans-serif !important;
     font-size: 0.82rem !important;
     font-weight: 600 !important;
-    transition: background var(--tr), border-color var(--tr), color var(--tr), transform var(--tr) !important;
+    transition:
+        background var(--tr),
+        border-color var(--tr),
+        color var(--tr),
+        transform var(--tr) !important;
     box-shadow: 0 1px 4px rgba(108, 71, 255, 0.12) !important;
     line-height: 1 !important;
 }
@@ -1069,5 +1077,12 @@
     }
     .modal-rule-row {
         grid-template-columns: 1fr 1fr;
+    }
+    .search-highlight {
+        background-color: #fef3c7;
+        color: #b45309;
+        border-radius: 4px;
+        padding: 0 2px;
+        font-weight: 500;
     }
 }

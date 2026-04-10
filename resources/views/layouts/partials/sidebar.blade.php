@@ -89,6 +89,38 @@
                 </ul>
             </li>
 
+            @canAccess('dokumen_it', 'read')
+            <li class="mt-0.5 w-full">
+                <!-- Trigger -->
+                <a href="javascript:;" onclick="toggleDropdown(this)"
+                    class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
+                    <div class="flex items-center">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                            <i class="fas fa-file-alt relative top-0 text-sm leading-normal"
+                                style="color: #266ef3 !important;"></i>
+                        </div>
+                        <span class="ml-1 duration-300 ease">Dokumen IT</span>
+                    </div>
+                    <i class="fas fa-chevron-down text-sm transition-transform duration-200"></i>
+                </a>
+
+                <!-- Dropdown Menu -->
+                <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
+                    style="max-height: 0; opacity: 0;" dropdown-menu>
+                    <li class="w-full">
+                        <a href="{{ route('dokumen-it.index') }}"
+                            class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
+                                <i class="fas fa-list text-sm leading-normal"></i>
+                            </div>
+                            <span class="ml-1">Dokumen IT</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            @endcanAccess
+
+            @canAccess('bank_ilmu', 'read')
             <li class="mt-0.5 w-full">
                 <!-- Trigger -->
                 <a href="javascript:;" onclick="toggleDropdown(this)"
@@ -117,6 +149,7 @@
                     </li>
                 </ul>
             </li>
+            @endcanAccess
 
             <li class="mt-0.5 w-full">
                 <!-- Trigger -->
@@ -134,6 +167,8 @@
                 <!-- Dropdown Menu -->
                 <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
                     style="max-height: 0; opacity: 0;" dropdown-menu>
+
+                    @canAccess('komplain_ipsrs', 'read')
                     <li class="w-full">
                         <a href="{{ route('komplain.ipsrs.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -143,6 +178,9 @@
                             <span class="ml-1">IPSRS</span>
                         </a>
                     </li>
+                    @endcanAccess
+
+                    @canAccess('outsourcing_vendor', 'read')
                     <li class="w-full">
                         <a href="{{ route('komplain.outsourcing-vendor.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -152,6 +190,9 @@
                             <span class="ml-1">Outsourching & Vendor</span>
                         </a>
                     </li>
+                    @endcanAccess
+
+                    @canAccess('kesehatan_lingkungan', 'read')
                     <li class="w-full">
                         <a href="{{ route('komplain.kesehatan-lingkungan.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -161,6 +202,8 @@
                             <span class="ml-1">Kesehatan Lingkungan</span>
                         </a>
                     </li>
+                    @endcanAccess
+
                 </ul>
             </li>
 
@@ -180,6 +223,8 @@
                 <!-- Dropdown Menu -->
                 <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
                     style="max-height: 0; opacity: 0;" dropdown-menu>
+
+                    @canAccess('reservasi_ruangan', 'read')
                     <li class="w-full">
                         <a href="{{ route('reservasi.ruangan.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -189,6 +234,9 @@
                             <span class="ml-1">Ruangan</span>
                         </a>
                     </li>
+                    @endcanAccess
+
+                    @canAccess('reservasi_kendaraan', 'read')
                     <li class="w-full">
                         <a href="{{ route('reservasi.kendaraan.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -198,9 +246,12 @@
                             <span class="ml-1">Kendaraan</span>
                         </a>
                     </li>
+                    @endcanAccess
+
                 </ul>
             </li>
 
+            @canAccess('desain_grafis', 'read')
             <li class="mt-0.5 w-full">
                 <!-- Trigger -->
                 <a href="javascript:;" onclick="toggleDropdown(this)"
@@ -228,7 +279,9 @@
                     </li>
                 </ul>
             </li>
+            @endcanAccess
 
+            @canAccess('kecelakaan_kerja', 'read')
             <li class="mt-0.5 w-full">
                 <!-- Trigger -->
                 <a href="javascript:;" onclick="toggleDropdown(this)"
@@ -256,6 +309,7 @@
                     </li>
                 </ul>
             </li>
+            @endcanAccess
 
             <li class="mt-0.5 w-full">
                 <!-- Trigger -->
@@ -273,6 +327,8 @@
                 <!-- Dropdown Menu -->
                 <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
                     style="max-height: 0; opacity: 0;" dropdown-menu>
+
+                    @canAccess('mutu', 'read')
                     <li class="w-full">
                         <a href="{{ route('komite-mutu.mutu.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -282,6 +338,9 @@
                             <span class="ml-1">Mutu</span>
                         </a>
                     </li>
+                    @endcanAccess
+
+                    @canAccess('bank_spo', 'read')
                     <li class="w-full">
                         <a href="{{ route('komite-mutu.bank-spo.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -291,6 +350,9 @@
                             <span class="ml-1">Bank SPO</span>
                         </a>
                     </li>
+                    @endcanAccess
+
+                    @canAccess('manajemen_risiko', 'read')
                     <li class="w-full">
                         <a href="{{ route('komite-mutu.manajemen-risiko.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -300,6 +362,9 @@
                             <span class="ml-1">Manajemen Risiko</span>
                         </a>
                     </li>
+                    @endcanAccess
+
+                    @canAccess('pelaporan_ikp', 'read')
                     <li class="w-full">
                         <a href="{{ route('komite-mutu.pelaporan-ikp.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -309,6 +374,9 @@
                             <span class="ml-1">Pelaporan IKP</span>
                         </a>
                     </li>
+                    @endcanAccess
+
+                    @canAccess('pengajuan_dokumen', 'read')
                     <li class="w-full">
                         <a href="{{ route('komite-mutu.pengajuan-dokumen.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -318,6 +386,9 @@
                             <span class="ml-1">Pengajuan Dokumen</span>
                         </a>
                     </li>
+                    @endcanAccess
+
+                    @canAccess('laporan_perilaku', 'read')
                     <li class="w-full">
                         <a href="{{ route('komite-mutu.laporan-perilaku.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -327,6 +398,8 @@
                             <span class="ml-1">Laporan Perilaku</span>
                         </a>
                     </li>
+                    @endcanAccess
+
                 </ul>
             </li>
 
@@ -347,6 +420,8 @@
                 <!-- Dropdown Menu -->
                 <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
                     style="max-height: 0; opacity: 0;" dropdown-menu>
+
+                    @canAccess('utw', 'read')
                     <li class="w-full">
                         <a href="{{ route('sdm-hukum.utw.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -356,6 +431,8 @@
                             <span class="ml-1">UTW</span>
                         </a>
                     </li>
+                    @endcanAccess
+
                     <li class="w-full">
                         <a href="{{ route('sdm-hukum.struktur-organisasi.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -365,6 +442,8 @@
                             <span class="ml-1">Struktur Organisasi</span>
                         </a>
                     </li>
+
+                    @canAccess('peraturan_perusahaan', 'read')
                     <li class="w-full">
                         <a href="{{ route('sdm-hukum.peraturan-perusahaan.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -374,6 +453,9 @@
                             <span class="ml-1">Peraturan Perusahaan</span>
                         </a>
                     </li>
+                    @endcanAccess
+
+                    @canAccess('surat_keputusan', 'read')
                     <li class="w-full">
                         <a href="{{ route('sdm-hukum.surat-keputusan.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -383,6 +465,9 @@
                             <span class="ml-1">Surat Keputusan</span>
                         </a>
                     </li>
+                    @endcanAccess
+
+                    @canAccess('mandatory_training', 'read')
                     <li class="w-full">
                         <a href="{{ route('sdm-hukum.mandatory-training.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -392,6 +477,8 @@
                             <span class="ml-1">Mandatory Training</span>
                         </a>
                     </li>
+                    @endcanAccess
+
                 </ul>
             </li>
 
@@ -412,6 +499,8 @@
                 <!-- Dropdown Menu -->
                 <ul class="max-h-0 overflow-hidden flex-col pl-10 mt-1 space-y-1 transition-all duration-300 ease-in-out"
                     style="max-height: 0; opacity: 0;" dropdown-menu>
+
+                    @canAccess('peminjaman_aset', 'read')
                     <li class="w-full">
                         <a href="{{ route('pengadaan-aset.peminjaman-aset.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -421,6 +510,9 @@
                             <span class="ml-1">Peminjaman Aset</span>
                         </a>
                     </li>
+                    @endcanAccess
+
+                    @canAccess('pengembalian_aset', 'read')
                     <li class="w-full">
                         <a href="{{ route('pengadaan-aset.pengembalian-aset.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -430,6 +522,9 @@
                             <span class="ml-1">Pengembalian Aset</span>
                         </a>
                     </li>
+                    @endcanAccess
+
+                    @canAccess('pemindahan_aset', 'read')
                     <li class="w-full">
                         <a href="{{ route('pengadaan-aset.pemindahan-aset.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -439,6 +534,9 @@
                             <span class="ml-1">Pemindahan Aset</span>
                         </a>
                     </li>
+                    @endcanAccess
+
+                    @canAccess('laporan_aset_rusak', 'read')
                     <li class="w-full">
                         <a href="{{ route('pengadaan-aset.laporan-aset-rusak.index') }}"
                             class="py-2.7 text-sm ease-nav-brand mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-normal text-slate-600 transition-colors hover:bg-gray-100 dark:text-white dark:opacity-80">
@@ -448,9 +546,12 @@
                             <span class="ml-1">Laporan Aset Rusak</span>
                         </a>
                     </li>
+                    @endcanAccess
+
                 </ul>
             </li>
 
+            @canAccess('komite_medik', 'read')
             <li class="mt-0.5 w-full">
                 <!-- Trigger -->
                 <a href="javascript:;" onclick="toggleDropdown(this)"
@@ -479,7 +580,9 @@
                     </li>
                 </ul>
             </li>
+            @endcanAccess
 
+            @canAccess('kesiapan_ambulance', 'read')
             <li class="mt-0.5 w-full">
                 <!-- Trigger -->
                 <a href="javascript:;" onclick="toggleDropdown(this)"
@@ -507,7 +610,9 @@
                     </li>
                 </ul>
             </li>
+            @endcanAccess
 
+            @canAccess('toner', 'read')
             <li class="mt-0.5 w-full">
                 <!-- Trigger -->
                 <a href="javascript:;" onclick="toggleDropdown(this)"
@@ -535,7 +640,9 @@
                     </li>
                 </ul>
             </li>
+            @endcanAccess
 
+            @canAccess('visitasi', 'read')
             <li class="mt-0.5 w-full">
                 <!-- Trigger -->
                 <a href="javascript:;" onclick="toggleDropdown(this)"
@@ -564,7 +671,9 @@
                     </li>
                 </ul>
             </li>
+            @endcanAccess
 
+            @canAccess('peminjaman', 'read')
             <li class="mt-0.5 w-full">
                 <!-- Trigger -->
                 <a href="javascript:;" onclick="toggleDropdown(this)"
@@ -593,7 +702,9 @@
                     </li>
                 </ul>
             </li>
+            @endcanAccess
 
+            @canAccess('hardware', 'read')
             <li class="mt-0.5 w-full">
                 <!-- Trigger -->
                 <a href="javascript:;" onclick="toggleDropdown(this)"
@@ -622,6 +733,8 @@
                     </li>
                 </ul>
             </li>
+            @endcanAccess
+
         </ul>
     </div>
 </aside>

@@ -18,12 +18,15 @@
                                 <p class="text-slate-600">{{ $bankIlmu->file_pdf }}</p>
                             </div>
 
-                            {{-- Tanggal --}}
+                            {{-- Tanggal Upload --}}
                             <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Tanggal</label>
-                                <p class="text-slate-600">
-                                    {{ \Carbon\Carbon::parse($bankIlmu->tanggal)->translatedFormat('d F Y') }}
-                                </p>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Tanggal Upload</label>
+                                <div class="flex flex-col mb-4">
+                                    <span>{{ \Carbon\Carbon::parse($bankIlmu->created_at)->translatedFormat('d F Y') }}</span>
+                                    <span
+                                        class="text-xs text-gray-400">{{ \Carbon\Carbon::parse($bankIlmu->created_at)->format('H:i') }}
+                                        WIB</span>
+                                </div>
                             </div>
 
                             {{-- File PDF --}}

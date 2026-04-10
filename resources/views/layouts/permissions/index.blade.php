@@ -38,6 +38,29 @@
             margin-bottom: 1rem;
             opacity: 0.5;
         }
+
+        .filter-badge {
+            background: #f0ecff;
+            color: #6c47ff;
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-badge i {
+            font-size: 0.7rem;
+        }
+
+        .search-info-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
     </style>
 @endpush
 
@@ -74,7 +97,7 @@
         <div class="perm-stats">
             <div class="perm-stat">
                 <div class="perm-stat-label"><i class="fas fa-key"></i> Total permission</div>
-                <div class="perm-stat-value">{{ $permissions->count() }}</div>
+                <div class="perm-stat-value" id="totalPermissions">{{ $permissions->count() }}</div>
                 <div class="perm-stat-sub">permission terdaftar</div>
             </div>
             <div class="perm-stat">
@@ -102,10 +125,17 @@
                     <i class="fas fa-times-circle" style="font-size: 1rem;"></i>
                 </button>
             </div>
-            <div id="searchInfo" style="margin-top: 8px; font-size: 0.75rem; color: #6b7280; display: none;">
-                <span id="searchResultCount"></span>
+            <div class="search-info-wrapper">
+                <div id="searchInfo" style="font-size: 0.75rem; color: #6b7280; display: none;">
+                    <span id="searchResultCount"></span>
+                </div>
+                <div id="filterBadge" class="filter-badge" style="display: none;">
+                    <i class="fas fa-filter"></i>
+                    <span id="filterCount">0</span> data difilter
+                </div>
             </div>
         </div>
+
         {{-- Table Card --}}
         <div class="perm-card">
             <table class="perm-table">
@@ -123,7 +153,7 @@
                         <th style="text-align:center">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="permissionsTableBody">
                     @forelse($permissions as $p)
                         @php
                             $badgeClass = match ($p->action) {
@@ -135,10 +165,10 @@
                             };
                             $ruleCount = $p->rules->count();
                         @endphp
-                        <tr>
+                        <tr data-menu="{{ strtolower($p->menu) }}" data-permission-id="{{ $p->id }}">
                             {{-- Menu --}}
                             <td>
-                                <span class="menu-chip" title="{{ $p->menu }}">{{ $p->menu }}</span>
+                                <span class="menu-chip menu-text" title="{{ $p->menu }}">{{ $p->menu }}</span>
                             </td>
 
                             {{-- Action --}}
@@ -190,7 +220,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr>
+                        <tr id="emptyRow">
                             <td colspan="4">
                                 <div class="perm-empty">
                                     <div class="perm-empty-icon"><i class="fas fa-lock-open"></i></div>
@@ -393,4 +423,194 @@
     </script>
 
     <script src="{{ asset('assets/js/permissions.js') }}"></script>
+    
+    {{-- Search functionality script --}}
+    <script>
+        (function() {
+            "use strict";
+
+            // DOM Elements
+            const searchInput = document.getElementById('searchMenuInput');
+            const clearBtn = document.getElementById('clearSearchBtn');
+            const searchInfo = document.getElementById('searchInfo');
+            const searchResultCount = document.getElementById('searchResultCount');
+            const filterBadge = document.getElementById('filterBadge');
+            const filterCountSpan = document.getElementById('filterCount');
+            const tableBody = document.getElementById('permissionsTableBody');
+            const totalPermissionsSpan = document.getElementById('totalPermissions');
+            
+            let currentSearchTerm = '';
+            
+            // Function to highlight text
+            function highlightText(text, searchTerm) {
+                if (!searchTerm || searchTerm.trim() === '') {
+                    return text;
+                }
+                
+                const regex = new RegExp(`(${escapeRegex(searchTerm)})`, 'gi');
+                return text.replace(regex, '<span class="search-highlight">$1</span>');
+            }
+            
+            // Escape regex special characters
+            function escapeRegex(string) {
+                return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            }
+            
+            // Main search function
+            function performSearch() {
+                const searchTerm = searchInput.value.trim();
+                currentSearchTerm = searchTerm;
+                
+                const rows = tableBody.querySelectorAll('tr:not(#emptyRow)');
+                let visibleCount = 0;
+                
+                if (searchTerm === '') {
+                    // Show all rows
+                    rows.forEach(row => {
+                        row.classList.remove('hidden-row');
+                        visibleCount++;
+                        // Remove highlights
+                        const menuCell = row.querySelector('.menu-text');
+                        if (menuCell && menuCell.originalText) {
+                            menuCell.innerHTML = menuCell.originalText;
+                            menuCell.originalText = null;
+                        } else if (menuCell) {
+                            menuCell.originalText = menuCell.innerHTML;
+                            menuCell.innerHTML = menuCell.originalText;
+                        }
+                    });
+                    
+                    // Hide clear button and search info
+                    clearBtn.style.display = 'none';
+                    searchInfo.style.display = 'none';
+                    filterBadge.style.display = 'none';
+                    
+                } else {
+                    // Filter rows
+                    const lowerSearchTerm = searchTerm.toLowerCase();
+                    
+                    rows.forEach(row => {
+                        const menuText = row.querySelector('.menu-text');
+                        if (!menuText) return;
+                        
+                        const originalText = menuText.originalText || menuText.innerHTML;
+                        menuText.originalText = originalText;
+                        
+                        const menuName = row.getAttribute('data-menu') || originalText.toLowerCase();
+                        
+                        if (menuName.includes(lowerSearchTerm)) {
+                            row.classList.remove('hidden-row');
+                            visibleCount++;
+                            // Apply highlight
+                            const plainText = originalText;
+                            menuText.innerHTML = highlightText(plainText, searchTerm);
+                        } else {
+                            row.classList.add('hidden-row');
+                            menuText.innerHTML = originalText;
+                        }
+                    });
+                    
+                    // Show clear button and search info
+                    clearBtn.style.display = 'flex';
+                    searchInfo.style.display = 'block';
+                    filterBadge.style.display = 'flex';
+                    
+                    // Update search info text
+                    const totalRows = rows.length;
+                    searchResultCount.innerHTML = `Menampilkan ${visibleCount} dari ${totalRows} menu`;
+                    filterCountSpan.textContent = visibleCount;
+                }
+                
+                // Handle empty state display
+                const hasVisibleRows = visibleCount > 0;
+                const emptyRow = document.getElementById('emptyRow');
+                const originalEmptyRow = document.querySelector('#permissionsTableBody #emptyRow');
+                
+                if (searchTerm !== '' && visibleCount === 0) {
+                    // Show empty search result message if no existing empty row
+                    if (!document.getElementById('searchEmptyRow')) {
+                        const newEmptyRow = document.createElement('tr');
+                        newEmptyRow.id = 'searchEmptyRow';
+                        newEmptyRow.innerHTML = `
+                            <td colspan="4">
+                                <div class="search-empty-result">
+                                    <i class="fas fa-search"></i>
+                                    <h3>Tidak ada menu yang ditemukan</h3>
+                                    <p>Tidak ada menu dengan nama "${escapeHtml(searchTerm)}"</p>
+                                </div>
+                            </td>
+                        `;
+                        tableBody.appendChild(newEmptyRow);
+                    }
+                    if (originalEmptyRow) originalEmptyRow.style.display = 'none';
+                } else {
+                    const searchEmptyRow = document.getElementById('searchEmptyRow');
+                    if (searchEmptyRow) searchEmptyRow.remove();
+                    if (originalEmptyRow) originalEmptyRow.style.display = visibleCount === 0 && searchTerm === '' ? '' : 'none';
+                }
+            }
+            
+            // Escape HTML to prevent XSS
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+            
+            // Clear search
+            function clearSearch() {
+                searchInput.value = '';
+                performSearch();
+                searchInput.focus();
+            }
+            
+            // Debounce function for better performance
+            function debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+            
+            // Event listeners
+            if (searchInput) {
+                searchInput.addEventListener('input', debounce(performSearch, 300));
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        performSearch();
+                    }
+                });
+            }
+            
+            if (clearBtn) {
+                clearBtn.addEventListener('click', clearSearch);
+            }
+            
+            // Initialize - store original menu texts and add data-menu attributes
+            function initializeSearchData() {
+                const rows = tableBody.querySelectorAll('tr:not(#emptyRow)');
+                rows.forEach(row => {
+                    const menuCell = row.querySelector('.menu-text');
+                    if (menuCell) {
+                        const menuText = menuCell.textContent.trim();
+                        row.setAttribute('data-menu', menuText.toLowerCase());
+                        menuCell.originalText = menuCell.innerHTML;
+                    }
+                });
+            }
+            
+            // Call initialization when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initializeSearchData);
+            } else {
+                initializeSearchData();
+            }
+        })();
+    </script>
 @endpush

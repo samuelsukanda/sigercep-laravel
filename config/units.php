@@ -470,6 +470,12 @@ return [
         'Formulir',
     ],
 
+    'jenis_dokumen_it' => [
+        'Regulasi',
+        'SPO IT',
+        'Form IT'
+    ],
+
     'permintaan_pengajuan' => [
         'Penerbitan  Dokumen Baru',
         'Revisi Dokumen',
