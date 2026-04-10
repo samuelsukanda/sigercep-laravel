@@ -44,7 +44,7 @@
 @section('content')
     <div class="perm-page">
 
-        {{-- ═══ Header ═══ --}}
+        {{-- Header --}}
         <div class="perm-header">
             <div class="perm-header-info">
                 <h1><i class="fas fa-shield-halved"></i> Manajemen Hak Akses</h1>
@@ -55,7 +55,7 @@
             </button>
         </div>
 
-        {{-- ═══ Alerts ═══ --}}
+        {{-- Alerts --}}
         @if (session('success'))
             <div class="perm-alert perm-alert-success">
                 <i class="fas fa-circle-check" style="font-size: 1rem; margin-top: 1px;"></i>
@@ -70,7 +70,7 @@
             </div>
         @endif
 
-        {{-- ═══ Stats ═══ --}}
+        {{-- Stats --}}
         <div class="perm-stats">
             <div class="perm-stat">
                 <div class="perm-stat-label"><i class="fas fa-key"></i> Total permission</div>
@@ -89,7 +89,7 @@
             </div>
         </div>
 
-        {{-- ═══ Search Bar ═══ --}}
+        {{-- Search Bar --}}
         <div class="perm-search-container" style="margin-bottom: 1.5rem; width: 100%;">
             <div class="perm-search-wrapper" style="position: relative; width: 100%;">
                 <i class="fas fa-search"
@@ -106,7 +106,7 @@
                 <span id="searchResultCount"></span>
             </div>
         </div>
-        {{-- ═══ Table Card ═══ --}}
+        {{-- Table Card --}}
         <div class="perm-card">
             <table class="perm-table">
                 <colgroup>
@@ -178,11 +178,11 @@
 
                                     {{-- Hapus permission --}}
                                     <form action="{{ route('permissions.destroy', $p->id) }}" method="POST"
-                                        style="display:inline;margin:0"
-                                        onsubmit="return confirm('Yakin hapus permission {{ addslashes($p->menu) }} – {{ $p->action }}?')">
+                                        class="form-delete" data-name="{{ $p->menu }} - {{ $p->action }}"
+                                        style="display:inline;margin:0">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn-delete-perm">
+                                        <button type="button" class="btn-delete-perm btn-delete-trigger">
                                             <i class="fas fa-trash-can"></i>
                                         </button>
                                     </form>
@@ -203,8 +203,7 @@
                 </tbody>
             </table>
         </div>
-
-    </div>{{-- end .perm-page --}}
+    </div>
 
     {{-- Overlay --}}
     <div class="rule-panel-overlay" id="rulePanelOverlay" onclick="closeRulePanel()"></div>
@@ -256,7 +255,7 @@
                             <i class="fas fa-user" style="margin-right:4px"></i>Nama User
                         </label>
                         <input type="text" id="pf-name" name="name" class="pf-input"
-                            placeholder="Contoh: Budi Santoso">
+                            placeholder="Masukan nama user">
                         <div class="pf-hint">Isi jika ingin memberikan akses ke user tertentu saja</div>
                     </div>
 
@@ -265,7 +264,7 @@
                             <i class="fas fa-building" style="margin-right:4px"></i>Unit / Divisi
                         </label>
                         <input type="text" id="pf-unit" name="unit" class="pf-input"
-                            placeholder="Contoh: Teknologi Informasi, HRD, Finance">
+                            placeholder="Masukan Unit">
                         <div class="pf-hint">Kosongkan jika tidak perlu filter unit</div>
                     </div>
 
@@ -274,7 +273,7 @@
                             <i class="fas fa-user-tie" style="margin-right:4px"></i>Jabatan
                         </label>
                         <input type="text" id="pf-jabatan" name="jabatan" class="pf-input"
-                            placeholder="Contoh: Manager, Staff, Supervisor">
+                            placeholder="Masukan Jabatan">
                         <div class="pf-hint">Kosongkan jika tidak perlu filter jabatan</div>
                     </div>
 
@@ -297,13 +296,9 @@
                 <i class="fas fa-plus"></i> Tambah Rule
             </button>
         </div>
+    </div>
 
-    </div>{{-- end .rule-panel --}}
-
-
-    {{-- ═══════════════════════
-     MODAL — Tambah Permission
-     ═══════════════════════ --}}
+    {{-- MODAL — Tambah Permission --}}
     <div class="perm-modal-overlay" id="permModalOverlay" onclick="handleModalOverlayClick(event)">
         <div class="perm-modal" id="permModal">
 
@@ -321,7 +316,7 @@
                     <div class="perm-form-group">
                         <label class="perm-form-label" for="inp-menu">Menu</label>
                         <input type="text" id="inp-menu" name="menu" class="perm-form-input"
-                            placeholder="Contoh: dashboard, helpdesk, report" required>
+                            placeholder="Masukan Menu" required>
                         <div class="perm-form-hint">Nama menu/modul yang akan diatur aksesnya</div>
                     </div>
 
@@ -386,5 +381,16 @@
 @endsection
 
 @push('scripts')
+    <script>
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-top-center",
+            timeOut: 3000,
+        };
+
+        window.deleteRuleUrl = "{{ url('/permissions/delete-rule') }}";
+    </script>
+
     <script src="{{ asset('assets/js/permissions.js') }}"></script>
 @endpush

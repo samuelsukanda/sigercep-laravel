@@ -56,27 +56,25 @@ Route::middleware('auth')->group(function () {
     })->name('app');
 
     // Permission Management Routes
-    Route::middleware(['auth'])->prefix('permissions')->name('permissions.')->group(function () {
-        Route::get('/', [PermissionController::class, 'index'])
-            ->name('index')
-            ->middleware('permission:permissions,read');
-
-        Route::post('/', [PermissionController::class, 'store'])
-            ->name('store')
-            ->middleware('permission:permissions,create');
-
-        Route::delete('/{permission}', [PermissionController::class, 'destroy'])
-            ->name('destroy')
-            ->middleware('permission:permissions,delete');
-
-        Route::post('/{permission}/add-rule', [PermissionController::class, 'addRule'])
-            ->name('add-rule')
-            ->middleware('permission:permissions,create');
-
-        Route::delete('/rule/{rule}', [PermissionController::class, 'deleteRule'])
-            ->name('delete-rule')
-            ->middleware('permission:permissions,delete');
-    });
+    Route::middleware(['auth'])
+        ->prefix('permissions')
+        ->name('permissions.')
+        ->group(function () {
+            Route::delete('/delete-rule/{rule}', [PermissionController::class, 'deleteRule'])
+                ->name('deleteRule');
+            Route::get('/', [PermissionController::class, 'index'])
+                ->name('index')
+                ->middleware('permission:permissions,read');
+            Route::post('/', [PermissionController::class, 'store'])
+                ->name('store')
+                ->middleware('permission:permissions,create');
+            Route::delete('/{permission}', [PermissionController::class, 'destroy'])
+                ->name('destroy')
+                ->middleware('permission:permissions,delete');
+            Route::post('/{permission}/add-rule', [PermissionController::class, 'addRule'])
+                ->name('add-rule')
+                ->middleware('permission:permissions,create');
+        });
 
     // Pages - Views
 

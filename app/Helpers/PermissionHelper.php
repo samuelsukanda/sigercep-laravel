@@ -16,9 +16,7 @@ class PermissionHelper
         $unit = strtolower(trim($user->unit ?? ''));
         $jabatan = strtolower(trim($user->jabatan ?? ''));
 
-        // ===============================
-        // 🟢 1. SUPERADMIN (WILDCARD)
-        // ===============================
+        // SUPERADMIN (WILDCARD)
         $hasWildcard = Permission::where('menu', '*')
             ->where('action', '*')
             ->whereHas('rules', function ($q) use ($unit, $jabatan, $name) {
@@ -37,9 +35,7 @@ class PermissionHelper
 
         if ($hasWildcard) return true;
 
-        // ===============================
-        // 🟠 2. CEK EXACT PERMISSION
-        // ===============================
+        // CEK EXACT PERMISSION
         $permission = Permission::where('menu', $menu)
             ->where('action', $action)
             ->first();

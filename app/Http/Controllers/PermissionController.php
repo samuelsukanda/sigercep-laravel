@@ -22,7 +22,6 @@ class PermissionController extends Controller
             'rules' => 'nullable|array'
         ]);
 
-        // Cek apakah sudah ada
         $exists = Permission::where('menu', $request->menu)
             ->where('action', $request->action)
             ->exists();

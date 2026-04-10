@@ -11,17 +11,13 @@ class PermissionSeeder extends Seeder
 {
     public function run()
     {
-        // ===============================
-        // 🔥 CLEAN TABLE (WAJIB)
-        // ===============================
+        // CLEAN TABLE
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         PermissionRule::truncate();
         Permission::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        // ===============================
-        // 🔧 HELPER SUPERADMIN RULE
-        // ===============================
+        // HELPER SUPERADMIN RULE
         $superRules = [
             ['unit' => 'teknologi informasi', 'jabatan' => 'operasional it technical support', 'name' => 'sammuel'],
             ['unit' => 'teknologi informasi', 'jabatan' => 'operasional it technical support', 'name' => 'raden.ibnu'],
@@ -30,18 +26,14 @@ class PermissionSeeder extends Seeder
             ['unit' => 'teknologi informasi', 'jabatan' => 'spv it', 'name' => 'deden eka nugraha'],
         ];
 
-        // ===============================
-        // 🟢 SUPERADMIN (FULL AKSES)
-        // ===============================
+        // SUPERADMIN (FULL AKSES)
         $super = Permission::create([
             'menu' => '*',
             'action' => '*'
         ]);
         $super->rules()->createMany($superRules);
 
-        // ===============================
-        // 📋 DAFTAR SEMUA MENU
-        // ===============================
+        // DAFTAR SEMUA MENU
         $allMenus = [
             'komplain_ipsrs',
             'kesehatan_lingkungan',
@@ -64,9 +56,7 @@ class PermissionSeeder extends Seeder
             'helpdesk'
         ];
 
-        // ===============================
-        // 🟠 SEMUA USER (HANYA CREATE DAN READ)
-        // ===============================
+        // SEMUA USER (HANYA CREATE DAN READ)
         $basicActions = ['create', 'read'];
 
         foreach ($allMenus as $menu) {
@@ -82,9 +72,7 @@ class PermissionSeeder extends Seeder
             }
         }
 
-        // ===============================
-        // 📖 READ ONLY MENU (TANPA CREATE, UPDATE, DELETE)
-        // ===============================
+        // READ ONLY MENU (TANPA CREATE, UPDATE, DELETE)
         $readOnlyMenus = [
             'bank_spo',
             'utw',
@@ -105,9 +93,7 @@ class PermissionSeeder extends Seeder
             ]);
         }
 
-        // ===============================
-        // 🔵 ADMIN HELP DESK (IT) - FULL AKSES
-        // ===============================
+        // ADMIN HELP DESK (IT) - FULL AKSES
         $fullActions = ['create', 'read', 'update', 'delete'];
 
         foreach ($fullActions as $action) {
@@ -119,9 +105,7 @@ class PermissionSeeder extends Seeder
             ]);
         }
 
-        // ===============================
-        // 📊 REPORT - READ ONLY UNTUK UNIT IT
-        // ===============================
+        // REPORT - READ ONLY UNTUK UNIT IT
         Permission::create([
             'menu' => 'reports',
             'action' => 'read'
@@ -129,9 +113,7 @@ class PermissionSeeder extends Seeder
             'unit' => 'teknologi informasi'
         ]);
 
-        // ===============================
-        // 🔴 MUTU - FULL AKSES UNTUK MENU TERTENTU
-        // ===============================
+        // MUTU - FULL AKSES UNTUK MENU TERTENTU
         $mutuMenus = [
             'mutu',
             'bank_spo',
@@ -157,9 +139,7 @@ class PermissionSeeder extends Seeder
             }
         }
 
-        // ===============================
-        // 🟣 SDM - FULL AKSES UNTUK MENU TERTENTU
-        // ===============================
+        // SDM - FULL AKSES UNTUK MENU TERTENTU
         $sdmMenus = [
             'utw',
             'peraturan_perusahaan',
@@ -185,10 +165,7 @@ class PermissionSeeder extends Seeder
             }
         }
 
-        // ===============================
-        // 🟤 KOMITE MEDIK - FULL AKSES (TIM KHUSUS)
-        // ===============================
-        // HAPUS KOMITE MEDIK DARI READ ONLY DAN BUAT FULL AKSES UNTUK TIMNYA
+        // KOMITE MEDIK - FULL AKSES (TIM KHUSUS)
         $komiteRules = [
             ['unit' => 'komite medik', 'jabatan' => 'staf komite medik', 'name' => 'meliana.fatimah']
         ];
@@ -201,9 +178,7 @@ class PermissionSeeder extends Seeder
             $permission->rules()->createMany($komiteRules);
         }
         
-        // ===============================
-        // 🔐 PERMISSION MANAGEMENT - HANYA UNTUK SAMMUEL
-        // ===============================
+        // PERMISSION MANAGEMENT - HANYA UNTUK SAMMUEL
         $permManagementActions = ['read', 'create', 'update', 'delete'];
 
         foreach ($permManagementActions as $action) {
@@ -212,7 +187,6 @@ class PermissionSeeder extends Seeder
                 'action' => $action
             ]);
 
-            // Hanya untuk user sammuel dari IT Operasional
             $permission->rules()->create([
                 'unit' => 'teknologi informasi',
                 'jabatan' => 'operasional it technical support',
@@ -220,9 +194,7 @@ class PermissionSeeder extends Seeder
             ]);
         }
 
-        // ===============================
-        // 🟡 SUPERADMIN ONLY MENU (HANYA SUPERADMIN YANG BISA)
-        // ===============================
+        // SUPERADMIN ONLY MENU (HANYA SUPERADMIN YANG BISA)
         $superOnlyMenus = ['toner', 'visitasi', 'hardware', 'peminjaman'];
 
         foreach ($superOnlyMenus as $menu) {

@@ -670,8 +670,6 @@
 }
 
 /* ── Tab 2: Tambah rule ── */
-.add-rule-form-panel {
-}
 .pf-group {
     margin-bottom: 1rem;
 }
@@ -684,28 +682,30 @@
     letter-spacing: 0.5px;
     margin-bottom: 6px;
 }
+
+/* ✅ MODIFIED: Stronger border for side panel inputs */
 .pf-input {
     width: 100% !important;
     font-family: "Open Sans", sans-serif !important;
     font-size: 0.83rem !important;
     padding: 9px 11px !important;
-    border: 1.5px solid var(--input-border) !important;
+    border: 1.5px solid #8b7dc8 !important;
     border-radius: var(--r-md) !important;
     background: #fff !important;
     color: var(--text) !important;
     outline: none !important;
-    box-shadow: none !important;
+    box-shadow: 0 1px 3px rgba(108, 71, 255, 0.08) !important;
     transition:
         border-color var(--tr),
         box-shadow var(--tr) !important;
     height: auto !important;
 }
 .pf-input:hover {
-    border-color: #b8aef0 !important;
+    border-color: #6c47ff !important;
 }
 .pf-input:focus {
     border-color: var(--accent) !important;
-    box-shadow: 0 0 0 3px rgba(108, 71, 255, 0.12) !important;
+    box-shadow: 0 0 0 3px rgba(108, 71, 255, 0.15) !important;
 }
 .pf-input::placeholder {
     color: var(--hint) !important;
@@ -725,23 +725,31 @@
     gap: 8px;
     justify-content: flex-end;
 }
+
+/* ✅ MODIFIED: Tutup button with visible border + purple text */
 .btn-pf-cancel {
-    padding: 8px 16px !important;
-    border: 1px solid var(--border-mid) !important;
+    padding: 8px 18px !important;
+    border: 1.5px solid #8b7dc8 !important;
     border-radius: var(--r-md) !important;
-    background: transparent !important;
-    color: var(--muted) !important;
+    background: #ffffff !important;
+    color: #6c47ff !important;
     cursor: pointer !important;
     font-family: "Open Sans", sans-serif !important;
     font-size: 0.82rem !important;
     font-weight: 600 !important;
-    transition: background var(--tr) !important;
-    box-shadow: none !important;
+    transition: background var(--tr), border-color var(--tr), color var(--tr), transform var(--tr) !important;
+    box-shadow: 0 1px 4px rgba(108, 71, 255, 0.12) !important;
     line-height: 1 !important;
 }
 .btn-pf-cancel:hover {
-    background: #fff !important;
+    background: var(--accent-lt) !important;
+    border-color: var(--accent) !important;
+    color: var(--accent-h) !important;
 }
+.btn-pf-cancel:active {
+    transform: scale(0.97) !important;
+}
+
 .btn-pf-submit {
     padding: 8px 20px !important;
     border: none !important;
@@ -835,10 +843,10 @@
     background: rgba(255, 255, 255, 0.35) !important;
 }
 .perm-modal-body {
-    padding: 1.4rem 1.5rem 0 !important;
+    padding: 1.4rem 1.25rem 0 !important;
 }
 .perm-modal-footer {
-    padding: 1rem 1.5rem 1.4rem !important;
+    padding: 1rem 1.25rem 1.4rem !important;
     display: flex !important;
     justify-content: flex-end !important;
     gap: 8px !important;
@@ -855,18 +863,20 @@
     letter-spacing: 0.5px !important;
     margin-bottom: 6px !important;
 }
+
+/* ✅ MODIFIED: Stronger border for modal inputs */
 .perm-form-input,
 .perm-form-select {
     width: 100% !important;
     font-family: "Open Sans", sans-serif !important;
     font-size: 0.84rem !important;
     padding: 9px 12px !important;
-    border: 1.5px solid var(--input-border) !important;
+    border: 1.5px solid #8b7dc8 !important;
     border-radius: var(--r-md) !important;
     background: #fff !important;
     color: var(--text) !important;
     outline: none !important;
-    box-shadow: none !important;
+    box-shadow: 0 1px 3px rgba(108, 71, 255, 0.08) !important;
     transition:
         border-color var(--tr),
         box-shadow var(--tr) !important;
@@ -874,12 +884,12 @@
 }
 .perm-form-input:hover,
 .perm-form-select:hover {
-    border-color: #b8aef0 !important;
+    border-color: #6c47ff !important;
 }
 .perm-form-input:focus,
 .perm-form-select:focus {
     border-color: var(--accent) !important;
-    box-shadow: 0 0 0 3px rgba(108, 71, 255, 0.12) !important;
+    box-shadow: 0 0 0 3px rgba(108, 71, 255, 0.15) !important;
 }
 .perm-form-input::placeholder {
     color: var(--hint) !important;
@@ -914,31 +924,37 @@
 }
 .modal-rule-row {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr auto;
-    gap: 6px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 28px;
+    gap: 5px;
     align-items: center;
 }
+.modal-rule-row input {
+    min-width: 0 !important;
+    width: 100% !important;
+}
+
+/* ✅ MODIFIED: Stronger border for modal rule row inputs */
 .modal-rule-row input {
     font-family: "Open Sans", sans-serif !important;
     font-size: 0.78rem !important;
     padding: 7px 9px !important;
-    border: 1.5px solid var(--input-border) !important;
+    border: 1.5px solid #8b7dc8 !important;
     border-radius: var(--r-sm) !important;
     background: #fff !important;
     color: var(--text) !important;
     outline: none !important;
-    box-shadow: none !important;
+    box-shadow: 0 1px 2px rgba(108, 71, 255, 0.06) !important;
     transition:
         border-color var(--tr),
         box-shadow var(--tr) !important;
     height: auto !important;
 }
 .modal-rule-row input:hover {
-    border-color: #b8aef0 !important;
+    border-color: #6c47ff !important;
 }
 .modal-rule-row input:focus {
     border-color: var(--accent) !important;
-    box-shadow: 0 0 0 3px rgba(108, 71, 255, 0.12) !important;
+    box-shadow: 0 0 0 3px rgba(108, 71, 255, 0.15) !important;
 }
 .modal-rule-row input::placeholder {
     color: var(--hint) !important;
@@ -981,23 +997,31 @@
 .btn-rm-row-modal:hover {
     background: #fcebeb !important;
 }
+
+/* ✅ MODIFIED: Batal button with visible border + purple text */
 .btn-perm-cancel {
-    padding: 8px 16px !important;
-    border: 1px solid var(--border-mid) !important;
+    padding: 8px 18px !important;
+    border: 1.5px solid #8b7dc8 !important;
     border-radius: var(--r-md) !important;
-    background: transparent !important;
-    color: var(--muted) !important;
+    background: #ffffff !important;
+    color: #6c47ff !important;
     cursor: pointer !important;
     font-family: "Open Sans", sans-serif !important;
     font-size: 0.82rem !important;
     font-weight: 600 !important;
-    transition: background var(--tr) !important;
-    box-shadow: none !important;
+    transition: background var(--tr), border-color var(--tr), color var(--tr), transform var(--tr) !important;
+    box-shadow: 0 1px 4px rgba(108, 71, 255, 0.12) !important;
     line-height: 1 !important;
 }
 .btn-perm-cancel:hover {
-    background: var(--surface2) !important;
+    background: var(--accent-lt) !important;
+    border-color: var(--accent) !important;
+    color: var(--accent-h) !important;
 }
+.btn-perm-cancel:active {
+    transform: scale(0.97) !important;
+}
+
 .btn-perm-submit {
     padding: 8px 20px !important;
     border: none !important;
