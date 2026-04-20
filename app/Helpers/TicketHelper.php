@@ -3,17 +3,20 @@
 namespace App\Helpers;
 
 use App\Models\Ticket;
+use Illuminate\Support\Facades\DB;
 
 class TicketHelper
 {
     public static function generateTicketNumber()
     {
         $month = now()->format('m');
-        $year = now()->format('Y');
+        $year  = now()->format('Y');
         $prefix = $month . '-' . $year;
 
-        $lastTicket = Ticket::where('ticket_number', 'LIKE', "%-{$prefix}")
-            ->orderBy('id', 'desc')
+        $lastTicket = DB::table('tickets')
+            ->where('ticket_number', 'LIKE', "%-{$prefix}")
+            ->lockForUpdate()
+            ->orderByDesc('id')
             ->first();
 
         if ($lastTicket) {

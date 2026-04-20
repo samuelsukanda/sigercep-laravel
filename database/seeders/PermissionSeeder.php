@@ -19,11 +19,11 @@ class PermissionSeeder extends Seeder
 
         // HELPER SUPERADMIN RULE
         $superRules = [
-            ['unit' => 'teknologi informasi', 'jabatan' => 'operasional it technical support', 'name' => 'sammuel'],
-            ['unit' => 'teknologi informasi', 'jabatan' => 'operasional it technical support', 'name' => 'raden.ibnu'],
-            ['unit' => 'teknologi informasi', 'jabatan' => 'it infrastruktur', 'name' => 'iyan.hermawan'],
-            ['unit' => 'teknologi informasi', 'jabatan' => 'pengembangan sistem', 'name' => 'novit.adriansyah'],
-            ['unit' => 'teknologi informasi', 'jabatan' => 'spv it', 'name' => 'deden eka nugraha'],
+            ['unit' => 'teknologi dan informasi', 'jabatan' => 'operasional it technical support', 'name' => 'sammuel'],
+            ['unit' => 'teknologi dan informasi', 'jabatan' => 'operasional it technical support', 'name' => 'raden.ibnu'],
+            ['unit' => 'teknologi dan informasi', 'jabatan' => 'it infrastruktur', 'name' => 'iyan.hermawan'],
+            ['unit' => 'teknologi dan informasi', 'jabatan' => 'pengembangan sistem', 'name' => 'novit.adriansyah'],
+            ['unit' => 'teknologi dan informasi', 'jabatan' => 'spv it', 'name' => 'deden eka nugraha'],
         ];
 
         // SUPERADMIN (FULL AKSES)
@@ -101,7 +101,7 @@ class PermissionSeeder extends Seeder
                 'menu' => 'helpdesk',
                 'action' => $action
             ])->rules()->create([
-                'unit' => 'teknologi informasi'
+                'unit' => 'teknologi dan informasi'
             ]);
         }
 
@@ -110,7 +110,7 @@ class PermissionSeeder extends Seeder
             'menu' => 'reports',
             'action' => 'read'
         ])->rules()->create([
-            'unit' => 'teknologi informasi'
+            'unit' => 'teknologi dan informasi'
         ]);
 
         // MUTU - FULL AKSES UNTUK MENU TERTENTU
@@ -126,7 +126,7 @@ class PermissionSeeder extends Seeder
 
         $mutuRules = [
             ['unit' => 'mutu', 'jabatan' => 'ketua mutu', 'name' => 'pupu.pujiawati'],
-            ['unit' => 'mutu', 'jabatan' => 'staf mutu', 'name' => 'indah.pertiwi'],
+            ['jabatan' => 'staf mutu', 'name' => 'indah.pertiwi'],
         ];
 
         foreach ($mutuMenus as $menu) {
@@ -188,7 +188,7 @@ class PermissionSeeder extends Seeder
             ]);
 
             $permission->rules()->create([
-                'unit' => 'teknologi informasi',
+                'unit' => 'teknologi dan informasi',
                 'jabatan' => 'operasional it technical support',
                 'name' => 'sammuel'
             ]);

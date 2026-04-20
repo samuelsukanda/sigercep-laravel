@@ -33,7 +33,7 @@ class DokumenITPermissionSeeder extends Seeder
             $permission->rules()->delete();
 
             $permission->rules()->create([
-                'unit' => 'teknologi informasi'
+                'unit' => 'teknologi dan informasi'
             ]);
         }
     }

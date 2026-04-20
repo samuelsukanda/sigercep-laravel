@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Notifications\NewTicketNotification;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class TicketController extends Controller
 {
-
     public function index(Request $request)
     {
         $isFiltered = $request->hasAny([
@@ -52,12 +52,12 @@ class TicketController extends Controller
         if ($request->filled('periode_dari')) {
             $query->whereDate('created_at', '>=', $start);
         }
+
         if ($request->filled('periode_sampai')) {
             $query->whereDate('created_at', '<=', $end);
         }
 
         $tickets = $query->orderBy('created_at', 'desc')->paginate(15);
-
         $tickets->appends($request->query());
 
         return view('pages.helpdesk.index', compact('tickets', 'isFiltered'));
@@ -78,28 +78,67 @@ class TicketController extends Controller
             'attachment.*' => 'file|mimes:jpg,png,jpeg,doc,docx,xls,xlsx,pdf|max:2048'
         ]);
 
-        $ticket = new Ticket();
-        $ticket->ticket_number = TicketHelper::generateTicketNumber();
-        $ticket->user_id       = Auth::id();
-        $ticket->category      = $request->category;
-        $ticket->description   = $request->description;
-        $ticket->urgency       = $request->urgency;
-        $ticket->status        = 'Open';
+        $normalizedDescription = strtolower(
+            trim(preg_replace('/\s+/', ' ', $request->description))
+        );
 
-        if ($request->hasFile('attachment')) {
-            $paths = [];
-            foreach ($request->file('attachment') as $file) {
-                $extension = $file->getClientOriginalExtension();
-                $filename = 'helpdesk-' . $ticket->ticket_number . '-' . now()->format('YmdHis') . '-' . uniqid() . '.' . $extension;
-                $path = $file->storeAs('images/helpdesk', $filename, 'public');
-                $paths[] = $path;
+        $fingerprint = md5(
+            Auth::id() . '|' .
+            $normalizedDescription . '|' .
+            $request->category . '|' .
+            now()->format('Y-m-d H:i')
+        );
+
+        try {
+            DB::beginTransaction();
+
+            $exists = Ticket::where('fingerprint', $fingerprint)->exists();
+            if ($exists) {
+                DB::rollBack();
+                return back()->withInput()
+                    ->with('error', 'Tiket yang sama sudah dibuat di waktu yang sama.');
             }
-            $ticket->attachment = $paths;
+
+            $ticket = new Ticket();
+            $ticket->ticket_number = TicketHelper::generateTicketNumber();
+            $ticket->user_id       = Auth::id();
+            $ticket->category      = $request->category;
+            $ticket->description   = $request->description;
+            $ticket->urgency       = $request->urgency;
+            $ticket->status        = 'Open';
+            $ticket->fingerprint   = $fingerprint;
+
+            if ($request->hasFile('attachment')) {
+                $paths = [];
+
+                foreach ($request->file('attachment') as $file) {
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = 'helpdesk-' . now()->format('YmdHis') . '-' . uniqid() . '.' . $extension;
+
+                    $path = $file->storeAs('images/helpdesk', $filename, 'public');
+                    $paths[] = $path;
+                }
+
+                $ticket->attachment = $paths;
+            }
+
+            $ticket->save();
+
+            DB::commit();
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollBack();
+
+            if ($e->getCode() == 23000) {
+                return back()->withInput()
+                    ->with('error', 'Tiket duplikat terdeteksi (double submit).');
+            }
+
+            throw $e;
         }
 
-        $ticket->save();
+        $itUsers = User::where('unit', 'Teknologi dan Informasi')->get();
 
-        $itUsers = User::where('unit', 'Teknologi Informasi')->get();
         foreach ($itUsers as $user) {
             $user->notify(new NewTicketNotification($ticket));
         }
@@ -113,6 +152,7 @@ class TicketController extends Controller
         $ticket = Ticket::with(['approval', 'updates.user'])
             ->where('user_id', Auth::id())
             ->findOrFail($id);
+
         return view('pages.helpdesk.show', compact('ticket'));
     }
 }

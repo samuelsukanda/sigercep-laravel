@@ -102,7 +102,7 @@
         </div>
         <div class="px-5 py-3">
             @php
-                $allCategories = ['Hardware', 'Printer', 'Jaringan', 'Software', 'SIMRS'];
+                $allCategories = ['Hardware', 'Jaringan', 'Software', 'SIMRS'];
                 $categoryData = $categoryRecap ?? [];
             @endphp
             @foreach ($allCategories as $cat)

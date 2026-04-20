@@ -180,7 +180,7 @@
                         // Cek apakah user memenuhi kriteria
                         if (
                             $name == 'sammuel' &&
-                            $unit == 'teknologi informasi' &&
+                            $unit == 'teknologi dan informasi' &&
                             $jabatan == 'operasional it technical support'
                         ) {
                             $canAccessPermissions = true;
