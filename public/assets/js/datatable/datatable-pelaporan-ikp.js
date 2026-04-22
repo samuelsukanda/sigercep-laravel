@@ -22,6 +22,13 @@ $(document).ready(function () {
             zeroRecords: "Tidak ada data yang ditemukan",
             emptyTable: "Tidak ada data tersedia",
         },
+
+        initComplete: function () {
+            $(this.api().table().container()).addClass(
+                "datatable-custom-wrapper",
+            );
+        },
+
         order: [[2, "desc"]],
     });
 });

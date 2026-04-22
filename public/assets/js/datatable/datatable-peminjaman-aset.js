@@ -1,11 +1,11 @@
 // public/assets/js/datatable-peminjaman-aset.js
-$(document).ready(function() {
+$(document).ready(function () {
     $("#peminjamanAsetTable").DataTable({
         responsive: true,
         pageLength: 10,
         lengthMenu: [
             [10, 25, 50, 100, -1],
-            [10, 25, 50, 100, "Semua"]
+            [10, 25, 50, 100, "Semua"],
         ],
         language: {
             search: "Cari:",
@@ -17,11 +17,18 @@ $(document).ready(function() {
                 first: "Pertama",
                 last: "Terakhir",
                 next: "Selanjutnya",
-                previous: "Sebelumnya"
+                previous: "Sebelumnya",
             },
             zeroRecords: "Tidak ada data yang ditemukan",
-            emptyTable: "Tidak ada data tersedia"
+            emptyTable: "Tidak ada data tersedia",
         },
-        order: [[3, "desc"]]
+
+        initComplete: function () {
+            $(this.api().table().container()).addClass(
+                "datatable-custom-wrapper",
+            );
+        },
+
+        order: [[3, "desc"]],
     });
 });

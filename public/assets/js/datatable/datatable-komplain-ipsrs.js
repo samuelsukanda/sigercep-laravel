@@ -1,5 +1,5 @@
 // public/assets/js/datatable-komplain-ipsrs.js
-$(document).ready(function() {
+$(document).ready(function () {
     $("#komplainTable").DataTable({
         responsive: true,
         pageLength: 10,
@@ -22,6 +22,13 @@ $(document).ready(function() {
             zeroRecords: "Tidak ada data yang ditemukan",
             emptyTable: "Tidak ada data tersedia",
         },
+
+        initComplete: function () {
+            $(this.api().table().container()).addClass(
+                "datatable-custom-wrapper",
+            );
+        },
+
         order: [[3, "desc"]],
     });
 });

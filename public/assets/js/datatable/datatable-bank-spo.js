@@ -98,5 +98,10 @@ let table = $("#bankSpoTable").DataTable({
             },
         },
     ],
+
+    initComplete: function () {
+        $(this.api().table().container()).addClass("datatable-custom-wrapper");
+    },
+
     order: [[3, "desc"]],
 });

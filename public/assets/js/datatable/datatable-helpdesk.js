@@ -1,5 +1,4 @@
-// public/assets/js/datatable-admin.js
-$(document).ready(function() {
+$(document).ready(function () {
     $("#ticketTable").DataTable({
         responsive: true,
         pageLength: 15,
@@ -22,6 +21,13 @@ $(document).ready(function() {
             zeroRecords: "Tidak ada data yang ditemukan",
             emptyTable: "Tidak ada data tersedia",
         },
+
+        initComplete: function () {
+            $(this.api().table().container()).addClass(
+                "datatable-custom-wrapper",
+            );
+        },
+
         order: [[3, "desc"]],
     });
 });

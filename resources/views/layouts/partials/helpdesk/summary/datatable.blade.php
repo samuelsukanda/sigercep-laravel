@@ -10,7 +10,7 @@
         </span>
     </div>
     <div class="p-4 overflow-x-auto">
-        <table id="ticketTable" class="w-full text-sm">
+        <table id="ticketTable" class="datatable-custom w-full text-sm">
             <thead>
                 <tr class="border-b border-gray-200">
                     <th class="text-left py-3 px-3 font-semibold text-slate-600 whitespace-nowrap">No. Tiket
