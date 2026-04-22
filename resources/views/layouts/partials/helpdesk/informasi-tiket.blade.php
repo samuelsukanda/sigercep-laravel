@@ -25,6 +25,11 @@
             </div>
 
             <div class="w-full md:w-1/2 xl:w-1/3 px-3">
+                <label class="block  text-sm font-semibold" style="color: #7664E4 !important;">Jabatan</label>
+                <p class="text-slate-600"> {{ $ticket->user->jabatan ?? '-' }}</p>
+            </div>
+
+            <div class="w-full md:w-1/2 xl:w-1/3 px-3">
                 <label class="block  text-sm font-semibold" style="color: #7664E4 !important;">Tanggal/Jam</label>
                 <p class="text-slate-600">
                     {{ \Carbon\Carbon::parse($ticket->created_at)->translatedFormat('d F Y H:i') }}

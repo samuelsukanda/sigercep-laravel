@@ -79,6 +79,10 @@ Route::middleware('auth')->group(function () {
 
     // Pages - Views
 
+    Route::get('/test-telegram', function () {
+        \App\Helpers\TelegramHelper::send("TEST MASUK");
+    });
+
     // Ticket
     // User routes
     Route::middleware(['auth', 'permission:helpdesk,create'])

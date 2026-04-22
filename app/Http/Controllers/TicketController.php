@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use App\Helpers\TicketHelper;
+use App\Helpers\TelegramHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Notifications\NewTicketNotification;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class TicketController extends Controller
 {
@@ -84,9 +88,9 @@ class TicketController extends Controller
 
         $fingerprint = md5(
             Auth::id() . '|' .
-            $normalizedDescription . '|' .
-            $request->category . '|' .
-            now()->format('Y-m-d H:i')
+                $normalizedDescription . '|' .
+                $request->category . '|' .
+                now()->format('Y-m-d H:i')
         );
 
         try {
@@ -112,11 +116,8 @@ class TicketController extends Controller
                 $paths = [];
 
                 foreach ($request->file('attachment') as $file) {
-                    $extension = $file->getClientOriginalExtension();
-                    $filename = 'helpdesk-' . now()->format('YmdHis') . '-' . uniqid() . '.' . $extension;
-
-                    $path = $file->storeAs('images/helpdesk', $filename, 'public');
-                    $paths[] = $path;
+                    $filename = 'helpdesk-' . now()->format('YmdHis') . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+                    $paths[] = $file->storeAs('images/helpdesk', $filename, 'public');
                 }
 
                 $ticket->attachment = $paths;
@@ -126,6 +127,56 @@ class TicketController extends Controller
 
             DB::commit();
 
+            try {
+                $desc = e(Str::limit($ticket->description, 500));
+                $userData = Auth::user();
+                $name = ucwords(str_replace('.', ' ', $userData->name ?? '-'));
+                $unit = e($userData->unit ?? '-');
+                $jabatan = e($userData->jabatan ?? '-');
+
+                $message = "<b>📌 Tiket Baru</b>\n\n"
+                    . "<b>No:</b> {$ticket->ticket_number}\n"
+                    . "<b>Nama:</b> {$name}\n"
+                    . "<b>Divisi:</b> {$unit}\n"
+                     . "<b>Jabatan:</b> {$jabatan}\n\n"
+                    . "<b>Deskripsi:</b>\n{$desc}";
+
+                $response = TelegramHelper::send($message);
+
+                if (!$response || !$response->ok()) {
+                    Log::error('Telegram gagal', [
+                        'response' => $response ? $response->body() : 'null'
+                    ]);
+                }
+
+                if (!empty($ticket->attachment)) {
+                    foreach ($ticket->attachment as $file) {
+
+                        $filePath = storage_path('app/public/' . $file);
+
+                        if (file_exists($filePath)) {
+                            $res = Http::attach(
+                                'document',
+                                file_get_contents($filePath),
+                                basename($filePath)
+                            )->post("https://api.telegram.org/bot" . config('services.telegram.token') . "/sendDocument", [
+                                'chat_id' => config('services.telegram.chat_id'),
+                            ]);
+
+                            if (!$res->ok()) {
+                                Log::error('Telegram attachment gagal', [
+                                    'file' => $file,
+                                    'response' => $res->body()
+                                ]);
+                            }
+                        }
+                    }
+                }
+            } catch (\Exception $e) {
+                Log::error('Telegram Exception', [
+                    'message' => $e->getMessage()
+                ]);
+            }
         } catch (\Illuminate\Database\QueryException $e) {
             DB::rollBack();
 

@@ -46,4 +46,5 @@
 @push('scripts')
     <script src="{{ asset('assets/js/file-upload.js') }}"></script>
     <script src="{{ asset('assets/js/alert-upload.js') }}"></script>
+    <script src="{{ asset('assets/js/multiple.js') }}"></script>
 @endpush
