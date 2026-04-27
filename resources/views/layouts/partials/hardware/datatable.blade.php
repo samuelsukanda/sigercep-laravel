@@ -17,7 +17,7 @@
                     <td class="px-6 py-4">{{ $item->unit }}</td>
                     <td class="px-6 py-4">
                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
-                            Lantai {{ $item->lantai }}
+                            {{ $item->lantai }}
                         </span>
                     </td>
                     <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->tanggal)->timestamp }}">

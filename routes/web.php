@@ -39,6 +39,7 @@ use App\Http\Controllers\SuratKeputusanController;
 use App\Http\Controllers\KomiteMedikController;
 use App\Http\Controllers\HardwareController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\UserSessionController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -76,6 +77,11 @@ Route::middleware('auth')->group(function () {
                 ->name('add-rule')
                 ->middleware('permission:permissions,create');
         });
+
+    // User Monitoring
+    Route::middleware(['auth'])
+        ->get('/user-monitoring', [UserSessionController::class, 'index'])
+        ->name('user.monitoring');
 
     // Pages - Views
 

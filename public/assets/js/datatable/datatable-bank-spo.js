@@ -49,6 +49,12 @@ let table = $("#bankSpoTable").DataTable({
         },
         {
             data: "tanggal_formatted",
+            render: function (data, type, row) {
+                if (type === "sort" || type === "type") {
+                    return row.created_at_timestamp;
+                }
+                return data;
+            },
         },
         {
             data: null,

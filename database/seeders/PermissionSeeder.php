@@ -22,7 +22,7 @@ class PermissionSeeder extends Seeder
             ['unit' => 'teknologi dan informasi', 'jabatan' => 'operasional it technical support', 'name' => 'sammuel'],
             ['unit' => 'teknologi dan informasi', 'jabatan' => 'operasional it technical support', 'name' => 'raden.ibnu'],
             ['unit' => 'teknologi dan informasi', 'jabatan' => 'it infrastruktur', 'name' => 'iyan.hermawan'],
-            ['unit' => 'teknologi dan informasi', 'jabatan' => 'operasional it technical support', 'name' => 'novit.adriansyah'],
+            ['unit' => 'teknologi dan informasi', 'jabatan' => 'pengembangan sistem', 'name' => 'novit.adriansyah'],
             ['unit' => 'teknologi dan informasi', 'jabatan' => 'spv it', 'name' => 'deden eka nugraha'],
         ];
 

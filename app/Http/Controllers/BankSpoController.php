@@ -27,15 +27,12 @@ class BankSpoController extends Controller
 
             $query = BankSpo::query();
 
-            // ================= FILTER =================
 
-            // 🔥 FILTER TANGGAL (FORMAT d-m-Y)
             if ($request->filled('periode_dari')) {
                 try {
                     $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
                     $query->where('created_at', '>=', $startDate);
                 } catch (\Exception $e) {
-                    // skip kalau format salah
                 }
             }
 
@@ -44,21 +41,17 @@ class BankSpoController extends Controller
                     $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
                     $query->where('created_at', '<=', $endDate);
                 } catch (\Exception $e) {
-                    // skip kalau format salah
                 }
             }
 
-            // FILTER UNIT
             if (!empty($request->unit)) {
                 $query->where('unit', $request->unit);
             }
 
-            // FILTER JENIS SPO
             if ($request->filled('jenis_spo')) {
                 $query->where('jenis_spo', $request->jenis_spo);
             }
 
-            // ================= SEARCH =================
             if ($request->has('search') && !empty($request->search['value'])) {
                 $search = $request->search['value'];
 
@@ -69,11 +62,9 @@ class BankSpoController extends Controller
                 });
             }
 
-            // ================= TOTAL =================
             $recordsTotal = BankSpo::count();
             $recordsFiltered = $query->count();
 
-            // ================= ORDER =================
             if ($request->has('order')) {
                 $orderColumn = $columns[$request->order[0]['column']];
                 $orderDir = $request->order[0]['dir'];
@@ -82,18 +73,15 @@ class BankSpoController extends Controller
                 $query->orderBy('created_at', 'desc');
             }
 
-            // ================= PAGINATION =================
             $start = $request->start ?? 0;
             $length = $request->length ?? 10;
 
             $records = $query->skip($start)->take($length)->get();
 
-            // ================= PERMISSION =================
             $canUpdate = PermissionHelper::canAccess('bank_spo', 'update');
             $canRead = PermissionHelper::canAccess('bank_spo', 'read');
             $canDelete = PermissionHelper::canAccess('bank_spo', 'delete');
 
-            // ================= FORMAT DATA =================
             $data = [];
 
             foreach ($records as $item) {
@@ -102,7 +90,15 @@ class BankSpoController extends Controller
                     'file_pdf' => $item->file_pdf,
                     'unit' => $item->unit,
                     'jenis_spo' => $item->jenis_spo,
-                    'tanggal_formatted' => Carbon::parse($item->created_at)->translatedFormat('d F Y'),
+
+                    'created_at_timestamp' => Carbon::parse($item->created_at)->timestamp,
+
+                    'tanggal_formatted' => '
+                    <div class="flex flex-col">
+                        <span>' . Carbon::parse($item->created_at)->translatedFormat('d F Y') . '</span>
+                        <span class="text-xs text-gray-400">' . Carbon::parse($item->created_at)->format('H:i') . ' WIB</span>
+                    </div>
+                ',
                     'can_update' => $canUpdate,
                     'can_read' => $canRead,
                     'can_delete' => $canDelete,
@@ -117,7 +113,6 @@ class BankSpoController extends Controller
             ]);
         }
 
-        // ================= VIEW =================
         return view('pages.komite-mutu.bank-spo.index');
     }
 

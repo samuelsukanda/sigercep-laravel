@@ -167,7 +167,7 @@
                     </li>
                 @endauth
 
-                {{-- Permissions - Hanya untuk user tertentu --}}
+                {{-- Permissions --}}
                 @php
                     $user = Auth::user();
                     $canAccessPermissions = false;
@@ -177,7 +177,6 @@
                         $unit = strtolower(trim($user->unit ?? ''));
                         $jabatan = strtolower(trim($user->jabatan ?? ''));
 
-                        // Cek apakah user memenuhi kriteria
                         if (
                             $name == 'sammuel' &&
                             $unit == 'teknologi dan informasi' &&
@@ -193,6 +192,13 @@
                         <a href="{{ route('permissions.index') }}" class="p-0 text-sm transition-all ease-nav-brand"
                             style="color: #7664E4 !important;">
                             <i class="cursor-pointer fa fa-cog"></i>
+                        </a>
+                    </li>
+
+                    <li class="flex items-center px-2">
+                        <a href="{{ route('user.monitoring') }}" class="p-0 text-sm transition-all ease-nav-brand"
+                            style="color: #7664E4 !important;">
+                            <i class="cursor-pointer fa fa-signal"></i>
                         </a>
                     </li>
                 @endif
