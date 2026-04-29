@@ -1,0 +1,409 @@
+/* ── Google Font ────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
+
+/* ── Root ───────────────────────────────────────── */
+:root {
+    --font-base: "Plus Jakarta Sans", sans-serif;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --shadow-card:
+        0 1px 4px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
+    --color-primary: #6d51e8;
+    --color-primary-light: #ede9fe;
+    --color-primary-dark: #5b3fd4;
+
+    /* grid: No | Nama | Username | Status | Info */
+    --um-grid: 56px 1fr 180px 120px 180px;
+}
+
+/* ── Wrap — full width ──────────────────────────── */
+.um-wrap {
+    font-family: var(--font-base);
+    padding: 24px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ── Header Card ────────────────────────────────── */
+.um-header-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: 20px 24px;
+}
+
+.um-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.um-title-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.um-icon-box {
+    width: 42px;
+    height: 42px;
+    background: var(--color-primary-light);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.um-icon-box i {
+    font-size: 17px;
+    color: var(--color-primary);
+}
+
+.um-title-text {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.um-title-sub {
+    font-size: 12px;
+    color: #9ca3af;
+    margin: 3px 0 0;
+}
+
+/* ── Stat chip ──────────────────────────────────── */
+.um-stat {
+    border-radius: var(--radius-md);
+    padding: 10px 20px;
+    text-align: right;
+}
+
+.um-stat-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.um-stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.um-stat--purple {
+    background: var(--color-primary-light);
+}
+
+.um-stat--purple .um-stat-label {
+    color: var(--color-primary);
+}
+
+.um-stat--purple .um-stat-value {
+    color: #4c33b8;
+}
+
+/* ── Table Card ─────────────────────────────────── */
+.um-table-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    width: 100%;
+}
+
+/* ── Table Head ─────────────────────────────────── */
+.um-thead {
+    display: grid;
+    grid-template-columns: var(--um-grid);
+    padding: 11px 20px;
+    background: var(--color-primary);
+    gap: 12px;
+    align-items: center;
+}
+
+.um-th {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.um-th--right {
+    text-align: right;
+}
+
+/* ── Table Body ─────────────────────────────────── */
+.um-tbody {
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* ── Row ────────────────────────────────────────── */
+.um-row {
+    display: grid;
+    grid-template-columns: var(--um-grid);
+    align-items: center;
+    gap: 12px;
+    padding: 11px 8px;
+    border-radius: var(--radius-md);
+    border: 1px solid #f0f0f4;
+    background: #fafafa;
+    transition:
+        background 0.15s,
+        box-shadow 0.15s,
+        transform 0.15s;
+}
+
+.um-row:hover {
+    background: #fff;
+    box-shadow: 0 2px 14px rgba(109, 81, 232, 0.09);
+    transform: translateY(-1px);
+    border-color: #e0d9f9;
+}
+
+.um-row--even {
+    background: #fff;
+}
+
+/* ── Cells ──────────────────────────────────────── */
+.um-cell {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
+.um-cell--no {
+    justify-content: center;
+}
+
+.um-cell--name {
+    gap: 11px;
+}
+
+.um-cell--info {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+}
+
+/* ── No badge ───────────────────────────────────── */
+.um-badge-no {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* ── Avatar ─────────────────────────────────────── */
+.um-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.um-avatar--teal {
+    background: #ccfbf1;
+    color: #0f766e;
+}
+.um-avatar--blue {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+.um-avatar--purple {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+.um-avatar--pink {
+    background: #fce7f3;
+    color: #be185d;
+}
+.um-avatar--amber {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* ── Name info ──────────────────────────────────── */
+.um-name-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.um-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a2e;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.35;
+}
+
+.um-jabatan {
+    font-size: 11px;
+    color: #9ca3af;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 1px;
+}
+
+/* ── Username pill ──────────────────────────────── */
+.um-username-pill {
+    font-size: 12px;
+    font-weight: 500;
+    background: #eff6ff;
+    color: #1d4ed8;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid #bfdbfe;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: inline-block;
+}
+
+/* ── Status ─────────────────────────────────────── */
+.um-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+}
+
+.um-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.um-status--active {
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+.um-status--active .um-status-dot {
+    background: #22c55e;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.3;
+    }
+}
+
+/* ── Meta (info column) ─────────────────────────── */
+.um-meta {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+}
+
+.um-meta-label {
+    color: #b0b7c3;
+    white-space: nowrap;
+}
+
+.um-meta-val {
+    color: #6b7280;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* ── Empty state ────────────────────────────────── */
+.um-empty {
+    padding: 64px 24px;
+    text-align: center;
+    color: #c0c7d4;
+}
+
+.um-empty i {
+    font-size: 38px;
+    display: block;
+    margin-bottom: 14px;
+}
+
+.um-empty p {
+    font-size: 13px;
+    margin: 0;
+}
+
+/* ── Footer ─────────────────────────────────────── */
+.um-footer {
+    padding: 11px 24px;
+    border-top: 1px solid #f0f0f4;
+    font-size: 12px;
+    color: #9ca3af;
+    background: #fafafa;
+}
+
+.um-footer strong {
+    color: #374151;
+    font-weight: 600;
+}
+
+/* ── Responsive ─────────────────────────────────── */
+@media (max-width: 768px) {
+    :root {
+        --um-grid: 44px 1fr 110px 90px;
+    }
+
+    .um-thead > .um-th:last-child,
+    .um-row > .um-cell:last-child {
+        display: none;
+    }
+}
+
+@media (max-width: 540px) {
+    :root {
+        --um-grid: 40px 1fr 80px;
+    }
+
+    .um-thead > .um-th:nth-child(4),
+    .um-thead > .um-th:nth-child(5),
+    .um-row > .um-cell:nth-child(4),
+    .um-row > .um-cell:nth-child(5) {
+        display: none;
+    }
+
+    .um-wrap {
+        padding: 14px 12px;
+    }
+}

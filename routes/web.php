@@ -2,6 +2,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TicketController;
@@ -40,9 +41,14 @@ use App\Http\Controllers\KomiteMedikController;
 use App\Http\Controllers\HardwareController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserSessionController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
-    return redirect('/login');
+    if (Auth::check()) {
+        return redirect()->route('dashboard');
+    }
+
+    return redirect()->route('login');
 });
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -82,6 +88,11 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth'])
         ->get('/user-monitoring', [UserSessionController::class, 'index'])
         ->name('user.monitoring');
+
+    // List User
+    Route::middleware(['auth'])
+        ->get('/users', [UserController::class, 'index'])
+        ->name('users');
 
     // Pages - Views
 

@@ -30,17 +30,16 @@
 .um-icon-box {
     width: 36px;
     height: 36px;
-    background: #fff3e0;
+    background: #fff7ed;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
 }
 
-.um-icon-box svg {
-    width: 18px;
-    height: 18px;
+.um-icon-box i {
+    font-size: 16px;
+    color: #ea580c;
 }
 
 .um-title-text {
@@ -172,7 +171,7 @@
 
 /* ── Table Header ───────────────────────────────── */
 .um-thead {
-    background: #f97316;
+    background: #7664e4;
     display: grid;
     grid-template-columns: 56px 1fr 150px 115px 170px;
     padding: 11px 20px;
@@ -245,8 +244,8 @@
 }
 
 .um-uid--id {
-    background: #fff3e0;
-    color: #c2410c;
+    background: #ede9fe;
+    color: #6d28d9;
 }
 
 .um-uid--guest {

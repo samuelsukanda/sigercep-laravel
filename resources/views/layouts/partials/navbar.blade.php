@@ -26,7 +26,7 @@
             <div class="flex items-center md:ml-auto md:pr-4"></div>
             <ul class="flex flex-row justify-end pl-0 mb-0 list-none md-max:w-full">
                 {{-- Profile --}}
-                <li class="flex items-center h-full cursor-pointer">
+                <li class="flex items-center h-full cursor-pointer" title="Nama">
                     <div class="flex items-center space-x-3">
                         @if (Auth::check())
                             <span class="text-sm font-semibold uppercase"
@@ -39,7 +39,7 @@
                         <span class="text-sm font-semibold" style="color: #7664E4 !important;"> - </span>
                     </div>
                 </li>
-                <li class="flex items-center h-full pr-2 cursor-pointer">
+                <li class="flex items-center h-full pr-2 cursor-pointer" title="Jabatan">
                     <div class="flex items-center space-x-3">
                         @if (Auth::check())
                             <span class="text-sm font-semibold uppercase"
@@ -59,7 +59,7 @@
 
 
                             <!-- ICON BELL -->
-                            <i class="far fa-bell"></i>
+                            <i class="far fa-bell" title="Notifikasi"></i>
 
                             @php $unreadCount = auth()->user()->unreadNotifications->count(); @endphp
 
@@ -189,16 +189,23 @@
 
                 @if ($canAccessPermissions)
                     <li class="flex items-center px-2">
-                        <a href="{{ route('permissions.index') }}" class="p-0 text-sm transition-all ease-nav-brand"
-                            style="color: #7664E4 !important;">
+                        <a href="{{ route('permissions.index') }}" title="Permission"
+                            class="p-0 text-sm transition-all ease-nav-brand" style="color: #7664E4 !important;">
                             <i class="cursor-pointer fa fa-cog"></i>
                         </a>
                     </li>
 
                     <li class="flex items-center px-2">
-                        <a href="{{ route('user.monitoring') }}" class="p-0 text-sm transition-all ease-nav-brand"
-                            style="color: #7664E4 !important;">
+                        <a href="{{ route('user.monitoring') }}" title="Monitoring User"
+                            class="p-0 text-sm transition-all ease-nav-brand" style="color: #7664E4 !important;">
                             <i class="cursor-pointer fa fa-signal"></i>
+                        </a>
+                    </li>
+
+                    <li class="flex items-center px-2">
+                        <a href="{{ route('users') }}" title="Daftar User"
+                            class="p-0 text-sm transition-all ease-nav-brand" style="color: #7664E4 !important;">
+                            <i class="cursor-pointer fa fa-users"></i>
                         </a>
                     </li>
                 @endif
@@ -217,7 +224,7 @@
                         x-transition:leave-end="opacity-0 translate-y-2 scale-95"
                         class="block p-0 text-sm transition-all ease-nav-brand" aria-expanded="false"
                         style="color: #7664E4 !important;">
-                        <i class="fa fa-power-off"></i>
+                        <i class="fa fa-power-off" title="Logout"></i>
                     </a>
 
                     <!-- Dropdown Menu -->
