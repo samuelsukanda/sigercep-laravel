@@ -3,6 +3,7 @@
 @stack('styles')
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
+
 <body data-page="virtual-reality"
     class="m-0 font-sans text-base antialiased font-normal dark:bg-slate-900
             leading-default bg-gray-50 text-slate-500
@@ -32,5 +33,4 @@
 {{-- Scripts --}}
 @include('layouts.partials.scripts')
 @stack('scripts')
-
 </html>

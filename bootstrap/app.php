@@ -3,7 +3,6 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use App\Http\Middleware\CheckPermission;
-use Binafy\LaravelUserMonitoring\Middlewares\VisitMonitoringMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(

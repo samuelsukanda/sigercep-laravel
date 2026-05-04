@@ -18,6 +18,7 @@ class User extends Authenticatable
         'nik',
         'jabatan',
         'status_karyawan',
+        'last_seen_at', 
     ];
 
     protected $hidden = [

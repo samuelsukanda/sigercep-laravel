@@ -24,7 +24,7 @@ class UserSessionController extends Controller
                 $agent = new Agent();
                 $agent->setUserAgent($s->user_agent);
 
-                // Device
+                // DEVICE
                 $s->device = match (true) {
                     $agent->isDesktop() => 'desktop',
                     $agent->isTablet() => 'tablet',
@@ -35,23 +35,26 @@ class UserSessionController extends Controller
                 $s->browser = $agent->browser();
                 $s->platform = $agent->platform();
 
-                // Status
-                $last = Carbon::createFromTimestamp($s->last_activity);
-                $diff = now()->diffInMinutes($last);
+                if (!$s->last_activity) {
+                    $timestamp = now()->subYears(1)->timestamp;
+                } else {
+                    $timestamp = (int) $s->last_activity;
+                }
 
-                $s->diff = $diff;
+                $diff = now()->timestamp - $timestamp;
 
-                $s->status = match (true) {
-                    $diff < 5 => 'online',
-                    $diff < 30 => 'idle',
-                    default => 'away',
-                };
+                // STATUS
+                if ($diff < 120) {
+                    $s->status = 'online';
+                } elseif ($diff < 600) {
+                    $s->status = 'idle';
+                } else {
+                    $s->status = 'offline';
+                }
 
-                $s->time_label = match (true) {
-                    $diff < 1 => 'Aktif sekarang',
-                    $diff < 60 => $diff . ' menit lalu',
-                    default => floor($diff / 60) . ' jam lalu',
-                };
+                $s->last_activity_at = date('d/m/Y H:i:s', $timestamp);
+
+                $s->time_label = Carbon::createFromTimestamp($timestamp)->diffForHumans();
 
                 return $s;
             });

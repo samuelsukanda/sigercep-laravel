@@ -136,9 +136,12 @@
                             </div>
 
                             <div>
-                                <div class="um-time">{{ date('d/m/Y H:i:s', $s->last_activity) }}</div>
-                                <div class="um-time-rel {{ $timeClass }}">
-                                    {{ $s->time_label }}
+                                <div class="um-time">
+                                    {{ $s->last_activity_at ?? '-' }}
+                                </div>
+
+                                <div class="um-time-rel" id="time-{{ $s->id }}">
+                                    {{ $s->time_label ?? '-' }}
                                 </div>
                             </div>
 
@@ -167,7 +170,7 @@
                             </div>
 
                             <div>
-                                <span class="um-status {{ $statusClass }}">
+                                <span class="um-status {{ $statusClass }}" id="status-{{ $s->id }}">
                                     <span class="um-status-dot"></span>
                                     {{ $statusLabel }}
                                 </span>

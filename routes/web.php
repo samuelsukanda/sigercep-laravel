@@ -3,6 +3,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TicketController;
@@ -84,21 +85,23 @@ Route::middleware('auth')->group(function () {
                 ->middleware('permission:permissions,create');
         });
 
-    // User Monitoring
-    Route::middleware(['auth'])
-        ->get('/user-monitoring', [UserSessionController::class, 'index'])
-        ->name('user.monitoring');
+    // User
+    Route::middleware(['auth'])->group(function () {
 
-    // List User
-    Route::middleware(['auth'])
-        ->get('/users', [UserController::class, 'index'])
-        ->name('users');
+        // User Monitoring
+        Route::get('/user-monitoring', [UserSessionController::class, 'index'])
+            ->name('user.monitoring');
+
+        Route::get('/user-monitoring-data', [UserSessionController::class, 'data'])
+            ->middleware('auth')
+            ->name('user.monitoring.data');
+
+        // List User
+        Route::get('/users', [UserController::class, 'index'])
+            ->name('users');
+    });
 
     // Pages - Views
-
-    Route::get('/test-telegram', function () {
-        \App\Helpers\TelegramHelper::send("TEST MASUK");
-    });
 
     // Ticket
     // User routes
