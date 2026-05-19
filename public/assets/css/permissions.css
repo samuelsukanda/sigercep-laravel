@@ -585,6 +585,7 @@
     margin: 0;
 }
 
+/* ── Rule list item ── */
 .rule-list-item {
     display: flex;
     align-items: center;
@@ -648,7 +649,48 @@
     font-weight: 600;
     color: var(--text);
 }
+
+/* ── Rule item actions (edit + delete) ── */
+.rule-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+/* Tombol Edit Rule */
+.btn-rule-edit {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: var(--r-sm) !important;
+    border: 1px solid var(--border-mid) !important;
+    background: transparent !important;
+    color: var(--accent) !important;
+    font-size: 0.75rem !important;
+    cursor: pointer !important;
+    flex-shrink: 0;
+    transition:
+        background var(--tr),
+        border-color var(--tr),
+        color var(--tr) !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+}
+.btn-rule-edit:hover {
+    background: var(--accent-lt) !important;
+    border-color: var(--accent) !important;
+    color: var(--accent-h) !important;
+}
+
+/* Tombol Delete Rule */
 .btn-rule-delete {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 28px;
     height: 28px;
     border-radius: var(--r-sm);
@@ -656,11 +698,8 @@
     background: transparent !important;
     color: #993c1d !important;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
     flex-shrink: 0;
+    font-size: 0.75rem;
     transition: background var(--tr);
     padding: 0 !important;
     box-shadow: none !important;
@@ -682,8 +721,6 @@
     letter-spacing: 0.5px;
     margin-bottom: 6px;
 }
-
-/* ✅ MODIFIED: Stronger border for side panel inputs */
 .pf-input {
     width: 100% !important;
     font-family: "Open Sans", sans-serif !important;
@@ -725,8 +762,6 @@
     gap: 8px;
     justify-content: flex-end;
 }
-
-/* ✅ MODIFIED: Tutup button with visible border + purple text */
 .btn-pf-cancel {
     padding: 8px 18px !important;
     border: 1.5px solid #8b7dc8 !important;
@@ -753,7 +788,6 @@
 .btn-pf-cancel:active {
     transform: scale(0.97) !important;
 }
-
 .btn-pf-submit {
     padding: 8px 20px !important;
     border: none !important;
@@ -781,7 +815,7 @@
 }
 
 /* ════════════════════════════════════════════════
-   MODAL — Tambah Permission
+   MODAL — Tambah Permission & Edit Rule
    ════════════════════════════════════════════════ */
 .perm-modal-overlay {
     position: fixed !important;
@@ -800,6 +834,12 @@
     opacity: 1 !important;
     pointer-events: all !important;
 }
+
+/* Edit rule modal harus di atas side panel */
+#editRuleModalOverlay {
+    z-index: 100001 !important;
+}
+
 .perm-modal {
     background: #fff !important;
     border-radius: var(--r-xl) !important;
@@ -867,8 +907,6 @@
     letter-spacing: 0.5px !important;
     margin-bottom: 6px !important;
 }
-
-/* ✅ MODIFIED: Stronger border for modal inputs */
 .perm-form-input,
 .perm-form-select {
     width: 100% !important;
@@ -935,10 +973,6 @@
 .modal-rule-row input {
     min-width: 0 !important;
     width: 100% !important;
-}
-
-/* ✅ MODIFIED: Stronger border for modal rule row inputs */
-.modal-rule-row input {
     font-family: "Open Sans", sans-serif !important;
     font-size: 0.78rem !important;
     padding: 7px 9px !important;
@@ -1001,8 +1035,6 @@
 .btn-rm-row-modal:hover {
     background: #fcebeb !important;
 }
-
-/* ✅ MODIFIED: Batal button with visible border + purple text */
 .btn-perm-cancel {
     padding: 8px 18px !important;
     border: 1.5px solid #8b7dc8 !important;
@@ -1029,7 +1061,6 @@
 .btn-perm-cancel:active {
     transform: scale(0.97) !important;
 }
-
 .btn-perm-submit {
     padding: 8px 20px !important;
     border: none !important;
@@ -1056,8 +1087,17 @@
     transform: scale(0.97) !important;
 }
 
+/* ── Search highlight ── */
+.search-highlight {
+    background-color: #fef3c7;
+    color: #b45309;
+    border-radius: 4px;
+    padding: 0 2px;
+    font-weight: 500;
+}
+
 /* ── Responsive ── */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
     .perm-page {
         padding: 1rem 0.75rem 2rem;
     }
@@ -1078,11 +1118,108 @@
     .modal-rule-row {
         grid-template-columns: 1fr 1fr;
     }
-    .search-highlight {
-        background-color: #fef3c7;
-        color: #b45309;
-        border-radius: 4px;
-        padding: 0 2px;
-        font-weight: 500;
+
+    /* ── Tabel → Card layout di mobile ── */
+    .perm-card {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        overflow: visible !important;
+    }
+
+    .perm-table {
+        display: block !important;
+        table-layout: auto !important;
+    }
+
+    .perm-table colgroup {
+        display: none !important;
+    }
+
+    /* Sembunyikan thead */
+    .perm-table thead {
+        display: none !important;
+    }
+
+    .perm-table tbody {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+
+    /* Tiap baris jadi card */
+    .perm-table tbody tr {
+        display: flex !important;
+        flex-direction: column !important;
+        background: #fff !important;
+        border: 1px solid var(--border) !important;
+        border-radius: var(--r-lg) !important;
+        padding: 12px 14px !important;
+        box-shadow: var(--sh-sm) !important;
+        gap: 8px !important;
+        transition: box-shadow var(--tr) !important;
+    }
+    .perm-table tbody tr:hover {
+        box-shadow: var(--sh-md) !important;
+    }
+    .perm-table tbody tr:hover td {
+        background: transparent !important;
+    }
+
+    /* Tiap td jadi baris horizontal: label + value */
+    .perm-table td {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        padding: 0 !important;
+        border: none !important;
+        background: transparent !important;
+        overflow: visible !important;
+    }
+
+    /* Label otomatis dari data-label */
+    .perm-table td::before {
+        content: attr(data-label);
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        min-width: 56px;
+        flex-shrink: 0;
+    }
+
+    /* Kolom aksi: label + tombol rata kiri */
+    .perm-table td:last-child {
+        justify-content: flex-start !important;
+        padding-top: 4px !important;
+        border-top: 1px solid var(--border) !important;
+        margin-top: 2px !important;
+    }
+    .perm-action-btns {
+        justify-content: flex-start !important;
+    }
+
+    /* menu-chip jangan terpotong */
+    .menu-chip {
+        max-width: 100% !important;
+    }
+
+    /* Empty state — kembalikan ke normal */
+    #emptyRow,
+    #searchEmptyRow {
+        display: table-row !important;
+        background: #fff !important;
+        border-radius: var(--r-lg) !important;
+    }
+    #emptyRow td,
+    #searchEmptyRow td {
+        display: table-cell !important;
+        padding: 0 !important;
+    }
+    #emptyRow td::before,
+    #searchEmptyRow td::before {
+        display: none !important;
     }
 }

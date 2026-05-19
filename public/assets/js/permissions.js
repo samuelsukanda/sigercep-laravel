@@ -12,7 +12,7 @@
     var activeTab = "list";
     var ruleCounter = 1;
 
-    /* MODAL Tambah Permission */
+    /* ───── MODAL Tambah Permission ───── */
     window.openPermModal = function () {
         document.getElementById("permModalOverlay").classList.add("open");
     };
@@ -27,7 +27,7 @@
         }
     };
 
-    /* SUBMIT RULE */
+    /* ───── SUBMIT ADD RULE ───── */
     window.submitAddRule = function () {
         const form = document.getElementById("addRuleForm");
 
@@ -43,7 +43,7 @@
         form.submit();
     };
 
-    /* SIDE PANEL */
+    /* ───── SIDE PANEL ───── */
     window.openRulePanel = function (permId, menu, action) {
         activePerm = permissionsData.find(function (p) {
             return p.id === permId;
@@ -91,6 +91,7 @@
             tab === "add" ? "inline-flex" : "none";
     };
 
+    /* ───── RENDER RULE LIST ───── */
     function renderRuleList() {
         var container = document.getElementById("ruleListContainer");
         var rules = activePerm ? activePerm.rules : [];
@@ -127,16 +128,21 @@
                 var icon = r.unit
                     ? "fa-building"
                     : r.jabatan
-                      ? "fa-user-tie"
-                      : "fa-user";
+                    ? "fa-user-tie"
+                    : "fa-user";
 
                 var formattedName = r.name ? formatUserName(r.name) : "";
 
                 var nameRow = formattedName
                     ? '<div class="rule-name-main"><i class="fas fa-user" style="font-size:10px;margin-right:3px;color:var(--muted)"></i>' +
-                      esc(formattedName) +
-                      "</div>"
+                    esc(formattedName) +
+                    "</div>"
                     : "";
+
+                // Encode data untuk onclick attribute
+                var safeName = escAttr(r.name || "");
+                var safeUnit = escAttr(r.unit || "");
+                var safeJabatan = escAttr(r.jabatan || "");
 
                 return (
                     '<div class="rule-list-item" id="rule-item-' +
@@ -148,33 +154,156 @@
                     '<div class="rule-list-meta">' +
                     (parts.length
                         ? '<div class="rule-list-meta-row">' +
-                          parts.join('<span class="rule-meta-sep">·</span>') +
-                          "</div>"
+                        parts.join('<span class="rule-meta-sep">·</span>') +
+                        "</div>"
                         : "") +
                     nameRow +
                     (!parts.length && !r.name
                         ? '<span style="font-size:.72rem;color:var(--hint);font-style:italic">Rule tanpa detail</span>'
                         : "") +
                     "</div>" +
+                    // Tombol aksi — edit & delete
+                    '<div class="rule-item-actions">' +
+                    // Tombol Edit
+                    '<button type="button" class="btn-rule-edit" ' +
+                    'onclick="openEditRuleModal(' +
+                    r.id +
+                    ", '" +
+                    safeName +
+                    "', '" +
+                    safeUnit +
+                    "', '" +
+                    safeJabatan +
+                    "')\" " +
+                    'title="Edit rule">' +
+                    '<i class="fas fa-pen"></i>' +
+                    "</button>" +
+                    // Tombol Delete
                     '<form action="/permissions/delete-rule/' +
                     r.id +
-                    '" method="POST" class="form-delete-rule" data-name="' +
-                    (formattedName || "rule ini") +
-                    '" style="display:inline;margin:0">' +
+                    '" method="POST" ' +
+                    'class="form-delete-rule" data-name="' +
+                    esc(formattedName || "rule ini") +
+                    '" ' +
+                    'style="display:inline;margin:0">' +
                     '<input type="hidden" name="_token" value="' +
                     csrfToken +
                     '">' +
                     '<input type="hidden" name="_method" value="DELETE">' +
-                    '<button type="button" class="btn-rule-delete btn-delete-rule">' +
+                    '<button type="button" class="btn-rule-delete btn-delete-rule" title="Hapus rule">' +
                     '<i class="fas fa-trash-can"></i>' +
                     "</button>" +
                     "</form>" +
-                    "</div>"
+                    "</div>" + // .rule-item-actions
+                    "</div>" // .rule-list-item
                 );
             })
             .join("");
     }
 
+    /* ───── MODAL EDIT RULE ───── */
+    window.openEditRuleModal = function (ruleId, name, unit, jabatan) {
+        document.getElementById("editRuleId").value = ruleId;
+        document.getElementById("edit-name").value = name || "";
+        document.getElementById("edit-unit").value = unit || "";
+        document.getElementById("edit-jabatan").value = jabatan || "";
+
+        // Reset state tombol
+        var btn = document.getElementById("btnSaveEditRule");
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-floppy-disk"></i> Simpan Perubahan';
+
+        document.getElementById("editRuleModalOverlay").classList.add("open");
+    };
+
+    window.closeEditRuleModal = function () {
+        document
+            .getElementById("editRuleModalOverlay")
+            .classList.remove("open");
+    };
+
+    window.handleEditRuleOverlayClick = function (e) {
+        if (e.target.id === "editRuleModalOverlay") closeEditRuleModal();
+    };
+
+    window.submitEditRule = async function () {
+        const ruleId = document.getElementById("editRuleId").value;
+        const name = document.getElementById("edit-name").value.trim();
+        const unit = document.getElementById("edit-unit").value.trim();
+        const jabatan = document.getElementById("edit-jabatan").value.trim();
+
+        if (!name && !unit && !jabatan) {
+            toastr.warning("Isi minimal satu field!", "Info");
+            return;
+        }
+
+        const btn = document.getElementById("btnSaveEditRule");
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+
+        try {
+            const res = await fetch(window.updateRuleUrl + "/" + ruleId, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": csrfToken,
+                    Accept: "application/json",
+                },
+                body: JSON.stringify({ name, unit, jabatan }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                toastr.error(
+                    data.error || "Gagal menyimpan perubahan.",
+                    "Error",
+                );
+                btn.disabled = false;
+                btn.innerHTML =
+                    '<i class="fas fa-floppy-disk"></i> Simpan Perubahan';
+                return;
+            }
+
+            // Update data in-memory
+            for (var i = 0; i < permissionsData.length; i++) {
+                var perm = permissionsData[i];
+                for (var j = 0; j < perm.rules.length; j++) {
+                    if (perm.rules[j].id == ruleId) {
+                        perm.rules[j].name = name;
+                        perm.rules[j].unit = unit;
+                        perm.rules[j].jabatan = jabatan;
+                        break;
+                    }
+                }
+            }
+
+            // Update activePerm juga agar renderRuleList pakai data baru
+            if (activePerm) {
+                for (var k = 0; k < activePerm.rules.length; k++) {
+                    if (activePerm.rules[k].id == ruleId) {
+                        activePerm.rules[k].name = name;
+                        activePerm.rules[k].unit = unit;
+                        activePerm.rules[k].jabatan = jabatan;
+                        break;
+                    }
+                }
+            }
+
+            toastr.success("Rule berhasil diperbarui!", "Berhasil");
+            closeEditRuleModal();
+
+            // Re-render panel tanpa reload
+            renderRuleList();
+        } catch (err) {
+            toastr.error("Terjadi kesalahan. Coba lagi.", "Error");
+            btn.disabled = false;
+            btn.innerHTML =
+                '<i class="fas fa-floppy-disk"></i> Simpan Perubahan';
+        }
+    };
+
+    /* ───── HELPERS ───── */
     function formatUserName(name) {
         if (!name) return "";
 
@@ -200,12 +329,18 @@
             .join(" ");
     }
 
+    // Escape untuk innerHTML
     function esc(str) {
         return String(str)
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;");
+    }
+
+    // Escape untuk nilai di dalam single-quote onclick attribute
+    function escAttr(str) {
+        return String(str).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
     }
 
     function clearAddForm() {
@@ -215,7 +350,7 @@
     }
 })();
 
-// Alert Delete Global
+/* ───── Alert Delete Global ───── */
 document.addEventListener("click", function (e) {
     const btn = e.target.closest(".btn-delete-rule, .btn-delete-trigger");
     if (!btn) return;

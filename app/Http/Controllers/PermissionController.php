@@ -80,6 +80,22 @@ class PermissionController extends Controller
         return redirect()->route('permissions.index')->with('success', 'Rule berhasil ditambahkan!');
     }
 
+    public function updateRule(Request $request, PermissionRule $rule)
+    {
+        $request->validate([
+            'unit'    => 'nullable|string|max:255',
+            'jabatan' => 'nullable|string|max:255',
+            'name'    => 'nullable|string|max:255',
+        ]);
+
+        if (!$request->unit && !$request->jabatan && !$request->name) {
+            return response()->json(['error' => 'Minimal satu field harus diisi.'], 422);
+        }
+
+        $rule->update($request->only(['unit', 'jabatan', 'name']));
+        return response()->json(['success' => true, 'rule' => $rule]);
+    }
+
     public function deleteRule(PermissionRule $rule)
     {
         $rule->delete();

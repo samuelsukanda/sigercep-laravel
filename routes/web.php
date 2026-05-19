@@ -3,7 +3,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TicketController;
@@ -69,6 +68,7 @@ Route::middleware('auth')->group(function () {
         ->prefix('permissions')
         ->name('permissions.')
         ->group(function () {
+            Route::put('/update-rule/{rule}', [PermissionController::class, 'updateRule'])->name('updateRule');
             Route::delete('/delete-rule/{rule}', [PermissionController::class, 'deleteRule'])
                 ->name('deleteRule');
             Route::get('/', [PermissionController::class, 'index'])

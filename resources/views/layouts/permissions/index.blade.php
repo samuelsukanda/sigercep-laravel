@@ -6,6 +6,31 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/permissions.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/search.css') }}">
+
+    <style>
+        .btn-rule-edit {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 28px !important;
+            height: 28px !important;
+            border-radius: 6px !important;
+            border: 1px solid rgba(108, 71, 255, 0.22) !important;
+            background: transparent !important;
+            color: #6c47ff !important;
+            font-size: 0.75rem !important;
+            cursor: pointer !important;
+            flex-shrink: 0 !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+        }
+
+        .btn-rule-edit:hover {
+            background: #f0ecff !important;
+            border-color: #6c47ff !important;
+            color: #5535e0 !important;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -110,13 +135,14 @@
                             $ruleCount = $p->rules->count();
                         @endphp
                         <tr data-menu="{{ strtolower($p->menu) }}" data-permission-id="{{ $p->id }}">
+
                             {{-- Menu --}}
-                            <td>
+                            <td data-label="Menu">
                                 <span class="menu-chip menu-text" title="{{ $p->menu }}">{{ $p->menu }}</span>
                             </td>
 
                             {{-- Action --}}
-                            <td>
+                            <td data-label="Action">
                                 <span class="action-badge {{ $badgeClass }}">
                                     <span class="dot"></span>
                                     {{ strtoupper($p->action) }}
@@ -124,7 +150,7 @@
                             </td>
 
                             {{-- Rules ringkas --}}
-                            <td>
+                            <td data-label="Rules">
                                 @if ($ruleCount > 0)
                                     <span class="rule-count-badge">
                                         <i class="fas fa-users"></i>
@@ -138,19 +164,17 @@
                             </td>
 
                             {{-- Aksi --}}
-                            <td>
+                            <td data-label="Aksi">
                                 <div class="perm-action-btns">
-                                    {{-- Tombol kelola rules — buka side panel --}}
                                     <button type="button" class="btn-manage-rules"
                                         onclick="openRulePanel(
-                                        {{ $p->id }},
-                                        '{{ addslashes($p->menu) }}',
-                                        '{{ $p->action }}'
-                                    )">
+                {{ $p->id }},
+                '{{ addslashes($p->menu) }}',
+                '{{ $p->action }}'
+            )">
                                         <i class="fas fa-sliders"></i> Kelola
                                     </button>
 
-                                    {{-- Hapus permission --}}
                                     <form action="{{ route('permissions.destroy', $p->id) }}" method="POST"
                                         class="form-delete" data-name="{{ $p->menu }} - {{ $p->action }}"
                                         style="display:inline;margin:0">
@@ -162,6 +186,7 @@
                                     </form>
                                 </div>
                             </td>
+
                         </tr>
                     @empty
                         <tr id="emptyRow">
@@ -336,6 +361,68 @@
         </div>
     </div>
 
+    {{-- MODAL — Edit Rule --}}
+    <div class="perm-modal-overlay" id="editRuleModalOverlay" onclick="handleEditRuleOverlayClick(event)">
+        <div class="perm-modal" id="editRuleModal">
+
+            <div class="perm-modal-header">
+                <h2>
+                    <i class="fas fa-pen-to-square" style="margin-right:7px;opacity:.85"></i>
+                    Edit Rule
+                </h2>
+                <button class="perm-modal-close" onclick="closeEditRuleModal()" type="button">
+                    <i class="fas fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="perm-modal-body">
+                {{-- ID rule disimpan di sini --}}
+                <input type="hidden" id="editRuleId">
+
+                <div class="perm-form-group">
+                    <label class="perm-form-label" for="edit-name">
+                        <i class="fas fa-user" style="margin-right:4px"></i>Nama User
+                    </label>
+                    <input type="text" id="edit-name" class="perm-form-input" placeholder="Nama user">
+                    <div class="perm-form-hint">Kosongkan jika tidak perlu filter nama</div>
+                </div>
+
+                <div class="perm-form-group">
+                    <label class="perm-form-label" for="edit-unit">
+                        <i class="fas fa-building" style="margin-right:4px"></i>Unit / Divisi
+                    </label>
+                    <input type="text" id="edit-unit" class="perm-form-input" placeholder="Unit">
+                    <div class="perm-form-hint">Kosongkan jika tidak perlu filter unit</div>
+                </div>
+
+                <div class="perm-form-group">
+                    <label class="perm-form-label" for="edit-jabatan">
+                        <i class="fas fa-user-tie" style="margin-right:4px"></i>Jabatan
+                    </label>
+                    <input type="text" id="edit-jabatan" class="perm-form-input" placeholder="Jabatan">
+                    <div class="perm-form-hint">Kosongkan jika tidak perlu filter jabatan</div>
+                </div>
+
+                <div
+                    style="padding:12px;background:var(--surface2);border-radius:var(--r-md);
+                        border:1px solid var(--border);margin-top:.5rem">
+                    <p style="font-size:.72rem;color:var(--muted);margin:0;line-height:1.6">
+                        <i class="fas fa-circle-info" style="color:var(--accent);margin-right:5px"></i>
+                        Minimal isi satu field. Rule cocok jika semua field yang diisi sesuai data user.
+                    </p>
+                </div>
+            </div>
+
+            <div class="perm-modal-footer">
+                <button type="button" class="btn-perm-cancel" onclick="closeEditRuleModal()">Batal</button>
+                <button type="button" class="btn-perm-submit" id="btnSaveEditRule" onclick="submitEditRule()">
+                    <i class="fas fa-floppy-disk"></i> Simpan Perubahan
+                </button>
+            </div>
+
+        </div>
+    </div>
+
     {{-- Embed semua data rules sebagai JSON --}}
     <script id="permissionsData" type="application/json">
     {!! json_encode($permissions->map(function($p) {
@@ -367,5 +454,6 @@
         };
 
         window.deleteRuleUrl = "{{ url('/permissions/delete-rule') }}";
+        window.updateRuleUrl = "{{ url('/permissions/update-rule') }}";
     </script>
 @endpush
