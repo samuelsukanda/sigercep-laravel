@@ -10,13 +10,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tickets', function (Blueprint $table) {
+            $table->string('fingerprint')->nullable()->after('id');
             $table->unique('fingerprint');
         });
     }
 
     public function down(): void
     {
-        Schema::table('fingerprint', function (Blueprint $table) {
+        Schema::table('tickets', function (Blueprint $table) {
             //
         });
     }

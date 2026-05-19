@@ -174,9 +174,28 @@ class AdminTicketController extends Controller
             'note' => 'required'
         ]);
 
-        $ticket->status = $request->status;
+        // ⬅️ Jika sebelumnya Open & mulai dikerjakan
+        if ($ticket->status == 'Open' && $request->status == 'In Progress') {
+            $ticket->status = 'In Progress';
+        } else {
+            $ticket->status = $request->status;
+        }
 
-        if (in_array($request->status, ['Closed', 'Done'])) {
+        // ⬅️ Jika selesai
+        if ($request->status == 'Done') {
+            $ticket->resolved_at = now();
+
+            // Update approval jika sebelumnya Need Clarification
+            $approval = $ticket->approval;
+            if ($approval && $approval->approval_status == 'Need Clarification') {
+                $approval->approval_status = 'Approved';
+                $approval->approved_at = now();
+                $approval->approved_by = Auth::user()->name;
+                $approval->save();
+            }
+        }
+
+        if ($request->status == 'Closed') {
             $ticket->resolved_at = now();
         }
 
@@ -185,13 +204,13 @@ class AdminTicketController extends Controller
         $update = TicketUpdate::create([
             'ticket_id' => $ticket->id,
             'user_id' => Auth::id(),
-            'status' => $request->status,
+            'status' => $ticket->status,
             'note' => $request->note
         ]);
 
         if ($ticket->user) {
             $ticket->user->notify(new TicketStatusUpdatedNotification($update));
-        };
+        }
 
         return back()->with('success', 'Status tiket diperbarui.');
     }

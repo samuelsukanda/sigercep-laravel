@@ -53,7 +53,7 @@ class PermissionSeeder extends Seeder
             'pengembalian_aset',
             'laporan_aset_rusak',
             'pemindahan_aset',
-            'helpdesk'
+            'helpdesk',
         ];
 
         // SEMUA USER (HANYA CREATE DAN READ)
@@ -148,11 +148,11 @@ class PermissionSeeder extends Seeder
         ];
 
         $sdmRules = [
-            ['unit' => 'sdm', 'jabatan' => 'manajer sdm dan hukum', 'name' => 'jatu.priya'],
-            ['unit' => 'sdm', 'jabatan' => 'spv sdm dan hukum', 'name' => 'ruri.kemala'],
-            ['unit' => 'sdm', 'jabatan' => 'staf sdm', 'name' => 'novia.firstania'],
-            ['unit' => 'sdm', 'jabatan' => 'staf diklat dan pengembangan', 'name' => 'rifaldi.zakhari'],
-            ['unit' => 'sdm', 'jabatan' => 'staf hukum dan hubungan industrial', 'name' => 'muhamad.fajar'],
+            ['jabatan' => 'manajer sdm dan hukum', 'name' => 'jatu.priya'],
+            ['jabatan' => 'spv sdm dan hukum', 'name' => 'ruri.kemala'],
+            ['jabatan' => 'staf sdm', 'name' => 'novia.firstania'],
+            ['jabatan' => 'staf diklat dan pengembangan', 'name' => 'rifaldi.zakhari'],
+            ['jabatan' => 'staf hukum dan hubungan industrial', 'name' => 'muhamad.fajar'],
         ];
 
         foreach ($sdmMenus as $menu) {
@@ -177,7 +177,7 @@ class PermissionSeeder extends Seeder
             ]);
             $permission->rules()->createMany($komiteRules);
         }
-        
+
         // PERMISSION MANAGEMENT - HANYA UNTUK SAMMUEL
         $permManagementActions = ['read', 'create', 'update', 'delete'];
 
@@ -195,7 +195,7 @@ class PermissionSeeder extends Seeder
         }
 
         // SUPERADMIN ONLY MENU (HANYA SUPERADMIN YANG BISA)
-        $superOnlyMenus = ['toner', 'visitasi', 'hardware', 'peminjaman'];
+        $superOnlyMenus = ['toner', 'visitasi', 'hardware', 'peminjaman', 'dokumen_it'];
 
         foreach ($superOnlyMenus as $menu) {
             foreach ($fullActions as $action) {

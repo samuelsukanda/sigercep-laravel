@@ -5,6 +5,7 @@
 {{-- Style --}}
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/loading.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/filter-responsive.css') }}">
 @endpush
 
 @section('content')

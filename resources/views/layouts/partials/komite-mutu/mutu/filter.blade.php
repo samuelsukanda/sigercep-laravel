@@ -1,7 +1,7 @@
 <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-4">
     <div class="px-5 py-4">
         <form method="GET" action="{{ route('komite-mutu.mutu.index') }}" id="filterForm">
-            <div class="flex flex-wrap gap-3 items-end">
+            <div class="flex flex-wrap gap-3 items-end ">
 
                 {{-- Tambah Data --}}
                 @canAccess('mutu', 'create')
@@ -15,7 +15,6 @@
                 @endcanAccess
             </div>
 
+        </form>
     </div>
-    </form>
-</div>
 </div>
