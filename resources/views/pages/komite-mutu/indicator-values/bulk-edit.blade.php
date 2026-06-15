@@ -2,12 +2,22 @@
 
 @section('title', 'SIGERCEP - Input Capaian Bulanan')
 
+@push('styles')
+    <style>
+        @media (min-width: 1280px) {
+            .modal-overlay {
+                left: 17rem !important;
+            }
+        }
+    </style>
+@endpush
+
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
         {{-- Header Section --}}
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
             <div>
-                <h3 class="font-bold text-2xl text-slate-800 dark:text-white">Input Capaian Bulanan</h3>
+                <h3 class="font-bold text-2xl text-gray-900 dark:text-white">Input Capaian Bulanan</h3>
             </div>
 
             <div>
@@ -42,7 +52,8 @@
                 class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div class="flex items-center gap-2">
                     <i class="fas fa-filter text-slate-400"></i>
-                    <h6 class="text-sm font-bold text-slate-800 dark:text-white uppercase m-0 ml-2">Pilih Periode & Kategori</h6>
+                    <h6 class="text-sm font-bold text-slate-800 dark:text-white uppercase m-0 ml-2">Pilih Periode & Kategori
+                    </h6>
                 </div>
                 <div class="flex flex-wrap md:flex-nowrap items-center gap-4 flex-1 md:justify-end">
                     {{-- Jenis Select --}}
@@ -93,6 +104,11 @@
                 <span class="text-sm font-bold text-slate-800 dark:text-white uppercase">
                     Form Input: {{ $jenis }} - {{ $bulanNama[$bulan] }} {{ $tahun }}
                 </span>
+                <button type="button" onclick="openAddModal()"
+                    class="inline-flex items-center justify-center px-4 py-2 text-xs font-bold uppercase rounded-lg shadow-md hover:shadow-lg active:opacity-85 transition-all text-white"
+                    style="background-color: #7664E4 !important; color: white !important;">
+                    <i class="fas fa-plus mr-2"></i> Tambah Indikator
+                </button>
             </div>
 
             <form method="POST" action="{{ route('indicator-values.bulk-update') }}" class="p-6">
@@ -233,9 +249,131 @@
     </div>
 @endsection
 
+{{-- Modal Tambah Indikator --}}
+@push('modals')
+    <div id="addIndicatorModal"
+        class="modal-overlay hidden items-center justify-center bg-slate-900/50 backdrop-blur-[2px]"
+        style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999;">
+        <div class="relative w-full max-w-2xl mx-auto px-4">
+            <div
+                class="relative bg-white dark:bg-slate-850 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden">
+
+                {{-- Header --}}
+                <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-slate-700"
+                    style="background: linear-gradient(135deg, #7664E4 0%, #5a4fcf 100%);">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+                            <i class="fas fa-plus text-white text-sm"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-white tracking-wide">
+                            Tambah Indikator Baru
+                        </h3>
+                    </div>
+                    <button type="button"
+                        class="text-white/80 hover:text-white hover:bg-white/20 rounded-lg w-8 h-8 inline-flex justify-center items-center transition-all"
+                        onclick="closeAddModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <form action="{{ route('indicators.store') }}" method="POST" class="p-6">
+                    @csrf
+                    <input type="hidden" name="tahun" value="{{ $tahun }}">
+                    <input type="hidden" name="jenis_indikator" value="{{ $jenis }}">
+
+                    <div class="grid gap-4 mb-4 grid-cols-2">
+                        <div class="col-span-2 sm:col-span-1">
+                            <label for="no_urut"
+                                class="block mb-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">No
+                                Urut</label>
+                            <input type="text" name="no_urut" id="no_urut"
+                                class="bg-white mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:text-white"
+                                placeholder="e.g. 1, 2a, dst">
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <label for="target_value"
+                                class="block mb-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Target
+                                (%)</label>
+                            <input type="number" step="any" name="target_value" id="target_value"
+                                class="bg-white mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:text-white"
+                                placeholder="e.g. 80">
+                        </div>
+                        <div class="col-span-2">
+                            <label for="nama_indikator"
+                                class="block mb-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Nama
+                                Indikator <span class="text-red-500">*</span></label>
+                            <input type="text" name="nama_indikator" id="nama_indikator"
+                                class="bg-white mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:text-white"
+                                required>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <label for="pj"
+                                class="block mb-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Penanggung
+                                Jawab (PJ)</label>
+                            <input type="text" name="pj" id="pj"
+                                class="bg-white mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:text-white">
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <label for="unit_terkait"
+                                class="block mb-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Unit
+                                Terkait</label>
+                            <input type="text" name="unit_terkait" id="unit_terkait"
+                                class="bg-white mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:text-white">
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-slate-700">
+                        <button type="button"
+                            class="px-5 py-2.5 text-sm font-medium text-slate-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all"
+                            onclick="closeAddModal()">
+                            Batal
+                        </button>
+                        <button type="submit"
+                            class="px-5 py-2.5 text-sm font-bold text-white rounded-lg shadow-md hover:shadow-lg transition-all inline-flex items-center gap-2"
+                            style="background: linear-gradient(135deg, #7664E4 0%, #5a4fcf 100%);">
+                            <i class="fas fa-save mr-1"></i> Simpan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+@endpush
+
 @push('scripts')
     <script>
+        function openAddModal() {
+            const modal = document.getElementById('addIndicatorModal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            // Prevent body scroll when modal is open
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAddModal() {
+            const modal = document.getElementById('addIndicatorModal');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            // Restore body scroll
+            document.body.style.overflow = '';
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
+            // Pindahkan modal ke body agar tidak terjebak di dalam <main>
+            // yang punya transition-all (membuat containing block baru untuk fixed positioning)
+            const modal = document.getElementById('addIndicatorModal');
+            if (modal) {
+                document.body.appendChild(modal);
+
+                // Close modal when clicking outside the dialog box
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) closeAddModal();
+                });
+            }
+
+            // Auto-calculate percentage
             const rows = document.querySelectorAll('.row-indicator');
 
             rows.forEach(row => {
@@ -259,6 +397,11 @@
                     denInput.addEventListener('input', calculatePercentage);
                 }
             });
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeAddModal();
         });
     </script>
 @endpush

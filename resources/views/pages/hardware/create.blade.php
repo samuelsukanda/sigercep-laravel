@@ -16,6 +16,10 @@
                             @csrf
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                                {{-- IP PC --}}
+                                <x-form.input name="ip" label="IP Komputer" :value="old('ip', $hardware->ip ?? '')" required />
+
                                 {{-- Nama --}}
                                 <x-form.input name="nama" label="Nama" :value="old('nama', $hardware->nama ?? '')" required />
 
@@ -44,25 +48,14 @@
                                             @php
                                                 $checklistItems = [
                                                     'Wallpaper backround RS',
-                                                    'Pastikan login sistem operasi ada dua (admin dan limit)',
-                                                    'Pastikan password admin dan limit terkontrol',
+                                                    'Password admin dan user terkontrol',
                                                     'Screen saver jalan',
-                                                    'Aplikasi remote VNC berjalan',
                                                     'Aplikasi remote VNC berjalan',
                                                     'Bersihkan komputer dari software yang tidak diijinkan',
                                                     'Cek kapasitas hardisk sistem operasi C',
-                                                    'Jalankan SIMRS HAMORI',
-                                                    'IP address sesuai',
-                                                    'Ping Local dan Internet berjalan/reply',
-                                                    'Printer bisa digunakan',
-                                                    'Catridge terisi tinta',
-                                                    'Cek nyalanya Monitor',
-                                                    'Cek fungsi UPS',
-                                                    'Cek fungsi Mouse',
-                                                    'Cek fungsi Keyboard',
-                                                    'Bersihkan Casing bagian dalam dari debu',
-                                                    'Rapihkan pengkabelan',
-                                                    'Rapikan penempatan',
+                                                    'Koneksi Internet',
+                                                    'Printer dan hardware pendukung berfungsi',
+                                                    'Cleaning CPU',
                                                     'Akses Flashdisk terkontrol',
                                                 ];
                                             @endphp
@@ -93,26 +86,6 @@
                                             </tr>
                                         </tfoot>
                                     </table>
-
-                                    {{-- Tanda Tangan --}}
-                                    <div class="mt-6">
-                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Tanda Tangan:</label>
-                                        <div class="border rounded shadow-sm bg-white p-4">
-                                            <canvas id="signature-pad" class="w-1/2 h-52 rounded"
-                                                style="border: 2px solid #9e9e9e;"></canvas>
-                                            <input type="hidden" name="tanda_tangan" id="tanda_tangan">
-                                            <div class="mt-4 flex gap-2">
-                                                <button type="button" id="undo"
-                                                    class="relative p-4 mb-4 mr-1 text-white border border-solid rounded-lg bg-gradient-to-tl from-zinc-800 to-zinc-700 border-slate-100 px-4 py-2 flex items-center gap-2">
-                                                    <i class="fa fa-undo mr-1"></i> Undo
-                                                </button>
-                                                <button type="button" id="clear"
-                                                    class="relative p-4 mb-4 text-white border border-red-300 border-solid rounded-lg bg-gradient-to-tl from-red-600 to-orange-600 px-4 py-2 flex items-center gap-2">
-                                                    <i class="fa fa-trash mr-1"></i> Clear
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
 
                                 </div>
                             </div>

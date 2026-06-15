@@ -59,7 +59,7 @@ class IndicatorExcelSeeder extends Seeder
         Indicator::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        $filePath = 'C:/Users/Samuel/Downloads/MONITORING CAPAIAN INDIKATOR MUTU RS HAMORI.xlsx';
+        $filePath = 'C:\Users\Admin\Herd\sigercep\public\assets\file\MONITORING CAPAIAN INDIKATOR MUTU RS HAMORI.xlsx';
 
         if (!file_exists($filePath)) {
             $this->command->error("File tidak ditemukan: $filePath");

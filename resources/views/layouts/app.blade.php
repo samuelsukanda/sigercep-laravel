@@ -28,6 +28,7 @@
         {{-- @include('layouts.partials.fixed') --}}
     </main>
 
+@stack('modals')
 </body>
 
 {{-- Scripts --}}

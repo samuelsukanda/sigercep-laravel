@@ -39,4 +39,38 @@ class IndicatorController extends Controller
             'indicators', 'tahun', 'jenis', 'jenisOptions', 'tahunOptions'
         ));
     }
+
+    /**
+     * Simpan indikator baru.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'no_urut' => 'nullable|string|max:50',
+            'pj' => 'nullable|string|max:255',
+            'nama_indikator' => 'required|string|max:255',
+            'jenis_indikator' => 'required|string|max:50',
+            'unit_terkait' => 'nullable|string|max:255',
+            'target_value' => 'nullable|numeric',
+            'tahun' => 'required|integer',
+        ]);
+
+        $indicator = Indicator::create([
+            'no_urut' => $request->no_urut,
+            'pj' => $request->pj,
+            'nama_indikator' => $request->nama_indikator,
+            'jenis_indikator' => $request->jenis_indikator,
+            'unit_terkait' => $request->unit_terkait,
+        ]);
+
+        if ($request->filled('target_value')) {
+            IndicatorTarget::create([
+                'indicator_id' => $indicator->id,
+                'tahun' => $request->tahun,
+                'target_value' => $request->target_value,
+            ]);
+        }
+
+        return back()->with('success', 'Indikator berhasil ditambahkan.');
+    }
 }

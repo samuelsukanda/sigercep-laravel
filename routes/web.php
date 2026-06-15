@@ -282,8 +282,13 @@ Route::middleware('auth')->group(function () {
         ->names('hardware');
 
     // Indikator Mutu
-    Route::middleware(['auth', 'permission:mutu,read'])->group(function () {
-        Route::get('indicators', [IndicatorController::class, 'index'])->name('indicators.index');
+    Route::middleware(['auth'])->group(function () {
+        Route::get('indicators', [IndicatorController::class, 'index'])
+            ->middleware('permission:mutu,read')
+            ->name('indicators.index');
+        Route::post('indicators', [IndicatorController::class, 'store'])
+            ->middleware('permission:mutu,create')
+            ->name('indicators.store');
     });
 
     Route::middleware(['auth'])->prefix('indicator-values')->name('indicator-values.')->group(function () {
