@@ -42,6 +42,8 @@ use App\Http\Controllers\HardwareController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserSessionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\IndicatorController;
+use App\Http\Controllers\IndicatorValueController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -278,4 +280,18 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth'])
         ->resource('hardware', HardwareController::class)
         ->names('hardware');
+
+    // Indikator Mutu
+    Route::middleware(['auth', 'permission:mutu,read'])->group(function () {
+        Route::get('indicators', [IndicatorController::class, 'index'])->name('indicators.index');
+    });
+
+    Route::middleware(['auth'])->prefix('indicator-values')->name('indicator-values.')->group(function () {
+        Route::get('bulk-edit', [IndicatorValueController::class, 'editBulk'])
+            ->middleware('permission:mutu,read')
+            ->name('bulk-edit');
+        Route::post('bulk-update', [IndicatorValueController::class, 'updateBulk'])
+            ->middleware('permission:mutu,update')
+            ->name('bulk-update');
+    });
 });
