@@ -71,10 +71,12 @@ $(document).ready(function () {
 
 // Select2
 $(document).ready(function () {
-    $("#unit").select2({
-        placeholder: "Pilih Unit",
-        allowClear: true,
-    });
+    if ($("#unit").is("select")) {
+        $("#unit").select2({
+            placeholder: "Pilih Unit",
+            allowClear: true,
+        });
+    }
 
     $("#unit_asal").select2({
         placeholder: "Pilih Unit Asal",
@@ -86,10 +88,12 @@ $(document).ready(function () {
         allowClear: true,
     });
 
-    $("#lantai").select2({
-        placeholder: "Pilih Lantai",
-        allowClear: true,
-    });
+    if ($("#lantai").is("select")) {
+        $("#lantai").select2({
+            placeholder: "Pilih Lantai",
+            allowClear: true,
+        });
+    }
 
     $("#filter-unit").select2({
         placeholder: "Pilih Unit",

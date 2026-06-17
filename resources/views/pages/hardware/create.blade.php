@@ -18,16 +18,17 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                                 {{-- IP PC --}}
-                                <x-form.input name="ip" label="IP Komputer" :value="old('ip', $hardware->ip ?? '')" required />
+                                <x-form.select name="ip" label="IP Komputer" :options="$ips" :selected="old('ip', $hardware->ip ?? '')"
+                                    required />
 
                                 {{-- Nama --}}
-                                <x-form.input name="nama" label="Nama PC" :value="old('nama', $hardware->nama ?? '')" required />
+                                <x-form.input name="nama" label="Nama PC" :value="old('nama', $hardware->nama ?? '')" required readonly />
 
                                 {{-- Unit --}}
-                                <x-form.select name="unit" label="Unit" :options="config('units.units')" :selected="old('unit', $hardware->unit ?? '')" required />
+                                <x-form.input name="unit" label="Unit" :value="old('unit', $hardware->unit ?? '')" required readonly />
 
                                 {{-- Lantai --}}
-                                <x-form.select name="lantai" label="Lantai" :options="config('units.lantai')" :selected="old('lantai', $hardware->lantai ?? '')" required />
+                                <x-form.input name="lantai" label="Lantai" :value="old('lantai', $hardware->lantai ?? '')" required readonly />
 
                                 {{-- Hari/Tanggal Pengecekan --}}
                                 <x-form.input name="tanggal" label="Hari/Tanggal Pengecekan" :value="old('tanggal', $hardware->tanggal ?? '')"
@@ -110,6 +111,31 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/check-all.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
-    <script src="{{ asset('assets/js/signature-create.js') }}"></script>
+    <script>
+        const hardwareData = @json($hardwareData);
+        $(document).ready(function() {
+            $('#ip').select2({
+                placeholder: 'Pilih IP Komputer',
+                allowClear: true
+            });
+
+            $('#ip').on('change', function() {
+                const selectedIp = $(this).val();
+                if (hardwareData[selectedIp]) {
+                    $('#nama').val(hardwareData[selectedIp].nama_pc);
+                    $('#unit').val(hardwareData[selectedIp].unit);
+                    $('#lantai').val(hardwareData[selectedIp].lantai);
+                } else {
+                    $('#nama').val('');
+                    $('#unit').val('');
+                    $('#lantai').val('');
+                }
+            });
+
+            // Trigger change on load if an IP is already selected
+            if ($('#ip').val()) {
+                $('#ip').trigger('change');
+            }
+        });
+    </script>
 @endpush

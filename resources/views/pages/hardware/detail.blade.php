@@ -53,24 +53,14 @@
                                         @php
                                             $checklistItems = [
                                                 'Wallpaper backround RS',
-                                                'Pastikan login sistem operasi ada dua (admin dan limit)',
-                                                'Pastikan password admin dan limit terkontrol',
+                                                'Password admin dan user terkontrol',
                                                 'Screen saver jalan',
                                                 'Aplikasi remote VNC berjalan',
                                                 'Bersihkan komputer dari software yang tidak diijinkan',
                                                 'Cek kapasitas hardisk sistem operasi C',
-                                                'Jalankan SIMRS HAMORI',
-                                                'IP address sesuai',
-                                                'Ping Local dan Internet berjalan/reply',
-                                                'Printer bisa digunakan',
-                                                'Catridge terisi tinta',
-                                                'Cek nyalanya Monitor',
-                                                'Cek fungsi UPS',
-                                                'Cek fungsi Mouse',
-                                                'Cek fungsi Keyboard',
-                                                'Bersihkan Casing bagian dalam dari debu',
-                                                'Rapihkan pengkabelan',
-                                                'Rapikan penempatan',
+                                                'Koneksi Internet',
+                                                'Printer dan hardware pendukung berfungsi',
+                                                'Cleaning CPU',
                                                 'Akses Flashdisk terkontrol',
                                             ];
 
@@ -98,19 +88,6 @@
                                 </table>
                             </div>
 
-                            {{-- Tanda Tangan --}}
-                            @if ($hardware->tanda_tangan)
-                                <div class="mb-4">
-                                    <label class="block mb-1 text-sm font-semibold text-slate-700">Tanda Tangan</label>
-                                    <img src="{{ asset($hardware->tanda_tangan) }}" alt="Tanda Tangan"
-                                        class="border rounded max-w-xs h-auto mt-2">
-                                </div>
-                            @else
-                                <div class="mb-4">
-                                    <label class="block mb-1 text-sm font-semibold text-slate-700">Tanda Tangan</label>
-                                    <p class="text-slate-600 italic">Belum ada tanda tangan.</p>
-                                </div>
-                            @endif
                         </div>
 
                         <div class="mt-6">

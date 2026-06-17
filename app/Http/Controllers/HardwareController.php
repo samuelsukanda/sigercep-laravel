@@ -57,30 +57,43 @@ class HardwareController extends Controller
 
     public function create()
     {
-        return view('pages.hardware.create');
+        $hardwareData = [];
+        $ips = [];
+        $path = public_path('assets/file/Hardware.xlsx');
+        
+        if (file_exists($path)) {
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($path);
+            $worksheet = $spreadsheet->getActiveSheet();
+            $rows = $worksheet->toArray();
+            
+            foreach ($rows as $index => $row) {
+                if ($index === 0) continue; // Skip header
+                
+                $ip = $row[4] ?? null;
+                if (!empty($ip)) {
+                    $ips[] = $ip;
+                    $hardwareData[$ip] = [
+                        'nama_pc' => $row[1] ?? '',
+                        'unit' => $row[2] ?? '',
+                        'lantai' => $row[3] ?? '',
+                    ];
+                }
+            }
+        }
+
+        return view('pages.hardware.create', compact('hardwareData', 'ips'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'ip'           => 'required|string|max:255',
             'nama'         => 'required|string|max:255',
             'unit'         => 'required|string|max:255',
             'lantai'       => 'required|string|max:255',
             'tanggal'      => 'required|date',
             'checklist'    => 'nullable|array',
-            'tanda_tangan' => 'required|string',
         ]);
-
-        if ($request->has('tanda_tangan')) {
-            $signatureData = $request->input('tanda_tangan');
-            $data = explode(',', $signatureData);
-            $decoded = base64_decode($data[1]);
-
-            $path = 'signatures/hardware/signature_' . time() . '.png';
-            Storage::disk('public')->put($path, $decoded);
-
-            $validated['tanda_tangan'] = 'storage/' . $path;
-        }
 
         Hardware::create($validated);
 
@@ -95,41 +108,43 @@ class HardwareController extends Controller
 
     public function edit(Hardware $hardware)
     {
-        return view('pages.hardware.edit', compact('hardware'));
+        $hardwareData = [];
+        $ips = [];
+        $path = public_path('assets/file/Hardware.xlsx');
+        
+        if (file_exists($path)) {
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($path);
+            $worksheet = $spreadsheet->getActiveSheet();
+            $rows = $worksheet->toArray();
+            
+            foreach ($rows as $index => $row) {
+                if ($index === 0) continue; // Skip header
+                
+                $ip = $row[4] ?? null;
+                if (!empty($ip)) {
+                    $ips[] = $ip;
+                    $hardwareData[$ip] = [
+                        'nama_pc' => $row[1] ?? '',
+                        'unit' => $row[2] ?? '',
+                        'lantai' => $row[3] ?? '',
+                    ];
+                }
+            }
+        }
+
+        return view('pages.hardware.edit', compact('hardware', 'hardwareData', 'ips'));
     }
 
     public function update(Request $request, Hardware $hardware)
     {
         $validated = $request->validate([
+            'ip'           => 'required|string|max:255',
             'nama'         => 'required|string|max:255',
             'unit'         => 'required|string|max:255',
             'lantai'       => 'required|string|max:255',
             'tanggal'      => 'required|date',
             'checklist'    => 'nullable|array',
-            'tanda_tangan' => 'nullable|string',
         ]);
-
-        if ($request->filled('tanda_tangan')) {
-            $signatureData = $request->input('tanda_tangan');
-            $data = explode(',', $signatureData);
-            $decoded = base64_decode($data[1]);
-
-            $path = 'signatures/hardware/signature_' . time() . '.png';
-            Storage::disk('public')->put($path, $decoded);
-
-            if (
-                $hardware->tanda_tangan &&
-                Storage::disk('public')->exists(str_replace('storage/', '', $hardware->tanda_tangan))
-            ) {
-                Storage::disk('public')->delete(
-                    str_replace('storage/', '', $hardware->tanda_tangan)
-                );
-            }
-
-            $validated['tanda_tangan'] = 'storage/' . $path;
-        } else {
-            $validated['tanda_tangan'] = $hardware->tanda_tangan;
-        }
 
         $hardware->update($validated);
 
@@ -139,13 +154,6 @@ class HardwareController extends Controller
 
     public function destroy(Hardware $hardware)
     {
-        if ($hardware->tanda_tangan) {
-            $path = str_replace('storage/', '', $hardware->tanda_tangan);
-            if (Storage::disk('public')->exists($path)) {
-                Storage::disk('public')->delete($path);
-            }
-        }
-
         $hardware->delete();
 
         return redirect()->route('hardware.index')

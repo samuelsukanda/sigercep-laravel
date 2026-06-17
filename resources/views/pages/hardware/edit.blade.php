@@ -18,14 +18,18 @@
                             @method('PUT')
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {{-- IP PC --}}
+                                <x-form.select name="ip" label="IP Komputer" :options="$ips" :selected="old('ip', $hardware->ip ?? '')"
+                                    required />
+
                                 {{-- Nama --}}
-                                <x-form.input name="nama" label="Nama" :value="old('nama', $hardware->nama ?? '')" required />
+                                <x-form.input name="nama" label="Nama PC" :value="old('nama', $hardware->nama ?? '')" required readonly />
 
                                 {{-- Unit --}}
-                                <x-form.select name="unit" label="Unit" :options="config('units.units')" :selected="old('unit', $hardware->unit ?? '')" required />
+                                <x-form.input name="unit" label="Unit" :value="old('unit', $hardware->unit ?? '')" required readonly />
 
                                 {{-- Lantai --}}
-                                <x-form.select name="lantai" label="Lantai" :options="config('units.lantai')" :selected="old('lantai', $hardware->lantai ?? '')" required />
+                                <x-form.input name="lantai" label="Lantai" :value="old('lantai', $hardware->lantai ?? '')" required readonly />
 
                                 {{-- Hari/Tanggal Pengecekan --}}
                                 <x-form.input name="tanggal" label="Hari/Tanggal Pengecekan" :value="old('tanggal', $hardware->tanggal ?? '')"
@@ -46,24 +50,14 @@
                                             @php
                                                 $checklistItems = [
                                                     'Wallpaper backround RS',
-                                                    'Pastikan login sistem operasi ada dua (admin dan limit)',
-                                                    'Pastikan password admin dan limit terkontrol',
+                                                    'Password admin dan user terkontrol',
                                                     'Screen saver jalan',
                                                     'Aplikasi remote VNC berjalan',
                                                     'Bersihkan komputer dari software yang tidak diijinkan',
                                                     'Cek kapasitas hardisk sistem operasi C',
-                                                    'Jalankan SIMRS HAMORI',
-                                                    'IP address sesuai',
-                                                    'Ping Local dan Internet berjalan/reply',
-                                                    'Printer bisa digunakan',
-                                                    'Catridge terisi tinta',
-                                                    'Cek nyalanya Monitor',
-                                                    'Cek fungsi UPS',
-                                                    'Cek fungsi Mouse',
-                                                    'Cek fungsi Keyboard',
-                                                    'Bersihkan Casing bagian dalam dari debu',
-                                                    'Rapihkan pengkabelan',
-                                                    'Rapikan penempatan',
+                                                    'Koneksi Internet',
+                                                    'Printer dan hardware pendukung berfungsi',
+                                                    'Cleaning CPU',
                                                     'Akses Flashdisk terkontrol',
                                                 ];
 
@@ -111,57 +105,7 @@
                                     </table>
                                 </div>
 
-                                {{-- Tanda Tangan --}}
-                                <div class="mt-6">
-                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Tanda Tangan:</label>
-                                    <div class="border rounded shadow-sm bg-white p-4">
-                                        {{-- Current signature preview --}}
-                                        @if ($hardware->tanda_tangan)
-                                            <div id="current-signature-container" class="mb-4">
-                                                <p class="text-sm text-gray-600 mb-2">Tanda tangan saat ini:</p>
-                                                <img id="signature-preview" src="{{ asset($hardware->tanda_tangan) }}"
-                                                    class="max-w-xs h-auto border rounded" alt="Tanda tangan saat ini" />
-                                                <div class="mt-2">
-                                                    <button type="button" id="edit-signature"
-                                                        class="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">
-                                                        Edit Tanda Tangan
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        @endif
 
-                                        {{-- Signature canvas container --}}
-                                        <div id="signature-container" class="{{ $hardware->tanda_tangan ? 'hidden' : '' }}">
-                                            <p class="text-sm text-gray-600 mb-2">
-                                                {{ $hardware->tanda_tangan ? 'Buat tanda tangan baru:' : 'Buat tanda tangan:' }}
-                                            </p>
-
-                                            {{-- Signature canvas --}}
-                                            <canvas id="signature-pad" class="signature-canvas"></canvas>
-
-                                            {{-- Action buttons --}}
-                                            <div class="mt-4 flex gap-2 flex-wrap">
-                                                <button type="button" id="undo"
-                                                    class="relative p-4 mb-4 mr-1 text-white border border-solid rounded-lg bg-gradient-to-tl from-zinc-800 to-zinc-700 border-slate-100 px-4 py-2 flex items-center gap-2">
-                                                    <i class="fa fa-undo mr-1"></i> Undo
-                                                </button>
-                                                <button type="button" id="clear"
-                                                    class="relative p-4 mb-4 mr-1 text-white border border-red-300 border-solid rounded-lg bg-gradient-to-tl from-red-600 to-orange-600 px-4 py-2 flex items-center gap-2">
-                                                    <i class="fa fa-trash mr-1"></i> Clear
-                                                </button>
-                                                @if ($hardware->tanda_tangan)
-                                                    <button type="button" id="cancel-edit"
-                                                        class="relative p-4 mb-4 text-white border border-solid rounded-lg bg-gradient-to-tl from-slate-600 to-slate-300 border-slate-100 px-4 py-2 flex items-center gap-2">
-                                                        <i class="fa fa-times mr-1"></i> Batal
-                                                    </button>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                        {{-- Hidden input for signature data --}}
-                                        <input type="hidden" id="tanda_tangan" name="tanda_tangan" value="">
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="mt-6">
@@ -181,6 +125,31 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/check-all.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
-    <script src="{{ asset('assets/js/signature-edit.js') }}"></script>
+    <script>
+        const hardwareData = @json($hardwareData);
+        $(document).ready(function() {
+            $('#ip').select2({
+                placeholder: 'Pilih IP Komputer',
+                allowClear: true
+            });
+
+            $('#ip').on('change', function() {
+                const selectedIp = $(this).val();
+                if (hardwareData[selectedIp]) {
+                    $('#nama').val(hardwareData[selectedIp].nama_pc);
+                    $('#unit').val(hardwareData[selectedIp].unit);
+                    $('#lantai').val(hardwareData[selectedIp].lantai);
+                } else {
+                    $('#nama').val('');
+                    $('#unit').val('');
+                    $('#lantai').val('');
+                }
+            });
+
+            // Trigger change on load if an IP is already selected
+            if ($('#ip').val()) {
+                $('#ip').trigger('change');
+            }
+        });
+    </script>
 @endpush

@@ -12,12 +12,12 @@ class Hardware extends Model
     protected $table = 'hardware';
 
     protected $fillable = [
+        'ip',
         'nama',
         'unit',
         'lantai',
         'tanggal',
         'checklist',
-        'tanda_tangan',
     ];
 
     protected $casts = [
