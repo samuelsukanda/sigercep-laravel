@@ -27,9 +27,6 @@ class Indicator extends Model
         return $this->hasMany(IndicatorValue::class);
     }
 
-    /**
-     * Ambil target_value untuk tahun tertentu.
-     */
     public function getTarget($tahun)
     {
         return $this->targets->where('tahun', $tahun)->first()->target_value ?? null;

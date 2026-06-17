@@ -28,10 +28,11 @@
         {{-- @include('layouts.partials.fixed') --}}
     </main>
 
-@stack('modals')
+    @stack('modals')
 </body>
 
 {{-- Scripts --}}
 @include('layouts.partials.scripts')
 @stack('scripts')
+
 </html>

@@ -21,7 +21,7 @@
                                 <x-form.input name="ip" label="IP Komputer" :value="old('ip', $hardware->ip ?? '')" required />
 
                                 {{-- Nama --}}
-                                <x-form.input name="nama" label="Nama" :value="old('nama', $hardware->nama ?? '')" required />
+                                <x-form.input name="nama" label="Nama PC" :value="old('nama', $hardware->nama ?? '')" required />
 
                                 {{-- Unit --}}
                                 <x-form.select name="unit" label="Unit" :options="config('units.units')" :selected="old('unit', $hardware->unit ?? '')" required />
@@ -32,6 +32,9 @@
                                 {{-- Hari/Tanggal Pengecekan --}}
                                 <x-form.input name="tanggal" label="Hari/Tanggal Pengecekan" :value="old('tanggal', $hardware->tanggal ?? '')"
                                     id="tanggal" placeholder="Pilih Tanggal" required />
+
+                                {{-- Tambah Device Pendukung --}}
+
 
                                 {{-- Table Checklist Hardware --}}
                                 <div class="mt-4">

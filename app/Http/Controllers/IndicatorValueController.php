@@ -14,9 +14,6 @@ class IndicatorValueController extends Controller
         $this->middleware('permission:mutu,update')->only(['updateBulk']);
     }
 
-    /**
-     * Tampilkan form bulk input capaian bulanan.
-     */
     public function editBulk(Request $request)
     {
         $tahun = $request->get('tahun', date('Y'));
@@ -33,11 +30,11 @@ class IndicatorValueController extends Controller
         ];
 
         $indicators = Indicator::where('jenis_indikator', $jenis)
+            ->whereHas('targets', fn($q) => $q->where('tahun', $tahun))
             ->with(['targets' => fn($q) => $q->where('tahun', $tahun)])
             ->orderByRaw("CAST(no_urut AS UNSIGNED)")
             ->get();
 
-        // Ambil nilai yang sudah ada untuk (tahun, bulan), di-index berdasarkan indicator_id
         $existing = IndicatorValue::where('tahun', $tahun)
             ->where('bulan', $bulan)
             ->whereIn('indicator_id', $indicators->pluck('id'))
@@ -50,9 +47,6 @@ class IndicatorValueController extends Controller
         ));
     }
 
-    /**
-     * Simpan semua nilai capaian bulanan (bulk update/insert).
-     */
     public function updateBulk(Request $request)
     {
         $request->validate([
@@ -69,13 +63,11 @@ class IndicatorValueController extends Controller
             $numerator   = isset($data['numerator'])   && $data['numerator']   !== '' ? (float) $data['numerator']   : null;
             $denominator = isset($data['denominator']) && $data['denominator'] !== '' ? (float) $data['denominator'] : null;
 
-            // Hitung nilai otomatis dari numerator/denominator jika keduanya terisi
             if ($numerator !== null && $denominator !== null && $denominator > 0) {
                 $nilai = round(($numerator / $denominator) * 100, 2);
             } elseif ($nilaiInput !== null && $nilaiInput !== '') {
                 $nilai = (float) $nilaiInput;
             } else {
-                // Tidak ada data — hapus jika sudah ada sebelumnya
                 IndicatorValue::where([
                     'indicator_id' => $indicatorId,
                     'tahun'        => $request->tahun,

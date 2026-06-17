@@ -17,9 +17,6 @@ class IndicatorController extends Controller
         $this->middleware('permission:mutu,delete')->only(['destroy']);
     }
 
-    /**
-     * Tampilan daftar indikator dengan filter tahun & jenis.
-     */
     public function index(Request $request)
     {
         $tahun   = $request->get('tahun', date('Y'));
@@ -28,6 +25,7 @@ class IndicatorController extends Controller
         $tahunOptions = [2025, 2026, 2027];
 
         $indicators = Indicator::where('jenis_indikator', $jenis)
+            ->whereHas('targets', fn($q) => $q->where('tahun', $tahun))
             ->with([
                 'targets' => fn($q) => $q->where('tahun', $tahun),
                 'values'  => fn($q) => $q->where('tahun', $tahun)->orderBy('bulan'),
@@ -40,9 +38,6 @@ class IndicatorController extends Controller
         ));
     }
 
-    /**
-     * Simpan indikator baru.
-     */
     public function store(Request $request)
     {
         $request->validate([

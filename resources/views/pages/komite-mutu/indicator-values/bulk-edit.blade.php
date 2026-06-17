@@ -324,7 +324,7 @@
 
                     <div class="flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-slate-700">
                         <button type="button"
-                            class="px-5 py-2.5 text-sm font-medium text-slate-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all"
+                            class="px-5 py-2.5 mr-2 text-sm font-medium text-slate-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all"
                             onclick="closeAddModal()">
                             Batal
                         </button>
@@ -347,7 +347,6 @@
             if (!modal) return;
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            // Prevent body scroll when modal is open
             document.body.style.overflow = 'hidden';
         }
 
@@ -356,18 +355,14 @@
             if (!modal) return;
             modal.classList.add('hidden');
             modal.classList.remove('flex');
-            // Restore body scroll
             document.body.style.overflow = '';
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Pindahkan modal ke body agar tidak terjebak di dalam <main>
-            // yang punya transition-all (membuat containing block baru untuk fixed positioning)
             const modal = document.getElementById('addIndicatorModal');
             if (modal) {
                 document.body.appendChild(modal);
 
-                // Close modal when clicking outside the dialog box
                 modal.addEventListener('click', function(e) {
                     if (e.target === this) closeAddModal();
                 });
@@ -387,7 +382,6 @@
 
                     if (!isNaN(num) && !isNaN(den) && den > 0) {
                         const pct = (num / den) * 100;
-                        // Set and round to 2 decimal places
                         nilaiInput.value = Math.round(pct * 100) / 100;
                     }
                 }
