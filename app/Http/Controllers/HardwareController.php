@@ -12,7 +12,7 @@ class HardwareController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:hardware,read')->only(['index', 'show']);
+        $this->middleware('permission:hardware,read')->only(['index', 'show', 'report']);
         $this->middleware('permission:hardware,create')->only(['create', 'store']);
         $this->middleware('permission:hardware,update')->only(['edit', 'update']);
         $this->middleware('permission:hardware,delete')->only(['destroy']);
@@ -53,6 +53,55 @@ class HardwareController extends Controller
         $hardware = $query->orderBy('tanggal', 'desc')->get();
 
         return view('pages.hardware.index', compact('hardware', 'isFiltered'));
+    }
+
+    public function report(Request $request)
+    {
+        $bulan = $request->input('bulan', date('m'));
+        $tahun = $request->input('tahun', date('Y'));
+        $selectedLantai = $request->input('lantai');
+
+        $pcMasters = [];
+        $listLantai = [];
+        $path = public_path('assets/file/Hardware.xlsx');
+        
+        if (file_exists($path)) {
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($path);
+            $worksheet = $spreadsheet->getActiveSheet();
+            $rows = $worksheet->toArray();
+            
+            foreach ($rows as $index => $row) {
+                if ($index === 0) continue; // Skip header
+                
+                $ip = $row[4] ?? null;
+                $lantai = $row[3] ?? '';
+                if (!empty($ip)) {
+                    if (!empty($lantai) && !in_array($lantai, $listLantai)) {
+                        $listLantai[] = $lantai;
+                    }
+
+                    if ($selectedLantai && $lantai !== $selectedLantai) {
+                        continue;
+                    }
+
+                    $pcMasters[] = (object)[
+                        'nama_pc' => $row[1] ?? '',
+                        'unit' => $row[2] ?? '',
+                        'lantai' => $lantai,
+                        'ip' => $ip,
+                    ];
+                }
+            }
+        }
+        
+        sort($listLantai);
+
+        $hardwareChecks = Hardware::whereYear('tanggal', $tahun)
+            ->whereMonth('tanggal', $bulan)
+            ->get()
+            ->keyBy('ip');
+
+        return view('pages.hardware.reports', compact('pcMasters', 'hardwareChecks', 'bulan', 'tahun', 'listLantai', 'selectedLantai'));
     }
 
     public function create()

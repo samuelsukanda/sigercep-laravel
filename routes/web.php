@@ -277,9 +277,10 @@ Route::middleware('auth')->group(function () {
         ->names('toner');
 
     // Hardware
-    Route::middleware(['auth'])
-        ->resource('hardware', HardwareController::class)
-        ->names('hardware');
+    Route::middleware(['auth'])->group(function () {
+        Route::get('hardware/reports', [HardwareController::class, 'report'])->name('hardware.reports');
+        Route::resource('hardware', HardwareController::class)->names('hardware');
+    });
 
     // Indikator Mutu
     Route::middleware(['auth'])->group(function () {

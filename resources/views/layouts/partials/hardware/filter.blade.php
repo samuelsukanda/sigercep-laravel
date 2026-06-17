@@ -39,16 +39,28 @@
                         </a>
                     </div>
 
-                    {{-- Tambah Data --}}
-                    @canAccess('hardware', 'create')
-                    <a href="{{ route('hardware.create') }}"
-                        class="inline-flex items-center justify-center
+                    <div class="flex items-end">
+                        {{-- Reports --}}
+                        @canAccess('hardware', 'read')
+                        <a href="{{ route('hardware.reports') }}"
+                            class="mr-1 inline-flex items-center justify-center
+                            h-9 px-4 text-xs font-semibold text-slate-700 uppercase
+                            rounded-lg shadow-md bg-gray-200 hover:shadow-sm active:opacity-85 transition-all">
+                            <i class="fas fa-file-alt mr-2"></i> Laporan
+                        </a>
+                        @endcanAccess
+
+                        {{-- Tambah Data --}}
+                        @canAccess('hardware', 'create')
+                        <a href="{{ route('hardware.create') }}"
+                            class="inline-flex items-center justify-center
                             h-9 px-4 text-xs font-semibold text-white uppercase
                             rounded-lg shadow-md hover:shadow-sm active:opacity-85 transition-all"
-                        style="background-color: #7664E4 !important;">
-                        Tambah Data
-                    </a>
-                    @endcanAccess
+                            style="background-color: #7664E4 !important;">
+                            Tambah Data
+                        </a>
+                        @endcanAccess
+                    </div>
                 </div>
 
             </div>
