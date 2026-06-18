@@ -1,6 +1,30 @@
 (function () {
     "use strict";
 
+    // Inject styles to override global button style issues with SweetAlert
+    const swalStyle = document.createElement('style');
+    swalStyle.innerHTML = `
+      .swal2-container .swal2-styled.swal2-confirm {
+        background-color: #ef4444 !important;
+        color: #ffffff !important;
+        border: none !important;
+        transition: background-color 0.2s !important;
+      }
+      .swal2-container .swal2-styled.swal2-confirm:hover {
+        background-color: #dc2626 !important;
+      }
+      .swal2-container .swal2-styled.swal2-cancel {
+        background-color: #6b7280 !important;
+        color: #ffffff !important;
+        border: none !important;
+        transition: background-color 0.2s !important;
+      }
+      .swal2-container .swal2-styled.swal2-cancel:hover {
+        background-color: #4b5563 !important;
+      }
+    `;
+    document.head.appendChild(swalStyle);
+
     const csrfMeta = document.querySelector('meta[name="csrf-token"]');
     const csrfToken = csrfMeta ? csrfMeta.getAttribute("content") : "";
 
@@ -355,45 +379,22 @@ document.addEventListener("click", function (e) {
     const btn = e.target.closest(".btn-delete-rule, .btn-delete-trigger");
     if (!btn) return;
 
+    e.preventDefault();
     const form = btn.closest("form");
     const name = form.dataset.name || "data ini";
 
-    toastr.clear();
-
-    toastr.options = {
-        closeButton: false,
-        progressBar: true,
-        timeOut: 0,
-        extendedTimeOut: 0,
-        positionClass: "toast-top-center",
-        tapToDismiss: false,
-        newestOnTop: true,
-        onShown: function () {
-            const toastEl = document.querySelector(".toast");
-            if (!toastEl || toastEl.querySelector(".confirm-area")) return;
-
-            const actionArea = document.createElement("div");
-            actionArea.className = "mt-2 text-center confirm-area";
-            actionArea.innerHTML = `
-                <button class="btn btn-sm btn-danger me-2 btn-confirm-delete">
-                    Ya, Hapus
-                </button>
-                <button class="btn btn-sm btn-secondary btn-cancel-delete">
-                    Batal
-                </button>
-            `;
-
-            toastEl.appendChild(actionArea);
-
-            toastEl.querySelector(".btn-confirm-delete").onclick = () => {
-                form.submit();
-            };
-
-            toastEl.querySelector(".btn-cancel-delete").onclick = () => {
-                toastr.remove();
-            };
-        },
-    };
-
-    toastr.warning(`Yakin hapus <b>${name}</b>?`, "Konfirmasi Hapus");
+    Swal.fire({
+        title: "Konfirmasi Hapus",
+        html: `Yakin ingin menghapus <b>${name}</b>?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#ef4444",
+        cancelButtonColor: "#6b7280",
+        confirmButtonText: "Ya, Hapus!",
+        cancelButtonText: "Batal"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.submit();
+        }
+    });
 });

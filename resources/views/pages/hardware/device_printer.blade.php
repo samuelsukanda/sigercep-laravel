@@ -478,7 +478,8 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/alert-delete.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('assets/js/alert-delete-swal.js') }}"></script>
 <script>
     function openModal() {
         const modal = document.getElementById('addModal');
