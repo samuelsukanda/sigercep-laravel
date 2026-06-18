@@ -61,6 +61,7 @@
                                                 'Koneksi Internet',
                                                 'Printer dan hardware pendukung berfungsi',
                                                 'Cleaning CPU',
+                                                'Hapus cache temp dan cache browser',
                                                 'Akses Flashdisk terkontrol',
                                             ];
 

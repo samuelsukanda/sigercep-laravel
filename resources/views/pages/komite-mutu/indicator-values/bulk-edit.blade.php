@@ -252,88 +252,328 @@
 {{-- Modal Tambah Indikator --}}
 @push('modals')
     <div id="addIndicatorModal"
-        class="modal-overlay hidden items-center justify-center bg-slate-900/50 backdrop-blur-[2px]"
-        style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999;">
-        <div class="relative w-full max-w-2xl mx-auto px-4">
-            <div
-                class="relative bg-white dark:bg-slate-850 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden">
+         tabindex="-1"
+         aria-hidden="true"
+         aria-labelledby="modalTitle"
+         role="dialog"
+         class="modal-overlay hidden items-center justify-center"
+         style="
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: transparent;
+            padding: 1rem;
+         ">
 
-                {{-- Header --}}
-                <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-slate-700"
-                    style="background: linear-gradient(135deg, #7664E4 0%, #5a4fcf 100%);">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
-                            <i class="fas fa-plus text-white text-sm"></i>
+        {{-- Dialog container --}}
+        <div class="relative w-full" style="max-width: 480px; margin: auto;">
+            <div style="
+                background: #ffffff;
+                border-radius: 16px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+                overflow: hidden;
+            ">
+
+                {{-- ── Header ── --}}
+                <div style="
+                    background: #7664E4;
+                    padding: 1rem 1.25rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                ">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="
+                            width: 32px; height: 32px;
+                            border-radius: 8px;
+                            background: rgba(255,255,255,0.18);
+                            display: flex; align-items: center; justify-content: center;
+                            flex-shrink: 0;
+                        ">
+                            <i class="fas fa-chart-line" style="color: #fff; font-size: 13px;"></i>
                         </div>
-                        <h3 class="text-base font-bold text-white tracking-wide">
-                            Tambah Indikator Baru
-                        </h3>
+                        <div>
+                            <h3 id="modalTitle" style="
+                                margin: 0;
+                                font-size: 14px;
+                                font-weight: 700;
+                                color: #fff;
+                                line-height: 1.2;
+                            ">Tambah Indikator Baru</h3>
+                            <p style="
+                                margin: 0;
+                                font-size: 11px;
+                                color: rgba(255,255,255,0.7);
+                                margin-top: 1px;
+                            ">Kategori: {{ ucfirst(str_replace('-', ' ', $jenis)) }}</p>
+                        </div>
                     </div>
                     <button type="button"
-                        class="text-white/80 hover:text-white hover:bg-white/20 rounded-lg w-8 h-8 inline-flex justify-center items-center transition-all"
-                        onclick="closeAddModal()">
-                        <i class="fas fa-times"></i>
+                        onclick="closeAddModal()"
+                        aria-label="Tutup modal"
+                        style="
+                            width: 30px; height: 30px;
+                            border-radius: 8px;
+                            background: rgba(255,255,255,0.15);
+                            border: none;
+                            cursor: pointer;
+                            display: flex; align-items: center; justify-content: center;
+                            transition: background 0.15s;
+                            flex-shrink: 0;
+                        "
+                        onmouseover="this.style.background='rgba(255,255,255,0.25)'"
+                        onmouseout="this.style.background='rgba(255,255,255,0.15)'">
+                        <i class="fas fa-times" style="color: #fff; font-size: 13px;"></i>
                     </button>
                 </div>
 
-                <form action="{{ route('indicators.store') }}" method="POST" class="p-6">
+                {{-- ── Body ── --}}
+                <form action="{{ route('indicators.store') }}"
+                      method="POST"
+                      style="padding: 1.375rem 1.25rem 1.25rem;">
                     @csrf
                     <input type="hidden" name="tahun" value="{{ $tahun }}">
                     <input type="hidden" name="jenis_indikator" value="{{ $jenis }}">
 
-                    <div class="grid gap-4 mb-4 grid-cols-2">
-                        <div class="col-span-2 sm:col-span-1">
+                    {{-- No Urut & Target --}}
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1rem;">
+                        <div>
                             <label for="no_urut"
-                                class="block mb-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">No
-                                Urut</label>
-                            <input type="text" name="no_urut" id="no_urut"
-                                class="bg-white mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:text-white"
-                                placeholder="e.g. 1, 2a, dst">
+                                   style="
+                                       display: block;
+                                       font-size: 11px;
+                                       font-weight: 700;
+                                       color: #475569;
+                                       text-transform: uppercase;
+                                       letter-spacing: 0.06em;
+                                       margin-bottom: 5px;
+                                   ">
+                                No Urut
+                            </label>
+                            <input
+                                type="text"
+                                id="no_urut"
+                                name="no_urut"
+                                placeholder="e.g. 1, 2a, dst"
+                                value="{{ old('no_urut') }}"
+                                style="
+                                    width: 100%;
+                                    box-sizing: border-box;
+                                    height: 38px;
+                                    padding: 0 11px;
+                                    font-size: 13.5px;
+                                    color: #1e293b;
+                                    background: #f8fafc;
+                                    border: 1px solid #cbd5e1;
+                                    border-radius: 8px;
+                                    outline: none;
+                                    transition: border-color 0.15s, box-shadow 0.15s;
+                                "
+                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
+                            />
                         </div>
-                        <div class="col-span-2 sm:col-span-1">
+                        <div>
                             <label for="target_value"
-                                class="block mb-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Target
-                                (%)</label>
-                            <input type="number" step="any" name="target_value" id="target_value"
-                                class="bg-white mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:text-white"
-                                placeholder="e.g. 80">
-                        </div>
-                        <div class="col-span-2">
-                            <label for="nama_indikator"
-                                class="block mb-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Nama
-                                Indikator <span class="text-red-500">*</span></label>
-                            <input type="text" name="nama_indikator" id="nama_indikator"
-                                class="bg-white mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:text-white"
-                                required>
-                        </div>
-                        <div class="col-span-2 sm:col-span-1">
-                            <label for="pj"
-                                class="block mb-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Penanggung
-                                Jawab (PJ)</label>
-                            <input type="text" name="pj" id="pj"
-                                class="bg-white mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:text-white">
-                        </div>
-                        <div class="col-span-2 sm:col-span-1">
-                            <label for="unit_terkait"
-                                class="block mb-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Unit
-                                Terkait</label>
-                            <input type="text" name="unit_terkait" id="unit_terkait"
-                                class="bg-white mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full p-2.5 dark:bg-slate-800 dark:border-slate-600 dark:text-white">
+                                   style="
+                                       display: block;
+                                       font-size: 11px;
+                                       font-weight: 700;
+                                       color: #475569;
+                                       text-transform: uppercase;
+                                       letter-spacing: 0.06em;
+                                       margin-bottom: 5px;
+                                   ">
+                                Target (%)
+                            </label>
+                            <input
+                                type="number"
+                                step="any"
+                                id="target_value"
+                                name="target_value"
+                                placeholder="e.g. 80"
+                                value="{{ old('target_value') }}"
+                                style="
+                                    width: 100%;
+                                    box-sizing: border-box;
+                                    height: 38px;
+                                    padding: 0 11px;
+                                    font-size: 13.5px;
+                                    color: #1e293b;
+                                    background: #f8fafc;
+                                    border: 1px solid #cbd5e1;
+                                    border-radius: 8px;
+                                    outline: none;
+                                    transition: border-color 0.15s, box-shadow 0.15s;
+                                "
+                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
+                            />
                         </div>
                     </div>
 
-                    <div class="flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-slate-700">
+                    {{-- Nama Indikator --}}
+                    <div style="margin-bottom: 1rem;">
+                        <label for="nama_indikator"
+                               style="
+                                   display: block;
+                                   font-size: 11px;
+                                   font-weight: 700;
+                                   color: #475569;
+                                   text-transform: uppercase;
+                                   letter-spacing: 0.06em;
+                                   margin-bottom: 5px;
+                               ">
+                            Nama Indikator <span style="color: #ef4444;">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="nama_indikator"
+                            name="nama_indikator"
+                            required
+                            value="{{ old('nama_indikator') }}"
+                            style="
+                                width: 100%;
+                                box-sizing: border-box;
+                                height: 38px;
+                                padding: 0 11px;
+                                font-size: 13.5px;
+                                color: #1e293b;
+                                background: #f8fafc;
+                                border: 1px solid #cbd5e1;
+                                border-radius: 8px;
+                                outline: none;
+                                transition: border-color 0.15s, box-shadow 0.15s;
+                            "
+                            onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
+                        />
+                    </div>
+
+                    {{-- PJ & Unit Terkait --}}
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.375rem;">
+                        <div>
+                            <label for="pj"
+                                   style="
+                                       display: block;
+                                       font-size: 11px;
+                                       font-weight: 700;
+                                       color: #475569;
+                                       text-transform: uppercase;
+                                       letter-spacing: 0.06em;
+                                       margin-bottom: 5px;
+                                   ">
+                                PJ (Penanggung Jawab)
+                            </label>
+                            <input
+                                type="text"
+                                id="pj"
+                                name="pj"
+                                value="{{ old('pj') }}"
+                                style="
+                                    width: 100%;
+                                    box-sizing: border-box;
+                                    height: 38px;
+                                    padding: 0 11px;
+                                    font-size: 13.5px;
+                                    color: #1e293b;
+                                    background: #f8fafc;
+                                    border: 1px solid #cbd5e1;
+                                    border-radius: 8px;
+                                    outline: none;
+                                    transition: border-color 0.15s, box-shadow 0.15s;
+                                "
+                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
+                            />
+                        </div>
+                        <div>
+                            <label for="unit_terkait"
+                                   style="
+                                       display: block;
+                                       font-size: 11px;
+                                       font-weight: 700;
+                                       color: #475569;
+                                       text-transform: uppercase;
+                                       letter-spacing: 0.06em;
+                                       margin-bottom: 5px;
+                                   ">
+                                Unit Terkait
+                            </label>
+                            <input
+                                type="text"
+                                id="unit_terkait"
+                                name="unit_terkait"
+                                value="{{ old('unit_terkait') }}"
+                                style="
+                                    width: 100%;
+                                    box-sizing: border-box;
+                                    height: 38px;
+                                    padding: 0 11px;
+                                    font-size: 13.5px;
+                                    color: #1e293b;
+                                    background: #f8fafc;
+                                    border: 1px solid #cbd5e1;
+                                    border-radius: 8px;
+                                    outline: none;
+                                    transition: border-color 0.15s, box-shadow 0.15s;
+                                "
+                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
+                            />
+                        </div>
+                    </div>
+
+                    {{-- ── Footer / Action buttons ── --}}
+                    <div style="
+                        border-top: 1px solid #f1f5f9;
+                        padding-top: 1rem;
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: center;
+                        gap: 8px;
+                    ">
                         <button type="button"
-                            class="px-5 py-2.5 mr-2 text-sm font-medium text-slate-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all"
-                            onclick="closeAddModal()">
+                            onclick="closeAddModal()"
+                            style="
+                                height: 38px;
+                                padding: 0 16px;
+                                font-size: 13px;
+                                font-weight: 600;
+                                color: #64748b;
+                                background: #f1f5f9;
+                                border: 1px solid #e2e8f0;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                transition: background 0.15s;
+                            "
+                            onmouseover="this.style.background='#e2e8f0'"
+                            onmouseout="this.style.background='#f1f5f9'">
                             Batal
                         </button>
                         <button type="submit"
-                            class="px-5 py-2.5 text-sm font-bold text-white rounded-lg shadow-md hover:shadow-lg transition-all inline-flex items-center gap-2"
-                            style="background: linear-gradient(135deg, #7664E4 0%, #5a4fcf 100%);">
-                            <i class="fas fa-save mr-1"></i> Simpan
+                            style="
+                                height: 38px;
+                                padding: 0 20px;
+                                font-size: 13px;
+                                font-weight: 700;
+                                color: #fff;
+                                background: #7664E4;
+                                border: none;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                display: flex;
+                                align-items: center;
+                                gap: 7px;
+                                transition: background 0.15s, box-shadow 0.15s;
+                            "
+                            onmouseover="this.style.background='#6453d4'; this.style.boxShadow='0 4px 12px rgba(118,100,228,0.35)'"
+                            onmouseout="this.style.background='#7664E4'; this.style.boxShadow='none'">
+                            <i class="fas fa-save" style="font-size: 12px;"></i>
+                            Simpan
                         </button>
                     </div>
+
                 </form>
             </div>
         </div>
@@ -348,6 +588,10 @@
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+                const firstInput = modal.querySelector('input:not([type="hidden"]), select, textarea');
+                if (firstInput) firstInput.focus();
+            }, 50);
         }
 
         function closeAddModal() {

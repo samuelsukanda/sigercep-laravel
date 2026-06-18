@@ -112,6 +112,7 @@
                                 <th class="px-6 py-3">IP Komputer</th>
                                 <th class="px-6 py-3">Lantai</th>
                                 <th class="px-6 py-3 text-center">Status</th>
+                                <th class="px-6 py-3 text-center">Device & Printer</th>
                                 <th class="px-6 py-3 text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -136,6 +137,11 @@
                                                 @else
                                                     <i class="fas fa-times text-red-500 text-lg" style="color: #ef4444;" title="Belum Dicek"></i>
                                                 @endif
+                                            </td>
+                                            <td class="px-6 py-4 text-center">
+                                                <a href="{{ route('hardware.device-printer.show', $pc->ip) }}" class="text-indigo-500 hover:text-indigo-700 transition-colors" title="Device & Printer">
+                                                    <i class="fas fa-print text-lg"></i>
+                                                </a>
                                             </td>
                                             <td class="px-6 py-4 space-x-2 text-center">
                                                 @if($isChecked)

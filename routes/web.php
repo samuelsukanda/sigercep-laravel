@@ -279,6 +279,9 @@ Route::middleware('auth')->group(function () {
     // Hardware
     Route::middleware(['auth'])->group(function () {
         Route::get('hardware/reports', [HardwareController::class, 'report'])->name('hardware.reports');
+        Route::get('hardware/{ip}/device-printer', [HardwareController::class, 'showDevicePrinter'])->name('hardware.device-printer.show');
+        Route::post('hardware/{ip}/device-printer', [HardwareController::class, 'storeDevicePrinter'])->name('hardware.device-printer.store');
+        Route::delete('hardware/device-printer/{id}', [HardwareController::class, 'destroyDevicePrinter'])->name('hardware.device-printer.destroy');
         Route::resource('hardware', HardwareController::class)->names('hardware');
     });
 

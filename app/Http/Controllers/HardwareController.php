@@ -12,10 +12,10 @@ class HardwareController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:hardware,read')->only(['index', 'show', 'report']);
-        $this->middleware('permission:hardware,create')->only(['create', 'store']);
+        $this->middleware('permission:hardware,read')->only(['index', 'show', 'report', 'showDevicePrinter']);
+        $this->middleware('permission:hardware,create')->only(['create', 'store', 'storeDevicePrinter']);
         $this->middleware('permission:hardware,update')->only(['edit', 'update']);
-        $this->middleware('permission:hardware,delete')->only(['destroy']);
+        $this->middleware('permission:hardware,delete')->only(['destroy', 'destroyDevicePrinter']);
     }
 
     public function index(Request $request)
@@ -207,5 +207,68 @@ class HardwareController extends Controller
 
         return redirect()->route('hardware.index')
             ->with('success', 'Data berhasil dihapus.');
+    }
+
+    public function showDevicePrinter($ip)
+    {
+        $hardwareData = [];
+        $path = public_path('assets/file/Hardware.xlsx');
+        
+        $pcData = null;
+        if (file_exists($path)) {
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($path);
+            $worksheet = $spreadsheet->getActiveSheet();
+            $rows = $worksheet->toArray();
+            
+            foreach ($rows as $index => $row) {
+                if ($index === 0) continue; // Skip header
+                
+                $rowIp = $row[4] ?? null;
+                if ($rowIp == $ip) {
+                    $pcData = (object)[
+                        'ip' => $rowIp,
+                        'nama_pc' => $row[1] ?? '',
+                        'unit' => $row[2] ?? '',
+                        'lantai' => $row[3] ?? '',
+                    ];
+                    break;
+                }
+            }
+        }
+
+        if (!$pcData) {
+            return redirect()->route('hardware.reports')->with('error', 'Data PC tidak ditemukan.');
+        }
+
+        $devicePrinters = \App\Models\DevicePrinter::where('ip_pc', $ip)->get();
+
+        return view('pages.hardware.device_printer', compact('pcData', 'devicePrinters'));
+    }
+
+    public function storeDevicePrinter(Request $request, $ip)
+    {
+        $validated = $request->validate([
+            'nama_perangkat' => 'required|string|max:255',
+            'jenis'          => 'required|string|max:255',
+            'kondisi'        => 'required|string|max:255',
+            'keterangan'     => 'nullable|string',
+        ]);
+
+        $validated['ip_pc'] = $ip;
+
+        \App\Models\DevicePrinter::create($validated);
+
+        return redirect()->route('hardware.device-printer.show', $ip)
+            ->with('success', 'Device/Printer berhasil ditambahkan.');
+    }
+
+    public function destroyDevicePrinter($id)
+    {
+        $devicePrinter = \App\Models\DevicePrinter::findOrFail($id);
+        $ip = $devicePrinter->ip_pc;
+        $devicePrinter->delete();
+
+        return redirect()->route('hardware.device-printer.show', $ip)
+            ->with('success', 'Device/Printer berhasil dihapus.');
     }
 }
