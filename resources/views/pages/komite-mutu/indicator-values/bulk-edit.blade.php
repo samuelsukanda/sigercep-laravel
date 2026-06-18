@@ -256,17 +256,19 @@
          aria-hidden="true"
          aria-labelledby="modalTitle"
          role="dialog"
-         class="modal-overlay hidden items-center justify-center"
+         class="modal-overlay hidden justify-center"
          style="
             position: fixed;
             inset: 0;
             z-index: 9999;
-            background: transparent;
-            padding: 1rem;
+            background: rgba(0,0,0,0.5);
+            padding: 2rem 1rem;
+            overflow-y: auto;
+            align-items: flex-start;
          ">
 
         {{-- Dialog container --}}
-        <div class="relative w-full" style="max-width: 480px; margin: auto;">
+        <div class="relative w-full" style="max-width: 480px; margin: 1.5rem auto;">
             <div style="
                 background: #ffffff;
                 border-radius: 16px;

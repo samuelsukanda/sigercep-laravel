@@ -10,7 +10,9 @@ class DevicePrinter extends Model
         'ip_pc',
         'nama_perangkat',
         'jenis',
+        'merk_type',
         'kondisi',
         'keterangan',
+        'foto',
     ];
 }

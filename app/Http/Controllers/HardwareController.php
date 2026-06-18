@@ -250,11 +250,20 @@ class HardwareController extends Controller
         $validated = $request->validate([
             'nama_perangkat' => 'required|string|max:255',
             'jenis'          => 'required|string|max:255',
+            'merk_type'      => 'nullable|string|max:255',
             'kondisi'        => 'required|string|max:255',
             'keterangan'     => 'nullable|string',
+            'foto'           => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $validated['ip_pc'] = $ip;
+
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $filename = 'device-' . now()->format('YmdHis') . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('images/device_printers', $filename, 'public');
+            $validated['foto'] = $path;
+        }
 
         \App\Models\DevicePrinter::create($validated);
 
@@ -266,6 +275,11 @@ class HardwareController extends Controller
     {
         $devicePrinter = \App\Models\DevicePrinter::findOrFail($id);
         $ip = $devicePrinter->ip_pc;
+
+        if ($devicePrinter->foto && \Illuminate\Support\Facades\Storage::disk('public')->exists($devicePrinter->foto)) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($devicePrinter->foto);
+        }
+
         $devicePrinter->delete();
 
         return redirect()->route('hardware.device-printer.show', $ip)

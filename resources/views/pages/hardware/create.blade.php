@@ -57,9 +57,8 @@
                                                     'Aplikasi remote VNC berjalan',
                                                     'Bersihkan komputer dari software yang tidak diijinkan',
                                                     'Cek kapasitas hardisk sistem operasi C',
-                                                    'Koneksi Internet',
                                                     'Printer dan hardware pendukung berfungsi',
-                                                    'Cleaning CPU',
+                                                    'Cleaning CPU & Cek Pengkabelan',
                                                     'Hapus cache temp dan cache browser',
                                                     'Akses Flashdisk terkontrol',
                                                 ];
