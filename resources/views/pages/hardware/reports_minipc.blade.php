@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP - Laporan Bulanan Ceklis Hardware')
+@section('title', 'SIGERCEP - Laporan Bulanan Ceklis Mini PC & Laptop')
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/loading.css') }}">
@@ -13,13 +13,13 @@
             <div class="w-full max-w-full px-3 mx-auto mt-0">
                 {{-- Header --}}
                 <div class="flex justify-between items-center mb-4">
-                    <h3>Laporan Bulanan Ceklis PC Set & AIO</h3>
+                    <h3>Laporan Bulanan Ceklis Mini PC & Laptop</h3>
                 </div>
 
                 {{-- Filter Section --}}
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-4">
                     <div class="px-5 py-4">
-                        <form method="GET" action="{{ route('hardware.reports') }}" id="filterForm">
+                        <form method="GET" action="{{ route('hardware.reports.minipc') }}" id="filterForm">
                             <div class="flex flex-wrap gap-3 items-end filter-wrap">
 
                                 {{-- Bulan --}}
@@ -95,7 +95,7 @@
                                             <i class="fas fa-search text-sm leading-normal"></i>
                                         </button>
 
-                                        <a href="{{ route('hardware.reports') }}"
+                                        <a href="{{ route('hardware.reports.minipc') }}"
                                             class="btn-reset inline-flex items-center justify-center
                                                 h-9 px-4 text-xs font-semibold text-slate-700 uppercase
                                                 rounded-lg shadow-md bg-gray-200 hover:shadow-sm active:opacity-85 transition-all">
@@ -104,12 +104,12 @@
                                     </div>
 
                                     <div class="flex items-end">
-                                        <a href="{{ route('hardware.reports.minipc') }}"
+                                        <a href="{{ route('hardware.reports') }}"
                                             class="mr-2 inline-flex items-center justify-center
                                                 h-9 px-4 text-xs font-semibold text-white uppercase
                                                 rounded-lg shadow-md hover:shadow-sm active:opacity-85 transition-all"
                                             style="background-color: #7664E4 !important;">
-                                            Mini PC & Laptop
+                                            PC Set & PC AIO
                                         </a>
                                         <a href="{{ route('hardware.index') }}"
                                             class="inline-flex items-center justify-center

@@ -63,7 +63,7 @@
                             {{-- Unit --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Unit</label>
-                                <p class="text-slate-600">{{ $pcData->unit }}</p>
+                                <p class="text-slate-600">{{ empty($pcData->unit) ? '-' : $pcData->unit }}</p>
                             </div>
                             {{-- Lantai --}}
                             <div>
@@ -518,7 +518,8 @@
 
                         {{-- Dokumentasi --}}
                         <div style="margin-bottom: 1.375rem;">
-                            <label style="
+                            <label
+                                style="
                                    display: block;
                                    font-size: 11px;
                                    font-weight: 700;
@@ -530,7 +531,8 @@
                                 Dokumentasi
                             </label>
                             <div style="position: relative;">
-                                <label for="foto" style="
+                                <label for="foto"
+                                    style="
                                     display: flex;
                                     flex-direction: column;
                                     align-items: center;
@@ -543,14 +545,20 @@
                                     cursor: pointer;
                                     transition: border-color 0.15s, background-color 0.15s;
                                 "
-                                onmouseover="this.style.borderColor='#7664E4'; this.style.backgroundColor='#f1f0fd';"
-                                onmouseout="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc';">
-                                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; text-align: center; pointer-events: none;">
-                                        <i class="fas fa-cloud-upload-alt" style="font-size: 24px; color: #7664E4; margin-bottom: 6px;"></i>
-                                        <span id="file_upload_label" style="font-size: 12px; font-weight: 600; color: #475569;">Pilih atau tarik foto ke sini</span>
-                                        <span style="font-size: 10px; color: #94a3b8; margin-top: 2px;">Format JPG, PNG, JPEG (Max. 2MB)</span>
+                                    onmouseover="this.style.borderColor='#7664E4'; this.style.backgroundColor='#f1f0fd';"
+                                    onmouseout="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc';">
+                                    <div
+                                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; text-align: center; pointer-events: none;">
+                                        <i class="fas fa-cloud-upload-alt"
+                                            style="font-size: 24px; color: #7664E4; margin-bottom: 6px;"></i>
+                                        <span id="file_upload_label"
+                                            style="font-size: 12px; font-weight: 600; color: #475569;">Pilih atau tarik foto ke
+                                            sini</span>
+                                        <span style="font-size: 10px; color: #94a3b8; margin-top: 2px;">Format JPG, PNG, JPEG
+                                            (Max. 2MB)</span>
                                     </div>
-                                    <input type="file" id="foto" name="foto" accept="image/*" style="display: none;" onchange="handleFileSelected(this)" />
+                                    <input type="file" id="foto" name="foto" accept="image/*"
+                                        style="display: none;" onchange="handleFileSelected(this)" />
                                 </label>
                             </div>
                         </div>
@@ -742,7 +750,7 @@
             modal.classList.add('hidden');
             modal.classList.remove('flex');
             document.body.style.overflow = '';
-            
+
             // Reset custom file input labels and inputs
             const label = document.getElementById('file_upload_label');
             if (label) {
@@ -786,7 +794,7 @@
                     'Zebra ZD230'
                 ],
                 'Scanner': [
-                    'Scanner Barcode Anjungan',
+                    'Zebra DS9308',
                     'Epson DS-410',
                     'Canon Lide 300',
                     'Canon Lide 400'
@@ -810,7 +818,7 @@
                     'M-Tech',
                     'Vention',
                     'Huion Inspiroy RTS-300',
-                    'Fingerspot FlexCode 4500',
+                    'Digital Persona 4500',
                     'TP Link TL-SF1005D 5 PORT',
                     'TP Link TL-WN725'
                 ]
