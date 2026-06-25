@@ -70,6 +70,11 @@
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Lantai</label>
                                 <p class="text-slate-600">{{ $pcData->lantai }}</p>
                             </div>
+                            {{-- Spesifikasi --}}
+                            <div class="md:col-span-2">
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Spesifikasi</label>
+                                <p class="text-slate-600" style="white-space: pre-line;">{{ empty($pcData->spesifikasi) ? '-' : $pcData->spesifikasi }}</p>
+                            </div>
                         </div>
 
                         {{-- Table Device & Printer --}}
@@ -133,6 +138,13 @@
                                                             <i class="fa-solid fa-eye" style="font-size: 14px;"></i>
                                                         </button>
                                                     @endif
+                                                    <button type="button"
+                                                        onclick="openEditModal({{ $device->id }}, '{{ addslashes($device->nama_perangkat) }}', '{{ $device->kondisi }}', '{{ addslashes($device->keterangan ?? '') }}')"
+                                                        class="text-amber-600 hover:text-amber-800 mr-2"
+                                                        style="background: none; border: none; cursor: pointer; padding: 0;"
+                                                        title="Edit">
+                                                        <i class="fa-solid fa-pen-to-square" style="font-size: 14px;"></i>
+                                                    </button>
                                                     <x-button.action
                                                         href="{{ route('hardware.device-printer.destroy', $device->id) }}"
                                                         icon="trash" color="red" type="button" method="DELETE"
@@ -727,6 +739,98 @@
     @endpush
 @endsection
 
+{{-- =============================================================== --}}
+{{-- Modal Edit Device/Printer                                        --}}
+{{-- =============================================================== --}}
+@push('modals')
+    <div id="editModal" tabindex="-1" aria-hidden="true" aria-labelledby="editModalTitle" role="dialog"
+        class="modal-overlay hidden justify-center"
+        style="
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: rgba(0,0,0,0.5);
+        padding: 2rem 1rem;
+        overflow-y: auto;
+        align-items: flex-start;
+     ">
+        <div class="relative w-full" style="max-width: 480px; margin: 1.5rem auto;">
+            <div style="background: #ffffff; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); overflow: hidden;">
+
+                {{-- Header --}}
+                <div style="background: #7664E4; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-pen" style="color: #fff; font-size: 13px;"></i>
+                        </div>
+                        <div>
+                            <h3 id="editModalTitle" style="margin: 0; font-size: 14px; font-weight: 700; color: #fff; line-height: 1.2;">Edit Device &amp; Printer</h3>
+                            <p id="editModalSubtitle" style="margin: 0; font-size: 11px; color: rgba(255,255,255,0.8); margin-top: 1px;"></p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeEditModal()" aria-label="Tutup modal"
+                        style="width: 30px; height: 30px; border-radius: 8px; background: rgba(255,255,255,0.15); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; flex-shrink: 0;"
+                        onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
+                        <i class="fas fa-times" style="color: #fff; font-size: 13px;"></i>
+                    </button>
+                </div>
+
+                {{-- Form --}}
+                <form id="editForm" action="" method="POST" style="padding: 1.375rem 1.25rem 1.25rem;">
+                    @csrf
+                    @method('PUT')
+
+                    {{-- Kondisi --}}
+                    <div style="margin-bottom: 1rem;">
+                        <label for="edit_kondisi" style="display: block; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px;">
+                            Kondisi <span style="color: #ef4444;">*</span>
+                        </label>
+                        <div style="position: relative;">
+                            <select id="edit_kondisi" name="kondisi"
+                                style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 32px 0 11px; font-size: 13.5px; color: #1e293b; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; appearance: none; -webkit-appearance: none; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s;"
+                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
+                                <option value="Baik">Baik</option>
+                                <option value="Rusak Ringan">Rusak Ringan</option>
+                                <option value="Rusak Berat">Rusak Berat</option>
+                            </select>
+                            <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #94a3b8; font-size: 11px;">&#9660;</span>
+                        </div>
+                    </div>
+
+                    {{-- Keterangan --}}
+                    <div style="margin-bottom: 1.375rem;">
+                        <label for="edit_keterangan" style="display: block; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px;">
+                            Keterangan / Spesifikasi
+                        </label>
+                        <textarea id="edit_keterangan" name="keterangan" rows="4"
+                            placeholder="Keterangan tambahan, nomor seri, dll..."
+                            style="width: 100%; box-sizing: border-box; padding: 9px 11px; font-size: 13.5px; color: #1e293b; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; resize: vertical; font-family: inherit; line-height: 1.55; min-height: 90px; transition: border-color 0.15s, box-shadow 0.15s;"
+                            onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"></textarea>
+                    </div>
+
+                    {{-- Footer Buttons --}}
+                    <div style="border-top: 1px solid #f1f5f9; padding-top: 1rem; display: flex; justify-content: flex-end; align-items: center; gap: 8px;">
+                        <button type="button" onclick="closeEditModal()"
+                            style="height: 38px; padding: 0 16px; font-size: 13px; font-weight: 600; color: #64748b; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: background 0.15s;"
+                            onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">
+                            Batal
+                        </button>
+                        <button type="submit"
+                            style="height: 38px; padding: 0 20px; font-size: 13px; font-weight: 700; color: #fff; background: #7664E4; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: background 0.15s, box-shadow 0.15s;"
+                            onmouseover="this.style.background='#6453d4'; this.style.boxShadow='0 4px 12px rgba(118,100,228,0.35)'" onmouseout="this.style.background='#7664E4'; this.style.boxShadow='none'">
+                            <i class="fas fa-save" style="font-size: 12px;"></i>
+                            Simpan
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+@endpush
+
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('assets/js/alert-delete-swal.js') }}"></script>
@@ -786,7 +890,10 @@
                 'Printer': [
                     'Brother HL-L2360DN',
                     'Brother MFC-L5900DW',
+                    'Brother MFC-T4500DW',
                     'Epson L6550',
+                    'Epson L6490',
+                    'Epson L4150',
                     'Epson TM-T82',
                     'Epson LX-310',
                     'Epson M1140',
@@ -817,10 +924,12 @@
                 'Lainnya': [
                     'M-Tech',
                     'Vention',
+                    'Gaintech',
                     'Huion Inspiroy RTS-300',
                     'Digital Persona 4500',
-                    'TP Link TL-SF1005D 5 PORT',
-                    'TP Link TL-WN725'
+                    'TP-LINK TL-SF1005D',
+                    'TP-LINK TL-WN725',
+                    'WD'
                 ]
             };
 
@@ -949,11 +1058,59 @@
             }
         }
 
+        function openEditModal(id, namaPerangkat, kondisi, keterangan) {
+            const modal = document.getElementById('editModal');
+            if (!modal) return;
+
+            // Set action form
+            const form = document.getElementById('editForm');
+            if (form) {
+                form.action = '{{ url("hardware/device-printer") }}/' + id;
+            }
+
+            // Set subtitle
+            const subtitle = document.getElementById('editModalSubtitle');
+            if (subtitle) subtitle.innerText = namaPerangkat;
+
+            // Set nilai kondisi
+            const kondisiSelect = document.getElementById('edit_kondisi');
+            if (kondisiSelect) kondisiSelect.value = kondisi || 'Baik';
+
+            // Set nilai keterangan
+            const keteranganArea = document.getElementById('edit_keterangan');
+            if (keteranganArea) keteranganArea.value = keterangan || '';
+
+            // Tampilkan modal
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeEditModal() {
+            const modal = document.getElementById('editModal');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        // Append editModal ke body dan pasang event backdrop
+        document.addEventListener('DOMContentLoaded', function() {
+            const editModal = document.getElementById('editModal');
+            if (editModal) {
+                document.body.appendChild(editModal);
+                editModal.addEventListener('click', function(e) {
+                    if (e.target === this) closeEditModal();
+                });
+            }
+        });
+
         // Tutup dengan tombol Escape
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeModal();
                 closePhotoModal();
+                closeEditModal();
             }
         });
     </script>

@@ -14,7 +14,7 @@ class HardwareController extends Controller
     {
         $this->middleware('permission:hardware,read')->only(['index', 'show', 'report', 'reportMiniPc', 'showDevicePrinter']);
         $this->middleware('permission:hardware,create')->only(['create', 'store', 'storeDevicePrinter']);
-        $this->middleware('permission:hardware,update')->only(['edit', 'update']);
+        $this->middleware('permission:hardware,update')->only(['edit', 'update', 'updateDevicePrinter']);
         $this->middleware('permission:hardware,delete')->only(['destroy', 'destroyDevicePrinter']);
     }
 
@@ -73,8 +73,8 @@ class HardwareController extends Controller
             foreach ($rows as $index => $row) {
                 if ($index === 0) continue; // Skip header
                 
-                $ip = $row[4] ?? null;
-                $lantai = $row[3] ?? '';
+                $ip = $row[5] ?? null;
+                $lantai = $row[4] ?? '';
                 if (!empty($ip)) {
                     if (!empty($lantai) && !in_array($lantai, $listLantai)) {
                         $listLantai[] = $lantai;
@@ -86,7 +86,8 @@ class HardwareController extends Controller
 
                     $pcMasters[] = (object)[
                         'nama_pc' => $row[1] ?? '',
-                        'unit' => $row[2] ?? '',
+                        'jenis_pc' => $row[2] ?? '',
+                        'unit' => $row[3] ?? '',
                         'lantai' => $lantai,
                         'ip' => $ip,
                     ];
@@ -122,8 +123,8 @@ class HardwareController extends Controller
             foreach ($rows as $index => $row) {
                 if ($index === 0) continue; // Skip header
                 
-                $ip = str_replace(',', '.', $row[3] ?? '');
-                $lantai = $row[2] ?? '';
+                $ip = str_replace(',', '.', $row[4] ?? ''); // IP index shifted from 3 to 4
+                $lantai = $row[3] ?? ''; // Lantai index shifted from 2 to 3
                 if (!empty($ip)) {
                     if (!empty($lantai) && !in_array($lantai, $listLantai)) {
                         $listLantai[] = $lantai;
@@ -135,6 +136,7 @@ class HardwareController extends Controller
 
                     $pcMasters[] = (object)[
                         'nama_pc' => $row[1] ?? '',
+                        'jenis_pc' => $row[2] ?? '',
                         'unit' => '',
                         'lantai' => $lantai,
                         'ip' => $ip,
@@ -167,13 +169,14 @@ class HardwareController extends Controller
             foreach ($rows as $index => $row) {
                 if ($index === 0) continue; // Skip header
                 
-                $ip = $row[4] ?? null;
+                $ip = $row[5] ?? null;
                 if (!empty($ip)) {
                     $ips[] = $ip;
                     $hardwareData[$ip] = [
                         'nama_pc' => $row[1] ?? '',
-                        'unit' => $row[2] ?? '',
-                        'lantai' => $row[3] ?? '',
+                        'jenis_pc' => $row[2] ?? '',
+                        'unit' => $row[3] ?? '',
+                        'lantai' => $row[4] ?? '',
                     ];
                 }
             }
@@ -188,13 +191,14 @@ class HardwareController extends Controller
             foreach ($rows as $index => $row) {
                 if ($index === 0) continue; // Skip header
                 
-                $ip = str_replace(',', '.', $row[3] ?? '');
+                $ip = str_replace(',', '.', $row[4] ?? '');
                 if (!empty($ip)) {
                     $ips[] = $ip;
                     $hardwareData[$ip] = [
                         'nama_pc' => $row[1] ?? '',
+                        'jenis_pc' => $row[2] ?? '',
                         'unit' => '-',
-                        'lantai' => $row[2] ?? '',
+                        'lantai' => $row[3] ?? '',
                     ];
                 }
             }
@@ -239,13 +243,14 @@ class HardwareController extends Controller
             foreach ($rows as $index => $row) {
                 if ($index === 0) continue; // Skip header
                 
-                $ip = $row[4] ?? null;
+                $ip = $row[5] ?? null;
                 if (!empty($ip)) {
                     $ips[] = $ip;
                     $hardwareData[$ip] = [
                         'nama_pc' => $row[1] ?? '',
-                        'unit' => $row[2] ?? '',
-                        'lantai' => $row[3] ?? '',
+                        'jenis_pc' => $row[2] ?? '',
+                        'unit' => $row[3] ?? '',
+                        'lantai' => $row[4] ?? '',
                     ];
                 }
             }
@@ -260,13 +265,14 @@ class HardwareController extends Controller
             foreach ($rows as $index => $row) {
                 if ($index === 0) continue; // Skip header
                 
-                $ip = str_replace(',', '.', $row[3] ?? '');
+                $ip = str_replace(',', '.', $row[4] ?? '');
                 if (!empty($ip)) {
                     $ips[] = $ip;
                     $hardwareData[$ip] = [
                         'nama_pc' => $row[1] ?? '',
+                        'jenis_pc' => $row[2] ?? '',
                         'unit' => '-',
-                        'lantai' => $row[2] ?? '',
+                        'lantai' => $row[3] ?? '',
                     ];
                 }
             }
@@ -313,13 +319,20 @@ class HardwareController extends Controller
             foreach ($rows as $index => $row) {
                 if ($index === 0) continue; // Skip header
                 
-                $rowIp = $row[4] ?? null;
+                $rowIp = $row[5] ?? null;
                 if ($rowIp == $ip) {
+                    // RAM = kolom 6, CPU = kolom 7, gabungkan dengan newline
+                    $spesParts = array_filter([
+                        trim($row[6] ?? ''),
+                        trim($row[7] ?? ''),
+                    ]);
                     $pcData = (object)[
-                        'ip' => $rowIp,
-                        'nama_pc' => $row[1] ?? '',
-                        'unit' => $row[2] ?? '',
-                        'lantai' => $row[3] ?? '',
+                        'ip'          => $rowIp,
+                        'nama_pc'     => $row[1] ?? '',
+                        'jenis_pc'    => $row[2] ?? '',
+                        'unit'        => $row[3] ?? '',
+                        'lantai'      => $row[4] ?? '',
+                        'spesifikasi' => implode("\n", $spesParts),
                     ];
                     break;
                 }
@@ -337,13 +350,20 @@ class HardwareController extends Controller
                 foreach ($rows as $index => $row) {
                     if ($index === 0) continue; // Skip header
                     
-                    $rowIp = str_replace(',', '.', $row[3] ?? '');
+                    $rowIp = str_replace(',', '.', $row[4] ?? '');
                     if ($rowIp == $ip) {
+                        // Mini PC: RAM = kolom 5, CPU = kolom 6 (sesuaikan jika kolom berbeda)
+                        $spesParts = array_filter([
+                            trim($row[5] ?? ''),
+                            trim($row[6] ?? ''),
+                        ]);
                         $pcData = (object)[
-                            'ip' => $rowIp,
-                            'nama_pc' => $row[1] ?? '',
-                            'unit' => '',
-                            'lantai' => $row[2] ?? '',
+                            'ip'          => $rowIp,
+                            'nama_pc'     => $row[1] ?? '',
+                            'jenis_pc'    => $row[2] ?? '',
+                            'unit'        => '',
+                            'lantai'      => $row[3] ?? '',
+                            'spesifikasi' => implode("\n", $spesParts),
                         ];
                         break;
                     }
@@ -384,6 +404,21 @@ class HardwareController extends Controller
 
         return redirect()->route('hardware.device-printer.show', $ip)
             ->with('success', 'Device/Printer berhasil ditambahkan.');
+    }
+
+    public function updateDevicePrinter(Request $request, $id)
+    {
+        $devicePrinter = \App\Models\DevicePrinter::findOrFail($id);
+
+        $validated = $request->validate([
+            'kondisi'    => 'required|string|max:255',
+            'keterangan' => 'nullable|string',
+        ]);
+
+        $devicePrinter->update($validated);
+
+        return redirect()->route('hardware.device-printer.show', $devicePrinter->ip_pc)
+            ->with('success', 'Data device/printer berhasil diperbarui.');
     }
 
     public function destroyDevicePrinter($id)

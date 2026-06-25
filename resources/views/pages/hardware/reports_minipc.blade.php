@@ -134,6 +134,7 @@
                             <tr>
                                 <th class="px-6 py-3 text-center">No</th>
                                 <th class="px-6 py-3">Nama PC</th>
+                                <th class="px-6 py-3">Jenis PC</th>
                                 <th class="px-6 py-3">IP Komputer</th>
                                 <th class="px-6 py-3">Lantai</th>
                                 <th class="px-6 py-3 text-center">Status</th>
@@ -150,6 +151,7 @@
                                 <tr class="hover:bg-gray-50 transition-colors">
                                     <td class="px-6 py-4 font-medium text-center">{{ $index + 1 }}</td>
                                     <td class="px-6 py-4 font-medium">{{ $pc->nama_pc }}</td>
+                                    <td class="px-6 py-4 font-medium">{{ $pc->jenis_pc }}</td>
                                     <td class="px-6 py-4">{{ $pc->ip }}</td>
                                     <td class="px-6 py-4">
                                         <span
