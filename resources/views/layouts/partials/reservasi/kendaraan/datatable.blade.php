@@ -15,7 +15,7 @@
         <tbody class="text-s text-slate-500 bg-white">
             @forelse ($reservasi as $item)
                 <tr class="hover:bg-gray-50 transition-colors">
-                    <td class="px-6 py-4 font-medium">{{ ucfirst(strtolower($item->nama)) }}</td>
+                    <td class="px-6 py-4 font-medium">{{ ucwords(strtolower($item->nama)) }}</td>
                     <td class="px-6 py-4">{{ $item->unit }}</td>
                     <td class="px-6 py-4">
                         {{ \Carbon\Carbon::createFromFormat('H:i:s', $item->jam_berangkat)->format('H:i') }} WIB</td>

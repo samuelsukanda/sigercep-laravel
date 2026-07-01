@@ -25,7 +25,7 @@
                                     : 'bg-red-100 text-red-800'));
                 @endphp
                 <tr class="hover:bg-gray-50 transition-colors">
-                    <td class="px-6 py-4 font-medium">{{ ucfirst(strtolower($item->nama)) }}</td>
+                    <td class="px-6 py-4 font-medium">{{ ucwords(strtolower($item->nama)) }}</td>
                     <td class="px-6 py-4">{{ $item->no_rm }}</td>
                     <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->tanggal_kejadian)->timestamp }}">
                         <div class="flex flex-col">

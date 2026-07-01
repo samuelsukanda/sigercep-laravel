@@ -14,7 +14,7 @@
         <tbody class="text-s text-slate-500 bg-white">
             @forelse ($pengadaan as $item)
                 <tr class="hover:bg-gray-50 transition-colors">
-                    <td class="px-6 py-4 font-medium">{{ ucfirst(strtolower($item->nama)) }}</td>
+                    <td class="px-6 py-4 font-medium">{{ ucwords(strtolower($item->nama)) }}</td>
                     <td class="px-6 py-4">{{ $item->unit }}</td>
                     <td class="px-6 py-4">{{ Str::limit(strtolower($item->keperluan), 40) }}</td>
                     <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->tanggal)->timestamp }}">

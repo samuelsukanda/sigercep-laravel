@@ -24,7 +24,7 @@
                                     : 'bg-blue-100 text-blue-800'));
                 @endphp
                 <tr class="hover:bg-gray-50 transition-colors">
-                    <td class="px-6 py-4 font-medium">{{ ucfirst(strtolower($item->nama)) }}</td>
+                    <td class="px-6 py-4 font-medium">{{ ucwords(strtolower($item->nama)) }}</td>
                     <td class="px-6 py-4">{{ $item->nik }}</td>
                     <td class="px-6 py-4">{{ $item->unit }}</td>
                     <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->tanggal)->timestamp }}">
