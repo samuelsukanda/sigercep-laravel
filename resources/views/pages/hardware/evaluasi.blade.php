@@ -23,7 +23,26 @@
                                 style="padding:8px 12px; font-size:13px; border:1px solid #d1d5db; border-radius:8px; outline:none; min-width:120px;">
                                 <option value="">Semua Tahun</option>
                             </select>
-                            <span id="totalBulan" style="font-size:12px; color:#9ca3af;"></span>
+                            
+                            <label style="font-size:12px; font-weight:600; color:#4b5563; margin-left:8px;">Bulan:</label>
+                            <select id="filterBulan" onchange="renderSemuaEvaluasi()"
+                                style="padding:8px 12px; font-size:13px; border:1px solid #d1d5db; border-radius:8px; outline:none; min-width:120px;">
+                                <option value="">Semua Bulan</option>
+                                <option value="01">Januari</option>
+                                <option value="02">Februari</option>
+                                <option value="03">Maret</option>
+                                <option value="04">April</option>
+                                <option value="05">Mei</option>
+                                <option value="06">Juni</option>
+                                <option value="07">Juli</option>
+                                <option value="08">Agustus</option>
+                                <option value="09">September</option>
+                                <option value="10">Oktober</option>
+                                <option value="11">November</option>
+                                <option value="12">Desember</option>
+                            </select>
+
+                            <span id="totalBulan" style="font-size:12px; color:#9ca3af; margin-left:8px;"></span>
                         </div>
                         <div>
                             <button type="button" onclick="bukaModalEvaluasi()"
@@ -160,10 +179,17 @@
         function renderSemuaEvaluasi() {
             var semua = semuaDataGlobal;
             var tahunFilter = document.getElementById('filterTahun').value;
+            var bulanFilter = document.getElementById('filterBulan').value;
 
             if (tahunFilter) {
                 semua = semua.filter(function(item) {
                     return item.bulan.startsWith(tahunFilter);
+                });
+            }
+
+            if (bulanFilter) {
+                semua = semua.filter(function(item) {
+                    return item.bulan.endsWith('-' + bulanFilter);
                 });
             }
 
