@@ -211,6 +211,12 @@
                         </div>
                     </div>
                     <div style="display:flex; gap:8px;">
+                        <button onclick="editBulan('${item.bulan}')"
+                            style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px;
+                                   font-size:11px; font-weight:600; color:#3b82f6; border:none; cursor:pointer;
+                                   border-radius:6px; background:#fff;">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
                         <button onclick="hapusBulan('${item.bulan}')"
                             style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px;
                                    font-size:11px; font-weight:600; color:#ef4444; border:none; cursor:pointer;
@@ -243,6 +249,11 @@
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;');
+        }
+
+        function editBulan(bulan) {
+            document.getElementById('bulanEvaluasi').value = bulan;
+            bukaModalEvaluasi();
         }
 
         function hapusBulan(bulan) {
