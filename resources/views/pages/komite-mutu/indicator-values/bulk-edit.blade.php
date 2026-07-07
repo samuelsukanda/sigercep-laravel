@@ -132,6 +132,8 @@
                                     Denominator (D)</th>
                                 <th class="py-3 px-4 w-44 text-center border border-gray-300 dark:border-slate-700">Capaian
                                     (%)</th>
+                                <th class="py-3 px-3 w-24 text-center border border-gray-300 dark:border-slate-700">Aksi
+                                </th>
                             </tr>
                         </thead>
                         <tbody
@@ -173,7 +175,7 @@
                                     {{-- No --}}
                                     <td
                                         class="py-4 px-3 text-center font-bold text-xs text-slate-400 border border-gray-300 dark:border-slate-700">
-                                        {{ $indicator->no_urut }}
+                                        {{ $loop->iteration }}
                                     </td>
 
                                     {{-- Nama Indikator --}}
@@ -220,10 +222,27 @@
                                             value="{{ $nil !== null ? (float) $nil : '' }}"
                                             class="w-full text-xs p-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-center font-bold input-nilai">
                                     </td>
+
+                                    {{-- Aksi --}}
+                                    <td class="py-3 px-3 text-center border border-gray-300 dark:border-slate-700">
+                                        <div class="flex items-center justify-center gap-2">
+                                            <button type="button"
+                                                onclick='openEditModal({{ $indicator->id }}, @json($indicator->nama_indikator), @json($indicator->pj), @json($indicator->unit_terkait), @json($target))'
+                                                class="text-blue-500 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:hover:bg-blue-800/50 p-1.5 rounded transition-colors"
+                                                title="Edit Indikator">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button type="button" onclick="confirmDelete({{ $indicator->id }})"
+                                                class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:hover:bg-red-800/50 p-1.5 rounded transition-colors"
+                                                title="Hapus Indikator">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6"
+                                    <td colspan="7"
                                         class="py-12 text-center text-slate-500 border border-gray-300 dark:border-slate-700">
                                         <div class="flex flex-col items-center justify-center gap-3">
                                             <i class="fas fa-folder-open text-4xl text-slate-300"></i>
@@ -245,19 +264,21 @@
                     </div>
                 @endif
             </form>
+
+            {{-- Form Hapus --}}
+            <form id="deleteForm" method="POST" class="hidden">
+                @csrf
+                @method('DELETE')
+            </form>
         </div>
     </div>
 @endsection
 
 {{-- Modal Tambah Indikator --}}
 @push('modals')
-    <div id="addIndicatorModal"
-         tabindex="-1"
-         aria-hidden="true"
-         aria-labelledby="modalTitle"
-         role="dialog"
-         class="modal-overlay hidden justify-center"
-         style="
+    <div id="addIndicatorModal" tabindex="-1" aria-hidden="true" aria-labelledby="modalTitle" role="dialog"
+        class="modal-overlay hidden justify-center"
+        style="
             position: fixed;
             inset: 0;
             z-index: 9999;
@@ -269,7 +290,8 @@
 
         {{-- Dialog container --}}
         <div class="relative w-full" style="max-width: 480px; margin: 1.5rem auto;">
-            <div style="
+            <div
+                style="
                 background: #ffffff;
                 border-radius: 16px;
                 box-shadow: 0 20px 60px rgba(0,0,0,0.2);
@@ -277,7 +299,8 @@
             ">
 
                 {{-- ── Header ── --}}
-                <div style="
+                <div
+                    style="
                     background: #7664E4;
                     padding: 1rem 1.25rem;
                     display: flex;
@@ -285,7 +308,8 @@
                     justify-content: space-between;
                 ">
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <div style="
+                        <div
+                            style="
                             width: 32px; height: 32px;
                             border-radius: 8px;
                             background: rgba(255,255,255,0.18);
@@ -295,24 +319,26 @@
                             <i class="fas fa-chart-line" style="color: #fff; font-size: 13px;"></i>
                         </div>
                         <div>
-                            <h3 id="modalTitle" style="
+                            <h3 id="modalTitle"
+                                style="
                                 margin: 0;
                                 font-size: 14px;
                                 font-weight: 700;
                                 color: #fff;
                                 line-height: 1.2;
-                            ">Tambah Indikator Baru</h3>
-                            <p style="
+                            ">
+                                Tambah Indikator Baru</h3>
+                            <p
+                                style="
                                 margin: 0;
                                 font-size: 11px;
                                 color: rgba(255,255,255,0.7);
                                 margin-top: 1px;
-                            ">Kategori: {{ ucfirst(str_replace('-', ' ', $jenis)) }}</p>
+                            ">
+                                Kategori: {{ ucfirst(str_replace('-', ' ', $jenis)) }}</p>
                         </div>
                     </div>
-                    <button type="button"
-                        onclick="closeAddModal()"
-                        aria-label="Tutup modal"
+                    <button type="button" onclick="closeAddModal()" aria-label="Tutup modal"
                         style="
                             width: 30px; height: 30px;
                             border-radius: 8px;
@@ -330,94 +356,49 @@
                 </div>
 
                 {{-- ── Body ── --}}
-                <form action="{{ route('indicators.store') }}"
-                      method="POST"
-                      style="padding: 1.375rem 1.25rem 1.25rem;">
+                <form action="{{ route('indicators.store') }}" method="POST"
+                    style="padding: 1.375rem 1.25rem 1.25rem;">
                     @csrf
                     <input type="hidden" name="tahun" value="{{ $tahun }}">
                     <input type="hidden" name="jenis_indikator" value="{{ $jenis }}">
 
-                    {{-- No Urut & Target --}}
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1rem;">
-                        <div>
-                            <label for="no_urut"
-                                   style="
-                                       display: block;
-                                       font-size: 11px;
-                                       font-weight: 700;
-                                       color: #475569;
-                                       text-transform: uppercase;
-                                       letter-spacing: 0.06em;
-                                       margin-bottom: 5px;
-                                   ">
-                                No Urut
-                            </label>
-                            <input
-                                type="text"
-                                id="no_urut"
-                                name="no_urut"
-                                placeholder="e.g. 1, 2a, dst"
-                                value="{{ old('no_urut') }}"
-                                style="
-                                    width: 100%;
-                                    box-sizing: border-box;
-                                    height: 38px;
-                                    padding: 0 11px;
-                                    font-size: 13.5px;
-                                    color: #1e293b;
-                                    background: #f8fafc;
-                                    border: 1px solid #cbd5e1;
-                                    border-radius: 8px;
-                                    outline: none;
-                                    transition: border-color 0.15s, box-shadow 0.15s;
-                                "
-                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
-                            />
-                        </div>
-                        <div>
-                            <label for="target_value"
-                                   style="
-                                       display: block;
-                                       font-size: 11px;
-                                       font-weight: 700;
-                                       color: #475569;
-                                       text-transform: uppercase;
-                                       letter-spacing: 0.06em;
-                                       margin-bottom: 5px;
-                                   ">
-                                Target (%)
-                            </label>
-                            <input
-                                type="number"
-                                step="any"
-                                id="target_value"
-                                name="target_value"
-                                placeholder="e.g. 80"
-                                value="{{ old('target_value') }}"
-                                style="
-                                    width: 100%;
-                                    box-sizing: border-box;
-                                    height: 38px;
-                                    padding: 0 11px;
-                                    font-size: 13.5px;
-                                    color: #1e293b;
-                                    background: #f8fafc;
-                                    border: 1px solid #cbd5e1;
-                                    border-radius: 8px;
-                                    outline: none;
-                                    transition: border-color 0.15s, box-shadow 0.15s;
-                                "
-                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
-                            />
-                        </div>
+                    {{-- Target --}}
+                    <div style="margin-bottom: 1rem;">
+                        <label for="target_value"
+                            style="
+                                   display: block;
+                                   font-size: 11px;
+                                   font-weight: 700;
+                                   color: #475569;
+                                   text-transform: uppercase;
+                                   letter-spacing: 0.06em;
+                                   margin-bottom: 5px;
+                               ">
+                            Target (%)
+                        </label>
+                        <input type="number" step="any" id="target_value" name="target_value"
+                            placeholder="e.g. 80" value="{{ old('target_value') }}"
+                            style="
+                                width: 100%;
+                                box-sizing: border-box;
+                                height: 38px;
+                                padding: 0 11px;
+                                font-size: 13.5px;
+                                color: #1e293b;
+                                background: #f8fafc;
+                                border: 1px solid #cbd5e1;
+                                border-radius: 8px;
+                                outline: none;
+                                transition: border-color 0.15s, box-shadow 0.15s;
+                            "
+                            onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
                     </div>
 
                     {{-- Nama Indikator --}}
                     <div style="margin-bottom: 1rem;">
                         <label for="nama_indikator"
-                               style="
+                            style="
                                    display: block;
                                    font-size: 11px;
                                    font-weight: 700;
@@ -428,11 +409,7 @@
                                ">
                             Nama Indikator <span style="color: #ef4444;">*</span>
                         </label>
-                        <input
-                            type="text"
-                            id="nama_indikator"
-                            name="nama_indikator"
-                            required
+                        <input type="text" id="nama_indikator" name="nama_indikator" required
                             value="{{ old('nama_indikator') }}"
                             style="
                                 width: 100%;
@@ -448,15 +425,14 @@
                                 transition: border-color 0.15s, box-shadow 0.15s;
                             "
                             onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
-                        />
+                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
                     </div>
 
                     {{-- PJ & Unit Terkait --}}
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.375rem;">
                         <div>
                             <label for="pj"
-                                   style="
+                                style="
                                        display: block;
                                        font-size: 11px;
                                        font-weight: 700;
@@ -467,11 +443,7 @@
                                    ">
                                 PJ (Penanggung Jawab)
                             </label>
-                            <input
-                                type="text"
-                                id="pj"
-                                name="pj"
-                                value="{{ old('pj') }}"
+                            <input type="text" id="pj" name="pj" value="{{ old('pj') }}"
                                 style="
                                     width: 100%;
                                     box-sizing: border-box;
@@ -486,12 +458,11 @@
                                     transition: border-color 0.15s, box-shadow 0.15s;
                                 "
                                 onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
-                            />
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
                         </div>
                         <div>
                             <label for="unit_terkait"
-                                   style="
+                                style="
                                        display: block;
                                        font-size: 11px;
                                        font-weight: 700;
@@ -502,10 +473,7 @@
                                    ">
                                 Unit Terkait
                             </label>
-                            <input
-                                type="text"
-                                id="unit_terkait"
-                                name="unit_terkait"
+                            <input type="text" id="unit_terkait" name="unit_terkait"
                                 value="{{ old('unit_terkait') }}"
                                 style="
                                     width: 100%;
@@ -521,13 +489,13 @@
                                     transition: border-color 0.15s, box-shadow 0.15s;
                                 "
                                 onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
-                            />
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
                         </div>
                     </div>
 
                     {{-- ── Footer / Action buttons ── --}}
-                    <div style="
+                    <div
+                        style="
                         border-top: 1px solid #f1f5f9;
                         padding-top: 1rem;
                         display: flex;
@@ -535,8 +503,7 @@
                         align-items: center;
                         gap: 8px;
                     ">
-                        <button type="button"
-                            onclick="closeAddModal()"
+                        <button type="button" onclick="closeAddModal()"
                             style="
                                 height: 38px;
                                 padding: 0 16px;
@@ -549,8 +516,7 @@
                                 cursor: pointer;
                                 transition: background 0.15s;
                             "
-                            onmouseover="this.style.background='#e2e8f0'"
-                            onmouseout="this.style.background='#f1f5f9'">
+                            onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">
                             Batal
                         </button>
                         <button type="submit"
@@ -580,9 +546,301 @@
             </div>
         </div>
     </div>
+
+    {{-- Modal Edit Indikator --}}
+    <div id="editIndicatorModal" tabindex="-1" aria-hidden="true" aria-labelledby="modalTitleEdit" role="dialog"
+        class="modal-overlay hidden justify-center"
+        style="
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0,0,0,0.5);
+            padding: 2rem 1rem;
+            overflow-y: auto;
+            align-items: flex-start;
+         ">
+
+        {{-- Dialog container --}}
+        <div class="relative w-full" style="max-width: 480px; margin: 1.5rem auto;">
+            <div
+                style="
+                background: #ffffff;
+                border-radius: 16px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+                overflow: hidden;
+            ">
+
+                {{-- ── Header ── --}}
+                <div
+                    style="
+                    background: #3b82f6;
+                    padding: 1rem 1.25rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                ">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div
+                            style="
+                            width: 32px; height: 32px;
+                            border-radius: 8px;
+                            background: rgba(255,255,255,0.18);
+                            display: flex; align-items: center; justify-content: center;
+                            flex-shrink: 0;
+                        ">
+                            <i class="fas fa-edit" style="color: #fff; font-size: 13px;"></i>
+                        </div>
+                        <div>
+                            <h3 id="modalTitleEdit"
+                                style="
+                                margin: 0;
+                                font-size: 14px;
+                                font-weight: 700;
+                                color: #fff;
+                                line-height: 1.2;
+                            ">
+                                Edit Indikator</h3>
+                            <p
+                                style="
+                                margin: 0;
+                                font-size: 11px;
+                                color: rgba(255,255,255,0.7);
+                                margin-top: 1px;
+                            ">
+                                Kategori: {{ ucfirst(str_replace('-', ' ', $jenis)) }}</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeEditModal()" aria-label="Tutup modal"
+                        style="
+                            width: 30px; height: 30px;
+                            border-radius: 8px;
+                            background: rgba(255,255,255,0.15);
+                            border: none;
+                            cursor: pointer;
+                            display: flex; align-items: center; justify-content: center;
+                            transition: background 0.15s;
+                            flex-shrink: 0;
+                        "
+                        onmouseover="this.style.background='rgba(255,255,255,0.25)'"
+                        onmouseout="this.style.background='rgba(255,255,255,0.15)'">
+                        <i class="fas fa-times" style="color: #fff; font-size: 13px;"></i>
+                    </button>
+                </div>
+
+                {{-- ── Body ── --}}
+                <form id="editIndicatorForm" method="POST" style="padding: 1.375rem 1.25rem 1.25rem;">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="tahun" value="{{ $tahun }}">
+                    <input type="hidden" name="jenis_indikator" value="{{ $jenis }}">
+
+                    {{-- Target --}}
+                    <div style="margin-bottom: 1rem;">
+                        <label for="edit_target_value"
+                            style="
+                                   display: block;
+                                   font-size: 11px;
+                                   font-weight: 700;
+                                   color: #475569;
+                                   text-transform: uppercase;
+                                   letter-spacing: 0.06em;
+                                   margin-bottom: 5px;
+                               ">
+                            Target (%)
+                        </label>
+                        <input type="number" step="any" id="edit_target_value" name="target_value"
+                            placeholder="e.g. 80"
+                            style="
+                                width: 100%;
+                                box-sizing: border-box;
+                                height: 38px;
+                                padding: 0 11px;
+                                font-size: 13.5px;
+                                color: #1e293b;
+                                background: #f8fafc;
+                                border: 1px solid #cbd5e1;
+                                border-radius: 8px;
+                                outline: none;
+                                transition: border-color 0.15s, box-shadow 0.15s;
+                            "
+                            onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.12)'"
+                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
+                    </div>
+
+                    {{-- Nama Indikator --}}
+                    <div style="margin-bottom: 1rem;">
+                        <label for="edit_nama_indikator"
+                            style="
+                                   display: block;
+                                   font-size: 11px;
+                                   font-weight: 700;
+                                   color: #475569;
+                                   text-transform: uppercase;
+                                   letter-spacing: 0.06em;
+                                   margin-bottom: 5px;
+                               ">
+                            Nama Indikator <span style="color: #ef4444;">*</span>
+                        </label>
+                        <input type="text" id="edit_nama_indikator" name="nama_indikator" required
+                            style="
+                                width: 100%;
+                                box-sizing: border-box;
+                                height: 38px;
+                                padding: 0 11px;
+                                font-size: 13.5px;
+                                color: #1e293b;
+                                background: #f8fafc;
+                                border: 1px solid #cbd5e1;
+                                border-radius: 8px;
+                                outline: none;
+                                transition: border-color 0.15s, box-shadow 0.15s;
+                            "
+                            onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.12)'"
+                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
+                    </div>
+
+                    {{-- PJ & Unit Terkait --}}
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.375rem;">
+                        <div>
+                            <label for="edit_pj"
+                                style="
+                                       display: block;
+                                       font-size: 11px;
+                                       font-weight: 700;
+                                       color: #475569;
+                                       text-transform: uppercase;
+                                       letter-spacing: 0.06em;
+                                       margin-bottom: 5px;
+                                   ">
+                                PJ (Penanggung Jawab)
+                            </label>
+                            <input type="text" id="edit_pj" name="pj"
+                                style="
+                                    width: 100%;
+                                    box-sizing: border-box;
+                                    height: 38px;
+                                    padding: 0 11px;
+                                    font-size: 13.5px;
+                                    color: #1e293b;
+                                    background: #f8fafc;
+                                    border: 1px solid #cbd5e1;
+                                    border-radius: 8px;
+                                    outline: none;
+                                    transition: border-color 0.15s, box-shadow 0.15s;
+                                "
+                                onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.12)'"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
+                        </div>
+                        <div>
+                            <label for="edit_unit_terkait"
+                                style="
+                                       display: block;
+                                       font-size: 11px;
+                                       font-weight: 700;
+                                       color: #475569;
+                                       text-transform: uppercase;
+                                       letter-spacing: 0.06em;
+                                       margin-bottom: 5px;
+                                   ">
+                                Unit Terkait
+                            </label>
+                            <input type="text" id="edit_unit_terkait" name="unit_terkait"
+                                style="
+                                    width: 100%;
+                                    box-sizing: border-box;
+                                    height: 38px;
+                                    padding: 0 11px;
+                                    font-size: 13.5px;
+                                    color: #1e293b;
+                                    background: #f8fafc;
+                                    border: 1px solid #cbd5e1;
+                                    border-radius: 8px;
+                                    outline: none;
+                                    transition: border-color 0.15s, box-shadow 0.15s;
+                                "
+                                onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.12)'"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
+                        </div>
+                    </div>
+
+                    {{-- ── Footer / Action buttons ── --}}
+                    <div
+                        style="
+                        border-top: 1px solid #f1f5f9;
+                        padding-top: 1rem;
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: center;
+                        gap: 8px;
+                    ">
+                        <button type="button" onclick="closeEditModal()"
+                            style="
+                                height: 38px;
+                                padding: 0 16px;
+                                font-size: 13px;
+                                font-weight: 600;
+                                color: #64748b;
+                                background: #f1f5f9;
+                                border: 1px solid #e2e8f0;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                transition: background 0.15s;
+                            "
+                            onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">
+                            Batal
+                        </button>
+                        <button type="submit"
+                            style="
+                                height: 38px;
+                                padding: 0 20px;
+                                font-size: 13px;
+                                font-weight: 700;
+                                color: #fff;
+                                background: #3b82f6;
+                                border: none;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                display: flex;
+                                align-items: center;
+                                gap: 7px;
+                                transition: background 0.15s, box-shadow 0.15s;
+                            "
+                            onmouseover="this.style.background='#2563eb'; this.style.boxShadow='0 4px 12px rgba(59,130,246,0.35)'"
+                            onmouseout="this.style.background='#3b82f6'; this.style.boxShadow='none'">
+                            <i class="fas fa-save" style="font-size: 12px;"></i>
+                            Simpan
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
 @endpush
 
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .btn-swal-confirm {
+            background-color: #ef4444 !important;
+            color: #ffffff !important;
+            transition: background-color 0.2s !important;
+        }
+
+        .btn-swal-confirm:hover {
+            background-color: #dc2626 !important;
+        }
+
+        .btn-swal-cancel {
+            background-color: #6b7280 !important;
+            color: #ffffff !important;
+            transition: background-color 0.2s !important;
+        }
+
+        .btn-swal-cancel:hover {
+            background-color: #4b5563 !important;
+        }
+    </style>
     <script>
         function openAddModal() {
             const modal = document.getElementById('addIndicatorModal');
@@ -641,7 +899,64 @@
 
         // Close modal on Escape key
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeAddModal();
+            if (e.key === 'Escape') {
+                closeAddModal();
+                closeEditModal();
+            }
         });
+
+        function openEditModal(id, nama, pj, unit, target) {
+            const modal = document.getElementById('editIndicatorModal');
+            if (!modal) return;
+
+            // Set form values
+            let url = "{{ route('indicators.update', ':id') }}";
+            url = url.replace(':id', id);
+            document.getElementById('editIndicatorForm').action = url;
+
+            document.getElementById('edit_nama_indikator').value = nama || '';
+            document.getElementById('edit_pj').value = pj || '';
+            document.getElementById('edit_unit_terkait').value = unit || '';
+            document.getElementById('edit_target_value').value = target || '';
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+                const firstInput = modal.querySelector('input:not([type="hidden"]), select, textarea');
+                if (firstInput) firstInput.focus();
+            }, 50);
+        }
+
+        function closeEditModal() {
+            const modal = document.getElementById('editIndicatorModal');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Konfirmasi Hapus',
+                text: 'Yakin ingin menghapus data ini?',
+                icon: 'warning',
+                showCancelButton: true,
+                customClass: {
+                    confirmButton: 'btn-swal-confirm',
+                    cancelButton: 'btn-swal-cancel'
+                },
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = document.getElementById('deleteForm');
+                    let url = "{{ route('indicators.destroy', ':id') }}";
+                    url = url.replace(':id', id);
+                    form.action = url;
+                    form.submit();
+                }
+            });
+        }
     </script>
 @endpush

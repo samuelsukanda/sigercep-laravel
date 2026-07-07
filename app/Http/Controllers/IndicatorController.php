@@ -30,7 +30,7 @@ class IndicatorController extends Controller
                 'targets' => fn($q) => $q->where('tahun', $tahun),
                 'values'  => fn($q) => $q->where('tahun', $tahun)->orderBy('bulan'),
             ])
-            ->orderByRaw("CAST(no_urut AS UNSIGNED)")
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return view('pages.komite-mutu.indicators.index', compact(
@@ -41,7 +41,6 @@ class IndicatorController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'no_urut' => 'nullable|string|max:50',
             'pj' => 'nullable|string|max:255',
             'nama_indikator' => 'required|string|max:255',
             'jenis_indikator' => 'required|string|max:50',
@@ -51,7 +50,7 @@ class IndicatorController extends Controller
         ]);
 
         $indicator = Indicator::create([
-            'no_urut' => $request->no_urut,
+            'no_urut' => '',
             'pj' => $request->pj,
             'nama_indikator' => $request->nama_indikator,
             'jenis_indikator' => $request->jenis_indikator,
@@ -67,5 +66,45 @@ class IndicatorController extends Controller
         }
 
         return back()->with('success', 'Indikator berhasil ditambahkan.');
+    }
+    public function update(Request $request, Indicator $indicator)
+    {
+        $request->validate([
+            'pj' => 'nullable|string|max:255',
+            'nama_indikator' => 'required|string|max:255',
+            'jenis_indikator' => 'required|string|max:50',
+            'unit_terkait' => 'nullable|string|max:255',
+            'target_value' => 'nullable|numeric',
+            'tahun' => 'required|integer',
+        ]);
+
+        $indicator->update([
+            'pj' => $request->pj,
+            'nama_indikator' => $request->nama_indikator,
+            'jenis_indikator' => $request->jenis_indikator,
+            'unit_terkait' => $request->unit_terkait,
+        ]);
+
+        if ($request->filled('target_value')) {
+            IndicatorTarget::updateOrCreate(
+                ['indicator_id' => $indicator->id, 'tahun' => $request->tahun],
+                ['target_value' => $request->target_value]
+            );
+        } else {
+            IndicatorTarget::where('indicator_id', $indicator->id)
+                ->where('tahun', $request->tahun)
+                ->delete();
+        }
+
+        return back()->with('success', 'Indikator berhasil diperbarui.');
+    }
+
+    public function destroy(Indicator $indicator)
+    {
+        $indicator->targets()->delete();
+        $indicator->values()->delete();
+        $indicator->delete();
+
+        return back()->with('success', 'Indikator berhasil dihapus.');
     }
 }

@@ -303,6 +303,12 @@ Route::middleware('auth')->group(function () {
         Route::post('indicators', [IndicatorController::class, 'store'])
             ->middleware('permission:mutu,create')
             ->name('indicators.store');
+        Route::put('indicators/{indicator}', [IndicatorController::class, 'update'])
+            ->middleware('permission:mutu,update')
+            ->name('indicators.update');
+        Route::delete('indicators/{indicator}', [IndicatorController::class, 'destroy'])
+            ->middleware('permission:mutu,delete')
+            ->name('indicators.destroy');
     });
 
     Route::middleware(['auth'])->prefix('indicator-values')->name('indicator-values.')->group(function () {

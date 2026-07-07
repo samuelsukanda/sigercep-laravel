@@ -32,7 +32,7 @@ class IndicatorValueController extends Controller
         $indicators = Indicator::where('jenis_indikator', $jenis)
             ->whereHas('targets', fn($q) => $q->where('tahun', $tahun))
             ->with(['targets' => fn($q) => $q->where('tahun', $tahun)])
-            ->orderByRaw("CAST(no_urut AS UNSIGNED)")
+            ->orderBy('created_at', 'desc')
             ->get();
 
         $existing = IndicatorValue::where('tahun', $tahun)
