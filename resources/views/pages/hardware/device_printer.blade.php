@@ -73,7 +73,8 @@
                             {{-- Spesifikasi --}}
                             <div class="md:col-span-2">
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Spesifikasi</label>
-                                <p class="text-slate-600" style="white-space: pre-line;">{{ empty($pcData->spesifikasi) ? '-' : $pcData->spesifikasi }}</p>
+                                <p class="text-slate-600" style="white-space: pre-line;">
+                                    {{ empty($pcData->spesifikasi) ? '-' : $pcData->spesifikasi }}</p>
                             </div>
                         </div>
 
@@ -755,22 +756,29 @@
         align-items: flex-start;
      ">
         <div class="relative w-full" style="max-width: 480px; margin: 1.5rem auto;">
-            <div style="background: #ffffff; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); overflow: hidden;">
+            <div
+                style="background: #ffffff; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); overflow: hidden;">
 
                 {{-- Header --}}
-                <div style="background: #7664E4; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between;">
+                <div
+                    style="background: #7664E4; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between;">
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <div
+                            style="width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                             <i class="fas fa-pen" style="color: #fff; font-size: 13px;"></i>
                         </div>
                         <div>
-                            <h3 id="editModalTitle" style="margin: 0; font-size: 14px; font-weight: 700; color: #fff; line-height: 1.2;">Edit Device &amp; Printer</h3>
-                            <p id="editModalSubtitle" style="margin: 0; font-size: 11px; color: rgba(255,255,255,0.8); margin-top: 1px;"></p>
+                            <h3 id="editModalTitle"
+                                style="margin: 0; font-size: 14px; font-weight: 700; color: #fff; line-height: 1.2;">Edit
+                                Device &amp; Printer</h3>
+                            <p id="editModalSubtitle"
+                                style="margin: 0; font-size: 11px; color: rgba(255,255,255,0.8); margin-top: 1px;"></p>
                         </div>
                     </div>
                     <button type="button" onclick="closeEditModal()" aria-label="Tutup modal"
                         style="width: 30px; height: 30px; border-radius: 8px; background: rgba(255,255,255,0.15); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; flex-shrink: 0;"
-                        onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
+                        onmouseover="this.style.background='rgba(255,255,255,0.25)'"
+                        onmouseout="this.style.background='rgba(255,255,255,0.15)'">
                         <i class="fas fa-times" style="color: #fff; font-size: 13px;"></i>
                     </button>
                 </div>
@@ -782,7 +790,8 @@
 
                     {{-- Kondisi --}}
                     <div style="margin-bottom: 1rem;">
-                        <label for="edit_kondisi" style="display: block; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px;">
+                        <label for="edit_kondisi"
+                            style="display: block; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px;">
                             Kondisi <span style="color: #ef4444;">*</span>
                         </label>
                         <div style="position: relative;">
@@ -794,13 +803,15 @@
                                 <option value="Rusak Ringan">Rusak Ringan</option>
                                 <option value="Rusak Berat">Rusak Berat</option>
                             </select>
-                            <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #94a3b8; font-size: 11px;">&#9660;</span>
+                            <span
+                                style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #94a3b8; font-size: 11px;">&#9660;</span>
                         </div>
                     </div>
 
                     {{-- Keterangan --}}
                     <div style="margin-bottom: 1.375rem;">
-                        <label for="edit_keterangan" style="display: block; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px;">
+                        <label for="edit_keterangan"
+                            style="display: block; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px;">
                             Keterangan / Spesifikasi
                         </label>
                         <textarea id="edit_keterangan" name="keterangan" rows="4"
@@ -811,7 +822,8 @@
                     </div>
 
                     {{-- Footer Buttons --}}
-                    <div style="border-top: 1px solid #f1f5f9; padding-top: 1rem; display: flex; justify-content: flex-end; align-items: center; gap: 8px;">
+                    <div
+                        style="border-top: 1px solid #f1f5f9; padding-top: 1rem; display: flex; justify-content: flex-end; align-items: center; gap: 8px;">
                         <button type="button" onclick="closeEditModal()"
                             style="height: 38px; padding: 0 16px; font-size: 13px; font-weight: 600; color: #64748b; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: background 0.15s;"
                             onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">
@@ -819,7 +831,8 @@
                         </button>
                         <button type="submit"
                             style="height: 38px; padding: 0 20px; font-size: 13px; font-weight: 700; color: #fff; background: #7664E4; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: background 0.15s, box-shadow 0.15s;"
-                            onmouseover="this.style.background='#6453d4'; this.style.boxShadow='0 4px 12px rgba(118,100,228,0.35)'" onmouseout="this.style.background='#7664E4'; this.style.boxShadow='none'">
+                            onmouseover="this.style.background='#6453d4'; this.style.boxShadow='0 4px 12px rgba(118,100,228,0.35)'"
+                            onmouseout="this.style.background='#7664E4'; this.style.boxShadow='none'">
                             <i class="fas fa-save" style="font-size: 12px;"></i>
                             Simpan
                         </button>
@@ -919,7 +932,8 @@
                     'Logitech M90'
                 ],
                 'Monitor': [
-                    'LG 20MK400H'
+                    'LG 20MK400H',
+                    'LG TV 43UQ8000PSC'
                 ],
                 'Lainnya': [
                     'M-Tech',
@@ -1065,7 +1079,7 @@
             // Set action form
             const form = document.getElementById('editForm');
             if (form) {
-                form.action = '{{ url("hardware/device-printer") }}/' + id;
+                form.action = '{{ url('hardware/device-printer') }}/' + id;
             }
 
             // Set subtitle
