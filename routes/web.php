@@ -282,6 +282,12 @@ Route::middleware('auth')->group(function () {
         Route::get('hardware/reports', [HardwareController::class, 'report'])->name('hardware.reports');
         Route::get('hardware/reports/minipc', [HardwareController::class, 'reportMiniPc'])->name('hardware.reports.minipc');
 
+        // Edit Master Data
+        Route::get('hardware/master-komputer/{id}/edit', [HardwareController::class, 'editMasterKomputer'])->name('hardware.master-komputer.edit');
+        Route::put('hardware/master-komputer/{id}', [HardwareController::class, 'updateMasterKomputer'])->name('hardware.master-komputer.update');
+        Route::get('hardware/master-mini-pc/{id}/edit', [HardwareController::class, 'editMasterMiniPc'])->name('hardware.master-mini-pc.edit');
+        Route::put('hardware/master-mini-pc/{id}', [HardwareController::class, 'updateMasterMiniPc'])->name('hardware.master-mini-pc.update');
+
         // Evaluasi Hardware
         Route::get('hardware/evaluasi', [HardwareEvaluasiController::class, 'index'])->name('hardware.evaluasi');
         Route::get('hardware/evaluasi/semua', [HardwareEvaluasiController::class, 'semuaData'])->name('hardware.evaluasi.semua');
@@ -294,6 +300,7 @@ Route::middleware('auth')->group(function () {
         Route::put('hardware/device-printer/{id}', [HardwareController::class, 'updateDevicePrinter'])->name('hardware.device-printer.update');
         Route::resource('hardware', HardwareController::class)->names('hardware');
     });
+
 
     // Indikator Mutu
     Route::middleware(['auth'])->group(function () {

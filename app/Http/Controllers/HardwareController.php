@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Hardware;
+use App\Models\MasterKomputer;
+use App\Models\MasterMiniPc;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -61,41 +63,17 @@ class HardwareController extends Controller
         $tahun = $request->input('tahun', date('Y'));
         $selectedLantai = $request->input('lantai');
 
-        $pcMasters = [];
-        $listLantai = [];
-        $path = public_path('assets/file/Hardware.xlsx');
-        
-        if (file_exists($path)) {
-            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($path);
-            $worksheet = $spreadsheet->getActiveSheet();
-            $rows = $worksheet->toArray();
-            
-            foreach ($rows as $index => $row) {
-                if ($index === 0) continue; // Skip header
-                
-                $ip = $row[5] ?? null;
-                $lantai = $row[4] ?? '';
-                if (!empty($ip)) {
-                    if (!empty($lantai) && !in_array($lantai, $listLantai)) {
-                        $listLantai[] = $lantai;
-                    }
+        $listLantai = MasterKomputer::whereNotNull('lantai')
+            ->distinct()
+            ->orderBy('lantai')
+            ->pluck('lantai')
+            ->toArray();
 
-                    if ($selectedLantai && $lantai !== $selectedLantai) {
-                        continue;
-                    }
-
-                    $pcMasters[] = (object)[
-                        'nama_pc' => $row[1] ?? '',
-                        'jenis_pc' => $row[2] ?? '',
-                        'unit' => $row[3] ?? '',
-                        'lantai' => $lantai,
-                        'ip' => $ip,
-                    ];
-                }
-            }
+        $query = MasterKomputer::query();
+        if ($selectedLantai) {
+            $query->where('lantai', $selectedLantai);
         }
-        
-        sort($listLantai);
+        $pcMasters = $query->get();
 
         $hardwareChecks = Hardware::whereYear('tanggal', $tahun)
             ->whereMonth('tanggal', $bulan)
@@ -111,41 +89,17 @@ class HardwareController extends Controller
         $tahun = $request->input('tahun', date('Y'));
         $selectedLantai = $request->input('lantai');
 
-        $pcMasters = [];
-        $listLantai = [];
-        $path = public_path('assets/file/Mini PC.xlsx');
-        
-        if (file_exists($path)) {
-            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($path);
-            $worksheet = $spreadsheet->getActiveSheet();
-            $rows = $worksheet->toArray();
-            
-            foreach ($rows as $index => $row) {
-                if ($index === 0) continue; // Skip header
-                
-                $ip = str_replace(',', '.', $row[4] ?? ''); // IP index shifted from 3 to 4
-                $lantai = $row[3] ?? ''; // Lantai index shifted from 2 to 3
-                if (!empty($ip)) {
-                    if (!empty($lantai) && !in_array($lantai, $listLantai)) {
-                        $listLantai[] = $lantai;
-                    }
+        $listLantai = MasterMiniPc::whereNotNull('lantai')
+            ->distinct()
+            ->orderBy('lantai')
+            ->pluck('lantai')
+            ->toArray();
 
-                    if ($selectedLantai && $lantai !== $selectedLantai) {
-                        continue;
-                    }
-
-                    $pcMasters[] = (object)[
-                        'nama_pc' => $row[1] ?? '',
-                        'jenis_pc' => $row[2] ?? '',
-                        'unit' => '',
-                        'lantai' => $lantai,
-                        'ip' => $ip,
-                    ];
-                }
-            }
+        $query = MasterMiniPc::query();
+        if ($selectedLantai) {
+            $query->where('lantai', $selectedLantai);
         }
-        
-        sort($listLantai);
+        $pcMasters = $query->get();
 
         $hardwareChecks = Hardware::whereYear('tanggal', $tahun)
             ->whereMonth('tanggal', $bulan)
@@ -159,50 +113,28 @@ class HardwareController extends Controller
     {
         $hardwareData = [];
         $ips = [];
-        $path = public_path('assets/file/Hardware.xlsx');
-        
-        if (file_exists($path)) {
-            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($path);
-            $worksheet = $spreadsheet->getActiveSheet();
-            $rows = $worksheet->toArray();
-            
-            foreach ($rows as $index => $row) {
-                if ($index === 0) continue; // Skip header
-                
-                $ip = $row[5] ?? null;
-                if (!empty($ip)) {
-                    $ips[] = $ip;
-                    $hardwareData[$ip] = [
-                        'nama_pc' => $row[1] ?? '',
-                        'jenis_pc' => $row[2] ?? '',
-                        'unit' => $row[3] ?? '',
-                        'lantai' => $row[4] ?? '',
-                    ];
-                }
-            }
-        }
 
-        $pathMiniPc = public_path('assets/file/Mini PC.xlsx');
-        if (file_exists($pathMiniPc)) {
-            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($pathMiniPc);
-            $worksheet = $spreadsheet->getActiveSheet();
-            $rows = $worksheet->toArray();
-            
-            foreach ($rows as $index => $row) {
-                if ($index === 0) continue; // Skip header
-                
-                $ip = str_replace(',', '.', $row[4] ?? '');
-                if (!empty($ip)) {
-                    $ips[] = $ip;
-                    $hardwareData[$ip] = [
-                        'nama_pc' => $row[1] ?? '',
-                        'jenis_pc' => $row[2] ?? '',
-                        'unit' => '-',
-                        'lantai' => $row[3] ?? '',
-                    ];
-                }
-            }
-        }
+        // Ambil dari master_komputer
+        MasterKomputer::all()->each(function ($pc) use (&$hardwareData, &$ips) {
+            $ips[] = $pc->ip;
+            $hardwareData[$pc->ip] = [
+                'nama_pc'  => $pc->nama_pc,
+                'jenis_pc' => $pc->jenis_pc,
+                'unit'     => $pc->unit,
+                'lantai'   => $pc->lantai,
+            ];
+        });
+
+        // Ambil dari master_mini_pc
+        MasterMiniPc::all()->each(function ($pc) use (&$hardwareData, &$ips) {
+            $ips[] = $pc->ip;
+            $hardwareData[$pc->ip] = [
+                'nama_pc'  => $pc->nama_pc,
+                'jenis_pc' => $pc->jenis_pc,
+                'unit'     => '-',
+                'lantai'   => $pc->lantai,
+            ];
+        });
 
         return view('pages.hardware.create', compact('hardwareData', 'ips'));
     }
@@ -233,50 +165,28 @@ class HardwareController extends Controller
     {
         $hardwareData = [];
         $ips = [];
-        $path = public_path('assets/file/Hardware.xlsx');
-        
-        if (file_exists($path)) {
-            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($path);
-            $worksheet = $spreadsheet->getActiveSheet();
-            $rows = $worksheet->toArray();
-            
-            foreach ($rows as $index => $row) {
-                if ($index === 0) continue; // Skip header
-                
-                $ip = $row[5] ?? null;
-                if (!empty($ip)) {
-                    $ips[] = $ip;
-                    $hardwareData[$ip] = [
-                        'nama_pc' => $row[1] ?? '',
-                        'jenis_pc' => $row[2] ?? '',
-                        'unit' => $row[3] ?? '',
-                        'lantai' => $row[4] ?? '',
-                    ];
-                }
-            }
-        }
 
-        $pathMiniPc = public_path('assets/file/Mini PC.xlsx');
-        if (file_exists($pathMiniPc)) {
-            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($pathMiniPc);
-            $worksheet = $spreadsheet->getActiveSheet();
-            $rows = $worksheet->toArray();
-            
-            foreach ($rows as $index => $row) {
-                if ($index === 0) continue; // Skip header
-                
-                $ip = str_replace(',', '.', $row[4] ?? '');
-                if (!empty($ip)) {
-                    $ips[] = $ip;
-                    $hardwareData[$ip] = [
-                        'nama_pc' => $row[1] ?? '',
-                        'jenis_pc' => $row[2] ?? '',
-                        'unit' => '-',
-                        'lantai' => $row[3] ?? '',
-                    ];
-                }
-            }
-        }
+        // Ambil dari master_komputer
+        MasterKomputer::all()->each(function ($pc) use (&$hardwareData, &$ips) {
+            $ips[] = $pc->ip;
+            $hardwareData[$pc->ip] = [
+                'nama_pc'  => $pc->nama_pc,
+                'jenis_pc' => $pc->jenis_pc,
+                'unit'     => $pc->unit,
+                'lantai'   => $pc->lantai,
+            ];
+        });
+
+        // Ambil dari master_mini_pc
+        MasterMiniPc::all()->each(function ($pc) use (&$hardwareData, &$ips) {
+            $ips[] = $pc->ip;
+            $hardwareData[$pc->ip] = [
+                'nama_pc'  => $pc->nama_pc,
+                'jenis_pc' => $pc->jenis_pc,
+                'unit'     => '-',
+                'lantai'   => $pc->lantai,
+            ];
+        });
 
         return view('pages.hardware.edit', compact('hardware', 'hardwareData', 'ips'));
     }
@@ -309,65 +219,40 @@ class HardwareController extends Controller
     public function showDevicePrinter($ip)
     {
         $pcData = null;
-        $path = public_path('assets/file/Hardware.xlsx');
-        
-        if (file_exists($path)) {
-            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($path);
-            $worksheet = $spreadsheet->getActiveSheet();
-            $rows = $worksheet->toArray();
-            
-            foreach ($rows as $index => $row) {
-                if ($index === 0) continue; // Skip header
-                
-                $rowIp = $row[5] ?? null;
-                if ($rowIp == $ip) {
-                    // RAM = kolom 6, CPU = kolom 7, gabungkan dengan newline
-                    $spesParts = array_filter([
-                        trim($row[6] ?? ''),
-                        trim($row[7] ?? ''),
-                    ]);
-                    $pcData = (object)[
-                        'ip'          => $rowIp,
-                        'nama_pc'     => $row[1] ?? '',
-                        'jenis_pc'    => $row[2] ?? '',
-                        'unit'        => $row[3] ?? '',
-                        'lantai'      => $row[4] ?? '',
-                        'spesifikasi' => implode("\n", $spesParts),
-                    ];
-                    break;
-                }
-            }
+
+        // Cari di master_komputer
+        $master = MasterKomputer::where('ip', $ip)->first();
+        if ($master) {
+            $spesParts = array_filter([
+                trim($master->ram ?? ''),
+                trim($master->cpu ?? ''),
+            ]);
+            $pcData = (object)[
+                'ip'          => $master->ip,
+                'nama_pc'     => $master->nama_pc,
+                'jenis_pc'    => $master->jenis_pc,
+                'unit'        => $master->unit,
+                'lantai'      => $master->lantai,
+                'spesifikasi' => implode("\n", $spesParts),
+            ];
         }
 
-        // Jika tidak ditemukan di Hardware, cari di Mini PC
+        // Jika tidak ditemukan, cari di master_mini_pc
         if (!$pcData) {
-            $pathMiniPc = public_path('assets/file/Mini PC.xlsx');
-            if (file_exists($pathMiniPc)) {
-                $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($pathMiniPc);
-                $worksheet = $spreadsheet->getActiveSheet();
-                $rows = $worksheet->toArray();
-                
-                foreach ($rows as $index => $row) {
-                    if ($index === 0) continue; // Skip header
-                    
-                    $rowIp = str_replace(',', '.', $row[4] ?? '');
-                    if ($rowIp == $ip) {
-                        // Mini PC: RAM = kolom 5, CPU = kolom 6 (sesuaikan jika kolom berbeda)
-                        $spesParts = array_filter([
-                            trim($row[5] ?? ''),
-                            trim($row[6] ?? ''),
-                        ]);
-                        $pcData = (object)[
-                            'ip'          => $rowIp,
-                            'nama_pc'     => $row[1] ?? '',
-                            'jenis_pc'    => $row[2] ?? '',
-                            'unit'        => '',
-                            'lantai'      => $row[3] ?? '',
-                            'spesifikasi' => implode("\n", $spesParts),
-                        ];
-                        break;
-                    }
-                }
+            $masterMini = MasterMiniPc::where('ip', $ip)->first();
+            if ($masterMini) {
+                $spesParts = array_filter([
+                    trim($masterMini->ram ?? ''),
+                    trim($masterMini->cpu ?? ''),
+                ]);
+                $pcData = (object)[
+                    'ip'          => $masterMini->ip,
+                    'nama_pc'     => $masterMini->nama_pc,
+                    'jenis_pc'    => $masterMini->jenis_pc,
+                    'unit'        => '',
+                    'lantai'      => $masterMini->lantai,
+                    'spesifikasi' => implode("\n", $spesParts),
+                ];
             }
         }
 
@@ -411,8 +296,11 @@ class HardwareController extends Controller
         $devicePrinter = \App\Models\DevicePrinter::findOrFail($id);
 
         $validated = $request->validate([
-            'kondisi'    => 'required|string|max:255',
-            'keterangan' => 'nullable|string',
+            'nama_perangkat' => 'required|string|max:255',
+            'jenis'          => 'required|string|max:255',
+            'merk_type'      => 'nullable|string|max:255',
+            'kondisi'        => 'required|string|max:255',
+            'keterangan'     => 'nullable|string',
         ]);
 
         $devicePrinter->update($validated);
@@ -434,5 +322,60 @@ class HardwareController extends Controller
 
         return redirect()->route('hardware.device-printer.show', $ip)
             ->with('success', 'Device/Printer berhasil dihapus.');
+    }
+
+    // ── Master Komputer ──────────────────────────────────────────────
+
+    public function editMasterKomputer($id)
+    {
+        $master = MasterKomputer::findOrFail($id);
+        return view('pages.hardware.master_komputer_edit', compact('master'));
+    }
+
+    public function updateMasterKomputer(Request $request, $id)
+    {
+        $master = MasterKomputer::findOrFail($id);
+
+        $validated = $request->validate([
+            'nama_pc'  => 'required|string|max:255',
+            'jenis_pc' => 'nullable|string|max:255',
+            'unit'     => 'nullable|string|max:255',
+            'lantai'   => 'nullable|string|max:255',
+            'ip'       => 'required|string|max:255|unique:master_komputer,ip,' . $id,
+            'ram'      => 'nullable|string|max:255',
+            'cpu'      => 'nullable|string|max:255',
+        ]);
+
+        $master->update($validated);
+
+        return redirect()->route('hardware.reports')
+            ->with('success', 'Data master komputer berhasil diperbarui.');
+    }
+
+    // ── Master Mini PC ───────────────────────────────────────────────
+
+    public function editMasterMiniPc($id)
+    {
+        $master = MasterMiniPc::findOrFail($id);
+        return view('pages.hardware.master_mini_pc_edit', compact('master'));
+    }
+
+    public function updateMasterMiniPc(Request $request, $id)
+    {
+        $master = MasterMiniPc::findOrFail($id);
+
+        $validated = $request->validate([
+            'nama_pc'  => 'required|string|max:255',
+            'jenis_pc' => 'nullable|string|max:255',
+            'lantai'   => 'nullable|string|max:255',
+            'ip'       => 'required|string|max:255|unique:master_mini_pc,ip,' . $id,
+            'ram'      => 'nullable|string|max:255',
+            'cpu'      => 'nullable|string|max:255',
+        ]);
+
+        $master->update($validated);
+
+        return redirect()->route('hardware.reports.minipc')
+            ->with('success', 'Data master Mini PC berhasil diperbarui.');
     }
 }

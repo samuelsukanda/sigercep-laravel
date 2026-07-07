@@ -176,13 +176,16 @@
                                         </a>
                                     </td>
                                     <td class="px-6 py-4 space-x-2 text-center">
+                                        {{-- Edit Master --}}
+                                        <a href="{{ route('hardware.master-komputer.edit', $pc->id) }}"
+                                            class="text-amber-500 hover:text-amber-700" title="Edit Master Data">
+                                            <i class="fas fa-pen-to-square text-lg"></i>
+                                        </a>
                                         @if ($isChecked)
                                             <a href="{{ route('hardware.show', $hardwareId) }}"
                                                 class="text-blue-500 hover:text-blue-700" title="Lihat Detail">
                                                 <i class="fas fa-eye text-lg"></i>
                                             </a>
-                                        @else
-                                            -
                                         @endif
                                     </td>
                                 </tr>

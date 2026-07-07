@@ -140,7 +140,7 @@
                                                         </button>
                                                     @endif
                                                     <button type="button"
-                                                        onclick="openEditModal({{ $device->id }}, '{{ addslashes($device->nama_perangkat) }}', '{{ $device->kondisi }}', '{{ addslashes($device->keterangan ?? '') }}')"
+                                                        onclick="openEditModal({{ $device->id }}, '{{ addslashes($device->nama_perangkat) }}', '{{ addslashes($device->jenis) }}', '{{ addslashes($device->merk_type ?? '') }}', '{{ $device->kondisi }}', '{{ addslashes($device->keterangan ?? '') }}')"
                                                         class="text-amber-600 hover:text-amber-800 mr-2"
                                                         style="background: none; border: none; cursor: pointer; padding: 0;"
                                                         title="Edit">
@@ -788,24 +788,95 @@
                     @csrf
                     @method('PUT')
 
-                    {{-- Kondisi --}}
+                    {{-- Nama Perangkat --}}
                     <div style="margin-bottom: 1rem;">
-                        <label for="edit_kondisi"
+                        <label for="edit_nama_perangkat"
                             style="display: block; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px;">
-                            Kondisi <span style="color: #ef4444;">*</span>
+                            Nama Perangkat <span style="color: #ef4444;">*</span>
                         </label>
-                        <div style="position: relative;">
-                            <select id="edit_kondisi" name="kondisi"
+                        <input type="text" id="edit_nama_perangkat" name="nama_perangkat" required
+                            style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 11px; font-size: 13.5px; color: #1e293b; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; transition: border-color 0.15s, box-shadow 0.15s;"
+                            onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
+                    </div>
+
+                    {{-- Jenis + Kondisi (2 kolom) --}}
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1rem;">
+
+                        {{-- Jenis --}}
+                        <div>
+                            <label for="edit_jenis"
+                                style="display: block; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px;">
+                                Jenis <span style="color: #ef4444;">*</span>
+                            </label>
+                            <div style="position: relative;">
+                                <select id="edit_jenis" name="jenis" required
+                                    style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 32px 0 11px; font-size: 13.5px; color: #1e293b; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; appearance: none; -webkit-appearance: none; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s;"
+                                    onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                    onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
+                                    <option value="Printer">Printer</option>
+                                    <option value="Scanner">Scanner</option>
+                                    <option value="Webcam">Webcam</option>
+                                    <option value="UPS">UPS</option>
+                                    <option value="Keyboard">Keyboard</option>
+                                    <option value="Mouse">Mouse</option>
+                                    <option value="Monitor">Monitor</option>
+                                    <option value="Lainnya">Lainnya</option>
+                                </select>
+                                <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #94a3b8; font-size: 11px;">&#9660;</span>
+                            </div>
+                        </div>
+
+                        {{-- Kondisi --}}
+                        <div>
+                            <label for="edit_kondisi"
+                                style="display: block; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px;">
+                                Kondisi <span style="color: #ef4444;">*</span>
+                            </label>
+                            <div style="position: relative;">
+                                <select id="edit_kondisi" name="kondisi"
+                                    style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 32px 0 11px; font-size: 13.5px; color: #1e293b; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; appearance: none; -webkit-appearance: none; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s;"
+                                    onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                    onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
+                                    <option value="Baik">Baik</option>
+                                    <option value="Rusak Ringan">Rusak Ringan</option>
+                                    <option value="Rusak Berat">Rusak Berat</option>
+                                </select>
+                                <span
+                                    style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #94a3b8; font-size: 11px;">&#9660;</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Merk / Type --}}
+                    <div id="edit_merk_type_group" style="margin-bottom: 1rem; display: none;">
+                        <label for="edit_merk_type_select"
+                            style="display: block; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px;">
+                            Merk / Type <span style="color: #ef4444;">*</span>
+                        </label>
+
+                        {{-- Select Dropdown --}}
+                        <div id="edit_merk_type_select_container"
+                            style="position: relative; display: block; margin-bottom: 8px;">
+                            <select id="edit_merk_type_select"
                                 style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 32px 0 11px; font-size: 13.5px; color: #1e293b; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; appearance: none; -webkit-appearance: none; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s;"
                                 onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
                                 onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
-                                <option value="Baik">Baik</option>
-                                <option value="Rusak Ringan">Rusak Ringan</option>
-                                <option value="Rusak Berat">Rusak Berat</option>
+                                <option value="">Pilih Merk/Type</option>
                             </select>
-                            <span
-                                style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #94a3b8; font-size: 11px;">&#9660;</span>
+                            <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #94a3b8; font-size: 11px;">&#9660;</span>
                         </div>
+
+                        {{-- Text Input for Manual Entry --}}
+                        <div id="edit_merk_type_input_container" style="display: none;">
+                            <input type="text" id="edit_merk_type_input" placeholder="Tulis Merk/Type"
+                                style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 11px; font-size: 13.5px; color: #1e293b; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; transition: border-color 0.15s, box-shadow 0.15s;"
+                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
+                        </div>
+
+                        {{-- Hidden input that actually gets submitted --}}
+                        <input type="hidden" id="edit_merk_type" name="merk_type" />
                     </div>
 
                     {{-- Keterangan --}}
@@ -1029,6 +1100,113 @@
 
             merkTypeInput.addEventListener('input', syncHiddenValue);
 
+            // ==========================================
+            // Dynamic Merk/Type Selection for EDIT MODAL
+            // ==========================================
+            const editJenisSelect = document.getElementById('edit_jenis');
+            const editMerkTypeGroup = document.getElementById('edit_merk_type_group');
+            const editMerkTypeSelectContainer = document.getElementById('edit_merk_type_select_container');
+            const editMerkTypeSelect = document.getElementById('edit_merk_type_select');
+            const editMerkTypeInputContainer = document.getElementById('edit_merk_type_input_container');
+            const editMerkTypeInput = document.getElementById('edit_merk_type_input');
+            const editMerkTypeHidden = document.getElementById('edit_merk_type');
+
+            window.updateEditMerkTypeFields = function(initialValue = null) {
+                const selectedJenis = editJenisSelect.value;
+
+                if (!selectedJenis) {
+                    editMerkTypeGroup.style.display = 'none';
+                    editMerkTypeHidden.value = '';
+                    return;
+                }
+
+                editMerkTypeGroup.style.display = 'block';
+
+                if (merkOptions[selectedJenis]) {
+                    // Populate select
+                    editMerkTypeSelect.innerHTML = '<option value="">Pilih Merk/Type</option>';
+                    merkOptions[selectedJenis].forEach(opt => {
+                        const option = document.createElement('option');
+                        option.value = opt;
+                        option.textContent = opt;
+                        editMerkTypeSelect.appendChild(option);
+                    });
+                    // Add manual option
+                    const manualOption = document.createElement('option');
+                    manualOption.value = '__manual__';
+                    manualOption.textContent = 'Lainnya';
+                    editMerkTypeSelect.appendChild(manualOption);
+
+                    editMerkTypeSelectContainer.style.display = 'block';
+                    editMerkTypeSelect.required = true;
+
+                    // Set initial value if provided
+                    if (initialValue) {
+                        const exists = merkOptions[selectedJenis].includes(initialValue);
+                        if (exists) {
+                            editMerkTypeSelect.value = initialValue;
+                            editMerkTypeInputContainer.style.display = 'none';
+                            editMerkTypeInput.required = false;
+                        } else {
+                            editMerkTypeSelect.value = '__manual__';
+                            editMerkTypeInputContainer.style.display = 'block';
+                            editMerkTypeInput.required = true;
+                            editMerkTypeInput.value = initialValue;
+                        }
+                    } else {
+                        editMerkTypeSelect.value = '';
+                        editMerkTypeInputContainer.style.display = 'none';
+                        editMerkTypeInput.required = false;
+                    }
+
+                } else {
+                    // No pre-defined options
+                    editMerkTypeSelectContainer.style.display = 'none';
+                    editMerkTypeSelect.required = false;
+
+                    editMerkTypeInputContainer.style.display = 'block';
+                    editMerkTypeInput.required = true;
+                    if (initialValue) {
+                        editMerkTypeInput.value = initialValue;
+                    }
+                }
+
+                syncEditHiddenValue();
+            };
+
+            function syncEditHiddenValue() {
+                const selectedJenis = editJenisSelect.value;
+                if (merkOptions[selectedJenis]) {
+                    if (editMerkTypeSelect.value === '__manual__') {
+                        editMerkTypeHidden.value = editMerkTypeInput.value;
+                    } else {
+                        editMerkTypeHidden.value = editMerkTypeSelect.value;
+                    }
+                } else {
+                    editMerkTypeHidden.value = editMerkTypeInput.value;
+                }
+            }
+
+            editJenisSelect.addEventListener('change', function() {
+                editMerkTypeSelect.value = '';
+                editMerkTypeInput.value = '';
+                window.updateEditMerkTypeFields();
+            });
+
+            editMerkTypeSelect.addEventListener('change', function() {
+                if (this.value === '__manual__') {
+                    editMerkTypeInputContainer.style.display = 'block';
+                    editMerkTypeInput.required = true;
+                    editMerkTypeInput.focus();
+                } else {
+                    editMerkTypeInputContainer.style.display = 'none';
+                    editMerkTypeInput.required = false;
+                }
+                syncEditHiddenValue();
+            });
+
+            editMerkTypeInput.addEventListener('input', syncEditHiddenValue);
+
             const photoModal = document.getElementById('photoModal');
             if (photoModal) {
                 document.body.appendChild(photoModal);
@@ -1072,7 +1250,7 @@
             }
         }
 
-        function openEditModal(id, namaPerangkat, kondisi, keterangan) {
+        function openEditModal(id, namaPerangkat, jenis, merkType, kondisi, keterangan) {
             const modal = document.getElementById('editModal');
             if (!modal) return;
 
@@ -1085,6 +1263,20 @@
             // Set subtitle
             const subtitle = document.getElementById('editModalSubtitle');
             if (subtitle) subtitle.innerText = namaPerangkat;
+
+            // Set nilai nama_perangkat
+            const namaInput = document.getElementById('edit_nama_perangkat');
+            if (namaInput) namaInput.value = namaPerangkat || '';
+
+            // Set nilai jenis
+            const jenisSelect = document.getElementById('edit_jenis');
+            if (jenisSelect) {
+                jenisSelect.value = jenis || '';
+                // Panggil logic dynamic merk/type dan berikan nilai awal (merkType)
+                if (window.updateEditMerkTypeFields) {
+                    window.updateEditMerkTypeFields(merkType);
+                }
+            }
 
             // Set nilai kondisi
             const kondisiSelect = document.getElementById('edit_kondisi');
