@@ -37,6 +37,8 @@
     </div>
 @endsection
 
+
+
 @push('scripts')
     <script src="{{ asset('assets/js/datatable/datatable-hardware.js') }}"></script>
     <script src="{{ asset('assets/js/loading-filter.js') }}"></script>
@@ -71,5 +73,4 @@
             sampai.set("minDate", dariValue);
             dari.set("maxDate", sampaiValue);
         });
-    </script>
 @endpush

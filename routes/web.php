@@ -39,6 +39,7 @@ use App\Http\Controllers\MandatoryTrainingController;
 use App\Http\Controllers\SuratKeputusanController;
 use App\Http\Controllers\KomiteMedikController;
 use App\Http\Controllers\HardwareController;
+use App\Http\Controllers\HardwareEvaluasiController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserSessionController;
 use App\Http\Controllers\UserController;
@@ -280,6 +281,13 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth'])->group(function () {
         Route::get('hardware/reports', [HardwareController::class, 'report'])->name('hardware.reports');
         Route::get('hardware/reports/minipc', [HardwareController::class, 'reportMiniPc'])->name('hardware.reports.minipc');
+
+        // Evaluasi Hardware
+        Route::get('hardware/evaluasi', [HardwareEvaluasiController::class, 'index'])->name('hardware.evaluasi');
+        Route::get('hardware/evaluasi/semua', [HardwareEvaluasiController::class, 'semuaData'])->name('hardware.evaluasi.semua');
+        Route::get('hardware/evaluasi/data', [HardwareEvaluasiController::class, 'getData'])->name('hardware.evaluasi.data');
+        Route::post('hardware/evaluasi/simpan', [HardwareEvaluasiController::class, 'simpan'])->name('hardware.evaluasi.simpan');
+        Route::delete('hardware/evaluasi/{bulan}', [HardwareEvaluasiController::class, 'hapusBulan'])->name('hardware.evaluasi.hapus');
         Route::get('hardware/{ip}/device-printer', [HardwareController::class, 'showDevicePrinter'])->name('hardware.device-printer.show');
         Route::post('hardware/{ip}/device-printer', [HardwareController::class, 'storeDevicePrinter'])->name('hardware.device-printer.store');
         Route::delete('hardware/device-printer/{id}', [HardwareController::class, 'destroyDevicePrinter'])->name('hardware.device-printer.destroy');
