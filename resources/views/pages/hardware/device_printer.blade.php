@@ -823,7 +823,8 @@
                                     <option value="Monitor">Monitor</option>
                                     <option value="Lainnya">Lainnya</option>
                                 </select>
-                                <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #94a3b8; font-size: 11px;">&#9660;</span>
+                                <span
+                                    style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #94a3b8; font-size: 11px;">&#9660;</span>
                             </div>
                         </div>
 
@@ -864,7 +865,8 @@
                                 onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
                                 <option value="">Pilih Merk/Type</option>
                             </select>
-                            <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #94a3b8; font-size: 11px;">&#9660;</span>
+                            <span
+                                style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #94a3b8; font-size: 11px;">&#9660;</span>
                         </div>
 
                         {{-- Text Input for Manual Entry --}}

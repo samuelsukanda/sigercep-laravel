@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ManajemenRisiko;
-use Carbon\Carbon;
+use App\Models\DaftarRisiko;
 use Illuminate\Support\Facades\Validator;
 
 class ManajemenRisikoController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('permission:manajemen_risiko,read')->only(['index', 'show']);
@@ -20,39 +18,43 @@ class ManajemenRisikoController extends Controller
 
     public function index(Request $request)
     {
-        $isFiltered = $request->hasAny([
-            'periode_dari',
-            'periode_sampai',
-        ]);
+        $unitFilter = $request->get('unit');
+        $tingkatFilter = $request->get('tingkat');
+        $kodeFilter = $request->get('kode_risiko');
 
-        $validator = Validator::make($request->all(), [
-            'periode_dari'   => 'nullable|date_format:d-m-Y',
-            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
-        ], [
-            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
-        ]);
+        // Distinct options for filters
+        $unitOptions = DaftarRisiko::select('unit')->distinct()->orderBy('unit')->pluck('unit');
+        $tingkatOptions = ['Sangat Rendah', 'Rendah', 'Sedang', 'Tinggi', 'Sangat Tinggi'];
+        $kodeOptions = DaftarRisiko::select('kode_risiko')->whereNotNull('kode_risiko')->distinct()->orderBy('kode_risiko')->pluck('kode_risiko');
 
-        if ($validator->fails()) {
-            return redirect()->route('komite-mutu.manajemen-risiko.index')
-                ->withErrors($validator)
-                ->withInput();
+        $query = DaftarRisiko::query();
+
+        if ($unitFilter) {
+            $query->where('unit', $unitFilter);
+        }
+        
+        if ($tingkatFilter) {
+            $query->where('analisis_tingkat', $tingkatFilter);
         }
 
-        $query = ManajemenRisiko::query();
-
-        if ($request->filled('periode_dari')) {
-            $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
-            $query->whereDate('tanggal', '>=', $startDate);
+        if ($kodeFilter) {
+            $query->where('kode_risiko', $kodeFilter);
         }
 
-        if ($request->filled('periode_sampai')) {
-            $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
-            $query->whereDate('tanggal', '<=', $endDate);
-        }
+        $risikos = $query->orderBy('no_urut')->get();
 
-        $mutu = $query->orderBy('tanggal', 'desc')->get();
+        // Statistics
+        $totalRisiko = DaftarRisiko::count();
+        $totalTinggiSangatTinggi = DaftarRisiko::whereIn('analisis_tingkat', ['Tinggi', 'Sangat Tinggi'])->count();
+        $jumlahUnit = DaftarRisiko::select('unit')->distinct()->count();
 
-        return view('pages.komite-mutu.manajemen-risiko.index', compact('mutu', 'isFiltered'));
+        $isFiltered = $request->hasAny(['unit', 'tingkat', 'kode_risiko']);
+
+        return view('pages.komite-mutu.manajemen-risiko.index', compact(
+            'risikos', 'unitFilter', 'tingkatFilter', 'kodeFilter', 
+            'unitOptions', 'tingkatOptions', 'kodeOptions',
+            'totalRisiko', 'totalTinggiSangatTinggi', 'jumlahUnit', 'isFiltered'
+        ));
     }
 
     public function create()
@@ -63,61 +65,91 @@ class ManajemenRisikoController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama' => 'required|string|max:50',
-            'unit' => 'required|string|max:50',
-            'tanggal' => 'required|date',
-            'uraian' => 'required|string|max:255',
-            'dampak' => 'required|integer|min:1|max:5',
-            'kemungkinan' => 'required|integer|min:1|max:5',
-            'nilai' => 'required|integer',
-            'keterangan' => 'nullable|string|max:255',
+            'unit' => 'required|string|max:255',
+            'no_urut' => 'required|integer',
+            'risiko' => 'required|string',
+            'kode_risiko' => 'nullable|string|max:255',
+            'sebab' => 'nullable|string',
+            'sumber_risiko' => 'nullable|string|max:255',
+            'c_uc' => 'nullable|string|max:50',
+            'dampak' => 'nullable|string',
+            'pengendalian' => 'nullable|string',
+            'analisis_p' => 'nullable|numeric',
+            'analisis_d' => 'nullable|numeric',
+            'analisis_bobot' => 'nullable|numeric',
+            'analisis_nilai' => 'nullable|numeric',
+            'analisis_tingkat' => 'nullable|string|max:255',
+            'target_waktu' => 'nullable|string|max:255',
+            'mitigasi_p' => 'nullable|numeric',
+            'mitigasi_d' => 'nullable|numeric',
+            'mitigasi_bobot' => 'nullable|numeric',
+            'mitigasi_nilai' => 'nullable|numeric',
+            'mitigasi_tingkat' => 'nullable|string|max:255',
         ]);
 
-        ManajemenRisiko::create($validated);
+        $validated['efektif'] = $request->has('efektif');
+        $validated['tidak_efektif'] = $request->has('tidak_efektif');
+
+        DaftarRisiko::create($validated);
 
         return redirect()->route('komite-mutu.manajemen-risiko.index')
-            ->with('success', 'Data berhasil disimpan.');
+            ->with('success', 'Data risiko berhasil disimpan.');
     }
 
     public function show(string $id)
     {
-        $mutu = ManajemenRisiko::findOrFail($id);
-        return view('pages.komite-mutu.manajemen-risiko.detail', compact('mutu'));
+        $risiko = DaftarRisiko::findOrFail($id);
+        return view('pages.komite-mutu.manajemen-risiko.detail', compact('risiko'));
     }
 
     public function edit(string $id)
     {
-        $mutu = ManajemenRisiko::findOrFail($id);
-        return view('pages.komite-mutu.manajemen-risiko.edit', compact('mutu'));
+        $risiko = DaftarRisiko::findOrFail($id);
+        return view('pages.komite-mutu.manajemen-risiko.edit', compact('risiko'));
     }
 
     public function update(Request $request, string $id)
     {
-        $mutu = ManajemenRisiko::findOrFail($id);
+        $risiko = DaftarRisiko::findOrFail($id);
 
         $validated = $request->validate([
-            'nama' => 'required|string|max:50',
-            'unit' => 'required|string|max:50',
-            'tanggal' => 'required|date',
-            'uraian' => 'required|string|max:255',
-            'dampak' => 'required|integer|min:1|max:5',
-            'kemungkinan' => 'required|integer|min:1|max:5',
-            'nilai' => 'required|integer|min:1|max:25',
-            'keterangan' => 'nullable|string|max:255',
+            'unit' => 'required|string|max:255',
+            'no_urut' => 'required|integer',
+            'risiko' => 'required|string',
+            'kode_risiko' => 'nullable|string|max:255',
+            'sebab' => 'nullable|string',
+            'sumber_risiko' => 'nullable|string|max:255',
+            'c_uc' => 'nullable|string|max:50',
+            'dampak' => 'nullable|string',
+            'pengendalian' => 'nullable|string',
+            'analisis_p' => 'nullable|numeric',
+            'analisis_d' => 'nullable|numeric',
+            'analisis_bobot' => 'nullable|numeric',
+            'analisis_nilai' => 'nullable|numeric',
+            'analisis_tingkat' => 'nullable|string|max:255',
+            'target_waktu' => 'nullable|string|max:255',
+            'mitigasi_p' => 'nullable|numeric',
+            'mitigasi_d' => 'nullable|numeric',
+            'mitigasi_bobot' => 'nullable|numeric',
+            'mitigasi_nilai' => 'nullable|numeric',
+            'mitigasi_tingkat' => 'nullable|string|max:255',
         ]);
 
-        $mutu->update($validated);
+        $validated['efektif'] = $request->has('efektif');
+        $validated['tidak_efektif'] = $request->has('tidak_efektif');
+
+        $risiko->update($validated);
 
         return redirect()->route('komite-mutu.manajemen-risiko.index')
-            ->with('success', 'Data berhasil diperbarui.');
+            ->with('success', 'Data risiko berhasil diperbarui.');
     }
 
     public function destroy(string $id)
     {
-        $mutu = ManajemenRisiko::findOrFail($id);
-        $mutu->delete();
+        $risiko = DaftarRisiko::findOrFail($id);
+        $risiko->delete();
 
         return redirect()->route('komite-mutu.manajemen-risiko.index')
-            ->with('success', 'Data berhasil dihapus.');
+            ->with('success', 'Data risiko berhasil dihapus.');
     }
 }

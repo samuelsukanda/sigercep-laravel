@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+@section('title', 'SIGERCEP - Tambah Dokumen IT')
 
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
@@ -17,7 +17,8 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Jenis Dokumen --}}
-                                <x-form.select name="jenis_dokumen" label="Jenis Dokumen" :options="config('units.jenis_dokumen_it')" :selected="old('jenis_dokumen')" required />
+                                <x-form.select name="jenis_dokumen" label="Jenis Dokumen" :options="config('units.jenis_dokumen_it')"
+                                    :selected="old('jenis_dokumen')" required />
 
                                 {{-- File PDF --}}
                                 <x-form.file-upload-pdf name="file_pdf" label="Upload File (PDF)" />

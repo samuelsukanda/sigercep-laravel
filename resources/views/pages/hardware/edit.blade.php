@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+@section('title', 'SIGERCEP - Edit Ceklis Hardware')
 
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
