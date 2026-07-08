@@ -50,6 +50,37 @@
                         </a>
                         @endcanAccess
 
+                        {{-- Generate Otomatis --}}
+                        @php
+                            $user = Auth::user();
+                            $canAccessPermissions = false;
+
+                            if ($user) {
+                                $name = strtolower(trim($user->name ?? ''));
+                                $unit = strtolower(trim($user->unit ?? ''));
+                                $jabatan = strtolower(trim($user->jabatan ?? ''));
+
+                                if (
+                                    $name == 'sammuel' &&
+                                    $unit == 'teknologi dan informasi' &&
+                                    $jabatan == 'operasional it technical support'
+                                ) {
+                                    $canAccessPermissions = true;
+                                }
+                            }
+                        @endphp
+
+                        @if ($canAccessPermissions)
+                        <button type="button"
+                            onclick="document.getElementById('generateModal').classList.remove('hidden'); document.getElementById('generateModal').classList.add('flex');"
+                            class="mr-1 inline-flex items-center justify-center
+                            h-9 px-4 text-xs font-semibold text-white uppercase
+                            rounded-lg shadow-md hover:shadow-sm active:opacity-85 transition-all"
+                            style="background-color: #3b82f6 !important;">
+                            <i class="fas fa-magic mr-2"></i> Generate
+                        </button>
+                        @endif
+
                         {{-- Tambah Data --}}
                         @canAccess('hardware', 'create')
                         <a href="{{ route('hardware.create') }}"

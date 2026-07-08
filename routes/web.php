@@ -298,9 +298,9 @@ Route::middleware('auth')->group(function () {
         Route::post('hardware/{ip}/device-printer', [HardwareController::class, 'storeDevicePrinter'])->name('hardware.device-printer.store');
         Route::delete('hardware/device-printer/{id}', [HardwareController::class, 'destroyDevicePrinter'])->name('hardware.device-printer.destroy');
         Route::put('hardware/device-printer/{id}', [HardwareController::class, 'updateDevicePrinter'])->name('hardware.device-printer.update');
+        Route::post('hardware/generate', [HardwareController::class, 'generate'])->name('hardware.generate');
         Route::resource('hardware', HardwareController::class)->names('hardware');
     });
-
 
     // Indikator Mutu
     Route::middleware(['auth'])->group(function () {

@@ -54,7 +54,12 @@ class HardwareController extends Controller
 
         $hardware = $query->orderBy('tanggal', 'desc')->get();
 
-        return view('pages.hardware.index', compact('hardware', 'isFiltered'));
+        $listLantaiKomputer = MasterKomputer::whereNotNull('lantai')->distinct()->pluck('lantai')->toArray();
+        $listLantaiMiniPc = MasterMiniPc::whereNotNull('lantai')->distinct()->pluck('lantai')->toArray();
+        $listLantai = array_unique(array_merge($listLantaiKomputer, $listLantaiMiniPc));
+        sort($listLantai);
+
+        return view('pages.hardware.index', compact('hardware', 'isFiltered', 'listLantai'));
     }
 
     public function report(Request $request)
@@ -377,5 +382,71 @@ class HardwareController extends Controller
 
         return redirect()->route('hardware.reports.minipc')
             ->with('success', 'Data master Mini PC berhasil diperbarui.');
+    }
+
+    // ── Generate Otomatis Ceklis Hardware ────────────────────────────
+    public function generate(Request $request)
+    {
+        $validated = $request->validate([
+            'tanggal' => ['required', 'date_format:d-m-Y'],
+            'lantai'  => 'required|array',
+            'lantai.*' => 'string',
+        ]);
+
+        $carbonDate = Carbon::createFromFormat('d-m-Y', $validated['tanggal']);
+        $tanggal = $carbonDate->format('Y-m-d');
+        $bulan   = $carbonDate->format('m');
+        $tahun   = $carbonDate->format('Y');
+
+        $lantai = $validated['lantai'];
+
+        $komputers = MasterKomputer::whereIn('lantai', $lantai)->get();
+
+        $count = 0;
+
+        $checklistItems = [
+            'Wallpaper backround RS',
+            'Password admin dan user terkontrol',
+            'Screen saver jalan',
+            'Aplikasi remote VNC berjalan',
+            'Bersihkan komputer dari software yang tidak diijinkan',
+            'Cek kapasitas hardisk sistem operasi C',
+            'Printer dan hardware pendukung berfungsi',
+            'Cleaning CPU & Cek Pengkabelan',
+            'Hapus cache temp dan cache browser',
+            'Akses Flashdisk terkontrol',
+        ];
+
+        $defaultChecklist = [];
+        foreach ($checklistItems as $item) {
+            $defaultChecklist[$item] = [
+                'status'     => 1,
+                'keterangan' => null,
+            ];
+        }
+
+        foreach ($komputers as $pc) {
+            // Cek apakah sudah ada untuk IP ini di bulan & tahun ini
+            $exists = Hardware::where('ip', $pc->ip)
+                ->whereYear('tanggal', $tahun)
+                ->whereMonth('tanggal', $bulan)
+                ->exists();
+
+            if (!$exists) {
+                Hardware::create([
+                    'ip'        => $pc->ip,
+                    'nama'      => $pc->nama_pc,
+                    'unit'      => $pc->unit ?? '-',
+                    'lantai'    => $pc->lantai,
+                    'tanggal'   => $tanggal,
+                    'checklist' => $defaultChecklist,
+                ]);
+                $count++;
+            }
+        }
+
+        $lantaiList = implode(', ', $lantai);
+        return redirect()->route('hardware.index')
+            ->with('success', "Berhasil menggenerate $count data ceklis hardware untuk lantai $lantaiList.");
     }
 }
