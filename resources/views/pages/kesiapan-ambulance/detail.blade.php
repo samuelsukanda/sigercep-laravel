@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+@section('title', 'SIGERCEP - Detail Kesiapan Ambulance')
 
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
@@ -106,7 +106,8 @@
 
                             {{-- Kelistrikan / Inverter --}}
                             <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Kelistrikan / Inverter</label>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Kelistrikan /
+                                    Inverter</label>
                                 <p class="text-slate-600">{{ $ambulance->inverter }}</p>
                             </div>
                         </div>

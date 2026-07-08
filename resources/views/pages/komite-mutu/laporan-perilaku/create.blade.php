@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+@section('title', 'SIGERCEP - Tambah Laporan Perilaku')
 
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
@@ -30,10 +30,12 @@
                                     placeholder="Pilih Tanggal" required />
 
                                 {{-- Kategori Laporan --}}
-                                <x-form.select name="kategori_laporan" label="Kategori Laporan" :options="config('units.kategori_laporan')" :selected="old('kategori_laporan', $laporanPerilaku->kategori ?? '')" required />
+                                <x-form.select name="kategori_laporan" label="Kategori Laporan" :options="config('units.kategori_laporan')"
+                                    :selected="old('kategori_laporan', $laporanPerilaku->kategori ?? '')" required />
 
-                                {{-- Keterangan Perilaku--}}
-                                <x-form.input name="keterangan_perilaku" label="Keterangan Perilaku" :value="old('keterangan_perilaku', $laporanPerilaku->keterangan_perilaku ?? '')" required />
+                                {{-- Keterangan Perilaku --}}
+                                <x-form.input name="keterangan_perilaku" label="Keterangan Perilaku" :value="old('keterangan_perilaku', $laporanPerilaku->keterangan_perilaku ?? '')"
+                                    required />
 
                                 {{-- Dokumen --}}
                                 <x-form.file-upload-pdf name="file_pdf" label="Dokumen (PDF)" />

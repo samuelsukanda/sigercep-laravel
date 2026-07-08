@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+@section('title', 'SIGERCEP - Edit Peminjaman')
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
@@ -61,7 +61,8 @@
                                         @endif
 
                                         {{-- Signature canvas container --}}
-                                        <div id="signature-container" class="{{ $peminjaman->tanda_tangan ? 'hidden' : '' }}">
+                                        <div id="signature-container"
+                                            class="{{ $peminjaman->tanda_tangan ? 'hidden' : '' }}">
                                             <p class="text-sm text-gray-600 mb-2">
                                                 {{ $peminjaman->tanda_tangan ? 'Buat tanda tangan baru:' : 'Buat tanda tangan:' }}
                                             </p>

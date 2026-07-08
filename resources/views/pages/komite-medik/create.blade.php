@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+@section('title', 'SIGERCEP - Tambah Komite Medik')
 
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
@@ -11,7 +11,8 @@
                         <h6 class="mb-0 font-bold text-lg">Tambah Komite Medik</h6>
                     </div>
                     <div class="flex-auto p-6">
-                        <form id="form" action="{{ route('komite-medik.store') }}" method="POST" enctype="multipart/form-data">
+                        <form id="form" action="{{ route('komite-medik.store') }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

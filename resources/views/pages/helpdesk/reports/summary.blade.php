@@ -1,6 +1,8 @@
 {{-- resources/views/reports/summary.blade.php --}}
 @extends('layouts.app')
 
+@section('title', 'SIGERCEP - Laporan Tiket Helpdesk')
+
 {{-- STyle --}}
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/loading.css') }}">

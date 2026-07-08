@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+@section('title', 'SIGERCEP - Edit Peraturan Perusahaan')
 
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
@@ -11,14 +11,14 @@
                         <h6 class="mb-0 font-bold text-lg">Edit Peraturan Perusahaan</h6>
                     </div>
                     <div class="flex-auto p-6">
-                        <form action="{{ route('sdm-hukum.peraturan-perusahaan.update', $peraturanPerusahaan->id) }}" method="POST"
-                            enctype="multipart/form-data">
+                        <form action="{{ route('sdm-hukum.peraturan-perusahaan.update', $peraturanPerusahaan->id) }}"
+                            method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama File --}}
-                                <x-form.input name="file_pdf" label="Nama File" :value="old('file_pdf', $peraturanPerusahaan->file_pdf ?? '')" required disabled/>
+                                <x-form.input name="file_pdf" label="Nama File" :value="old('file_pdf', $peraturanPerusahaan->file_pdf ?? '')" required disabled />
 
                                 {{-- File PDF --}}
                                 <x-form.file-upload-pdf name="file_pdf"
@@ -28,7 +28,8 @@
                                     <div class="col-span-2">
                                         <label class="block text-sm font-semibold mb-2 text-slate-700">File Sekarang</label>
                                         <p class="text-slate-600">{{ $peraturanPerusahaan->file_pdf }}</p>
-                                        <a href="{{ route('peraturan-perusahaan.show-file', $peraturanPerusahaan->id) }}" target="_blank"
+                                        <a href="{{ route('peraturan-perusahaan.show-file', $peraturanPerusahaan->id) }}"
+                                            target="_blank"
                                             class="px-2 py-1 bg-blue-500 rounded text-white hover:shadow-xs active:opacity-85">
                                             📄 Lihat File PDF
                                         </a>

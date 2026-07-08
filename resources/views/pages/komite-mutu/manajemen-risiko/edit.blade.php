@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP - Edit Daftar Risiko')
+@section('title', 'SIGERCEP - Edit Manajemen Risiko')
 
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">

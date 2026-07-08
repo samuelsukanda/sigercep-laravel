@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+@section('title', 'SIGERCEP - Edit Bank SPO')
 
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
@@ -18,7 +18,7 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama File --}}
-                                <x-form.input name="file_pdf" label="Nama File" :value="old('file_pdf', $bankSpo->file_pdf ?? '')" required disabled/>
+                                <x-form.input name="file_pdf" label="Nama File" :value="old('file_pdf', $bankSpo->file_pdf ?? '')" required disabled />
 
                                 {{-- Unit --}}
                                 <x-form.select name="unit" label="Unit" :options="config('units.spo')" :selected="old('unit', $bankSpo->unit)" required />

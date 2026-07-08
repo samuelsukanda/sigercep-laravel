@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+@section('title', 'SIGERCEP - Edit Kecelakaan Kerja')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
 @endpush
 
 @section('content')
@@ -54,28 +54,29 @@
                                     :value="old('kegiatan', $k3rs->kegiatan ?? '')" required />
 
                                 {{-- Riwayat Kecelakaan --}}
-                                <x-form.input name="riwayat" label="Riwayat Kecelakaan" :value="old('riwayat', $k3rs->riwayat ?? '')" required/>
+                                <x-form.input name="riwayat" label="Riwayat Kecelakaan" :value="old('riwayat', $k3rs->riwayat ?? '')" required />
 
                                 {{-- Penyebab Kecelakaan --}}
-                                <x-form.input name="penyebab" label="Penyebab Kecelakaan" :value="old('penyebab', $k3rs->penyebab ?? '')" required/>
+                                <x-form.input name="penyebab" label="Penyebab Kecelakaan" :value="old('penyebab', $k3rs->penyebab ?? '')" required />
 
                                 {{-- Nama/Jenis Bahan/Zat Yang Menyebabkan --}}
                                 <x-form.input name="bahan" label="Nama/Jenis Bahan/Zat Yang Menyebabkan (Jika Ada)"
                                     :value="old('bahan', $k3rs->bahan ?? '')" />
 
                                 {{-- Bagian Tubuh Yang Cedera --}}
-                                <x-form.input name="cedera" label="Bagian Tubuh Yang Cedera" :value="old('cedera', $k3rs->cedera ?? '')" required/>
+                                <x-form.input name="cedera" label="Bagian Tubuh Yang Cedera" :value="old('cedera', $k3rs->cedera ?? '')" required />
 
                                 {{-- Tindakan Pengobatan Pertama Yang Dilakukan --}}
                                 <x-form.input name="pengobatan" label="Tindakan Pengobatan Pertama Yang Dilakukan"
-                                    :value="old('pengobatan', $k3rs->pengobatan ?? '')" required/>
+                                    :value="old('pengobatan', $k3rs->pengobatan ?? '')" required />
 
                                 {{-- Tindakan Pengobatan Selanjutnya --}}
-                                <x-form.input name="pengobatan2" label="Tindakan Pengobatan Selanjutnya"
-                                    :value="old('pengobatan2', $k3rs->pengobatan2 ?? '')" required/>
+                                <x-form.input name="pengobatan2" label="Tindakan Pengobatan Selanjutnya" :value="old('pengobatan2', $k3rs->pengobatan2 ?? '')"
+                                    required />
 
                                 {{-- Pelaksana/Pemberi Pengobatan --}}
-                                <x-form.input name="pelaksana" label="Pelaksana/Pemberi Pengobatan" :value="old('pelaksana', $k3rs->pelaksana ?? '')" required/>
+                                <x-form.input name="pelaksana" label="Pelaksana/Pemberi Pengobatan" :value="old('pelaksana', $k3rs->pelaksana ?? '')"
+                                    required />
 
                                 {{-- Tanda Tangan Pelapor --}}
                                 <div class="mt-6">
@@ -108,14 +109,17 @@
 
                                             {{-- Action buttons --}}
                                             <div class="mt-4 flex gap-2 flex-wrap">
-                                                <button type="button" id="undo" class="relative p-4 mb-4 mr-1 text-white border border-solid rounded-lg bg-gradient-to-tl from-zinc-800 to-zinc-700 border-slate-100 px-4 py-2 flex items-center gap-2">
+                                                <button type="button" id="undo"
+                                                    class="relative p-4 mb-4 mr-1 text-white border border-solid rounded-lg bg-gradient-to-tl from-zinc-800 to-zinc-700 border-slate-100 px-4 py-2 flex items-center gap-2">
                                                     <i class="fa fa-undo mr-1"></i> Undo
                                                 </button>
-                                                <button type="button" id="clear" class="relative p-4 mb-4 mr-1 text-white border border-red-300 border-solid rounded-lg bg-gradient-to-tl from-red-600 to-orange-600 px-4 py-2 flex items-center gap-2">
+                                                <button type="button" id="clear"
+                                                    class="relative p-4 mb-4 mr-1 text-white border border-red-300 border-solid rounded-lg bg-gradient-to-tl from-red-600 to-orange-600 px-4 py-2 flex items-center gap-2">
                                                     <i class="fa fa-trash mr-1"></i> Clear
                                                 </button>
                                                 @if ($k3rs->tanda_tangan)
-                                                    <button type="button" id="cancel-edit" class="relative p-4 mb-4 text-white border border-solid rounded-lg bg-gradient-to-tl from-slate-600 to-slate-300 border-slate-100 px-4 py-2 flex items-center gap-2">
+                                                    <button type="button" id="cancel-edit"
+                                                        class="relative p-4 mb-4 text-white border border-solid rounded-lg bg-gradient-to-tl from-slate-600 to-slate-300 border-slate-100 px-4 py-2 flex items-center gap-2">
                                                         <i class="fa fa-times mr-1"></i> Batal
                                                     </button>
                                                 @endif

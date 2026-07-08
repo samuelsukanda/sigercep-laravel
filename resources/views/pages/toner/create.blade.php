@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+@section('title', 'SIGERCEP - Tambah Toner')
 
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
@@ -22,7 +22,8 @@
                                 <x-form.select name="unit" label="Unit" :options="config('units.units')" :selected="old('unit', $toner->unit ?? '')" required />
 
                                 {{-- Jenis Toner --}}
-                                <x-form.select name="toner" label="Jenis Toner" :options="config('units.toner')" :selected="old('toner', $toner->toner ?? '')" required />
+                                <x-form.select name="toner" label="Jenis Toner" :options="config('units.toner')" :selected="old('toner', $toner->toner ?? '')"
+                                    required />
 
                                 {{-- Jumlah --}}
                                 <x-form.input name="jumlah" label="Jumlah" :value="old('jumlah', $toner->jumlah ?? '')" required />

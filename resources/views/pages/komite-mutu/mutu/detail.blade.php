@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+@section('title', 'SIGERCEP - Detail Indikator Mutu')
 
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
@@ -28,14 +28,14 @@
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Unit</label>
                                 <p class="text-slate-600">{{ $mutu->unit }}</p>
-                            </div> 
-                            
-                            {{-- PJ Data --}}  
+                            </div>
+
+                            {{-- PJ Data --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Penanggung Jawab Data</label>
                                 <p class="text-slate-600">{{ $mutu->pj_data }}</p>
                             </div>
-                            
+
                             {{-- Numerator --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Numerator (N)</label>

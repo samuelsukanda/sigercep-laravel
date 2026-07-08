@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'SIGERCEP - Daftar Tiket Helpdesk')
+
 {{-- Style --}}
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/loading.css') }}">

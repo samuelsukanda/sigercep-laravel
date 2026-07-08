@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+@section('title', 'SIGERCEP - Edit Toner')
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">

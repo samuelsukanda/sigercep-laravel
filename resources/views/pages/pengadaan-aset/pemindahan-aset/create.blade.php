@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+@section('title', 'SIGERCEP - Tambah Pemindahan Aset')
 
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
@@ -20,10 +20,12 @@
                                 <x-form.input name="nama" label="Nama" :value="old('nama', $pengadaan->nama ?? '')" required />
 
                                 {{-- Unit Asal --}}
-                                <x-form.select name="unit_asal" label="Unit Asal" :options="config('units.units')" :selected="old('unit_asal', $pengadaan->unit_asal ?? '')" required />
+                                <x-form.select name="unit_asal" label="Unit Asal" :options="config('units.units')" :selected="old('unit_asal', $pengadaan->unit_asal ?? '')"
+                                    required />
 
-                                {{-- Unit Tujuan--}}
-                                <x-form.select name="unit_tujuan" label="Unit Tujuan" :options="config('units.units')" :selected="old('unit_tujuan', $pengadaan->unit_tujuan ?? '')" required />
+                                {{-- Unit Tujuan --}}
+                                <x-form.select name="unit_tujuan" label="Unit Tujuan" :options="config('units.units')" :selected="old('unit_tujuan', $pengadaan->unit_tujuan ?? '')"
+                                    required />
 
                                 {{-- Keperluan --}}
                                 <x-form.input name="keperluan" label="Keperluan" :value="old('keperluan', $pengadaan->keperluan ?? '')" required />
@@ -39,8 +41,7 @@
                                 <x-form.file-upload name="foto_barang" label="Foto Barang" :current="$pengadaan->foto_barang ?? null" />
 
                                 {{-- Foto Barcode --}}
-                                <x-form.file-upload name="foto_barcode" label="Foto Barcode (Jika Ada)"
-                                    :current="$pengadaan->foto_barcode ?? null" />
+                                <x-form.file-upload name="foto_barcode" label="Foto Barcode (Jika Ada)" :current="$pengadaan->foto_barcode ?? null" />
                             </div>
 
                             <div class="mt-6">

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+@section('title', 'SIGERCEP - Edit Bank Ilmu')
 
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
@@ -18,7 +18,7 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama File --}}
-                                <x-form.input name="file_pdf" label="Nama File" :value="old('file_pdf', $bankIlmu->file_pdf ?? '')" required disabled/>
+                                <x-form.input name="file_pdf" label="Nama File" :value="old('file_pdf', $bankIlmu->file_pdf ?? '')" required disabled />
 
                                 {{-- File PDF --}}
                                 <x-form.file-upload-pdf name="file_pdf"

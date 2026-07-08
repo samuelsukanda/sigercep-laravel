@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP - Daftar Mutu')
+@section('title', 'SIGERCEP - Daftar Indikator Mutu')
 
 {{-- Style --}}
 @push('styles')

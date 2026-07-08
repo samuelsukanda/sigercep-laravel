@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+@section('title', 'SIGERCEP - Tambah Peminjaman Aset')
 
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
@@ -33,15 +33,14 @@
                                 <x-form.input name="nama_barang" label="Nama Barang" :value="old('nama_barang', $pengadaan->nama_barang ?? '')" required />
 
                                 {{-- Tempat Asal Barang --}}
-                                <x-form.input name="tempat_asal_barang" label="Tempat Asal Barang" :value="old('tempat_asal_barang', $pengadaan->tempat_asal_barang ?? '')" required />
+                                <x-form.input name="tempat_asal_barang" label="Tempat Asal Barang" :value="old('tempat_asal_barang', $pengadaan->tempat_asal_barang ?? '')"
+                                    required />
 
                                 {{-- Foto Barang --}}
-                                <x-form.file-upload name="foto_barang" label="Foto Barang"
-                                    :current="$pengadaan->foto_barang ?? null" />
+                                <x-form.file-upload name="foto_barang" label="Foto Barang" :current="$pengadaan->foto_barang ?? null" />
 
                                 {{-- Foto Barcode --}}
-                                <x-form.file-upload name="foto_barcode" label="Foto Barcode (Jika Ada)"
-                                    :current="$pengadaan->foto_barcode ?? null" />
+                                <x-form.file-upload name="foto_barcode" label="Foto Barcode (Jika Ada)" :current="$pengadaan->foto_barcode ?? null" />
                             </div>
 
                             <div class="mt-6">
