@@ -65,7 +65,7 @@ class IndicatorController extends Controller
             ]);
         }
 
-        return back()->with('success', 'Indikator berhasil ditambahkan.');
+        return back()->with('success', 'Data berhasil disimpan.');
     }
     public function update(Request $request, Indicator $indicator)
     {
@@ -96,7 +96,7 @@ class IndicatorController extends Controller
                 ->delete();
         }
 
-        return back()->with('success', 'Indikator berhasil diperbarui.');
+        return back()->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(Indicator $indicator)
@@ -105,6 +105,6 @@ class IndicatorController extends Controller
         $indicator->values()->delete();
         $indicator->delete();
 
-        return back()->with('success', 'Indikator berhasil dihapus.');
+        return back()->with('success', 'Data berhasil dihapus.');
     }
 }

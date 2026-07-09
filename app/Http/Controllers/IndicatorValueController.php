@@ -94,6 +94,6 @@ class IndicatorValueController extends Controller
             'tahun' => $request->tahun,
             'bulan' => $request->bulan,
             'jenis' => $request->jenis,
-        ])->with('success', 'Data capaian bulan berhasil disimpan.');
+        ])->with('success', 'Data berhasil disimpan.');
     }
 }

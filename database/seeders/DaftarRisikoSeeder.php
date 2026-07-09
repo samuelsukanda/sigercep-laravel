@@ -48,7 +48,6 @@ class DaftarRisikoSeeder extends Seeder
 
             DaftarRisiko::create([
                 'unit' => $unit,
-                'no_urut' => (int) $no,
                 'risiko' => $risiko,
                 'kode_risiko' => trim($row[4] ?? ''),
                 'sebab' => trim($row[5] ?? ''),

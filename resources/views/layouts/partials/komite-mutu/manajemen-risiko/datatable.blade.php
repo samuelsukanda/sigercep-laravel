@@ -1,83 +1,117 @@
-<div class="relative overflow-x-auto shadow-md rounded-lg px-2 bg-white dark:text-white">
-    <table id="manajemenRisikoTable" class="datatable-custom min-w-full divide-y divide-gray-200 dark:divide-white-200 dark:text-white">
-        <thead class="text-xs text-slate-500 uppercase bg-white dark:text-white">
+<div class="relative overflow-x-auto shadow-md rounded-lg px-2 bg-white dark:bg-slate-850 dark:text-white mb-8">
+    <table id="manajemenRisikoTable"
+        class="datatable-custom min-w-full divide-y divide-gray-200 dark:divide-slate-800 dark:text-slate-300">
+        <thead class="text-xs text-slate-500 uppercase bg-white dark:bg-slate-900/30 dark:text-slate-300">
             <tr>
-                <th class="px-6 py-3">Nama</th>
+                <th class="px-6 py-3">No</th>
+                <th class="hidden">No Urut Real</th>
                 <th class="px-6 py-3">Unit</th>
-                <th class="px-6 py-3">Tanggal</th>
-                <th class="px-6 py-3">Uraian Risiko</th>
-                <th class="px-6 py-3">Dampak</th>
-                <th class="px-6 py-3">Kemungkinan</th>
-                <th class="px-6 py-3">Nilai Risiko</th>
-                <th class="px-6 py-3">Tingkat Risiko</th>
-                <th class="px-6 py-3 text-center">Aksi</th>
+                <th class="px-6 py-3 min-w-[300px]">Risiko</th>
+                <th class="px-6 py-3 min-w-[150px]">Kode Risiko</th>
+                <th class="px-6 py-3 min-w-[300px]">Sebab</th>
+                <th class="px-6 py-3 min-w-[200px]">Dampak</th>
+                <th class="px-6 py-3 min-w-[200px]">Pengendalian</th>
+                <th class="px-6 py-3 text-center min-w-[100px]">Tingkat<br>Analisis</th>
+                <th class="px-6 py-3 min-w-[150px]">Target Waktu</th>
+                <th class="px-6 py-3 text-center min-w-[100px]">Tingkat<br>Mitigasi</th>
+                <th class="px-6 py-3 text-center min-w-[120px] whitespace-nowrap">Aksi</th>
             </tr>
         </thead>
-        <tbody class="text-s text-slate-500 bg-white">
-            @forelse ($mutu as $item)
-                @php
-                    $nilai = $item->dampak * $item->kemungkinan;
-                    $tingkatRisiko =
-                        $nilai <= 4 ? 'Rendah' : ($nilai <= 9 ? 'Sedang' : ($nilai <= 16 ? 'Tinggi' : 'Sangat Tinggi'));
-                    $badgeColor =
-                        $tingkatRisiko == 'Rendah'
-                            ? 'bg-green-100 text-green-800'
-                            : ($tingkatRisiko == 'Sedang'
-                                ? 'bg-yellow-100 text-yellow-800'
-                                : ($tingkatRisiko == 'Tinggi'
-                                    ? 'bg-orange-100 text-orange-800'
-                                    : 'bg-red-100 text-red-800'));
-                @endphp
-                <tr class="hover:bg-gray-50 transition-colors">
-                    <td class="px-6 py-4 font-medium">{{ ucwords(strtolower($item->nama)) }}</td>
-                    <td class="px-6 py-4">{{ $item->unit }}</td>
-                    <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->tanggal)->timestamp }}">
-                        <div class="flex flex-col">
-                            <span>{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}</span>
-                        </div>
+        <tbody class="text-sm text-slate-600 bg-white dark:bg-slate-850 dark:text-slate-300">
+            @php
+                if (!function_exists('getBadgeColor')) {
+                    function getBadgeColor($tingkat)
+                    {
+                        if (empty($tingkat)) {
+                            return 'bg-slate-100 text-slate-500';
+                        }
+                        $t = strtolower(trim($tingkat));
+                        if (str_contains($t, 'sangat rendah')) {
+                            return 'bg-green-100 text-green-700';
+                        }
+                        if (str_contains($t, 'rendah')) {
+                            return 'bg-yellow-100 text-yellow-700';
+                        }
+                        if (str_contains($t, 'sangat tinggi')) {
+                            return 'bg-red-200 text-red-800 font-bold';
+                        }
+                        if (str_contains($t, 'tinggi')) {
+                            return 'bg-red-100 text-red-700';
+                        }
+                        if (str_contains($t, 'sedang')) {
+                            return 'bg-orange-100 text-orange-700';
+                        }
+                        return 'bg-slate-100 text-slate-700';
+                    }
+                }
+            @endphp
+            @forelse ($risikos as $item)
+                <tr class="hover:bg-gray-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                    <td class="px-6 py-4 font-medium text-center"></td>
+                    <td class="hidden">{{ $item->no_urut }}</td>
+                    <td class="px-6 py-4 font-bold">{{ $item->unit }}</td>
+                    <td class="px-6 py-4">{{ $item->risiko }}</td>
+                    <td class="px-6 py-4 text-xs font-medium text-slate-500 dark:text-slate-400">
+                        {{ $item->kode_risiko }}</td>
+                    <td class="px-6 py-4 text-xs">{{ $item->sebab }}</td>
+                    <td class="px-6 py-4 text-xs">{{ $item->dampak }}</td>
+                    <td class="px-6 py-4 text-xs">
+                        {{ $item->pengendalian }}
+                        @if ($item->efektif)
+                            <span class="block mt-1 text-emerald-600 font-semibold"><i class="fas fa-check mr-1"></i>
+                                Efektif</span>
+                        @endif
+                        @if ($item->tidak_efektif)
+                            <span class="block mt-1 text-red-500 font-semibold"><i class="fas fa-times mr-1"></i> Tidak
+                                Efektif</span>
+                        @endif
                     </td>
-                    <td class="px-6 py-4">{{ Str::limit($item->uraian, 50) }}</td>
                     <td class="px-6 py-4 text-center">
-                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                            {{ $item->dampak }}
+                        <span
+                            class="px-2 py-1 text-xs font-semibold rounded-full {{ getBadgeColor($item->analisis_tingkat) }}">
+                            {{ $item->analisis_tingkat ?? '-' }}
                         </span>
+                        @if ($item->analisis_nilai)
+                            <span class="block text-[10px] mt-1 text-slate-400">Nilai:
+                                {{ (float) $item->analisis_nilai }}</span>
+                        @endif
+                    </td>
+                    <td class="px-6 py-4 text-center text-xs">
+                        {{ $item->target_waktu ?? '-' }}
                     </td>
                     <td class="px-6 py-4 text-center">
-                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                            {{ $item->kemungkinan }}
+                        <span
+                            class="px-2 py-1 text-xs font-semibold rounded-full {{ getBadgeColor($item->mitigasi_tingkat) }}">
+                            {{ $item->mitigasi_tingkat ?? '-' }}
                         </span>
-                    </td>
-                    <td class="px-6 py-4 text-center font-bold">
-                        {{ $nilai }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $badgeColor }}">
-                            {{ $tingkatRisiko }}
-                        </span>
+                        @if ($item->mitigasi_nilai)
+                            <span class="block text-[10px] mt-1 text-slate-400">Nilai:
+                                {{ (float) $item->mitigasi_nilai }}</span>
+                        @endif
                     </td>
                     <td class="px-6 py-4 space-x-2 text-center">
-                        @canAccess('manajemen_risiko', 'update')
-                        <x-button.action href="{{ route('komite-mutu.manajemen-risiko.edit', $item->id) }}"
-                            icon="pen-to-square" color="emerald" title="Edit" />
-                        @endcanAccess
-
                         @canAccess('manajemen_risiko', 'read')
                         <x-button.action href="{{ route('komite-mutu.manajemen-risiko.show', $item->id) }}"
-                            icon="eye" color="emerald" title="Lihat Data" />
+                            icon="eye" color="emerald" title="Detail" />
+                        @endcanAccess
+
+                        @canAccess('manajemen_risiko', 'update')
+                        <x-button.action href="{{ route('komite-mutu.manajemen-risiko.edit', $item->id) }}"
+                            icon="edit" color="blue" title="Edit" />
                         @endcanAccess
 
                         @canAccess('manajemen_risiko', 'delete')
                         <x-button.action href="{{ route('komite-mutu.manajemen-risiko.destroy', $item->id) }}"
-                            icon="trash" color="red" type="button" method="DELETE" title="Hapus" />
+                            icon="trash-alt" color="red" type="button" method="DELETE" title="Hapus" />
                         @endcanAccess
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="9" class="px-6 py-8 text-center text-gray-500">
+                    <td colspan="12" class="px-6 py-12 text-center text-gray-500">
                         <div class="flex flex-col items-center gap-2">
-                            <i class="fas fa-inbox text-4xl text-gray-400"></i>
-                            <p>Tidak ada data manajemen risiko ditemukan</p>
+                            <i class="fas fa-folder-open text-4xl text-gray-400"></i>
+                            <p>Tidak ada data daftar risiko ditemukan.</p>
                         </div>
                     </td>
                 </tr>

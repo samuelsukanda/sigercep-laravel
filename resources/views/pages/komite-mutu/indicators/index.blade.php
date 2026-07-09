@@ -45,8 +45,8 @@
 
         @if (session('success'))
             <div
-                class="relative text-sm w-full p-4 mb-4 text-white border border-transparent rounded-lg bg-gradient-to-tl from-emerald-500 to-teal-400 shadow-md">
-                <i class="fas fa-check-circle mr-2"></i> {{ session('success') }}
+                class="relative text-s w-full p-4 mb-4 text-white border border-blue-300 border-solid rounded-lg bg-gradient-to-tl from-blue-500 to-violet-500">
+                {{ session('success') }}
             </div>
         @endif
 

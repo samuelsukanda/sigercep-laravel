@@ -3,21 +3,46 @@
         <form method="GET" action="{{ route('komite-mutu.manajemen-risiko.index') }}" id="filterForm">
             <div class="flex flex-wrap gap-3 items-end filter-wrap">
 
-                {{-- Periode Dari --}}
-                <div class="flex flex-col mr-1 filter-item" style="min-width:148px; flex:1 1 148px; max-width:180px;">
-                    <label class="text-xs font-semibold text-gray-600 mb-1.5">Periode Dari</label>
-                    <input type="text" name="periode_dari"
-                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent flatpickr"
-                        value="{{ request('periode_dari', now()->startOfMonth()->format('d-m-Y')) }}"
-                        placeholder="Pilih tanggal">
+                {{-- Filter Unit --}}
+                <div class="flex flex-col mr-1 filter-item"
+                    style="min-width:148px; flex:1 1 148px; max-width:180px;">
+                    <label class="text-xs font-semibold text-gray-600 mb-1.5">Unit</label>
+                    <select name="unit"
+                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">-- Semua Unit --</option>
+                        @foreach ($unitOptions as $opt)
+                            <option value="{{ $opt }}" {{ $unitFilter === $opt ? 'selected' : '' }}>
+                                {{ $opt }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
-                {{-- Periode Sampai --}}
-                <div class="flex flex-col mr-1 filter-item" style="min-width:148px; flex:1 1 148px; max-width:180px;">
-                    <label class="text-xs font-semibold text-gray-600 mb-1.5">Periode Sampai</label>
-                    <input type="text" name="periode_sampai"
-                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent flatpickr"
-                        value="{{ request('periode_sampai', now()->format('d-m-Y')) }}" placeholder="Pilih tanggal">
+                {{-- Filter Tingkat Risiko --}}
+                <div class="flex flex-col mr-1 filter-item"
+                    style="min-width:148px; flex:1 1 148px; max-width:180px;">
+                    <label class="text-xs font-semibold text-gray-600 mb-1.5">Tingkat Risiko</label>
+                    <select name="tingkat"
+                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">-- Semua Tingkat --</option>
+                        @foreach ($tingkatOptions as $opt)
+                            <option value="{{ $opt }}" {{ $tingkatFilter === $opt ? 'selected' : '' }}>
+                                {{ $opt }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Filter Kode Risiko --}}
+                <div class="flex flex-col mr-1 filter-item"
+                    style="min-width:148px; flex:1 1 148px; max-width:180px;">
+                    <label class="text-xs font-semibold text-gray-600 mb-1.5">Kode Risiko</label>
+                    <select name="kode_risiko"
+                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">-- Semua Kode --</option>
+                        @foreach ($kodeOptions as $opt)
+                            <option value="{{ $opt }}" {{ $kodeFilter === $opt ? 'selected' : '' }}>
+                                {{ $opt }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 {{-- Action Buttons --}}
@@ -50,7 +75,6 @@
                     </a>
                     @endcanAccess
                 </div>
-
             </div>
         </form>
     </div>

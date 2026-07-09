@@ -41,7 +41,7 @@ class ManajemenRisikoController extends Controller
             $query->where('kode_risiko', $kodeFilter);
         }
 
-        $risikos = $query->orderBy('no_urut')->get();
+        $risikos = $query->latest()->get();
 
         // Statistics
         $totalRisiko = DaftarRisiko::count();
@@ -66,7 +66,6 @@ class ManajemenRisikoController extends Controller
     {
         $validated = $request->validate([
             'unit' => 'required|string|max:255',
-            'no_urut' => 'required|integer',
             'risiko' => 'required|string',
             'kode_risiko' => 'nullable|string|max:255',
             'sebab' => 'nullable|string',
@@ -93,7 +92,7 @@ class ManajemenRisikoController extends Controller
         DaftarRisiko::create($validated);
 
         return redirect()->route('komite-mutu.manajemen-risiko.index')
-            ->with('success', 'Data risiko berhasil disimpan.');
+            ->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -114,7 +113,6 @@ class ManajemenRisikoController extends Controller
 
         $validated = $request->validate([
             'unit' => 'required|string|max:255',
-            'no_urut' => 'required|integer',
             'risiko' => 'required|string',
             'kode_risiko' => 'nullable|string|max:255',
             'sebab' => 'nullable|string',
@@ -141,7 +139,7 @@ class ManajemenRisikoController extends Controller
         $risiko->update($validated);
 
         return redirect()->route('komite-mutu.manajemen-risiko.index')
-            ->with('success', 'Data risiko berhasil diperbarui.');
+            ->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)
@@ -150,6 +148,6 @@ class ManajemenRisikoController extends Controller
         $risiko->delete();
 
         return redirect()->route('komite-mutu.manajemen-risiko.index')
-            ->with('success', 'Data risiko berhasil dihapus.');
+            ->with('success', 'Data berhasil dihapus.');
     }
 }

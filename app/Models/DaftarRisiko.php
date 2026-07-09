@@ -13,7 +13,6 @@ class DaftarRisiko extends Model
 
     protected $fillable = [
         'unit',
-        'no_urut',
         'risiko',
         'kode_risiko',
         'sebab',

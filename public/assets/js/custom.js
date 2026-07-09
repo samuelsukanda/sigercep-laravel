@@ -165,13 +165,25 @@ $(document).ready(function () {
         allowClear: true,
     });
 
-    $("#dampak").select2({
+    if ($("#dampak").is("select")) {
+        $("#dampak").select2({
+            placeholder: "Pilih Nilai",
+            allowClear: true,
+        });
+    }
+
+    $("#kemungkinan").select2({
         placeholder: "Pilih Nilai",
         allowClear: true,
     });
 
-    $("#kemungkinan").select2({
-        placeholder: "Pilih Nilai",
+    $("#analisis_tingkat").select2({
+        placeholder: "Pilih Tingkat",
+        allowClear: true,
+    });
+
+    $("#mitigasi_tingkat").select2({
+        placeholder: "Pilih Tingkat",
         allowClear: true,
     });
 

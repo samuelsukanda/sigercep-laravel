@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('daftar_risikos', function (Blueprint $table) {
             $table->id();
             $table->string('unit');
-            $table->integer('no_urut');
             $table->text('risiko');
             $table->string('kode_risiko')->nullable();
             $table->text('sebab')->nullable();
