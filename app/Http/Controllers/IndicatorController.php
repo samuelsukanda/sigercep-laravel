@@ -46,7 +46,7 @@ class IndicatorController extends Controller
             'jenis_indikator' => 'required|string|max:50',
             'unit_terkait' => 'nullable|string|max:255',
             'target_value' => 'nullable|numeric',
-            'operator' => 'nullable|string|in:<,<=,>,>=',
+            'operator' => 'nullable|string|in:<,<=,>,>=,=',
             'tahun' => 'required|integer',
         ]);
 
@@ -77,7 +77,7 @@ class IndicatorController extends Controller
             'jenis_indikator' => 'required|string|max:50',
             'unit_terkait' => 'nullable|string|max:255',
             'target_value' => 'nullable|numeric',
-            'operator' => 'nullable|string|in:<,<=,>,>=',
+            'operator' => 'nullable|string|in:<,<=,>,>=,=',
             'tahun' => 'required|integer',
         ]);
 

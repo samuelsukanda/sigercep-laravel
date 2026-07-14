@@ -16,6 +16,7 @@ class IndicatorValue extends Model
         'nilai',
         'numerator',
         'denominator',
+        'is_nan',
     ];
 
     public function indicator()

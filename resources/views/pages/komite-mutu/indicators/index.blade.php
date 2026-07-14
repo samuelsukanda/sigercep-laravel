@@ -348,10 +348,15 @@
                                                 '<=' => '≤',
                                                 '>'  => '>',
                                                 '>=' => '≥',
+                                                '='  => null,
                                             ][$operator ?? ''] ?? ($lowerIsBetter ? '≤' : '≥');
                                         @endphp
                                         <span class="text-xs bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md">
-                                            {{ $operatorSymbol }} {{ (float) $target }}%
+                                            @if($operator === '=')
+                                                {{ (float) $target }}%
+                                            @else
+                                                {{ $operatorSymbol }} {{ (float) $target }}%
+                                            @endif
                                         </span>
                                     @else
                                         <span class="text-slate-400">-</span>
@@ -365,6 +370,7 @@
                                         $nilai = $valObj?->nilai;
                                         $numerator = $valObj?->numerator;
                                         $denominator = $valObj?->denominator;
+                                        $is_nan = $valObj?->is_nan ?? false;
 
                                         $cellClass = 'text-slate-400';
                                         if ($nilai !== null) {
@@ -374,6 +380,8 @@
                                             $cellClass = $success
                                                 ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/20 dark:text-emerald-400 font-bold'
                                                 : 'text-red-500 bg-red-50 dark:bg-red-950/20 dark:text-red-400 font-bold';
+                                        } elseif ($is_nan) {
+                                            $cellClass = 'text-slate-500 bg-slate-50 dark:bg-slate-900/30 font-bold';
                                         }
 
                                         $tooltipText = '';
@@ -383,6 +391,8 @@
                                                 (float) $numerator .
                                                 ' | Denominator: ' .
                                                 (float) $denominator;
+                                        } elseif ($is_nan) {
+                                            $tooltipText = 'Tidak ada nilai (NaN)';
                                         }
                                     @endphp
                                     <td class="py-3 px-1 text-center text-xs {{ $cellClass }} border border-gray-300 dark:border-slate-700"
@@ -394,6 +404,8 @@
                                                     {{ (float) $numerator }}/{{ (float) $denominator }}
                                                 </span>
                                             @endif
+                                        @elseif($is_nan)
+                                            <span class="block">NaN</span>
                                         @else
                                             <span class="opacity-30 font-light">-</span>
                                         @endif
@@ -587,6 +599,7 @@
                                 <option value="<=">&le;</option>
                                 <option value=">">&gt;</option>
                                 <option value=">=">&ge;</option>
+                                <option value="=">=</option>
                             </select>
                         </div>
                         <div>
@@ -801,6 +814,20 @@
             if (e.key === 'Escape') closeEditModal();
         });
 
+        function toggleEditOperatorInfo(val) {
+            const info = document.getElementById('edit_operator_info');
+            if (info) info.style.display = (val === '=') ? 'block' : 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const editOpSel = document.getElementById('edit_operator');
+            if (editOpSel) {
+                editOpSel.addEventListener('change', function() {
+                    toggleEditOperatorInfo(this.value);
+                });
+            }
+        });
+
         function openEditModal(id, nama, pj, unit, target, operator) {
             const modal = document.getElementById('editIndicatorModal');
             if (!modal) return;
@@ -814,11 +841,9 @@
             document.getElementById('edit_pj').value = pj || '';
             document.getElementById('edit_unit_terkait').value = unit || '';
             document.getElementById('edit_target_value').value = target || '';
-            if(operator) {
-                document.getElementById('edit_operator').value = operator;
-            } else {
-                document.getElementById('edit_operator').value = '>=';
-            }
+            const opVal = operator || '>=';
+            document.getElementById('edit_operator').value = opVal;
+            toggleEditOperatorInfo(opVal);
 
             modal.classList.remove('hidden');
             modal.classList.add('flex');

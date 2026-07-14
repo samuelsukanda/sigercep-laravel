@@ -142,15 +142,15 @@
                                 @php
                                     $target = $indicator->targets->first()?->target_value;
 
-                                    // Cari nilai existing
                                     $valObj = $existing->get($indicator->id);
                                     $num = $valObj?->numerator;
                                     $den = $valObj?->denominator;
                                     $nil = $valObj?->nilai;
+                                    $isNan = $valObj?->is_nan ?? false;
 
                                     $lowerIsBetter = false;
                                     $operator = $indicator->targets->first()?->operator;
-                                    
+
                                     if ($operator) {
                                         $lowerIsBetter = in_array($operator, ['<', '<=']);
                                     } else {
@@ -200,15 +200,21 @@
                                         class="py-4 px-3 text-center font-bold text-slate-700 dark:text-slate-300 border border-gray-300 dark:border-slate-700">
                                         @if ($target !== null)
                                             @php
-                                                $operatorSymbol = [
-                                                    '<'  => '<',
-                                                    '<=' => '≤',
-                                                    '>'  => '>',
-                                                    '>=' => '≥',
-                                                ][$operator ?? ''] ?? ($lowerIsBetter ? '≤' : '≥');
+                                                $operatorSymbol =
+                                                    [
+                                                        '<' => '<',
+                                                        '<=' => '≤',
+                                                        '>' => '>',
+                                                        '>=' => '≥',
+                                                        '=' => null,
+                                                    ][$operator ?? ''] ?? ($lowerIsBetter ? '≤' : '≥');
                                             @endphp
                                             <span class="text-xs bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md">
-                                                {{ $operatorSymbol }} {{ (float) $target }}%
+                                                @if ($operator === '=')
+                                                    {{ (float) $target }}%
+                                                @else
+                                                    {{ $operatorSymbol }} {{ (float) $target }}%
+                                                @endif
                                             </span>
                                         @else
                                             <span class="text-slate-400">-</span>
@@ -231,17 +237,30 @@
                                     </td>
 
                                     {{-- Capaian (%) Input --}}
-                                    <td class="py-3 px-4 border border-gray-300 dark:border-slate-700">
-                                        <input type="number" step="any" name="values[{{ $indicator->id }}][nilai]"
-                                            value="{{ $nil !== null ? (float) $nil : '' }}"
-                                            class="w-full text-xs p-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-center font-bold input-nilai">
+                                    <td class="py-3 px-4 border border-gray-300 dark:border-slate-700 align-top">
+                                        <div class="flex flex-col items-center gap-2">
+                                            <input type="{{ $isNan ? 'text' : 'number' }}" step="any"
+                                                name="values[{{ $indicator->id }}][nilai]"
+                                                value="{{ $isNan ? 'NaN' : ($nil !== null ? (float) $nil : '') }}"
+                                                class="w-full text-xs p-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-center font-bold input-nilai {{ $isNan ? 'bg-slate-100 dark:bg-slate-900 text-slate-400 dark:text-slate-500 border-dashed' : '' }}"
+                                                {{ $isNan ? 'readonly' : '' }}>
+
+                                            <label
+                                                class="flex items-center justify-center gap-1.5 w-full py-1 px-2 rounded-md transition-all cursor-pointer select-none nan-label {{ $isNan ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' : 'bg-slate-50 text-slate-500 dark:bg-slate-800 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700' }}"
+                                                title="Tandai sebagai tidak ada data (NaN)">
+                                                <input type="checkbox"
+                                                    class="mr-1 nan-checkbox w-3 h-3 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-700"
+                                                    {{ $isNan ? 'checked' : '' }}>
+                                                <span class="text-[10px] font-semibold tracking-wide">NaN</span>
+                                            </label>
+                                        </div>
                                     </td>
 
                                     {{-- Aksi --}}
                                     <td class="py-3 px-3 text-center border border-gray-300 dark:border-slate-700">
                                         <div class="flex items-center justify-center gap-2">
                                             <button type="button"
-                                                onclick='openEditModal({{ $indicator->id }}, @json($indicator->nama_indikator), @json($indicator->pj), @json($indicator->unit_terkait), @json($target), @json($operator ?: ($lowerIsBetter ? "<=" : ">=")))'
+                                                onclick='openEditModal({{ $indicator->id }}, @json($indicator->nama_indikator), @json($indicator->pj), @json($indicator->unit_terkait), @json($target), @json($operator ?: ($lowerIsBetter ? '<=' : '>=')))'
                                                 class="text-blue-500 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:hover:bg-blue-800/50 p-1.5 rounded transition-colors"
                                                 title="Edit Indikator">
                                                 <i class="fas fa-edit"></i>
@@ -270,10 +289,11 @@
                     </table>
                 </div>
 
+
                 @if ($indicators->isNotEmpty())
                     <div class="flex justify-end gap-3 mt-4 border-t border-gray-100 dark:border-slate-800 pt-6">
                         <x-button.submit type="submit">
-                            <i class="fas fa-save mr-2"></i> Simpan Perubahan
+                            <i class="fas fa-save mr-2"></i> Simpan
                         </x-button.submit>
                     </div>
                 @endif
@@ -411,6 +431,7 @@
                                 <option value="<=" {{ old('operator') == '<=' ? 'selected' : '' }}>&le;</option>
                                 <option value=">" {{ old('operator') == '>' ? 'selected' : '' }}>&gt;</option>
                                 <option value=">=" {{ old('operator') == '>=' ? 'selected' : '' }}>&ge;</option>
+                                <option value="=" {{ old('operator') == '=' ? 'selected' : '' }}>=</option>
                             </select>
                         </div>
                         <div>
@@ -720,6 +741,7 @@
                                 <option value="<=">&le;</option>
                                 <option value=">">&gt;</option>
                                 <option value=">=">&ge;</option>
+                                <option value="=">=</option>
                             </select>
                         </div>
                         <div>
@@ -960,6 +982,49 @@
                 });
             }
 
+            // NaN Checkboxes
+            const nanCheckboxes = document.querySelectorAll('.nan-checkbox');
+            nanCheckboxes.forEach(cb => {
+                cb.addEventListener('change', function() {
+                    const row = this.closest('tr');
+                    const nilaiInput = row.querySelector('.input-nilai');
+                    const label = this.closest('label');
+
+                    const activeInputClasses = ['bg-slate-100', 'dark:bg-slate-900',
+                        'text-slate-400', 'dark:text-slate-500', 'border-dashed'
+                    ];
+                    const activeLabelClasses = ['bg-blue-50', 'text-blue-600',
+                        'dark:bg-blue-900/30', 'dark:text-blue-400'
+                    ];
+                    const inactiveLabelClasses = ['bg-slate-50',
+                        'text-slate-500', 'dark:bg-slate-800',
+                        'dark:text-slate-400', 'hover:bg-slate-100', 'dark:hover:bg-slate-700'
+                    ];
+
+                    if (this.checked) {
+                        nilaiInput.type = 'text';
+                        nilaiInput.value = 'NaN';
+                        nilaiInput.readOnly = true;
+                        nilaiInput.classList.add(...activeInputClasses);
+                        label.classList.remove(...inactiveLabelClasses);
+                        label.classList.add(...activeLabelClasses);
+                    } else {
+                        nilaiInput.type = 'number';
+                        nilaiInput.value = '';
+                        nilaiInput.readOnly = false;
+                        nilaiInput.classList.remove(...activeInputClasses);
+                        label.classList.remove(...activeLabelClasses);
+                        label.classList.add(...inactiveLabelClasses);
+                        // re-trigger calculation if num/den exist
+                        const numInput = row.querySelector('.input-num');
+                        const denInput = row.querySelector('.input-den');
+                        if (numInput && denInput) {
+                            numInput.dispatchEvent(new Event('input'));
+                        }
+                    }
+                });
+            });
+
             // Auto-calculate percentage
             const rows = document.querySelectorAll('.row-indicator');
 
@@ -967,8 +1032,11 @@
                 const numInput = row.querySelector('.input-num');
                 const denInput = row.querySelector('.input-den');
                 const nilaiInput = row.querySelector('.input-nilai');
+                const nanCb = row.querySelector('.nan-checkbox');
 
                 function calculatePercentage() {
+                    if (nanCb && nanCb.checked) return; // skip if NaN is checked
+
                     const num = parseFloat(numInput.value);
                     const den = parseFloat(denInput.value);
 
@@ -983,6 +1051,21 @@
                     denInput.addEventListener('input', calculatePercentage);
                 }
             });
+
+            // Operator info toggles
+            const addOpSel = document.getElementById('operator');
+            if (addOpSel) {
+                addOpSel.addEventListener('change', function() {
+                    toggleAddOperatorInfo(this.value);
+                });
+            }
+
+            const editOpSel = document.getElementById('edit_operator');
+            if (editOpSel) {
+                editOpSel.addEventListener('change', function() {
+                    toggleEditOperatorInfo(this.value);
+                });
+            }
         });
 
         // Close modal on Escape key
@@ -992,6 +1075,16 @@
                 closeEditModal();
             }
         });
+
+        function toggleEditOperatorInfo(val) {
+            const info = document.getElementById('edit_operator_info');
+            if (info) info.style.display = (val === '=') ? 'block' : 'none';
+        }
+
+        function toggleAddOperatorInfo(val) {
+            const info = document.getElementById('add_operator_info');
+            if (info) info.style.display = (val === '=') ? 'block' : 'none';
+        }
 
         function openEditModal(id, nama, pj, unit, target, operator) {
             const modal = document.getElementById('editIndicatorModal');
@@ -1006,11 +1099,9 @@
             document.getElementById('edit_pj').value = pj || '';
             document.getElementById('edit_unit_terkait').value = unit || '';
             document.getElementById('edit_target_value').value = target || '';
-            if(operator) {
-                document.getElementById('edit_operator').value = operator;
-            } else {
-                document.getElementById('edit_operator').value = '>=';
-            }
+            const opVal = operator || '>=';
+            document.getElementById('edit_operator').value = opVal;
+            toggleEditOperatorInfo(opVal);
 
             modal.classList.remove('hidden');
             modal.classList.add('flex');

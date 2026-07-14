@@ -53,7 +53,7 @@ class IndicatorValueController extends Controller
             'tahun'                    => 'required|integer|min:2020|max:2030',
             'bulan'                    => 'required|integer|min:1|max:12',
             'values'                   => 'nullable|array',
-            'values.*.nilai'           => 'nullable|numeric',
+            'values.*.nilai'           => 'nullable',
             'values.*.numerator'       => 'nullable|numeric',
             'values.*.denominator'     => 'nullable|numeric',
         ]);
@@ -63,10 +63,16 @@ class IndicatorValueController extends Controller
             $numerator   = isset($data['numerator'])   && $data['numerator']   !== '' ? (float) $data['numerator']   : null;
             $denominator = isset($data['denominator']) && $data['denominator'] !== '' ? (float) $data['denominator'] : null;
 
+            $is_nan = false;
             if ($numerator !== null && $denominator !== null && $denominator > 0) {
                 $nilai = round(($numerator / $denominator) * 100, 2);
             } elseif ($nilaiInput !== null && $nilaiInput !== '') {
-                $nilai = (float) $nilaiInput;
+                if ($nilaiInput === 'NaN') {
+                    $nilai = null;
+                    $is_nan = true;
+                } else {
+                    $nilai = (float) $nilaiInput;
+                }
             } else {
                 IndicatorValue::where([
                     'indicator_id' => $indicatorId,
@@ -86,14 +92,12 @@ class IndicatorValueController extends Controller
                     'nilai'        => $nilai,
                     'numerator'    => $numerator,
                     'denominator'  => $denominator,
+                    'is_nan'       => $is_nan,
                 ]
             );
         }
 
-        return redirect()->route('indicator-values.bulk-edit', [
-            'tahun' => $request->tahun,
-            'bulan' => $request->bulan,
-            'jenis' => $request->jenis,
-        ])->with('success', 'Data berhasil disimpan.');
+        return redirect()->route('indicators.index')
+            ->with('success', 'Data berhasil disimpan.');
     }
 }
