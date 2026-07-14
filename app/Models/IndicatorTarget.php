@@ -14,6 +14,7 @@ class IndicatorTarget extends Model
         'tahun',
         'target_value',
         'target_type',
+        'operator',
     ];
 
     public function indicator()

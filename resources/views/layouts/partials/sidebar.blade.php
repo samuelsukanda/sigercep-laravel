@@ -374,7 +374,7 @@
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
                                 <i class="fas fa-list text-sm leading-normal"></i>
                             </div>
-                            <span class="ml-1">Mutu</span>
+                            <span class="ml-1">Capaian Mutu</span>
                         </a>
                     </li>
                     @endcanAccess

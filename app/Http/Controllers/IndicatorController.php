@@ -46,6 +46,7 @@ class IndicatorController extends Controller
             'jenis_indikator' => 'required|string|max:50',
             'unit_terkait' => 'nullable|string|max:255',
             'target_value' => 'nullable|numeric',
+            'operator' => 'nullable|string|in:<,<=,>,>=',
             'tahun' => 'required|integer',
         ]);
 
@@ -62,6 +63,7 @@ class IndicatorController extends Controller
                 'indicator_id' => $indicator->id,
                 'tahun' => $request->tahun,
                 'target_value' => $request->target_value,
+                'operator' => $request->operator ?? '>=',
             ]);
         }
 
@@ -75,6 +77,7 @@ class IndicatorController extends Controller
             'jenis_indikator' => 'required|string|max:50',
             'unit_terkait' => 'nullable|string|max:255',
             'target_value' => 'nullable|numeric',
+            'operator' => 'nullable|string|in:<,<=,>,>=',
             'tahun' => 'required|integer',
         ]);
 
@@ -88,7 +91,7 @@ class IndicatorController extends Controller
         if ($request->filled('target_value')) {
             IndicatorTarget::updateOrCreate(
                 ['indicator_id' => $indicator->id, 'tahun' => $request->tahun],
-                ['target_value' => $request->target_value]
+                ['target_value' => $request->target_value, 'operator' => $request->operator ?? '>=']
             );
         } else {
             IndicatorTarget::where('indicator_id', $indicator->id)

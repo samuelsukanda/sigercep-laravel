@@ -100,25 +100,31 @@
                             if ($val->nilai !== null) {
                                 $totalValuesCount++;
                                 $lowerIsBetter = false;
-                                $namaLower = strtolower($ind->nama_indikator);
-                                if (
-                                    str_contains($namaLower, 'kejadian') ||
-                                    str_contains($namaLower, 'kematian') ||
-                                    str_contains($namaLower, 'infeksi') ||
-                                    str_contains($namaLower, 'keterlambatan') ||
-                                    str_contains($namaLower, 'salah') ||
-                                    str_contains($namaLower, 'reaksi') ||
-                                    str_contains($namaLower, 'insiden') ||
-                                    str_contains($namaLower, 'tertusuk') ||
-                                    str_contains($namaLower, 'kasus') ||
-                                    str_contains($namaLower, 'iddo') ||
-                                    str_contains($namaLower, 'isk') ||
-                                    str_contains($namaLower, 'iadp') ||
-                                    str_contains($namaLower, 'vap') ||
-                                    str_contains($namaLower, 'plebitis') ||
-                                    $tgt <= 15
-                                ) {
-                                    $lowerIsBetter = true;
+                                $operator = $ind->targets->first()?->operator;
+                                
+                                if ($operator) {
+                                    $lowerIsBetter = in_array($operator, ['<', '<=']);
+                                } else {
+                                    $namaLower = strtolower($ind->nama_indikator);
+                                    if (
+                                        str_contains($namaLower, 'kejadian') ||
+                                        str_contains($namaLower, 'kematian') ||
+                                        str_contains($namaLower, 'infeksi') ||
+                                        str_contains($namaLower, 'keterlambatan') ||
+                                        str_contains($namaLower, 'salah') ||
+                                        str_contains($namaLower, 'reaksi') ||
+                                        str_contains($namaLower, 'insiden') ||
+                                        str_contains($namaLower, 'tertusuk') ||
+                                        str_contains($namaLower, 'kasus') ||
+                                        str_contains($namaLower, 'iddo') ||
+                                        str_contains($namaLower, 'isk') ||
+                                        str_contains($namaLower, 'iadp') ||
+                                        str_contains($namaLower, 'vap') ||
+                                        str_contains($namaLower, 'plebitis') ||
+                                        $tgt <= 15
+                                    ) {
+                                        $lowerIsBetter = true;
+                                    }
                                 }
 
                                 $success = $lowerIsBetter ? $val->nilai <= $tgt : $val->nilai >= $tgt;
@@ -275,28 +281,33 @@
                         @forelse ($indicators as $indicator)
                             @php
                                 $target = $indicator->targets->first()?->target_value;
+                                $operator = $indicator->targets->first()?->operator;
 
                                 // Deteksi arah target (apakah lebih kecil atau lebih besar yang bagus)
                                 $lowerIsBetter = false;
-                                $namaLower = strtolower($indicator->nama_indikator);
-                                if (
-                                    str_contains($namaLower, 'kejadian') ||
-                                    str_contains($namaLower, 'kematian') ||
-                                    str_contains($namaLower, 'infeksi') ||
-                                    str_contains($namaLower, 'keterlambatan') ||
-                                    str_contains($namaLower, 'salah') ||
-                                    str_contains($namaLower, 'reaksi') ||
-                                    str_contains($namaLower, 'insiden') ||
-                                    str_contains($namaLower, 'tertusuk') ||
-                                    str_contains($namaLower, 'kasus') ||
-                                    str_contains($namaLower, 'iddo') ||
-                                    str_contains($namaLower, 'isk') ||
-                                    str_contains($namaLower, 'iadp') ||
-                                    str_contains($namaLower, 'vap') ||
-                                    str_contains($namaLower, 'plebitis') ||
-                                    $target <= 15
-                                ) {
-                                    $lowerIsBetter = true;
+                                if ($operator) {
+                                    $lowerIsBetter = in_array($operator, ['<', '<=']);
+                                } else {
+                                    $namaLower = strtolower($indicator->nama_indikator);
+                                    if (
+                                        str_contains($namaLower, 'kejadian') ||
+                                        str_contains($namaLower, 'kematian') ||
+                                        str_contains($namaLower, 'infeksi') ||
+                                        str_contains($namaLower, 'keterlambatan') ||
+                                        str_contains($namaLower, 'salah') ||
+                                        str_contains($namaLower, 'reaksi') ||
+                                        str_contains($namaLower, 'insiden') ||
+                                        str_contains($namaLower, 'tertusuk') ||
+                                        str_contains($namaLower, 'kasus') ||
+                                        str_contains($namaLower, 'iddo') ||
+                                        str_contains($namaLower, 'isk') ||
+                                        str_contains($namaLower, 'iadp') ||
+                                        str_contains($namaLower, 'vap') ||
+                                        str_contains($namaLower, 'plebitis') ||
+                                        $target <= 15
+                                    ) {
+                                        $lowerIsBetter = true;
+                                    }
                                 }
 
                                 $valuesByMonth = $indicator->values->keyBy('bulan');
@@ -331,8 +342,16 @@
                                 <td
                                     class="py-4 px-3 text-center font-bold text-slate-700 dark:text-slate-300 border border-gray-300 dark:border-slate-700">
                                     @if ($target !== null)
+                                        @php
+                                            $operatorSymbol = [
+                                                '<'  => '<',
+                                                '<=' => '≤',
+                                                '>'  => '>',
+                                                '>=' => '≥',
+                                            ][$operator ?? ''] ?? ($lowerIsBetter ? '≤' : '≥');
+                                        @endphp
                                         <span class="text-xs bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md">
-                                            {{ $lowerIsBetter ? '≤' : '≥' }} {{ (float) $target }}%
+                                            {{ $operatorSymbol }} {{ (float) $target }}%
                                         </span>
                                     @else
                                         <span class="text-slate-400">-</span>
@@ -405,7 +424,7 @@
                                 <td class="py-3 px-3 text-center border border-gray-300 dark:border-slate-700">
                                     <div class="flex items-center justify-center gap-2">
                                         <button type="button"
-                                            onclick='openEditModal({{ $indicator->id }}, @json($indicator->nama_indikator), @json($indicator->pj), @json($indicator->unit_terkait), @json($target))'
+                                            onclick='openEditModal({{ $indicator->id }}, @json($indicator->nama_indikator), @json($indicator->pj), @json($indicator->unit_terkait), @json($target), @json($operator ?: ($lowerIsBetter ? "<=" : ">=")))'
                                             class="text-blue-500 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:hover:bg-blue-800/50 p-1.5 rounded transition-colors"
                                             title="Edit Indikator">
                                             <i class="fas fa-edit"></i>
@@ -534,36 +553,73 @@
                     <input type="hidden" name="jenis_indikator" value="{{ $jenis }}">
 
                     {{-- Target --}}
-                    <div style="margin-bottom: 1rem;">
-                        <label for="edit_target_value"
-                            style="
-                                   display: block;
-                                   font-size: 11px;
-                                   font-weight: 700;
-                                   color: #475569;
-                                   text-transform: uppercase;
-                                   letter-spacing: 0.06em;
-                                   margin-bottom: 5px;
-                               ">
-                            Target (%)
-                        </label>
-                        <input type="number" step="any" id="edit_target_value" name="target_value"
-                            placeholder="e.g. 80"
-                            style="
-                                width: 100%;
-                                box-sizing: border-box;
-                                height: 38px;
-                                padding: 0 11px;
-                                font-size: 13.5px;
-                                color: #1e293b;
-                                background: #f8fafc;
-                                border: 1px solid #cbd5e1;
-                                border-radius: 8px;
-                                outline: none;
-                                transition: border-color 0.15s, box-shadow 0.15s;
-                            "
-                            onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.12)'"
-                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
+                    <div style="display: grid; grid-template-columns: 80px 1fr; gap: 12px; margin-bottom: 1rem;">
+                        <div>
+                            <label for="edit_operator"
+                                style="
+                                       display: block;
+                                       font-size: 11px;
+                                       font-weight: 700;
+                                       color: #475569;
+                                       text-transform: uppercase;
+                                       letter-spacing: 0.06em;
+                                       margin-bottom: 5px;
+                                   ">
+                                Tanda
+                            </label>
+                            <select id="edit_operator" name="operator"
+                                style="
+                                    width: 100%;
+                                    box-sizing: border-box;
+                                    height: 38px;
+                                    padding: 0 11px;
+                                    font-size: 13.5px;
+                                    color: #1e293b;
+                                    background: #f8fafc;
+                                    border: 1px solid #cbd5e1;
+                                    border-radius: 8px;
+                                    outline: none;
+                                    transition: border-color 0.15s, box-shadow 0.15s;
+                                "
+                                onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.12)'"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
+                                <option value="<">&lt;</option>
+                                <option value="<=">&le;</option>
+                                <option value=">">&gt;</option>
+                                <option value=">=">&ge;</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="edit_target_value"
+                                style="
+                                       display: block;
+                                       font-size: 11px;
+                                       font-weight: 700;
+                                       color: #475569;
+                                       text-transform: uppercase;
+                                       letter-spacing: 0.06em;
+                                       margin-bottom: 5px;
+                                   ">
+                                Target (%)
+                            </label>
+                            <input type="number" step="any" id="edit_target_value" name="target_value"
+                                placeholder="e.g. 80"
+                                style="
+                                    width: 100%;
+                                    box-sizing: border-box;
+                                    height: 38px;
+                                    padding: 0 11px;
+                                    font-size: 13.5px;
+                                    color: #1e293b;
+                                    background: #f8fafc;
+                                    border: 1px solid #cbd5e1;
+                                    border-radius: 8px;
+                                    outline: none;
+                                    transition: border-color 0.15s, box-shadow 0.15s;
+                                "
+                                onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.12)'"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
+                        </div>
                     </div>
 
                     {{-- Nama Indikator --}}
@@ -745,7 +801,7 @@
             if (e.key === 'Escape') closeEditModal();
         });
 
-        function openEditModal(id, nama, pj, unit, target) {
+        function openEditModal(id, nama, pj, unit, target, operator) {
             const modal = document.getElementById('editIndicatorModal');
             if (!modal) return;
 
@@ -758,6 +814,11 @@
             document.getElementById('edit_pj').value = pj || '';
             document.getElementById('edit_unit_terkait').value = unit || '';
             document.getElementById('edit_target_value').value = target || '';
+            if(operator) {
+                document.getElementById('edit_operator').value = operator;
+            } else {
+                document.getElementById('edit_operator').value = '>=';
+            }
 
             modal.classList.remove('hidden');
             modal.classList.add('flex');
