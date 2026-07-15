@@ -109,40 +109,43 @@
                             </div>
 
                             <h6 class="text-sm font-bold uppercase text-slate-500 mb-4 mt-6 border-b border-gray-100 pb-2">
-                                Target & Mitigasi</h6>
+                                Target Waktu</h6>
+                            <div class="grid grid-cols-1 mb-6">
+                                <x-form.input name="target_waktu" label="Target Waktu" :value="old('target_waktu')" />
+                            </div>
+
+                            @foreach([1, 2, 3, 4] as $tw)
+                            <h6 class="text-sm font-bold uppercase text-slate-500 mb-4 mt-6 border-b border-gray-100 pb-2">
+                                Tingkat Mitigasi TW {{ $tw }}</h6>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                                <div class="md:col-span-3">
-                                    <x-form.input name="target_waktu" label="Target Waktu" :value="old('target_waktu')" />
-                                </div>
-
                                 <div>
-                                    <x-form.input type="number" step="any" name="mitigasi_p" label="Mitigasi (P)"
-                                        id="mp" :value="old('mitigasi_p')" oninput="calcMitigasi()" />
+                                    <x-form.input type="number" step="any" name="mitigasi_tw{{ $tw }}_p" label="Mitigasi (P)"
+                                        id="mtw{{ $tw }}p" :value="old('mitigasi_tw'.$tw.'_p')" oninput="calcMitigasiTW({{ $tw }})" />
                                 </div>
                                 <div>
-                                    <x-form.input type="number" step="any" name="mitigasi_d" label="Mitigasi (D)"
-                                        id="md" :value="old('mitigasi_d')" oninput="calcMitigasi()" />
+                                    <x-form.input type="number" step="any" name="mitigasi_tw{{ $tw }}_d" label="Mitigasi (D)"
+                                        id="mtw{{ $tw }}d" :value="old('mitigasi_tw'.$tw.'_d')" oninput="calcMitigasiTW({{ $tw }})" />
                                 </div>
                                 <div>
-                                    <x-form.input type="number" step="any" name="mitigasi_nilai"
-                                        label="Mitigasi Nilai (P x D x Bobot)" id="mnilai" :value="old('mitigasi_nilai')" readonly />
+                                    <x-form.input type="number" step="any" name="mitigasi_tw{{ $tw }}_nilai"
+                                        label="Mitigasi Nilai (P x D x Bobot)" id="mtw{{ $tw }}nilai" :value="old('mitigasi_tw'.$tw.'_nilai')" readonly />
                                 </div>
-
                                 <div>
-                                    <x-form.input type="number" step="any" name="mitigasi_bobot"
-                                        label="Mitigasi Bobot" id="mbobot" :value="old('mitigasi_bobot')" oninput="calcMitigasi()" />
+                                    <x-form.input type="number" step="any" name="mitigasi_tw{{ $tw }}_bobot"
+                                        label="Mitigasi Bobot" id="mtw{{ $tw }}bobot" :value="old('mitigasi_tw'.$tw.'_bobot')" oninput="calcMitigasiTW({{ $tw }})" />
                                 </div>
                                 <div class="md:col-span-2">
-                                    <x-form.select name="mitigasi_tingkat" label="Tingkat Risiko Mitigasi"
+                                    <x-form.select name="mitigasi_tw{{ $tw }}_tingkat" label="Tingkat Risiko Mitigasi"
                                         :options="[
                                             'Sangat Rendah' => 'Sangat Rendah',
                                             'Rendah' => 'Rendah',
                                             'Sedang' => 'Sedang',
                                             'Tinggi' => 'Tinggi',
                                             'Sangat Tinggi' => 'Sangat Tinggi',
-                                        ]" :selected="old('mitigasi_tingkat')" id="mtingkat" />
+                                        ]" :selected="old('mitigasi_tw'.$tw.'_tingkat')" id="mtw{{ $tw }}tingkat" />
                                 </div>
                             </div>
+                            @endforeach
 
                             <div class="mt-6">
                                 <x-button.submit type="submit">Simpan</x-button.submit>
@@ -162,8 +165,14 @@
 
 @push('scripts')
     <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                width: '100%'
+            });
+        });
+
         function getTingkatRisiko(nilai) {
-            if (!nilai) return '';
+            if (isNaN(nilai) || nilai === '') return '';
             if (nilai <= 4) return 'Sangat Rendah';
             if (nilai <= 9) return 'Rendah';
             if (nilai <= 14) return 'Sedang';
@@ -172,24 +181,30 @@
         }
 
         function calcAnalisis() {
-            const p = parseFloat(document.getElementById('analisis_p').value) || 0;
-            const d = parseFloat(document.getElementById('analisis_d').value) || 0;
-            const bobot = parseFloat(document.getElementById('analisis_bobot').value) || 0;
-            if (p && d && bobot) {
+            const p = parseFloat(document.getElementById('analisis_p').value);
+            const d = parseFloat(document.getElementById('analisis_d').value);
+            const bobot = parseFloat(document.getElementById('analisis_bobot').value);
+            if (!isNaN(p) && !isNaN(d) && !isNaN(bobot)) {
                 const nilai = p * d * bobot;
                 document.getElementById('analisis_nilai').value = nilai.toFixed(2);
                 $('#analisis_tingkat').val(getTingkatRisiko(nilai)).trigger('change');
+            } else {
+                document.getElementById('analisis_nilai').value = '';
+                $('#analisis_tingkat').val('').trigger('change');
             }
         }
 
-        function calcMitigasi() {
-            const p = parseFloat(document.getElementById('mitigasi_p').value) || 0;
-            const d = parseFloat(document.getElementById('mitigasi_d').value) || 0;
-            const bobot = parseFloat(document.getElementById('mitigasi_bobot').value) || 0;
-            if (p && d && bobot) {
+        function calcMitigasiTW(tw) {
+            const p = parseFloat(document.getElementById('mitigasi_tw' + tw + '_p').value);
+            const d = parseFloat(document.getElementById('mitigasi_tw' + tw + '_d').value);
+            const bobot = parseFloat(document.getElementById('mitigasi_tw' + tw + '_bobot').value);
+            if (!isNaN(p) && !isNaN(d) && !isNaN(bobot)) {
                 const nilai = p * d * bobot;
-                document.getElementById('mitigasi_nilai').value = nilai.toFixed(2);
-                $('#mitigasi_tingkat').val(getTingkatRisiko(nilai)).trigger('change');
+                document.getElementById('mitigasi_tw' + tw + '_nilai').value = nilai.toFixed(2);
+                $('#mitigasi_tw' + tw + '_tingkat').val(getTingkatRisiko(nilai)).trigger('change');
+            } else {
+                document.getElementById('mitigasi_tw' + tw + '_nilai').value = '';
+                $('#mitigasi_tw' + tw + '_tingkat').val('').trigger('change');
             }
         }
     </script>

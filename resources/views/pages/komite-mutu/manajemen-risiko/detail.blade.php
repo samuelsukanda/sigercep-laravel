@@ -131,48 +131,53 @@
                             </div>
                         </div>
 
-                        {{-- Bagian Target & Mitigasi --}}
+                        {{-- Bagian Target Waktu --}}
                         <h6 class="text-sm font-bold uppercase text-slate-500 border-b border-gray-100 pb-2 mb-4">
-                            Target &amp; Mitigasi
+                            Target Waktu
                         </h6>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-
-                            {{-- Target Waktu --}}
                             <div class="md:col-span-2">
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Target Waktu</label>
                                 <p class="text-slate-600">{{ $risiko->target_waktu ?: '-' }}</p>
                             </div>
+                        </div>
 
+                        {{-- Bagian Mitigasi TW 1-4 --}}
+                        @foreach([1, 2, 3, 4] as $tw)
+                        <h6 class="text-sm font-bold uppercase text-slate-500 border-b border-gray-100 pb-2 mb-4">
+                            Tingkat Mitigasi TW {{ $tw }}
+                        </h6>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                             {{-- Mitigasi P --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Mitigasi P</label>
-                                <p class="text-slate-600">{{ (float) $risiko->mitigasi_p ?: '-' }}</p>
+                                <p class="text-slate-600">{{ (float) $risiko->{'mitigasi_tw'.$tw.'_p'} ?: '-' }}</p>
                             </div>
 
                             {{-- Mitigasi D --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Mitigasi D</label>
-                                <p class="text-slate-600">{{ (float) $risiko->mitigasi_d ?: '-' }}</p>
+                                <p class="text-slate-600">{{ (float) $risiko->{'mitigasi_tw'.$tw.'_d'} ?: '-' }}</p>
                             </div>
 
                             {{-- Nilai Mitigasi --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Nilai Mitigasi</label>
-                                <p class="text-slate-600">{{ (float) $risiko->mitigasi_nilai ?: '-' }}</p>
+                                <p class="text-slate-600">{{ (float) $risiko->{'mitigasi_tw'.$tw.'_nilai'} ?: '-' }}</p>
                             </div>
 
                             {{-- Bobot Mitigasi --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Bobot Mitigasi</label>
-                                <p class="text-slate-600">{{ (float) $risiko->mitigasi_bobot ?: '-' }}</p>
+                                <p class="text-slate-600">{{ (float) $risiko->{'mitigasi_tw'.$tw.'_bobot'} ?: '-' }}</p>
                             </div>
 
                             {{-- Tingkat Risiko Mitigasi --}}
                             <div class="md:col-span-2">
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Tingkat Risiko
-                                    Mitigasi</label>
+                                    Mitigasi TW {{ $tw }}</label>
                                 @php
-                                    $tingkatMitigasi = $risiko->mitigasi_tingkat;
+                                    $tingkatMitigasi = $risiko->{'mitigasi_tw'.$tw.'_tingkat'};
                                     $tm = strtolower(trim($tingkatMitigasi ?? ''));
                                     $badgeClassM = match (true) {
                                         str_contains($tm, 'sangat rendah') => 'bg-green-100 text-green-700',
@@ -188,6 +193,7 @@
                                 </span>
                             </div>
                         </div>
+                        @endforeach
 
                         {{-- Tombol Kembali --}}
                         <div class="mt-6">

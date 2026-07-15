@@ -13,7 +13,10 @@
                 <th class="px-6 py-3 min-w-[200px]">Pengendalian</th>
                 <th class="px-6 py-3 text-center min-w-[100px]">Tingkat<br>Analisis</th>
                 <th class="px-6 py-3 min-w-[150px]">Target Waktu</th>
-                <th class="px-6 py-3 text-center min-w-[100px]">Tingkat<br>Mitigasi</th>
+                <th class="px-6 py-3 text-center min-w-[100px]">Tingkat<br>Mitigasi TW 1</th>
+                <th class="px-6 py-3 text-center min-w-[100px]">Tingkat<br>Mitigasi TW 2</th>
+                <th class="px-6 py-3 text-center min-w-[100px]">Tingkat<br>Mitigasi TW 3</th>
+                <th class="px-6 py-3 text-center min-w-[100px]">Tingkat<br>Mitigasi TW 4</th>
                 <th class="px-6 py-3 text-center min-w-[120px] whitespace-nowrap">Aksi</th>
             </tr>
         </thead>
@@ -79,16 +82,18 @@
                     <td class="px-6 py-4 text-center text-xs">
                         {{ $item->target_waktu ?? '-' }}
                     </td>
+                    @foreach([1, 2, 3, 4] as $tw)
                     <td class="px-6 py-4 text-center">
                         <span
-                            class="px-2 py-1 text-xs font-semibold rounded-full {{ getBadgeColor($item->mitigasi_tingkat) }}">
-                            {{ $item->mitigasi_tingkat ?? '-' }}
+                            class="px-2 py-1 text-xs font-semibold rounded-full {{ getBadgeColor($item->{'mitigasi_tw'.$tw.'_tingkat'}) }}">
+                            {{ $item->{'mitigasi_tw'.$tw.'_tingkat'} ?? '-' }}
                         </span>
-                        @if ($item->mitigasi_nilai)
+                        @if ($item->{'mitigasi_tw'.$tw.'_nilai'})
                             <span class="block text-[10px] mt-1 text-slate-400">Nilai:
-                                {{ (float) $item->mitigasi_nilai }}</span>
+                                {{ (float) $item->{'mitigasi_tw'.$tw.'_nilai'} }}</span>
                         @endif
                     </td>
+                    @endforeach
                     <td class="px-6 py-4 space-x-2 text-center">
                         @canAccess('manajemen_risiko', 'read')
                         <x-button.action href="{{ route('komite-mutu.manajemen-risiko.show', $item->id) }}"
