@@ -72,7 +72,7 @@
                         style="border-color: #e2e8f0; color: #64748b; background-color: #ffffff;" @endif>
                     <i class="fas fa-globe" style="margin-right: 5px;"></i>Published
                     <span class="inline-flex items-center justify-center text-xs font-bold rounded-full"
-                        style="min-width:20px; height:20px; padding: 0 5px; margin-left: 4px; {{ $tab === 'published' ? 'background-color: #3b82f6; color: #ffffff;' : 'background-color: #e2e8f0; color: #475569;' }}">
+                        style="display: inline-flex; align-items: center; justify-content: center; min-width:20px; height:20px; line-height: 1; padding: 0 5px; margin-left: 4px; {{ $tab === 'published' ? 'background-color: #3b82f6; color: #ffffff;' : 'background-color: #e2e8f0; color: #475569;' }}">
                         {{ $counts['published'] ?? 0 }}
                     </span>
                 </a>
@@ -86,7 +86,7 @@
                     <i class="fas fa-file-alt" style="margin-right: 5px;"></i>Draft
                     @if (($counts['draft'] ?? 0) > 0)
                         <span class="inline-flex items-center justify-center text-xs font-bold rounded-full"
-                            style="min-width:20px; height:20px; padding: 0 5px; margin-left: 4px; {{ $tab === 'draft' ? 'background-color: #f59e0b; color: #ffffff;' : 'background-color: #e2e8f0; color: #475569;' }}">
+                            style="display: inline-flex; align-items: center; justify-content: center; min-width:20px; height:20px; line-height: 1; padding: 0 5px; margin-left: 4px; {{ $tab === 'draft' ? 'background-color: #f59e0b; color: #ffffff;' : 'background-color: #e2e8f0; color: #475569;' }}">
                             {{ $counts['draft'] }}
                         </span>
                     @endif
@@ -100,7 +100,7 @@
                         style="border-color: #e2e8f0; color: #64748b; background-color: #ffffff;" @endif>
                     <i class="fas fa-user" style="margin-right: 5px;"></i>Artikel Saya
                     <span class="inline-flex items-center justify-center text-xs font-bold rounded-full"
-                        style="min-width:20px; height:20px; padding: 0 5px; margin-left: 4px; {{ $tab === 'mine' ? 'background-color: #8b5cf6; color: #ffffff;' : 'background-color: #e2e8f0; color: #475569;' }}">
+                        style="display: inline-flex; align-items: center; justify-content: center; min-width:20px; height:20px; line-height: 1; padding: 0 5px; margin-left: 4px; {{ $tab === 'mine' ? 'background-color: #8b5cf6; color: #ffffff;' : 'background-color: #e2e8f0; color: #475569;' }}">
                         {{ $counts['mine'] ?? 0 }}
                     </span>
                 </a>
@@ -109,9 +109,9 @@
             {{-- Alert info untuk tab draft --}}
             @if ($tab === 'draft')
                 <div
-                    style="margin-top: 10px; display: flex; align-items: flex-start; gap: 8px; padding: 10px 14px; background-color: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; font-size: 12px; color: #92400e;">
+                    style="margin-top: 10px; display: flex; align-items: center; gap: 8px; padding: 10px 14px; background-color: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; font-size: 12px; color: #92400e;">
                     <i class="fas fa-info-circle"
-                        style="color: #f59e0b; flex-shrink: 0; margin-top: 1px; margin-right: 4px;"></i>
+                        style="color: #f59e0b; flex-shrink: 0; margin-right: 4px;"></i>
                     <span>
                         <strong>Draft</strong> tidak terlihat oleh pengguna biasa. Klik
                         <strong style="color: #16a34a;">Publish</strong> pada artikel untuk mempublikasikannya.

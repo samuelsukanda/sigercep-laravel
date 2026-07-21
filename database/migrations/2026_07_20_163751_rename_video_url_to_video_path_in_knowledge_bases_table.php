@@ -9,15 +9,15 @@ return new class extends Migration
 
     public function up(): void
     {
-        Schema::table('indicator_values', function (Blueprint $table) {
-            $table->boolean('is_nan')->default(false)->after('denominator');
+        Schema::table('knowledge_bases', function (Blueprint $table) {
+            $table->renameColumn('video_url', 'video_path');
         });
     }
 
     public function down(): void
     {
-        Schema::table('indicator_values', function (Blueprint $table) {
-            $table->dropColumn('is_nan');
+        Schema::table('knowledge_bases', function (Blueprint $table) {
+            $table->renameColumn('video_path', 'video_url');
         });
     }
 };

@@ -47,6 +47,11 @@
                 <p class="text-slate-600">{{ $ticket->description }}</p>
             </div>
 
+            <div class="w-full px-3">
+                <label class="block  text-sm font-semibold" style="color: #7664E4 !important;">Penanganan</label>
+                <p class="text-slate-600">{{ $ticket->penanganan }}</p>
+            </div>
+
             <div class="w-full px-3" x-data="previewModal()">
 
                 <label class="block text-sm font-semibold" style="color: #7664E4;">

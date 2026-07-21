@@ -6,18 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
     public function up(): void
     {
-        Schema::table('indicator_values', function (Blueprint $table) {
-            $table->boolean('is_nan')->default(false)->after('denominator');
+        Schema::table('knowledge_bases', function (Blueprint $table) {
+            $table->dropColumn('description');
         });
     }
 
     public function down(): void
     {
-        Schema::table('indicator_values', function (Blueprint $table) {
-            $table->dropColumn('is_nan');
+        Schema::table('knowledge_bases', function (Blueprint $table) {
+            $table->text('description')->nullable();
         });
     }
 };

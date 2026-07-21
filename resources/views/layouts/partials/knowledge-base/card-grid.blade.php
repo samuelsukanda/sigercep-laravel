@@ -18,8 +18,10 @@
                 </div>
 
                 {{-- Title --}}
-                <a href="{{ route('knowledge-base.show', $kb) }}" style="text-decoration: none;">
-                    <h5 style="font-size: 15px; font-weight: 700; color: #1e293b; margin: 0 0 8px 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                <a href="{{ route('knowledge-base.show', $kb) }}" style="text-decoration: none;"
+                   onmouseover="this.querySelector('h5').style.color='#3b82f6'"
+                   onmouseout="this.querySelector('h5').style.color='#1e293b'">
+                    <h5 style="font-size: 15px; font-weight: 700; color: #1e293b; margin: 0 0 8px 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; transition: color 0.2s;">
                         {{ $kb->title }}
                     </h5>
                 </a>
@@ -36,7 +38,7 @@
                     <div style="display: flex; align-items: center; font-size: 12px; color: #94a3b8; overflow: hidden; min-width: 0;">
                         <i class="fas fa-user" style="margin-right: 5px; flex-shrink: 0;"></i>
                         <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 80px; margin-right: 6px;">
-                            {{ $kb->author?->name ?? 'Unknown' }}
+                            {{ ucwords(str_replace('.', ' ', $kb->author?->name ?? 'Unknown')) }}
                         </span>
                         <span style="margin-right: 6px; color: #cbd5e1; flex-shrink: 0;">·</span>
                         <span style="white-space: nowrap; flex-shrink: 0;">{{ $kb->created_at->format('d M Y') }}</span>

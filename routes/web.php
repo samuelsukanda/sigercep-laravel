@@ -9,6 +9,7 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\AdminTicketController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\KnowledgeBaseController;
 use App\Http\Controllers\DesainGrafisController;
 use App\Http\Controllers\KomplainIpsrsController;
 use App\Http\Controllers\KomplainOutsourcingVendorController;
@@ -111,6 +112,14 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth', 'permission:helpdesk,create'])
         ->resource('helpdesk', TicketController::class)
         ->only(['create', 'store', 'index', 'show']);
+    // Knowledge Base routes
+    Route::middleware(['auth'])->group(function () {
+        Route::resource('knowledge-base', KnowledgeBaseController::class)
+            ->names('knowledge-base');
+        Route::patch('knowledge-base/{knowledgeBase}/publish', [KnowledgeBaseController::class, 'publish'])
+            ->name('knowledge-base.publish');
+    });
+
 
     // Admin routes
     Route::middleware(['auth', 'permission:helpdesk,manage'])->prefix('admin')->name('admin.')->group(function () {

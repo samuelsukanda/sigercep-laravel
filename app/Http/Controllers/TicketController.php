@@ -67,9 +67,12 @@ class TicketController extends Controller
         return view('pages.helpdesk.index', compact('tickets', 'isFiltered'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return view('pages.helpdesk.create');
+        $fromKb    = $request->boolean('from_kb');
+        $kbTitle   = $fromKb ? $request->input('kb_title', '') : null;
+
+        return view('pages.helpdesk.create', compact('fromKb', 'kbTitle'));
     }
 
     public function store(Request $request)
@@ -77,6 +80,7 @@ class TicketController extends Controller
         $request->validate([
             'category'    => 'nullable|in:Hardware,Printer,Jaringan,Software,SIMRS',
             'description' => 'required|string',
+            'penanganan'  => 'nullable|string',
             'urgency'     => 'nullable|in:Low,Medium,High,Critical',
             'attachment'  => 'nullable|array',
             'attachment.*' => 'file|mimes:jpg,png,jpeg,doc,docx,xls,xlsx,pdf|max:2048'
@@ -108,6 +112,7 @@ class TicketController extends Controller
             $ticket->user_id       = Auth::id();
             $ticket->category      = $request->category;
             $ticket->description   = $request->description;
+            $ticket->penanganan    = $request->filled('penanganan') ? $request->penanganan : null;
             $ticket->urgency       = $request->urgency;
             $ticket->status        = 'Open';
             $ticket->fingerprint   = $fingerprint;

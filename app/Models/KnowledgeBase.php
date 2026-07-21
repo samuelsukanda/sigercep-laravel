@@ -8,9 +8,8 @@ class KnowledgeBase extends Model
 {
     protected $fillable = [
         'title',
-        'description',
         'content',
-        'video_url',
+        'video_path',
         'photo_path',
         'category',
         'author_id',

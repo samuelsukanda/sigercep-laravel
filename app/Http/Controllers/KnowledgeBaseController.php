@@ -10,9 +10,7 @@ use Illuminate\Support\Str;
 
 class KnowledgeBaseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index(Request $request)
     {
         $user = auth()->user();
@@ -37,8 +35,7 @@ class KnowledgeBaseController extends Controller
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
                 $q->where('title', 'like', '%' . $request->search . '%')
-                  ->orWhere('content', 'like', '%' . $request->search . '%')
-                  ->orWhere('description', 'like', '%' . $request->search . '%');
+                  ->orWhere('content', 'like', '%' . $request->search . '%');
             });
         }
         
@@ -59,25 +56,19 @@ class KnowledgeBaseController extends Controller
         return view('pages.helpdesk.knowledge-base.index', compact('knowledgeBases', 'categories', 'tab', 'counts', 'isIT'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $categories = ['Hardware', 'Jaringan', 'Software', 'SIMRS'];
         return view('pages.helpdesk.knowledge-base.create', compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'content' => 'required|string',
-            'video_url' => 'nullable|url',
+            'video' => 'nullable|file|mimes:mp4,mov,mkv,avi,webm|max:20480',
             'photo' => 'nullable|image|max:5120',
             'category' => 'nullable|string|in:Hardware,Jaringan,Software,SIMRS',
             'status' => 'required|in:draft,published',
@@ -85,6 +76,10 @@ class KnowledgeBaseController extends Controller
 
         if ($request->hasFile('photo')) {
             $validated['photo_path'] = $request->file('photo')->store('knowledge_bases', 'public');
+        }
+
+        if ($request->hasFile('video')) {
+            $validated['video_path'] = $request->file('video')->store('knowledge_bases/videos', 'public');
         }
         
         $validated['author_id'] = auth()->id();
@@ -101,9 +96,6 @@ class KnowledgeBaseController extends Controller
             : redirect()->route('knowledge-base.show', $article)->with('success', $msg);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(KnowledgeBase $knowledgeBase)
     {
         if ($knowledgeBase->status === 'draft') {
@@ -125,9 +117,6 @@ class KnowledgeBaseController extends Controller
         return view('pages.helpdesk.knowledge-base.show', compact('knowledgeBase', 'related'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(KnowledgeBase $knowledgeBase)
     {
         $user = auth()->user();
@@ -140,9 +129,6 @@ class KnowledgeBaseController extends Controller
         return view('pages.helpdesk.knowledge-base.edit', compact('knowledgeBase', 'categories'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, KnowledgeBase $knowledgeBase)
     {
         $user = auth()->user();
@@ -155,7 +141,7 @@ class KnowledgeBaseController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'content' => 'required|string',
-            'video_url' => 'nullable|url',
+            'video' => 'nullable|file|mimes:mp4,mov,mkv,avi,webm|max:20480',
             'photo' => 'nullable|image|max:5120',
             'category' => 'nullable|string|in:Hardware,Jaringan,Software,SIMRS',
             'status' => 'required|in:draft,published',
@@ -168,6 +154,13 @@ class KnowledgeBaseController extends Controller
             $validated['photo_path'] = $request->file('photo')->store('knowledge_bases', 'public');
         }
 
+        if ($request->hasFile('video')) {
+            if ($knowledgeBase->video_path && !Str::contains($knowledgeBase->video_path, ['youtube.com', 'youtu.be'])) {
+                Storage::disk('public')->delete($knowledgeBase->video_path);
+            }
+            $validated['video_path'] = $request->file('video')->store('knowledge_bases/videos', 'public');
+        }
+
         $knowledgeBase->update($validated);
 
         $msg = $request->status === 'draft'
@@ -177,9 +170,6 @@ class KnowledgeBaseController extends Controller
         return redirect()->route('knowledge-base.show', $knowledgeBase)->with('success', $msg);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(KnowledgeBase $knowledgeBase)
     {
         $user = auth()->user();
@@ -191,14 +181,16 @@ class KnowledgeBaseController extends Controller
         if ($knowledgeBase->photo_path) {
             Storage::disk('public')->delete($knowledgeBase->photo_path);
         }
+
+        if ($knowledgeBase->video_path && !Str::contains($knowledgeBase->video_path, ['youtube.com', 'youtu.be'])) {
+            Storage::disk('public')->delete($knowledgeBase->video_path);
+        }
+
         $knowledgeBase->delete();
 
         return redirect()->route('knowledge-base.index')->with('success', 'Artikel berhasil dihapus.');
     }
 
-    /**
-     * Publish a draft article.
-     */
     public function publish(KnowledgeBase $knowledgeBase)
     {
         $user = auth()->user();

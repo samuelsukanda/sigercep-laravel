@@ -24,6 +24,17 @@
                                 {{-- Deskripsi --}}
                                 <x-form.textarea name="description" label="Deskripsi" :value="old('description', $tickets->description ?? '')" required />
 
+                                {{-- Penanganan (hanya muncul jika datang dari Knowledge Base) --}}
+                                @if (!empty($fromKb) && $fromKb)
+                                    <div class="md:col-span-2">
+                                        <x-form.input
+                                            name="penanganan"
+                                            label="Penanganan"
+                                            :value="old('penanganan', 'Sudah melakukan tutorial: ' . ($kbTitle ?? ''))"
+                                        />
+                                    </div>
+                                @endif
+
                                 {{-- Lampiran --}}
                                 <x-form.multi-file-upload name="attachment" label="Lampiran Pendukung" :current="$tickets->attachment ?? null" />
                             </div>

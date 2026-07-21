@@ -13,7 +13,7 @@ class Ticket extends Model
 
     protected $dates = ['deleted_at'];
 
-    protected $fillable = ['ticket_number', 'user_id', 'category', 'description', 'urgency', 'attachment', 'status'];
+    protected $fillable = ['ticket_number', 'user_id', 'category', 'description', 'penanganan', 'urgency', 'attachment', 'status'];
 
     protected $casts = [
         'created_at' => 'datetime',
