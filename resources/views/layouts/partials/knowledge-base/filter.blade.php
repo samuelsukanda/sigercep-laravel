@@ -11,7 +11,7 @@
                 <div class="flex flex-col mr-1 filter-item" style="min-width:200px; flex:1 1 200px;">
                     <label class="text-xs font-semibold text-gray-600 mb-1.5">Cari Artikel</label>
                     <input type="text" name="search" value="{{ request('search') }}"
-                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        class="focus:shadow-primary-outline text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 px-3 py-2 font-normal outline-none transition-all placeholder:text-gray-500 focus:outline-none focus:border-blue-500"
                         placeholder="Cari judul atau isi artikel...">
                 </div>
 
@@ -19,7 +19,7 @@
                 <div class="flex flex-col mr-1 filter-item" style="min-width:148px; flex:1 1 148px; max-width:220px;">
                     <label class="text-xs font-semibold text-gray-600 mb-1.5">Kategori</label>
                     <select name="category"
-                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white">
+                        class="focus:shadow-primary-outline text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 px-3 py-2 font-normal outline-none transition-all focus:outline-none focus:border-blue-500 bg-white">
                         <option value="">-- Semua Kategori --</option>
                         @foreach ($categories as $cat)
                             <option value="{{ $cat }}" {{ request('category') == $cat ? 'selected' : '' }}>
