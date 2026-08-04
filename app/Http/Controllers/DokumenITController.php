@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DokumenIt;
+use App\Helpers\PermissionHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -21,45 +22,95 @@ class DokumenITController extends Controller
 
     public function index(Request $request)
     {
+        if ($request->ajax()) {
+            $columns = ['file_pdf', 'jenis_dokumen', 'created_at'];
+
+            $query = DokumenIt::query();
+
+            if ($request->filled('periode_dari')) {
+                try {
+                    $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
+                    $query->where('created_at', '>=', $startDate);
+                } catch (\Exception $e) {
+                }
+            }
+
+            if ($request->filled('periode_sampai')) {
+                try {
+                    $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
+                    $query->where('created_at', '<=', $endDate);
+                } catch (\Exception $e) {
+                }
+            }
+
+            if ($request->filled('jenis_dokumen')) {
+                $query->where('jenis_dokumen', $request->jenis_dokumen);
+            }
+
+            if ($request->has('search') && !empty($request->search['value'])) {
+                $search = $request->search['value'];
+
+                $query->where(function ($q) use ($search) {
+                    $q->where('file_pdf', 'like', "%{$search}%")
+                        ->orWhere('jenis_dokumen', 'like', "%{$search}%");
+                });
+            }
+
+            $recordsTotal = DokumenIt::count();
+            $recordsFiltered = $query->count();
+
+            if ($request->has('order')) {
+                $orderColumn = $columns[$request->order[0]['column']] ?? 'created_at';
+                $orderDir = $request->order[0]['dir'] ?? 'desc';
+                $query->orderBy($orderColumn, $orderDir);
+            } else {
+                $query->orderBy('created_at', 'desc');
+            }
+
+            $start = $request->start ?? 0;
+            $length = $request->length ?? 10;
+
+            $records = $query->skip($start)->take($length)->get();
+
+            $canUpdate = PermissionHelper::canAccess('dokumen_it', 'update');
+            $canRead = PermissionHelper::canAccess('dokumen_it', 'read');
+            $canDelete = PermissionHelper::canAccess('dokumen_it', 'delete');
+
+            $data = [];
+
+            foreach ($records as $item) {
+                $data[] = [
+                    'id' => $item->id,
+                    'file_pdf' => $item->file_pdf,
+                    'jenis_dokumen' => $item->jenis_dokumen,
+                    'created_at_timestamp' => Carbon::parse($item->created_at)->timestamp,
+                    'tanggal_formatted' => '
+                    <div class="flex flex-col">
+                        <span>' . Carbon::parse($item->created_at)->translatedFormat('d F Y') . '</span>
+                        <span class="text-xs text-gray-400">' . Carbon::parse($item->created_at)->format('H:i') . ' WIB</span>
+                    </div>
+                ',
+                    'can_update' => $canUpdate,
+                    'can_read' => $canRead,
+                    'can_delete' => $canDelete,
+                ];
+            }
+
+            return response()->json([
+                'draw' => intval($request->draw),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data,
+            ]);
+        }
+
         $isFiltered = $request->hasAny([
             'periode_dari',
             'periode_sampai',
             'jenis_dokumen'
-
         ]);
 
-        $validator = Validator::make($request->all(), [
-            'periode_dari'   => 'nullable|date_format:d-m-Y',
-            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
-        ], [
-            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->route('dokumen-it.index')
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        $query = DokumenIt::query();
-
-        if ($request->filled('periode_dari')) {
-            $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
-            $query->whereDate('created_at', '>=', $startDate);
-        }
-
-        if ($request->filled('periode_sampai')) {
-            $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
-            $query->whereDate('created_at', '<=', $endDate);
-        }
-
-        if ($request->filled('jenis_dokumen')) {
-            $query->where('jenis_dokumen', $request->jenis_dokumen);
-        }
-
-        $DokumenIt = $query->orderBy('created_at', 'desc')->get();
-
-        return view('pages.dokumen-it.index', compact('DokumenIt', 'isFiltered'));
+        return view('pages.dokumen-it.index', compact('isFiltered'));
     }
 
     public function create()
