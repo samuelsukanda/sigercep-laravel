@@ -6,6 +6,7 @@ use App\Models\ReservasiKendaraan;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use App\Helpers\PermissionHelper;
 
 class ReservasiKendaraanController extends Controller
 {
@@ -20,39 +21,109 @@ class ReservasiKendaraanController extends Controller
 
     public function index(Request $request)
     {
-        $isFiltered = $request->hasAny([
-            'periode_dari',
-            'periode_sampai',
-        ]);
+        if ($request->ajax()) {
 
-        $validator = Validator::make($request->all(), [
-            'periode_dari'   => 'nullable|date_format:d-m-Y',
-            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
-        ], [
-            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
-        ]);
+            $columns = ['nama', 'unit', 'jam_berangkat', 'jam_pulang', 'tanggal', 'jenis_kendaraan', 'tempat_tujuan'];
 
-        if ($validator->fails()) {
-            return redirect()->route('reservasi.kendaraan.index')
-                ->withErrors($validator)
-                ->withInput();
+            $query = ReservasiKendaraan::query();
+
+            if ($request->filled('periode_dari')) {
+                try {
+                    $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
+                    $query->whereDate('tanggal', '>=', $startDate);
+                } catch (\Exception $e) {
+                }
+            }
+
+            if ($request->filled('periode_sampai')) {
+                try {
+                    $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
+                    $query->whereDate('tanggal', '<=', $endDate);
+                } catch (\Exception $e) {
+                }
+            }
+
+            if ($request->has('search') && !empty($request->search['value'])) {
+                $search = $request->search['value'];
+
+                $query->where(function ($q) use ($search) {
+                    $q->where('nama', 'like', "%{$search}%")
+                        ->orWhere('unit', 'like', "%{$search}%")
+                        ->orWhere('jenis_kendaraan', 'like', "%{$search}%")
+                        ->orWhere('tempat_tujuan', 'like', "%{$search}%")
+                        ->orWhere('keperluan', 'like', "%{$search}%");
+                });
+            }
+
+            $recordsTotal = ReservasiKendaraan::count();
+            $recordsFiltered = $query->count();
+
+            if ($request->has('order')) {
+                $orderColumn = $columns[$request->order[0]['column']] ?? 'tanggal';
+                $orderDir = $request->order[0]['dir'] ?? 'desc';
+                $query->orderBy($orderColumn, $orderDir);
+            } else {
+                $query->orderBy('tanggal', 'desc')->orderBy('jam_berangkat', 'asc');
+            }
+
+            $start = $request->start ?? 0;
+            $length = $request->length ?? 10;
+
+            $records = $query->skip($start)->take($length)->get();
+
+            $canUpdate = PermissionHelper::canAccess('reservasi_kendaraan', 'update');
+            $canRead = PermissionHelper::canAccess('reservasi_kendaraan', 'read');
+            $canDelete = PermissionHelper::canAccess('reservasi_kendaraan', 'delete');
+
+            $data = [];
+
+            foreach ($records as $item) {
+                $jamBerangkat = '-';
+                if (!empty($item->jam_berangkat)) {
+                    try {
+                        $jamBerangkat = Carbon::createFromFormat('H:i:s', $item->jam_berangkat)->format('H:i') . ' WIB';
+                    } catch (\Exception $e) {
+                        $jamBerangkat = $item->jam_berangkat;
+                    }
+                }
+                $jamPulang = '-';
+                if (!empty($item->jam_pulang)) {
+                    try {
+                        $jamPulang = Carbon::createFromFormat('H:i:s', $item->jam_pulang)->format('H:i') . ' WIB';
+                    } catch (\Exception $e) {
+                        $jamPulang = $item->jam_pulang;
+                    }
+                }
+
+                $data[] = [
+                    'id' => $item->id,
+                    'nama' => ucwords(strtolower($item->nama)),
+                    'unit' => $item->unit,
+                    'jam_berangkat' => $jamBerangkat,
+                    'jam_pulang' => $jamPulang,
+                    'tanggal_timestamp' => Carbon::parse($item->tanggal)->timestamp,
+                    'tanggal_formatted' => '
+                    <div class="flex flex-col">
+                        <span>' . Carbon::parse($item->tanggal)->translatedFormat('d F Y') . '</span>
+                    </div>
+                ',
+                    'jenis_kendaraan' => $item->jenis_kendaraan,
+                    'tempat_tujuan' => $item->tempat_tujuan,
+                    'can_update' => $canUpdate,
+                    'can_read' => $canRead,
+                    'can_delete' => $canDelete,
+                ];
+            }
+
+            return response()->json([
+                'draw' => intval($request->draw),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
         }
 
-        $query = ReservasiKendaraan::query();
-
-        if ($request->filled('periode_dari')) {
-            $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
-            $query->whereDate('tanggal', '>=', $startDate);
-        }
-
-        if ($request->filled('periode_sampai')) {
-            $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
-            $query->whereDate('tanggal', '<=', $endDate);
-        }
-
-        $reservasi = $query->orderBy('tanggal', 'desc')->orderBy('jam_berangkat', 'asc')->get();
-
-        return view('pages.reservasi.kendaraan.index', compact('reservasi', 'isFiltered'));
+        return view('pages.reservasi.kendaraan.index');
     }
 
     public function create()

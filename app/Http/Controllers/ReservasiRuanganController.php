@@ -6,6 +6,7 @@ use App\Models\ReservasiRuangan;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use App\Helpers\PermissionHelper;
 
 class ReservasiRuanganController extends Controller
 {
@@ -20,39 +21,111 @@ class ReservasiRuanganController extends Controller
 
     public function index(Request $request)
     {
-        $isFiltered = $request->hasAny([
-            'periode_dari',
-            'periode_sampai',
-        ]);
+        if ($request->ajax()) {
 
-        $validator = Validator::make($request->all(), [
-            'periode_dari'   => 'nullable|date_format:d-m-Y',
-            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
-        ], [
-            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
-        ]);
+            $columns = ['nama', 'unit', 'jam_mulai', 'jam_selesai', 'tanggal', 'ruang', 'approval'];
 
-        if ($validator->fails()) {
-            return redirect()->route('reservasi.ruangan.index')
-                ->withErrors($validator)
-                ->withInput();
+            $query = ReservasiRuangan::query();
+
+            if ($request->filled('periode_dari')) {
+                try {
+                    $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
+                    $query->whereDate('tanggal', '>=', $startDate);
+                } catch (\Exception $e) {
+                }
+            }
+
+            if ($request->filled('periode_sampai')) {
+                try {
+                    $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
+                    $query->whereDate('tanggal', '<=', $endDate);
+                } catch (\Exception $e) {
+                }
+            }
+
+            if ($request->has('search') && !empty($request->search['value'])) {
+                $search = $request->search['value'];
+
+                $query->where(function ($q) use ($search) {
+                    $q->where('nama', 'like', "%{$search}%")
+                        ->orWhere('unit', 'like', "%{$search}%")
+                        ->orWhere('ruang', 'like', "%{$search}%")
+                        ->orWhere('approval', 'like', "%{$search}%");
+                });
+            }
+
+            $recordsTotal = ReservasiRuangan::count();
+            $recordsFiltered = $query->count();
+
+            if ($request->has('order')) {
+                $orderColumn = $columns[$request->order[0]['column']] ?? 'tanggal';
+                $orderDir = $request->order[0]['dir'] ?? 'desc';
+                $query->orderBy($orderColumn, $orderDir);
+            } else {
+                $query->orderBy('tanggal', 'desc')->orderBy('jam_mulai', 'asc');
+            }
+
+            $start = $request->start ?? 0;
+            $length = $request->length ?? 10;
+
+            $records = $query->skip($start)->take($length)->get();
+
+            $canUpdate = PermissionHelper::canAccess('reservasi_ruangan', 'update');
+            $canRead = PermissionHelper::canAccess('reservasi_ruangan', 'read');
+            $canDelete = PermissionHelper::canAccess('reservasi_ruangan', 'delete');
+
+            $data = [];
+
+            foreach ($records as $item) {
+                $jamMulai = '-';
+                if (!empty($item->jam_mulai)) {
+                    try {
+                        $jamMulai = Carbon::createFromFormat('H:i:s', $item->jam_mulai)->format('H:i') . ' WIB';
+                    } catch (\Exception $e) {
+                        $jamMulai = $item->jam_mulai;
+                    }
+                }
+                $jamSelesai = '-';
+                if (!empty($item->jam_selesai)) {
+                    try {
+                        $jamSelesai = Carbon::createFromFormat('H:i:s', $item->jam_selesai)->format('H:i') . ' WIB';
+                    } catch (\Exception $e) {
+                        $jamSelesai = $item->jam_selesai;
+                    }
+                }
+
+                $approval = $item->approval ?? 'Pending';
+                $approvalHtml = view('components.badge.status-approval-badge', ['status' => $approval])->render();
+
+                $data[] = [
+                    'id' => $item->id,
+                    'nama' => ucwords(strtolower($item->nama)),
+                    'unit' => $item->unit,
+                    'jam_mulai' => $jamMulai,
+                    'jam_selesai' => $jamSelesai,
+                    'tanggal_timestamp' => Carbon::parse($item->tanggal)->timestamp,
+                    'tanggal_formatted' => '
+                    <div class="flex flex-col">
+                        <span>' . Carbon::parse($item->tanggal)->translatedFormat('d F Y') . '</span>
+                    </div>
+                ',
+                    'ruang' => $item->ruang,
+                    'approval_badge' => $approvalHtml,
+                    'can_update' => $canUpdate,
+                    'can_read' => $canRead,
+                    'can_delete' => $canDelete,
+                ];
+            }
+
+            return response()->json([
+                'draw' => intval($request->draw),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
         }
 
-        $query = ReservasiRuangan::query();
-
-        if ($request->filled('periode_dari')) {
-            $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
-            $query->whereDate('tanggal', '>=', $startDate);
-        }
-
-        if ($request->filled('periode_sampai')) {
-            $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
-            $query->whereDate('tanggal', '<=', $endDate);
-        }
-
-        $reservasi = $query->orderBy('tanggal', 'desc')->orderBy('jam_mulai', 'asc')->get();
-
-        return view('pages.reservasi.ruangan.index', compact('reservasi', 'isFiltered'));
+        return view('pages.reservasi.ruangan.index');
     }
 
     public function create()
