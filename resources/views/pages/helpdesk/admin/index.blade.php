@@ -53,7 +53,7 @@
                     dari.set("maxDate", dateStr);
                 },
             });
-            const dariValue = "{{ request('periode_dari', now()->startOfMonth()->format('d-m-Y')) }}";
+            const dariValue = "{{ request('periode_dari') }}";
             const sampaiValue = "{{ request('periode_sampai', now()->format('d-m-Y')) }}";
 
             dari.setDate(dariValue);
