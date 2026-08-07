@@ -59,8 +59,8 @@
                                                     'Cleaning CPU & Cek Pengkabelan',
                                                     'Hapus cache temp dan cache browser',
                                                     'Akses Flashdisk terkontrol',
-                                                    'Akses Flashdisk terkontrol',
                                                     'Running SFC & DISM',
+                                                    'Shutdown PC',
                                                 ];
 
                                                 $checklistData = $hardware->checklist ?? [];

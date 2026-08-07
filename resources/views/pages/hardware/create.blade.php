@@ -62,6 +62,7 @@
                                                     'Hapus cache temp dan cache browser',
                                                     'Akses Flashdisk terkontrol',
                                                     'Running SFC & DISM',
+                                                    'Shutdown PC',
                                                 ];
                                             @endphp
                                             @foreach ($checklistItems as $index => $item)
