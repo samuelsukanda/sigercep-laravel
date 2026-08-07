@@ -61,6 +61,7 @@
                                                     'Cleaning CPU & Cek Pengkabelan',
                                                     'Hapus cache temp dan cache browser',
                                                     'Akses Flashdisk terkontrol',
+                                                    'Running SFC & DISM',
                                                 ];
                                             @endphp
                                             @foreach ($checklistItems as $index => $item)
