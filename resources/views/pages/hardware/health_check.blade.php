@@ -18,7 +18,7 @@
                         <div class="flex flex-wrap gap-3 items-end justify-between">
                             <div class="flex flex-wrap gap-3 items-end">
                                 {{-- Cari --}}
-                                <div class="flex flex-col" style="min-width:180px;">
+                                <div class="flex flex-col mr-1" style="min-width:180px;">
                                     <label class="text-xs font-semibold text-gray-600 mb-1.5">Cari</label>
                                     <input type="text" id="filterCari" placeholder="Nama PC / IP / Unit / Petugas"
                                         class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
@@ -26,7 +26,7 @@
                                 </div>
 
                                 {{-- Periode Dari --}}
-                                <div class="flex flex-col" style="min-width:150px;">
+                                <div class="flex flex-col mr-1" style="min-width:150px;">
                                     <label class="text-xs font-semibold text-gray-600 mb-1.5">Periode Dari</label>
                                     <input type="text" id="filterDari"
                                         class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
@@ -34,7 +34,7 @@
                                 </div>
 
                                 {{-- Periode Sampai --}}
-                                <div class="flex flex-col" style="min-width:150px;">
+                                <div class="flex flex-col mr-1" style="min-width:150px;">
                                     <label class="text-xs font-semibold text-gray-600 mb-1.5">Periode Sampai</label>
                                     <input type="text" id="filterSampai"
                                         class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
@@ -61,7 +61,7 @@
                                 <button type="button" onclick="bukaModalTambah()"
                                     class="inline-flex items-center justify-center h-9 px-4 text-xs font-semibold text-white uppercase rounded-lg shadow-md hover:shadow-sm active:opacity-85 transition-all"
                                     style="background-color: #7664E4 !important;">
-                                    <i class="fas fa-plus mr-1"></i> Tambah Data
+                                    Tambah Data
                                 </button>
                             </div>
                         </div>
@@ -98,7 +98,7 @@
         var statusOptions = @json($statusOptions);
         var daftarPc = @json($daftarPc);
         var edittingId = null;
-        var fpDari, fpSampai;
+        var fpTanggal, fpDari, fpSampai;
 
         $(document).ready(function() {
             bangunOpsiPc();
@@ -113,6 +113,10 @@
             });
             fpSampai = flatpickr('#filterSampai', {
                 dateFormat: 'd-m-Y'
+            });
+            fpTanggal = flatpickr('#fieldTanggal', {
+                dateFormat: 'd-m-Y',
+                defaultDate: 'today'
             });
         }
 
@@ -155,7 +159,9 @@
                         'X-Requested-With': 'XMLHttpRequest'
                     }
                 })
-                .then(function(res) { return res.json(); })
+                .then(function(res) {
+                    return res.json();
+                })
                 .then(function(json) {
                     semuaDataGlobal = json.data || [];
                     renderSemua();
@@ -187,13 +193,19 @@
                 });
             }
             if (dari) {
-                semua = semua.filter(function(item) { return item.created_at >= dari; });
+                semua = semua.filter(function(item) {
+                    return item.checked_at >= dari;
+                });
             }
             if (sampai) {
-                semua = semua.filter(function(item) { return item.created_at <= sampai; });
+                semua = semua.filter(function(item) {
+                    return item.checked_at <= sampai;
+                });
             }
             if (status) {
-                semua = semua.filter(function(item) { return item.overall === status; });
+                semua = semua.filter(function(item) {
+                    return item.overall === status;
+                });
             }
             return semua;
         }
@@ -237,19 +249,23 @@
         function cardHtml(item) {
             var counts = item.counts;
             var parts = [];
-            if (counts.critical > 0) parts.push('<span style="color:#991b1b;font-weight:700;">' + counts.critical + ' Critical</span>');
-            if (counts.warning > 0) parts.push('<span style="color:#92400e;font-weight:700;">' + counts.warning + ' Warning</span>');
-            if (counts.healthy > 0) parts.push('<span style="color:#166534;font-weight:700;">' + counts.healthy + ' Healthy</span>');
+            if (counts.critical > 0) parts.push('<span style="color:#991b1b;font-weight:700;">' + counts.critical +
+                ' Critical</span>');
+            if (counts.warning > 0) parts.push('<span style="color:#92400e;font-weight:700;">' + counts.warning +
+                ' Warning</span>');
+            if (counts.healthy > 0) parts.push('<span style="color:#166534;font-weight:700;">' + counts.healthy +
+                ' Healthy</span>');
             var ringkasan = parts.join(' &middot; ');
 
             var barisHtml = '';
             item.items.forEach(function(row, i) {
+                var unit = row.component === 'CPU Temperature' ? '°C' : '%';
                 barisHtml += `
                 <tr style="border-bottom:1px solid #f3f4f6;">
                     <td style="padding:9px 16px; text-align:center; font-weight:600; color:#9ca3af; font-size:12px; width:44px;">${i + 1}</td>
                     <td style="padding:9px 16px; font-size:12px; color:#1f2937; font-weight:600;">${escapeHtml(row.component)}</td>
                     <td style="padding:9px 16px; font-size:12px; color:#374151; text-align:center; white-space:nowrap;">
-                        ${row.value !== null && row.value !== '' ? escapeHtml(row.value) + '%' : '-'}
+                        ${row.value !== null && row.value !== '' ? escapeHtml(row.value) + unit : '-'}
                     </td>
                     <td style="padding:9px 16px; text-align:center; white-space:nowrap;">${badgeHtml(row.status)}</td>
                     <td style="padding:9px 16px; font-size:12px; color:#6b7280;">${escapeHtml(row.notes || '-')}</td>
@@ -280,7 +296,7 @@
                     <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
                         <div style="text-align:right;">
                             <div style="font-size:11px; color:rgba(255,255,255,0.75);">
-                                <i class="fas fa-calendar-check" style="margin-right:4px;"></i>Created At: <b style="color:#fff;">${escapeHtml(item.created_at_formatted)}</b>
+                                <i class="fas fa-calendar-check" style="margin-right:4px;"></i>Tanggal Cek: <b style="color:#fff;">${escapeHtml(item.checked_at_formatted)}</b>
                             </div>
                         </div>
                         <div style="display:flex; gap:8px;">
@@ -384,6 +400,7 @@
             document.getElementById('modalSubJudul').textContent =
                 'Catat status kesehatan seluruh komponen hardware untuk satu PC.';
             setPc('');
+            fpTanggal.setDate(new Date());
             renderRows({});
             document.getElementById('modalHealthCheck').style.display = 'flex';
         }
@@ -396,7 +413,9 @@
                         'X-Requested-With': 'XMLHttpRequest'
                     }
                 })
-                .then(function(res) { return res.json(); })
+                .then(function(res) {
+                    return res.json();
+                })
                 .then(function(json) {
                     var check = json.check;
                     document.getElementById('modalJudul').textContent = 'Edit Health Check';
@@ -404,6 +423,7 @@
                         'Perbarui status kesehatan komponen untuk ' + check.nama_pc + '.';
 
                     setPc(check.nama_pc);
+                    fpTanggal.setDate(dmy(check.checked_at));
 
                     var itemMap = {};
                     json.items.forEach(function(item) {
@@ -418,9 +438,17 @@
                         title: 'Gagal',
                         text: 'Data tidak dapat dimuat.',
                         zIndex: 20000,
-                        customClass: { confirmButton: 'btn-swal-success' }
+                        customClass: {
+                            confirmButton: 'btn-swal-success'
+                        }
                     });
                 });
+        }
+
+        function dmy(iso) {
+            if (!iso) return '';
+            var p = iso.split('-');
+            return p[2] + '-' + p[1] + '-' + p[0];
         }
 
         function tutupModal() {
@@ -445,7 +473,7 @@
                 var th = document.createElement('tr');
                 th.style.background = '#f5f3ff';
                 th.innerHTML = `
-                    <td colspan="4" style="padding:8px 16px; border-bottom:1px solid #e5e7eb; border-top:2px solid #e5e7eb;">
+                    <td colspan="5" style="padding:8px 16px; border-bottom:1px solid #e5e7eb; border-top:2px solid #e5e7eb;">
                         <span style="font-size:11px; font-weight:800; color:#7664E4; text-transform:uppercase; letter-spacing:0.05em;">
                             <i class="fas fa-chevron-circle-right" style="margin-right:6px;"></i>${category}
                         </span>
@@ -456,31 +484,30 @@
                     no++;
                     var data = (itemMap[category + '||' + component] || {});
                     var tr = document.createElement('tr');
-                    tr.style.borderBottom = '1px solid #f3f4f6';
                     tr.innerHTML = `
-                        <td style="padding:8px 16px; text-align:center; font-weight:600; color:#9ca3af; font-size:12px; width:36px;">${no}</td>
-                        <td style="padding:8px 12px;">
+                        <td style="padding:8px 16px; text-align:center; font-weight:600; color:#9ca3af; font-size:12px; width:36px; border-bottom:1px solid #f3f4f6;">${no}</td>
+                        <td style="padding:8px 12px; border-bottom:1px solid #f3f4f6;">
                             <div style="font-size:12.5px; font-weight:600; color:#1f2937;">${escapeHtml(component)}</div>
                             <input type="hidden" name="category" value="${escapeHtml(category)}">
                             <input type="hidden" name="component" value="${escapeHtml(component)}">
                         </td>
-                        <td style="padding:8px 8px; width:150px;">
+                        <td style="padding:8px 8px; width:150px; border-bottom:1px solid #f3f4f6;">
                             <div style="position:relative;">
                                 <input type="number" step="any" min="0" name="value"
                                     placeholder="0"
                                     class="w-full px-3 py-2 pr-8 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                                     value="${escapeHtml(data.value || '')}">
-                                <span style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:12px; font-weight:700; pointer-events:none;">%</span>
+                                <span style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:12px; font-weight:700; pointer-events:none;">${component === 'CPU Temperature' ? '°C' : '%'}</span>
                             </div>
                         </td>
-                        <td style="padding:8px 8px; width:140px;">
+                        <td style="padding:8px 8px; width:140px; border-bottom:1px solid #f3f4f6;">
                             <select name="status" class="w-full border-gray-300 text-gray-700 outline-none">
                                 ${statusOptions.map(function(s) {
                                     return '<option value="' + s + '"' + ((data.status || 'Healthy') === s ? ' selected' : '') + '>' + s + '</option>';
                                 }).join('')}
                             </select>
                         </td>
-                        <td style="padding:8px 8px; width:180px;">
+                        <td style="padding:8px 8px; width:180px; border-bottom:1px solid #f3f4f6;">
                             <input type="text" name="notes" placeholder="Notes"
                                 class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                                 value="${escapeHtml(data.notes || '')}">
@@ -526,7 +553,9 @@
                     title: 'Perhatian',
                     text: 'Silakan pilih PC terlebih dahulu.',
                     zIndex: 20000,
-                    customClass: { confirmButton: 'btn-swal-success' }
+                    customClass: {
+                        confirmButton: 'btn-swal-success'
+                    }
                 });
                 return;
             }
@@ -538,6 +567,7 @@
                 ip: document.getElementById('fieldIp').value,
                 unit: document.getElementById('fieldUnit').value,
                 lantai: document.getElementById('fieldLantai').value,
+                checked_at: isoDmy(document.getElementById('fieldTanggal').value),
                 rows: rows
             };
 
@@ -556,7 +586,9 @@
                     },
                     body: JSON.stringify(payload)
                 })
-                .then(function(res) { return res.json(); })
+                .then(function(res) {
+                    return res.json();
+                })
                 .then(function(json) {
                     if (json.success) {
                         btn.innerHTML = '<i class="fas fa-check"></i> Tersimpan!';
@@ -607,7 +639,9 @@
                                 'X-Requested-With': 'XMLHttpRequest'
                             }
                         })
-                        .then(function(res) { return res.json(); })
+                        .then(function(res) {
+                            return res.json();
+                        })
                         .then(function(json) {
                             if (json.success) {
                                 Swal.fire({
@@ -615,7 +649,9 @@
                                     text: 'Data health check berhasil dihapus.',
                                     icon: 'success',
                                     zIndex: 20000,
-                                    customClass: { confirmButton: 'btn-swal-success' }
+                                    customClass: {
+                                        confirmButton: 'btn-swal-success'
+                                    }
                                 });
                                 muatSemuaData();
                             }
@@ -630,10 +666,12 @@
             background-color: #ef4444 !important;
             color: #ffffff !important;
         }
+
         .btn-swal-cancel {
             background-color: #6b7280 !important;
             color: #ffffff !important;
         }
+
         .btn-swal-success {
             background-color: #7664E4 !important;
             color: #ffffff !important;
@@ -659,8 +697,11 @@
                         <i class="fas fa-heartbeat" style="color:#fff; font-size:14px;"></i>
                     </div>
                     <div>
-                        <h5 id="modalJudul" style="margin:0; font-size:15px; font-weight:700; color:#fff; line-height:1.2;">Tambah Health Check</h5>
-                        <p id="modalSubJudul" style="margin:0; font-size:11px; color:rgba(255,255,255,0.8); margin-top:2px;">Catat status kesehatan seluruh komponen hardware untuk satu PC.</p>
+                        <h5 id="modalJudul" style="margin:0; font-size:15px; font-weight:700; color:#fff; line-height:1.2;">
+                            Tambah Health Check</h5>
+                        <p id="modalSubJudul"
+                            style="margin:0; font-size:11px; color:rgba(255,255,255,0.8); margin-top:2px;">Catat status
+                            kesehatan seluruh komponen hardware untuk satu PC.</p>
                     </div>
                 </div>
                 <button type="button" onclick="tutupModal()"
@@ -677,11 +718,19 @@
             <div style="padding:16px 24px; border-bottom:1px solid #f3f4f6; background:#f9fafb;">
                 <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap:14px;">
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Pilih PC <span style="color:#ef4444;">*</span></label>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Pilih PC <span
+                                style="color:#ef4444;">*</span></label>
                         <select id="selectPc"
                             class="select2 w-full border-gray-300 text-gray-700 outline-none transition-all"
                             onchange="onPcChange()"></select>
                         <p id="infoJenis" style="font-size:11px; color:#7664E4; font-weight:700; margin-top:4px;"></p>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Tanggal Cek <span
+                                style="color:#ef4444;">*</span></label>
+                        <input type="text" id="fieldTanggal"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                            placeholder="Pilih tanggal">
                     </div>
                 </div>
                 <input type="hidden" id="fieldIp">
@@ -690,21 +739,48 @@
             </div>
 
             {{-- Modal Body --}}
-            <div id="modalBodyScroll" style="flex:1; overflow-y:auto; padding:16px 24px;">
-                <table style="width:100%; border-collapse:collapse; font-size:13px;">
-                    <thead>
-                        <tr style="background-color:#7664E4; position:sticky; top:0; z-index:5;">
-                            <th style="color:#fff; text-align:center; font-weight:600; padding:10px 16px; border-radius:8px 0 0 0; width:36px;">No</th>
-                            <th style="color:#fff; text-align:left; font-weight:600; padding:10px 16px;">Component</th>
-                            <th style="color:#fff; text-align:left; font-weight:600; padding:10px 8px; width:150px;">Value (%)</th>
-                            <th style="color:#fff; text-align:left; font-weight:600; padding:10px 8px; width:140px;">Status</th>
-                            <th style="color:#fff; text-align:left; font-weight:600; padding:10px 8px; border-radius:0 8px 0 0; width:180px;">Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabelItemBody">
-                        {{-- Baris diisi via JS --}}
-                    </tbody>
-                </table>
+            <div style="flex:1; display:flex; flex-direction:column; min-height:0;">
+                {{-- Header tabel: TETAP, tidak ikut scroll --}}
+                <div style="padding:16px 24px 0 24px;">
+                    <table style="width:100%; table-layout:fixed; border-collapse:collapse; font-size:13px;">
+                        <colgroup>
+                            <col style="width:36px;">
+                            <col>
+                            <col style="width:150px;">
+                            <col style="width:140px;">
+                            <col style="width:180px;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th style="color:#fff; text-align:center; font-weight:600; padding:10px 16px; border-radius:8px 0 0 0; background:#7664E4;">
+                                    No</th>
+                                <th style="color:#fff; text-align:left; font-weight:600; padding:10px 16px; background:#7664E4;">
+                                    Component</th>
+                                <th style="color:#fff; text-align:left; font-weight:600; padding:10px 8px; background:#7664E4;">
+                                    Value</th>
+                                <th style="color:#fff; text-align:left; font-weight:600; padding:10px 8px; background:#7664E4;">
+                                    Status</th>
+                                <th style="color:#fff; text-align:left; font-weight:600; padding:10px 8px; border-radius:0 8px 0 0; background:#7664E4;">
+                                    Notes</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                {{-- Badan tabel: area yang scroll --}}
+                <div id="modalBodyScroll" style="flex:1; overflow-y:auto; padding:0 24px 16px 24px;">
+                    <table style="width:100%; table-layout:fixed; border-collapse:collapse; font-size:13px;">
+                        <colgroup>
+                            <col style="width:36px;">
+                            <col>
+                            <col style="width:150px;">
+                            <col style="width:140px;">
+                            <col style="width:180px;">
+                        </colgroup>
+                        <tbody id="tabelItemBody">
+                            {{-- Baris diisi via JS --}}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {{-- Modal Footer --}}

@@ -16,10 +16,12 @@ class HardwareHealthCheck extends Model
         'ip',
         'unit',
         'lantai',
+        'checked_at',
         'items',
     ];
 
     protected $casts = [
-        'items' => 'array',
+        'checked_at' => 'date',
+        'items'      => 'array',
     ];
 }

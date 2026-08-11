@@ -68,15 +68,15 @@ class HardwareHealthCheckController extends Controller
         }
 
         if ($request->filled('dari')) {
-            $query->whereDate('created_at', '>=', $request->dari);
+            $query->whereDate('checked_at', '>=', $request->dari);
         }
 
         if ($request->filled('sampai')) {
-            $query->whereDate('created_at', '<=', $request->sampai);
+            $query->whereDate('checked_at', '<=', $request->sampai);
         }
 
         $checks = $query
-            ->orderByDesc('created_at')
+            ->orderByDesc('checked_at')
             ->orderByDesc('id')
             ->get();
 
@@ -106,8 +106,8 @@ class HardwareHealthCheckController extends Controller
                 'ip'                  => $check->ip,
                 'unit'                => $check->unit,
                 'lantai'              => $check->lantai,
-                'created_at'          => $check->created_at->format('Y-m-d'),
-                'created_at_formatted' => $check->created_at->translatedFormat('d M Y'),
+                'checked_at'          => $check->checked_at ? $check->checked_at->format('Y-m-d') : null,
+                'checked_at_formatted' => $check->checked_at ? $check->checked_at->translatedFormat('d M Y') : '-',
                 'overall'             => $overall,
                 'counts'              => $counts,
                 'items'               => array_values($items),
@@ -128,6 +128,7 @@ class HardwareHealthCheckController extends Controller
                 'ip'         => $check->ip,
                 'unit'       => $check->unit,
                 'lantai'     => $check->lantai,
+                'checked_at' => $check->checked_at ? $check->checked_at->format('Y-m-d') : null,
                 'jenis'      => ($check->unit !== null && $check->unit !== '-' && $check->unit !== '') ? 'Komputer' : 'Mini PC & Laptop',
             ],
             'items' => array_values($check->items ?? []),
@@ -139,6 +140,7 @@ class HardwareHealthCheckController extends Controller
         $request->validate([
             'id'                  => 'nullable|integer',
             'nama_pc'             => 'required|string|max:255',
+            'checked_at'          => 'nullable|date',
             'rows'                => 'array',
             'rows.*.category'     => 'required|string',
             'rows.*.component'    => 'required|string',
@@ -170,6 +172,7 @@ class HardwareHealthCheckController extends Controller
             'ip'         => $request->ip ?: null,
             'unit'       => $request->unit ?: null,
             'lantai'     => $request->lantai ?: null,
+            'checked_at' => $request->checked_at ?: now(),
             'items'      => $items,
         ];
 

@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('ip')->nullable();
             $table->string('unit')->nullable();
             $table->string('lantai')->nullable();
+            $table->date('checked_at')->nullable();
             $table->json('items')->nullable();
             $table->timestamps();
         });
