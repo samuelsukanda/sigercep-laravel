@@ -41,6 +41,7 @@ use App\Http\Controllers\SuratKeputusanController;
 use App\Http\Controllers\KomiteMedikController;
 use App\Http\Controllers\HardwareController;
 use App\Http\Controllers\HardwareEvaluasiController;
+use App\Http\Controllers\HardwareHealthCheckController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserSessionController;
 use App\Http\Controllers\UserController;
@@ -303,6 +304,13 @@ Route::middleware('auth')->group(function () {
         Route::get('hardware/evaluasi/data', [HardwareEvaluasiController::class, 'getData'])->name('hardware.evaluasi.data');
         Route::post('hardware/evaluasi/simpan', [HardwareEvaluasiController::class, 'simpan'])->name('hardware.evaluasi.simpan');
         Route::delete('hardware/evaluasi/{bulan}', [HardwareEvaluasiController::class, 'hapusBulan'])->name('hardware.evaluasi.hapus');
+
+        // Health Check Hardware
+        Route::get('hardware/health-check', [HardwareHealthCheckController::class, 'index'])->name('hardware.health-check.index');
+        Route::get('hardware/health-check/data', [HardwareHealthCheckController::class, 'getData'])->name('hardware.health-check.data');
+        Route::get('hardware/health-check/items/{id}', [HardwareHealthCheckController::class, 'getItems'])->name('hardware.health-check.items');
+        Route::post('hardware/health-check/simpan', [HardwareHealthCheckController::class, 'simpan'])->name('hardware.health-check.simpan');
+        Route::delete('hardware/health-check/{id}', [HardwareHealthCheckController::class, 'hapus'])->name('hardware.health-check.hapus');
         Route::get('hardware/{ip}/device-printer', [HardwareController::class, 'showDevicePrinter'])->name('hardware.device-printer.show');
         Route::post('hardware/{ip}/device-printer', [HardwareController::class, 'storeDevicePrinter'])->name('hardware.device-printer.store');
         Route::delete('hardware/device-printer/{id}', [HardwareController::class, 'destroyDevicePrinter'])->name('hardware.device-printer.destroy');
