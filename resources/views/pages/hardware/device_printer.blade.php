@@ -71,110 +71,111 @@
                                 <p class="text-slate-600">{{ $pcData->lantai }}</p>
                             </div>
                             {{-- Spesifikasi --}}
-                            <div class="md:col-span-2">
+                            <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Spesifikasi</label>
-                                <p class="text-slate-600" style="white-space: pre-line;">
-                                    {{ empty($pcData->spesifikasi) ? '-' : $pcData->spesifikasi }}</p>
+                                <p class="text-slate-600 mb-0 leading-snug">{{ empty($pcData->ram) ? '-' : $pcData->ram }}</p>
+                                <p class="text-slate-600 mb-0 leading-snug">{{ empty($pcData->cpu) ? '-' : $pcData->cpu }}</p>
                             </div>
                         </div>
+                    </div>
 
-                        {{-- Table Device & Printer --}}
-                        <div class="mt-4">
-                            <h6 class="mb-3 font-semibold text-md">Daftar Device & Printer Terhubung</h6>
-                            <div class="overflow-x-auto">
-                                <table class="w-full border border-gray-200 text-sm rounded-lg">
-                                    <thead class="bg-gray-100 text-slate-600">
-                                        <tr>
-                                            <th class="border border-gray-200 px-3 py-2 text-center w-12">No</th>
-                                            <th class="border border-gray-200 px-3 py-2 text-left">Nama Perangkat</th>
-                                            <th class="border border-gray-200 px-3 py-2 text-center">Jenis</th>
-                                            <th class="border border-gray-200 px-3 py-2 text-center">Merk/Type</th>
-                                            <th class="border border-gray-200 px-3 py-2 text-center">Kondisi</th>
-                                            <th class="border border-gray-200 px-3 py-2 text-left">Keterangan</th>
-                                            <th class="border border-gray-200 px-3 py-2 text-center w-20">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse($devicePrinters as $index => $device)
-                                            <tr class="hover:bg-gray-50">
-                                                <td class="border border-gray-200 px-3 py-2 text-center">{{ $index + 1 }}
-                                                </td>
-                                                <td class="border border-gray-200 px-3 py-2 font-medium">
-                                                    {{ $device->nama_perangkat }}</td>
-                                                <td class="border border-gray-200 px-3 py-2 text-center">
+                    {{-- Table Device & Printer --}}
+                    <div class="mt-4">
+                        <h6 class="mb-3 font-semibold text-md">Daftar Device & Printer Terhubung</h6>
+                        <div class="overflow-x-auto">
+                            <table class="w-full border border-gray-200 text-sm rounded-lg">
+                                <thead class="bg-gray-100 text-slate-600">
+                                    <tr>
+                                        <th class="border border-gray-200 px-3 py-2 text-center w-12">No</th>
+                                        <th class="border border-gray-200 px-3 py-2 text-left">Nama Perangkat</th>
+                                        <th class="border border-gray-200 px-3 py-2 text-center">Jenis</th>
+                                        <th class="border border-gray-200 px-3 py-2 text-center">Merk/Type</th>
+                                        <th class="border border-gray-200 px-3 py-2 text-center">Kondisi</th>
+                                        <th class="border border-gray-200 px-3 py-2 text-left">Keterangan</th>
+                                        <th class="border border-gray-200 px-3 py-2 text-center w-20">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($devicePrinters as $index => $device)
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-200 px-3 py-2 text-center">{{ $index + 1 }}
+                                            </td>
+                                            <td class="border border-gray-200 px-3 py-2 font-medium">
+                                                {{ $device->nama_perangkat }}</td>
+                                            <td class="border border-gray-200 px-3 py-2 text-center">
+                                                <span
+                                                    class="px-2 py-1 text-xs font-semibold rounded-full {{ $device->jenis == 'Printer' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800' }}">
+                                                    {{ $device->jenis }}
+                                                </span>
+                                            </td>
+                                            <td class="border border-gray-200 px-3 py-2 text-center">
+                                                {{ $device->merk_type ?? '-' }}
+                                            </td>
+                                            <td class="border border-gray-200 px-3 py-2 text-center">
+                                                @if ($device->kondisi == 'Baik')
                                                     <span
-                                                        class="px-2 py-1 text-xs font-semibold rounded-full {{ $device->jenis == 'Printer' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800' }}">
-                                                        {{ $device->jenis }}
-                                                    </span>
-                                                </td>
-                                                <td class="border border-gray-200 px-3 py-2 text-center">
-                                                    {{ $device->merk_type ?? '-' }}
-                                                </td>
-                                                <td class="border border-gray-200 px-3 py-2 text-center">
-                                                    @if ($device->kondisi == 'Baik')
-                                                        <span
-                                                            class="px-2 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800">Baik</span>
-                                                    @elseif($device->kondisi == 'Rusak Ringan')
-                                                        <span
-                                                            class="px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800">Rusak
-                                                            Ringan</span>
-                                                    @elseif($device->kondisi == 'Rusak Berat')
-                                                        <span
-                                                            class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Rusak
-                                                            Berat</span>
-                                                    @else
-                                                        <span
-                                                            class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">{{ $device->kondisi ?? 'Baik' }}</span>
-                                                    @endif
-                                                </td>
-                                                <td class="border border-gray-200 px-3 py-2">
-                                                    {{ $device->keterangan ?? '-' }}</td>
-                                                <td class="border border-gray-200 px-3 py-2 text-center">
-                                                    @if ($device->foto)
-                                                        <button type="button"
-                                                            onclick="openPhotoModal('{{ asset('storage/' . $device->foto) }}', '{{ $device->nama_perangkat }}')"
-                                                            class="text-indigo-600 hover:text-indigo-800 text-sm mr-2"
-                                                            style="background: none; border: none; cursor: pointer; padding: 0;"
-                                                            title="Lihat Foto">
-                                                            <i class="fa-solid fa-eye" style="font-size: 14px;"></i>
-                                                        </button>
-                                                    @endif
+                                                        class="px-2 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800">Baik</span>
+                                                @elseif($device->kondisi == 'Rusak Ringan')
+                                                    <span
+                                                        class="px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800">Rusak
+                                                        Ringan</span>
+                                                @elseif($device->kondisi == 'Rusak Berat')
+                                                    <span
+                                                        class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Rusak
+                                                        Berat</span>
+                                                @else
+                                                    <span
+                                                        class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">{{ $device->kondisi ?? 'Baik' }}</span>
+                                                @endif
+                                            </td>
+                                            <td class="border border-gray-200 px-3 py-2">
+                                                {{ $device->keterangan ?? '-' }}</td>
+                                            <td class="border border-gray-200 px-3 py-2 text-center">
+                                                @if ($device->foto)
                                                     <button type="button"
-                                                        onclick="openEditModal({{ $device->id }}, '{{ addslashes($device->nama_perangkat) }}', '{{ addslashes($device->jenis) }}', '{{ addslashes($device->merk_type ?? '') }}', '{{ $device->kondisi }}', '{{ addslashes($device->keterangan ?? '') }}')"
-                                                        class="text-amber-600 hover:text-amber-800 mr-2"
+                                                        onclick="openPhotoModal('{{ asset('storage/' . $device->foto) }}', '{{ $device->nama_perangkat }}')"
+                                                        class="text-indigo-600 hover:text-indigo-800 text-sm mr-2"
                                                         style="background: none; border: none; cursor: pointer; padding: 0;"
-                                                        title="Edit">
-                                                        <i class="fa-solid fa-pen-to-square" style="font-size: 14px;"></i>
+                                                        title="Lihat Foto">
+                                                        <i class="fa-solid fa-eye" style="font-size: 14px;"></i>
                                                     </button>
-                                                    <x-button.action
-                                                        href="{{ route('hardware.device-printer.destroy', $device->id) }}"
-                                                        icon="trash" color="red" type="button" method="DELETE"
-                                                        title="Hapus" />
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="7"
-                                                    class="border border-gray-200 px-3 py-4 text-center text-slate-500">
-                                                    Belum ada device/printer yang ditambahkan.
-                                                </td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
-                            </div>
+                                                @endif
+                                                <button type="button"
+                                                    onclick="openEditModal({{ $device->id }}, '{{ addslashes($device->nama_perangkat) }}', '{{ addslashes($device->jenis) }}', '{{ addslashes($device->merk_type ?? '') }}', '{{ $device->kondisi }}', '{{ addslashes($device->keterangan ?? '') }}')"
+                                                    class="text-amber-600 hover:text-amber-800 mr-2"
+                                                    style="background: none; border: none; cursor: pointer; padding: 0;"
+                                                    title="Edit">
+                                                    <i class="fa-solid fa-pen-to-square" style="font-size: 14px;"></i>
+                                                </button>
+                                                <x-button.action
+                                                    href="{{ route('hardware.device-printer.destroy', $device->id) }}"
+                                                    icon="trash" color="red" type="button" method="DELETE"
+                                                    title="Hapus" />
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="7"
+                                                class="border border-gray-200 px-3 py-4 text-center text-slate-500">
+                                                Belum ada device/printer yang ditambahkan.
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         </div>
+                    </div>
 
-                        <div class="mt-6">
-                            <a href="{{ route('hardware.reports') }}"
-                                class="inline-block px-6 py-2 text-xs font-semibold text-slate-700 uppercase bg-gray-200 rounded-lg shadow-md hover:shadow-xs active:opacity-85">
-                                Kembali
-                            </a>
-                        </div>
+                    <div class="mt-6">
+                        <a href="{{ route('hardware.reports') }}"
+                            class="inline-block px-6 py-2 text-xs font-semibold text-slate-700 uppercase bg-gray-200 rounded-lg shadow-md hover:shadow-xs active:opacity-85">
+                            Kembali
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     @push('modals')

@@ -275,20 +275,24 @@ class HardwareController extends Controller
     {
         $pcData = null;
 
+        $cleanStr = function ($str) {
+            if (empty($str)) return '';
+            $str = str_replace("\xC2\xA0", ' ', $str);
+            $str = preg_replace('/<br\s*\/?>/i', "\n", $str);
+            return trim(preg_replace('/^\s+/u', '', $str));
+        };
+
         // Cari di master_komputer
         $master = MasterKomputer::where('ip', $ip)->first();
         if ($master) {
-            $spesParts = array_filter([
-                trim($master->ram ?? ''),
-                trim($master->cpu ?? ''),
-            ]);
             $pcData = (object)[
-                'ip'          => $master->ip,
-                'nama_pc'     => $master->nama_pc,
-                'jenis_pc'    => $master->jenis_pc,
-                'unit'        => $master->unit,
-                'lantai'      => $master->lantai,
-                'spesifikasi' => implode("\n", $spesParts),
+                'ip'       => $master->ip,
+                'nama_pc'  => $master->nama_pc,
+                'jenis_pc' => $master->jenis_pc,
+                'unit'     => $master->unit,
+                'lantai'   => $master->lantai,
+                'ram'      => $cleanStr($master->ram ?? ''),
+                'cpu'      => $cleanStr($master->cpu ?? ''),
             ];
         }
 
@@ -296,17 +300,14 @@ class HardwareController extends Controller
         if (!$pcData) {
             $masterMini = MasterMiniPc::where('ip', $ip)->first();
             if ($masterMini) {
-                $spesParts = array_filter([
-                    trim($masterMini->ram ?? ''),
-                    trim($masterMini->cpu ?? ''),
-                ]);
                 $pcData = (object)[
-                    'ip'          => $masterMini->ip,
-                    'nama_pc'     => $masterMini->nama_pc,
-                    'jenis_pc'    => $masterMini->jenis_pc,
-                    'unit'        => '',
-                    'lantai'      => $masterMini->lantai,
-                    'spesifikasi' => implode("\n", $spesParts),
+                    'ip'       => $masterMini->ip,
+                    'nama_pc'  => $masterMini->nama_pc,
+                    'jenis_pc' => $masterMini->jenis_pc,
+                    'unit'     => '',
+                    'lantai'   => $masterMini->lantai,
+                    'ram'      => $cleanStr($masterMini->ram ?? ''),
+                    'cpu'      => $cleanStr($masterMini->cpu ?? ''),
                 ];
             }
         }
