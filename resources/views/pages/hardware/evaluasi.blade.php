@@ -240,13 +240,19 @@
                         <button onclick="editBulan('${item.bulan}')"
                             style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px;
                                    font-size:11px; font-weight:600; color:#3b82f6; border:none; cursor:pointer;
-                                   border-radius:6px; background:#fff;">
+                                   border-radius:6px; background:#fff;
+                                   transition:background 0.18s, color 0.18s;"
+                            onmouseover="this.style.background='#eff6ff'; this.style.color='#2563eb';"
+                            onmouseout="this.style.background='#fff'; this.style.color='#3b82f6';">
                             <i class="fas fa-edit"></i> Edit
                         </button>
                         <button onclick="hapusBulan('${item.bulan}')"
                             style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px;
                                    font-size:11px; font-weight:600; color:#ef4444; border:none; cursor:pointer;
-                                   border-radius:6px; background:#fff;">
+                                   border-radius:6px; background:#fff;
+                                   transition:background 0.18s, color 0.18s;"
+                            onmouseover="this.style.background='#fef2f2'; this.style.color='#dc2626';"
+                            onmouseout="this.style.background='#fff'; this.style.color='#ef4444';">
                             <i class="fas fa-trash"></i> Hapus
                         </button>
                     </div>

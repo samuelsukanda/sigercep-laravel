@@ -20,9 +20,9 @@
                                 {{-- Cari --}}
                                 <div class="flex flex-col mr-1" style="min-width:180px;">
                                     <label class="text-xs font-semibold text-gray-600 mb-1.5">Cari</label>
-                                    <input type="text" id="filterCari" placeholder="Nama PC / IP / Unit / Petugas"
+                                    <input type="text" id="filterCari" placeholder="Nama PC / IP / Unit"
                                         class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                                        oninput="renderSemua()">
+                                        oninput="gantiFilter()">
                                 </div>
 
                                 {{-- Periode Dari --}}
@@ -30,7 +30,7 @@
                                     <label class="text-xs font-semibold text-gray-600 mb-1.5">Periode Dari</label>
                                     <input type="text" id="filterDari"
                                         class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                                        placeholder="Pilih tanggal" onchange="renderSemua()">
+                                        placeholder="Pilih tanggal" onchange="gantiFilter()">
                                 </div>
 
                                 {{-- Periode Sampai --}}
@@ -38,26 +38,31 @@
                                     <label class="text-xs font-semibold text-gray-600 mb-1.5">Periode Sampai</label>
                                     <input type="text" id="filterSampai"
                                         class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                                        placeholder="Pilih tanggal" onchange="renderSemua()">
+                                        placeholder="Pilih tanggal" onchange="gantiFilter()">
                                 </div>
 
                                 {{-- Status --}}
-                                <div class="flex flex-col" style="min-width:150px;">
+                                <div class="flex flex-col mr-1" style="min-width:150px;">
                                     <label class="text-xs font-semibold text-gray-600 mb-1.5">Status</label>
                                     <select id="filterStatus"
                                         class="select2 w-full border-gray-300 text-gray-700 outline-none transition-all"
-                                        onchange="renderSemua()">
-                                        <option value=""></option>
+                                        onchange="gantiFilter()">
+                                        <option value="">Semua Status</option>
                                         <option value="Healthy">Healthy</option>
                                         <option value="Warning">Warning</option>
                                         <option value="Critical">Critical</option>
                                     </select>
                                 </div>
 
-                                <span id="totalData" class="text-xs text-gray-400 mb-2 ml-1"></span>
+                                {{-- Button Reset --}}
+                                <button type="button" onclick="resetFilter()"
+                                    class="btn-reset inline-flex items-center justify-center h-9 px-4 text-xs font-semibold text-slate-700 uppercase rounded-lg shadow-md bg-gray-200 hover:shadow-sm active:opacity-85 transition-all">
+                                    Reset
+                                </button>
                             </div>
 
                             <div class="flex items-end">
+                                {{-- Button Tambah --}}
                                 <button type="button" onclick="bukaModalTambah()"
                                     class="inline-flex items-center justify-center h-9 px-4 text-xs font-semibold text-white uppercase rounded-lg shadow-md hover:shadow-sm active:opacity-85 transition-all"
                                     style="background-color: #7664E4 !important;">
@@ -72,6 +77,9 @@
                 <div id="kontenHealthCheck">
                     {{-- Diisi oleh JS --}}
                 </div>
+
+                {{-- Pagination --}}
+                <div id="paginationNav" style="display:none;"></div>
 
                 {{-- Empty State --}}
                 <div id="emptyState" style="display:none; text-align:center; padding:60px 20px;">
@@ -98,6 +106,8 @@
         var statusOptions = @json($statusOptions);
         var daftarPc = @json($daftarPc);
         var edittingId = null;
+        var halamanSekarang = 1;
+        var limitPerHalaman = 10;
         var fpTanggal, fpDari, fpSampai;
 
         $(document).ready(function() {
@@ -128,8 +138,6 @@
                 dropdownParent: $('#modalHealthCheck')
             });
             $('#filterStatus').select2({
-                placeholder: 'Semua Status',
-                allowClear: true,
                 width: '100%',
                 minimumResultsForSearch: Infinity
             });
@@ -164,6 +172,7 @@
                 })
                 .then(function(json) {
                     semuaDataGlobal = json.data || [];
+                    halamanSekarang = 1;
                     renderSemua();
                 })
                 .catch(function() {
@@ -214,22 +223,109 @@
             var semua = filterSemua();
             var konten = document.getElementById('kontenHealthCheck');
             var empty = document.getElementById('emptyState');
+            var nav = document.getElementById('paginationNav');
 
             if (semua.length === 0) {
                 konten.innerHTML = '';
                 empty.style.display = 'block';
-                document.getElementById('totalData').textContent = '';
+                nav.style.display = 'none';
+                nav.innerHTML = '';
                 return;
             }
 
             empty.style.display = 'none';
-            document.getElementById('totalData').textContent = semua.length + ' data';
+
+            var totalHalaman = Math.ceil(semua.length / limitPerHalaman);
+            if (halamanSekarang > totalHalaman) halamanSekarang = totalHalaman;
+            if (halamanSekarang < 1) halamanSekarang = 1;
+
+            var mulai = (halamanSekarang - 1) * limitPerHalaman;
+            var potongan = semua.slice(mulai, mulai + limitPerHalaman);
 
             var html = '';
-            semua.forEach(function(item) {
+            potongan.forEach(function(item) {
                 html += cardHtml(item);
             });
             konten.innerHTML = html;
+            renderPagination(semua.length, totalHalaman);
+        }
+
+        function gantiFilter() {
+            halamanSekarang = 1;
+            renderSemua();
+        }
+
+        function resetFilter() {
+            document.getElementById('filterCari').value = '';
+            fpDari.clear();
+            fpSampai.clear();
+            $('#filterStatus').val('').trigger('change');
+            halamanSekarang = 1;
+            renderSemua();
+        }
+
+        function pindahHalaman(hal) {
+            if (hal < 1) return;
+            halamanSekarang = hal;
+            renderSemua();
+        }
+
+        function renderPagination(total, totalHalaman) {
+            var nav = document.getElementById('paginationNav');
+            if (totalHalaman <= 1) {
+                nav.style.display = 'none';
+                nav.innerHTML = '';
+                return;
+            }
+
+            nav.style.display = 'flex';
+            nav.style.justifyContent = 'space-between';
+            nav.style.alignItems = 'center';
+            nav.style.flexWrap = 'wrap';
+            nav.style.gap = '10px';
+            nav.style.marginTop = '8px';
+
+            var info = '<div style="font-size:12px;color:#6b7280;">Menampilkan <b>' + total +
+                '</b> data &middot; Halaman <b>' + halamanSekarang + '/' + totalHalaman + '</b></div>';
+
+            var btn = function(label, hal, disabled, active) {
+                var style =
+                    'display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;' +
+                    'padding:0 10px;font-size:12px;font-weight:600;border-radius:8px;border:1px solid #e5e7eb;' +
+                    'background:#fff;color:#374151;cursor:pointer;';
+                if (disabled) style += 'opacity:0.4;cursor:not-allowed;';
+                if (active) style += 'background:#7664E4;border-color:#7664E4;color:#fff;';
+                var onclick = disabled ? '' : ' onclick="pindahHalaman(' + hal + ')"';
+                return '<button type="button" style="' + style + '"' + onclick + '>' + label + '</button>';
+            };
+
+            var angka = '';
+            var mulaiH = Math.max(1, halamanSekarang - 2);
+            var akhirH = Math.min(totalHalaman, mulaiH + 4);
+            mulaiH = Math.max(1, akhirH - 4);
+            for (var i = mulaiH; i <= akhirH; i++) {
+                angka += btn(i, i, false, i === halamanSekarang);
+            }
+
+            nav.innerHTML = info +
+                '<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
+                btn('<i class="fas fa-chevron-left"></i>', halamanSekarang - 1, halamanSekarang === 1, false) +
+                angka +
+                btn('<i class="fas fa-chevron-right"></i>', halamanSekarang + 1, halamanSekarang === totalHalaman, false) +
+                '</div>';
+        }
+
+        function toggleKartu(header) {
+            var body = header.nextElementSibling;
+            var chevron = header.querySelector('.kartu-chevron');
+            if (!body || !chevron) return;
+            if (body.style.display === 'none') {
+                body.style.display = 'block';
+                chevron.style.transform = 'rotate(180deg)';
+            } else {
+                body.style.display = 'none';
+                chevron.style.transform = 'rotate(0deg)';
+            }
         }
 
         function badgeHtml(status) {
@@ -275,21 +371,24 @@
             return `
             <div style="background:#fff; border-radius:12px; box-shadow:0 1px 4px rgba(0,0,0,0.08);
                         border:1px solid #e5e7eb; margin-bottom:16px; overflow:hidden;">
-                <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+                <div onclick="toggleKartu(this)" style="cursor:pointer; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
                             padding:14px 20px; background:linear-gradient(135deg,#7664E4 0%,#9b8af0 100%);">
                     <div style="display:flex; align-items:center; gap:12px;">
+                        <i class="fas fa-chevron-down kartu-chevron" style="color:#fff; font-size:12px; transition:transform 0.2s;"></i>
                         <div style="width:36px; height:36px; border-radius:10px; background:rgba(255,255,255,0.2);
                                     display:flex; align-items:center; justify-content:center;">
                             <i class="fas fa-server" style="color:#fff; font-size:14px;"></i>
                         </div>
                         <div>
                             <div style="font-size:14px; font-weight:700; color:#fff;">${escapeHtml(item.nama_pc)}</div>
-                            <div style="font-size:11px; color:rgba(255,255,255,0.8);">
-                                <i class="fas fa-network-wired" style="margin-right:4px;"></i>${escapeHtml(item.ip || '-')}
-                                <span style="margin:0 5px;">|</span>
-                                <i class="fas fa-building" style="margin-right:4px;"></i>${escapeHtml(item.unit || '-')}
-                                <span style="margin:0 5px;">|</span>
-                                <i class="fas fa-layer-group" style="margin-right:4px;"></i>${escapeHtml(item.lantai || '-')}
+                            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; font-size:11px; color:rgba(255,255,255,0.8); margin-top:4px;">
+                                <i class="fas fa-network-wired" style="margin-right:2px;"></i>${escapeHtml(item.ip || '-')}
+                                <span style="margin:0 2px;">|</span>
+                                <i class="fas fa-building" style="margin-right:2px;"></i>${escapeHtml(item.unit || '-')}
+                                <span style="margin:0 2px;">|</span>
+                                <i class="fas fa-layer-group" style="margin-right:2px;"></i>${escapeHtml(item.lantai || '-')}
+                                <span style="margin:0 2px;">|</span>
+                                ${badgeHtml(item.overall)}
                             </div>
                         </div>
                     </div>
@@ -300,27 +399,34 @@
                             </div>
                         </div>
                         <div style="display:flex; gap:8px;">
-                            <button onclick="editHealthCheck(${item.id})"
+                            <button onclick="event.stopPropagation(); editHealthCheck(${item.id})"
                                 style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px;
-                                       font-size:11px; font-weight:600; color:#3b82f6; border:none; cursor:pointer; border-radius:6px; background:#fff;">
+                                       font-size:11px; font-weight:600; color:#3b82f6; border:none; cursor:pointer; border-radius:6px; background:#fff;
+                                       transition:background 0.18s, color 0.18s;"
+                                onmouseover="this.style.background='#eff6ff'; this.style.color='#2563eb';"
+                                onmouseout="this.style.background='#fff'; this.style.color='#3b82f6';">
                                 <i class="fas fa-edit"></i> Edit
                             </button>
-                            <button onclick="hapusHealthCheck(${item.id})"
+                            <button onclick="event.stopPropagation(); hapusHealthCheck(${item.id})"
                                 style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px;
-                                       font-size:11px; font-weight:600; color:#ef4444; border:none; cursor:pointer; border-radius:6px; background:#fff;">
+                                       font-size:11px; font-weight:600; color:#ef4444; border:none; cursor:pointer; border-radius:6px; background:#fff;
+                                       transition:background 0.18s, color 0.18s;"
+                                onmouseover="this.style.background='#fef2f2'; this.style.color='#dc2626';"
+                                onmouseout="this.style.background='#fff'; this.style.color='#ef4444';">
                                 <i class="fas fa-trash"></i> Hapus
                             </button>
                         </div>
                     </div>
                 </div>
-                <div style="padding:10px 20px 0; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; border-bottom:1px solid #f3f4f6;">
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        ${badgeHtml(item.overall)}
-                        <span style="font-size:11px; color:#9ca3af; font-weight:600;">${item.items.length} komponen</span>
+                <div style="display:none;">
+                    <div style="padding:10px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; border-bottom:1px solid #f3f4f6;">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            ${badgeHtml(item.overall)}
+                            <span style="font-size:11px; color:#9ca3af; font-weight:600;">${item.items.length} komponen</span>
+                        </div>
+                        <div style="font-size:11px; color:#9ca3af;">${ringkasan}</div>
                     </div>
-                    <div style="font-size:11px; color:#9ca3af;">${ringkasan}</div>
-                </div>
-                <div style="overflow-x:auto;">
+                    <div style="overflow-x:auto;">
                     <table style="width:100%; border-collapse:collapse;">
                         <thead>
                             <tr style="background:#f9fafb;">
@@ -333,6 +439,7 @@
                         </thead>
                         <tbody>${barisHtml}</tbody>
                     </table>
+                    </div>
                 </div>
             </div>`;
         }
@@ -391,7 +498,6 @@
             document.getElementById('fieldIp').value = opt.getAttribute('data-ip') || '';
             document.getElementById('fieldUnit').value = opt.getAttribute('data-unit') || '';
             document.getElementById('fieldLantai').value = opt.getAttribute('data-lantai') || '';
-            document.getElementById('infoJenis').textContent = opt.getAttribute('data-jenis') || '';
         }
 
         function bukaModalTambah() {
@@ -402,6 +508,7 @@
             setPc('');
             fpTanggal.setDate(new Date());
             renderRows({});
+            resetBtnSimpan();
             document.getElementById('modalHealthCheck').style.display = 'flex';
         }
 
@@ -430,6 +537,7 @@
                         itemMap[item.category + '||' + item.component] = item;
                     });
                     renderRows(itemMap);
+                    resetBtnSimpan();
                     document.getElementById('modalHealthCheck').style.display = 'flex';
                 })
                 .catch(function() {
@@ -452,7 +560,16 @@
         }
 
         function tutupModal() {
+            resetBtnSimpan();
             document.getElementById('modalHealthCheck').style.display = 'none';
+        }
+
+        function resetBtnSimpan() {
+            var btn = document.querySelector('[onclick="saveHealthCheck()"]');
+            if (!btn) return;
+            btn.innerHTML = '<i class="fas fa-save"></i> Simpan';
+            btn.style.background = '#7664E4';
+            btn.disabled = false;
         }
 
         $(document).ready(function() {
@@ -461,6 +578,10 @@
             });
             $('#modalBodyScroll').on('scroll', function() {
                 $('#modalHealthCheck select').select2('close');
+                document.getElementById('tabelHeaderScroll').scrollLeft = this.scrollLeft;
+            });
+            $('#tabelHeaderScroll').on('scroll', function() {
+                document.getElementById('modalBodyScroll').scrollLeft = this.scrollLeft;
             });
         });
 
@@ -473,7 +594,7 @@
                 var th = document.createElement('tr');
                 th.style.background = '#f5f3ff';
                 th.innerHTML = `
-                    <td colspan="5" style="padding:8px 16px; border-bottom:1px solid #e5e7eb; border-top:2px solid #e5e7eb;">
+                    <td colspan="5" style="padding:8px 8px 8px 8px; border-bottom:1px solid #e5e7eb; border-top:2px solid #e5e7eb;">
                         <span style="font-size:11px; font-weight:800; color:#7664E4; text-transform:uppercase; letter-spacing:0.05em;">
                             <i class="fas fa-chevron-circle-right" style="margin-right:6px;"></i>${category}
                         </span>
@@ -485,13 +606,13 @@
                     var data = (itemMap[category + '||' + component] || {});
                     var tr = document.createElement('tr');
                     tr.innerHTML = `
-                        <td style="padding:8px 16px; text-align:center; font-weight:600; color:#9ca3af; font-size:12px; width:36px; border-bottom:1px solid #f3f4f6;">${no}</td>
+                        <td style="padding:8px 8px; text-align:center; font-weight:600; color:#9ca3af; font-size:12px; border-bottom:1px solid #f3f4f6;">${no}</td>
                         <td style="padding:8px 12px; border-bottom:1px solid #f3f4f6;">
                             <div style="font-size:12.5px; font-weight:600; color:#1f2937;">${escapeHtml(component)}</div>
                             <input type="hidden" name="category" value="${escapeHtml(category)}">
                             <input type="hidden" name="component" value="${escapeHtml(component)}">
                         </td>
-                        <td style="padding:8px 8px; width:150px; border-bottom:1px solid #f3f4f6;">
+                        <td style="padding:8px 8px; border-bottom:1px solid #f3f4f6;">
                             <div style="position:relative;">
                                 <input type="number" step="any" min="0" name="value"
                                     placeholder="0"
@@ -500,14 +621,14 @@
                                 <span style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:12px; font-weight:700; pointer-events:none;">${component === 'CPU Temperature' ? '°C' : '%'}</span>
                             </div>
                         </td>
-                        <td style="padding:8px 8px; width:140px; border-bottom:1px solid #f3f4f6;">
+                        <td style="padding:8px 8px; border-bottom:1px solid #f3f4f6;">
                             <select name="status" class="w-full border-gray-300 text-gray-700 outline-none">
                                 ${statusOptions.map(function(s) {
                                     return '<option value="' + s + '"' + ((data.status || 'Healthy') === s ? ' selected' : '') + '>' + s + '</option>';
                                 }).join('')}
                             </select>
                         </td>
-                        <td style="padding:8px 8px; width:180px; border-bottom:1px solid #f3f4f6;">
+                        <td style="padding:8px 8px; border-bottom:1px solid #f3f4f6;">
                             <input type="text" name="notes" placeholder="Notes"
                                 class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                                 value="${escapeHtml(data.notes || '')}">
@@ -665,69 +786,284 @@
         .btn-swal-confirm {
             background-color: #ef4444 !important;
             color: #ffffff !important;
+            transition: background-color 0.2s !important;
+        }
+
+        .btn-swal-confirm:hover {
+            background-color: #dc2626 !important;
         }
 
         .btn-swal-cancel {
             background-color: #6b7280 !important;
             color: #ffffff !important;
+            transition: background-color 0.2s !important;
+        }
+
+        .btn-swal-cancel:hover {
+            background-color: #4b5563 !important;
         }
 
         .btn-swal-success {
             background-color: #7664E4 !important;
             color: #ffffff !important;
+            transition: background-color 0.2s !important;
+        }
+
+        .btn-swal-success:hover {
+            background-color: #6051c9 !important;
+        }
+
+        /* Pastikan SweetAlert selalu tampil di atas semua modal */
+        .swal2-container {
+            z-index: 99999 !important;
+        }
+
+        .swal2-backdrop-show {
+            z-index: 99998 !important;
         }
     </style>
 @endpush
 
 @push('modals')
-    <div id="modalHealthCheck"
-        style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:9999;
-           background:rgba(0,0,0,0.5); align-items:center; justify-content:center; padding:16px;">
-        <div
-            style="background:#fff; border-radius:16px; box-shadow:0 25px 50px rgba(0,0,0,0.25);
-                width:100%; max-width:960px; max-height:92vh; display:flex; flex-direction:column;
-                margin:auto;">
+    {{-- ===== MODAL HEALTH CHECK ===== --}}
+    <style>
+        #modalHealthCheck {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+
+        .modal-hc-wrap {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .modal-hc-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            border-radius: 16px 16px 0 0;
+            background: #7664E4;
+            flex-shrink: 0;
+        }
+
+        /* Info PC */
+        .modal-hc-info {
+            padding: 16px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f9fafb;
+            flex-shrink: 0;
+        }
+
+        .modal-hc-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        /* Body */
+        .modal-hc-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            padding: 0 24px;
+        }
+
+        /* Tabel header sticky */
+        #tabelHeaderScroll {
+            padding: 4px 0 0 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+            flex-shrink: 0;
+        }
+
+        #tabelHeaderScroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Tabel body scroll */
+        #modalBodyScroll {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: auto;
+            padding: 0 0 12px 0;
+        }
+
+        /* Lebar minimum tabel */
+        .tbl-hc-inner {
+            min-width: 620px;
+        }
+
+        /* Kolom tabel */
+        .tbl-hc-col-no {
+            width: 44px;
+        }
+
+        .tbl-hc-col-comp {
+            width: auto;
+        }
+
+        /* flex/grow */
+        .tbl-hc-col-val {
+            width: 130px;
+        }
+
+        .tbl-hc-col-stat {
+            width: 140px;
+        }
+
+        .tbl-hc-col-note {
+            width: 180px;
+        }
+
+        /* Footer */
+        .modal-hc-footer {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 14px 24px;
+            border-top: 1px solid #e5e7eb;
+            flex-shrink: 0;
+        }
+
+        /* ===== MOBILE (â‰¤ 600px) ===== */
+        @media (max-width: 600px) {
+            #modalHealthCheck {
+                padding: 8px;
+                align-items: flex-end;
+            }
+
+            .modal-hc-wrap {
+                max-width: 100%;
+                max-height: 95vh;
+                border-radius: 16px 16px 0 0;
+            }
+
+            .modal-hc-header {
+                padding: 12px 16px;
+                border-radius: 16px 16px 0 0;
+            }
+
+            .modal-hc-info {
+                padding: 12px 16px;
+            }
+
+            .modal-hc-info-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            #tabelHeaderScroll {
+                padding: 4px 0 0 0;
+            }
+
+            #modalBodyScroll {
+                padding: 0 0 10px 0;
+            }
+
+            .modal-hc-body {
+                padding: 0 12px;
+            }
+
+            .modal-hc-footer {
+                padding: 12px 16px;
+                gap: 8px;
+            }
+
+            .modal-hc-footer button {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .tbl-hc-col-val {
+                width: 110px;
+            }
+
+            .tbl-hc-col-stat {
+                width: 120px;
+            }
+
+            .tbl-hc-col-note {
+                width: 140px;
+            }
+        }
+
+        /* ===== TABLET (601â€“900px) ===== */
+        @media (min-width: 601px) and (max-width: 900px) {
+            .modal-hc-wrap {
+                max-width: 96vw;
+                max-height: 92vh;
+            }
+        }
+    </style>
+
+    <div id="modalHealthCheck">
+        <div class="modal-hc-wrap">
+
             {{-- Modal Header --}}
-            <div
-                style="display:flex; align-items:center; justify-content:space-between; padding:16px 24px; border-radius:16px 16px 0 0; background:#7664E4;">
+            <div class="modal-hc-header">
                 <div style="display:flex; align-items:center; gap:12px;">
                     <div
                         style="width:36px; height:36px; border-radius:10px; background:rgba(255,255,255,0.18);
-                            display:flex; align-items:center; justify-content:center;">
+                                display:flex; align-items:center; justify-content:center; flex-shrink:0;">
                         <i class="fas fa-heartbeat" style="color:#fff; font-size:14px;"></i>
                     </div>
                     <div>
-                        <h5 id="modalJudul" style="margin:0; font-size:15px; font-weight:700; color:#fff; line-height:1.2;">
-                            Tambah Health Check</h5>
+                        <h5 id="modalJudul" style="margin:0; font-size:15px; font-weight:700; color:#fff; line-height:1.3;">
+                            Tambah Health Check
+                        </h5>
                         <p id="modalSubJudul"
-                            style="margin:0; font-size:11px; color:rgba(255,255,255,0.8); margin-top:2px;">Catat status
-                            kesehatan seluruh komponen hardware untuk satu PC.</p>
+                            style="margin:0; font-size:11px; color:rgba(255,255,255,0.8); margin-top:2px;">
+                            Catat status kesehatan seluruh komponen hardware untuk satu PC.
+                        </p>
                     </div>
                 </div>
                 <button type="button" onclick="tutupModal()"
                     style="width:32px; height:32px; border:none; background:rgba(255,255,255,0.15); cursor:pointer;
-                       border-radius:8px; display:flex; align-items:center; justify-content:center;
-                       color:#fff; font-size:14px; transition:background 0.15s;"
-                    onmouseover="this.style.background='rgba(255,255,255,0.25)'"
+                           border-radius:8px; display:flex; align-items:center; justify-content:center;
+                           color:#fff; font-size:14px; transition:background 0.15s; flex-shrink:0;"
+                    onmouseover="this.style.background='rgba(255,255,255,0.28)'"
                     onmouseout="this.style.background='rgba(255,255,255,0.15)'">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
 
-            {{-- Informasi PC & Petugas --}}
-            <div style="padding:16px 24px; border-bottom:1px solid #f3f4f6; background:#f9fafb;">
-                <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap:14px;">
+            {{-- Informasi PC & Tanggal --}}
+            <div class="modal-hc-info">
+                <div class="modal-hc-info-grid">
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Pilih PC <span
-                                style="color:#ef4444;">*</span></label>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">
+                            Pilih PC <span style="color:#ef4444;">*</span>
+                        </label>
                         <select id="selectPc"
                             class="select2 w-full border-gray-300 text-gray-700 outline-none transition-all"
                             onchange="onPcChange()"></select>
-                        <p id="infoJenis" style="font-size:11px; color:#7664E4; font-weight:700; margin-top:4px;"></p>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Tanggal Cek <span
-                                style="color:#ef4444;">*</span></label>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">
+                            Tanggal Cek <span style="color:#ef4444;">*</span>
+                        </label>
                         <input type="text" id="fieldTanggal"
                             class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                             placeholder="Pilih tanggal">
@@ -738,71 +1074,85 @@
                 <input type="hidden" id="fieldLantai">
             </div>
 
-            {{-- Modal Body --}}
-            <div style="flex:1; display:flex; flex-direction:column; min-height:0;">
-                {{-- Header tabel: TETAP, tidak ikut scroll --}}
-                <div style="padding:16px 24px 0 24px;">
-                    <table style="width:100%; table-layout:fixed; border-collapse:collapse; font-size:13px;">
-                        <colgroup>
-                            <col style="width:36px;">
-                            <col>
-                            <col style="width:150px;">
-                            <col style="width:140px;">
-                            <col style="width:180px;">
-                        </colgroup>
-                        <thead>
-                            <tr>
-                                <th style="color:#fff; text-align:center; font-weight:600; padding:10px 16px; border-radius:8px 0 0 0; background:#7664E4;">
-                                    No</th>
-                                <th style="color:#fff; text-align:left; font-weight:600; padding:10px 16px; background:#7664E4;">
-                                    Component</th>
-                                <th style="color:#fff; text-align:left; font-weight:600; padding:10px 8px; background:#7664E4;">
-                                    Value</th>
-                                <th style="color:#fff; text-align:left; font-weight:600; padding:10px 8px; background:#7664E4;">
-                                    Status</th>
-                                <th style="color:#fff; text-align:left; font-weight:600; padding:10px 8px; border-radius:0 8px 0 0; background:#7664E4;">
-                                    Notes</th>
-                            </tr>
-                        </thead>
-                    </table>
+            {{-- Modal Body (Header tabel sticky + Body scroll) --}}
+            <div class="modal-hc-body">
+                {{-- Header tabel: tidak ikut scroll vertikal --}}
+                <div id="tabelHeaderScroll">
+                    <div class="tbl-hc-inner">
+                        <table style="width:100%; table-layout:fixed; border-collapse:collapse; font-size:13px;">
+                            <colgroup>
+                                <col class="tbl-hc-col-no">
+                                <col class="tbl-hc-col-comp">
+                                <col class="tbl-hc-col-val">
+                                <col class="tbl-hc-col-stat">
+                                <col class="tbl-hc-col-note">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th
+                                        style="color:#fff; text-align:center; font-weight:700; font-size:12px; padding:10px 8px;
+                                               border-radius:8px 0 0 0; background:#7664E4; letter-spacing:0.04em;">
+                                        No</th>
+                                    <th
+                                        style="color:#fff; text-align:left; font-weight:700; font-size:12px; padding:10px 12px;
+                                               background:#7664E4; letter-spacing:0.04em;">
+                                        Component</th>
+                                    <th
+                                        style="color:#fff; text-align:center; font-weight:700; font-size:12px; padding:10px 8px;
+                                               background:#7664E4; letter-spacing:0.04em;">
+                                        Value</th>
+                                    <th
+                                        style="color:#fff; text-align:center; font-weight:700; font-size:12px; padding:10px 8px;
+                                               background:#7664E4; letter-spacing:0.04em;">
+                                        Status</th>
+                                    <th
+                                        style="color:#fff; text-align:left; font-weight:700; font-size:12px; padding:10px 8px;
+                                               border-radius:0 8px 0 0; background:#7664E4; letter-spacing:0.04em;">
+                                        Notes</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
-                {{-- Badan tabel: area yang scroll --}}
-                <div id="modalBodyScroll" style="flex:1; overflow-y:auto; padding:0 24px 16px 24px;">
-                    <table style="width:100%; table-layout:fixed; border-collapse:collapse; font-size:13px;">
-                        <colgroup>
-                            <col style="width:36px;">
-                            <col>
-                            <col style="width:150px;">
-                            <col style="width:140px;">
-                            <col style="width:180px;">
-                        </colgroup>
-                        <tbody id="tabelItemBody">
-                            {{-- Baris diisi via JS --}}
-                        </tbody>
-                    </table>
+
+                {{-- Badan tabel: area scroll vertikal --}}
+                <div id="modalBodyScroll">
+                    <div class="tbl-hc-inner">
+                        <table style="width:100%; table-layout:fixed; border-collapse:collapse; font-size:13px;">
+                            <colgroup>
+                                <col class="tbl-hc-col-no">
+                                <col class="tbl-hc-col-comp">
+                                <col class="tbl-hc-col-val">
+                                <col class="tbl-hc-col-stat">
+                                <col class="tbl-hc-col-note">
+                            </colgroup>
+                            <tbody id="tabelItemBody">
+                                {{-- Baris diisi via JS --}}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             {{-- Modal Footer --}}
-            <div
-                style="display:flex; align-items:center; justify-content:flex-end; gap:8px;
-                    padding:16px 24px; border-top:1px solid #e5e7eb;">
+            <div class="modal-hc-footer">
                 <button type="button" onclick="tutupModal()"
-                    style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px;
-                       font-size:12px; font-weight:600; color:#374151; border:1px solid #e5e7eb; cursor:pointer;
-                       border-radius:8px; background:#f1f5f9; transition:background 0.15s;"
-                    onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">
+                    style="display:inline-flex; align-items:center; gap:6px; padding:9px 20px;
+                           font-size:13px; font-weight:600; color:#374151; border:1px solid #d1d5db; cursor:pointer;
+                           border-radius:8px; background:#f8fafc; transition:background 0.15s;"
+                    onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f8fafc'">
                     Tutup
                 </button>
                 <button type="button" onclick="saveHealthCheck()"
-                    style="display:inline-flex; align-items:center; gap:8px; padding:8px 20px;
-                       font-size:12px; font-weight:700; color:#fff; border:none; cursor:pointer;
-                       border-radius:8px; background:#7664E4; box-shadow:0 2px 8px rgba(118,100,228,0.35);
-                       transition:background 0.15s;"
+                    style="display:inline-flex; align-items:center; gap:8px; padding:9px 24px;
+                           font-size:13px; font-weight:700; color:#fff; border:none; cursor:pointer;
+                           border-radius:8px; background:#7664E4; box-shadow:0 2px 8px rgba(118,100,228,0.35);
+                           transition:background 0.15s;"
                     onmouseover="this.style.background='#6453d4'" onmouseout="this.style.background='#7664E4'">
                     <i class="fas fa-save"></i> Simpan
                 </button>
             </div>
+
         </div>
     </div>
 @endpush
