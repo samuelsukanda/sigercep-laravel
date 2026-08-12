@@ -193,7 +193,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="fas fa-star relative top-0 text-sm leading-normal text-yellow-500"></i>
+                            <i class="fas fa-wave-square relative top-0 text-sm leading-normal text-red-500"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Fitur Baru</span>
                     </div>

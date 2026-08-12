@@ -1055,7 +1055,7 @@
                 <div class="modal-hc-info-grid">
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-1.5">
-                            Pilih PC <span style="color:#ef4444;">*</span>
+                            Pilih PC
                         </label>
                         <select id="selectPc"
                             class="select2 w-full border-gray-300 text-gray-700 outline-none transition-all"
@@ -1063,7 +1063,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-1.5">
-                            Tanggal Cek <span style="color:#ef4444;">*</span>
+                            Tanggal Cek
                         </label>
                         <input type="text" id="fieldTanggal"
                             class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"

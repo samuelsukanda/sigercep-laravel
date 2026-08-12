@@ -35,7 +35,7 @@
                                 {{-- Deskripsi --}}
                                 <div>
                                     <label class="block text-sm font-semibold mb-1 text-slate-700">
-                                        Deskripsi <span class="text-red-500">*</span>
+                                        Deskripsi
                                     </label>
                                     <textarea name="deskripsi" rows="5"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('deskripsi') border-red-500 @enderror"

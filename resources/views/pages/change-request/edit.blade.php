@@ -8,7 +8,7 @@
             <div class="w-full max-w-full px-3 mx-auto mt-0">
                 <div class="relative flex flex-col bg-white shadow-soft-xl rounded-2xl">
                     <div class="p-6 pb-0 mb-0 bg-white rounded-t-2xl">
-                        <h6 class="mb-0 font-bold text-lg">Edit Change Request #{{ $changeRequest->id }}</h6>
+                        <h6 class="mb-0 font-bold text-lg">Edit Change Request</h6>
                     </div>
                     <div class="flex-auto p-6">
                         <form action="{{ route('change-request.update', $changeRequest->id) }}" method="POST"
@@ -31,12 +31,14 @@
                                     <label class="block text-sm font-semibold mb-1 text-slate-700">Jabatan</label>
                                     <input type="text"
                                         class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-slate-500 text-sm"
-                                        value="{{ $changeRequest->user->jabatan ?? $changeRequest->jabatan ?? '-' }}" disabled>
+                                        value="{{ $changeRequest->user->jabatan ?? ($changeRequest->jabatan ?? '-') }}"
+                                        disabled>
                                 </div>
 
                                 {{-- Tanggal Permintaan --}}
                                 <div>
-                                    <label class="block text-sm font-semibold mb-1 text-slate-700">Tanggal Permintaan</label>
+                                    <label class="block text-sm font-semibold mb-1 text-slate-700">Tanggal
+                                        Permintaan</label>
                                     <input type="text" id="created_at" name="created_at"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('created_at') border-red-500 @enderror"
                                         value="{{ old('created_at', \Carbon\Carbon::parse($changeRequest->created_at)->format('d-m-Y')) }}"
@@ -49,7 +51,7 @@
                                 {{-- Status Dokumen --}}
                                 <div>
                                     <label class="block text-sm font-semibold mb-1 text-slate-700">
-                                        Status Dokumen <span class="text-red-500">*</span>
+                                        Status Dokumen
                                     </label>
                                     <select name="status_dokumen"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('status_dokumen') border-red-500 @enderror"
@@ -69,7 +71,7 @@
                                 {{-- Status Pengerjaan --}}
                                 <div>
                                     <label class="block text-sm font-semibold mb-1 text-slate-700">
-                                        Status Pengerjaan <span class="text-red-500">*</span>
+                                        Status Pengerjaan
                                     </label>
                                     <select name="status_pengerjaan"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('status_pengerjaan') border-red-500 @enderror"
@@ -113,7 +115,7 @@
                                 {{-- Deskripsi --}}
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-semibold mb-1 text-slate-700">
-                                        Deskripsi <span class="text-red-500">*</span>
+                                        Deskripsi
                                     </label>
                                     <textarea name="deskripsi" rows="5"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('deskripsi') border-red-500 @enderror"

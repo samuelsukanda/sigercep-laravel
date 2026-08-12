@@ -8,7 +8,7 @@
             <div class="w-full max-w-full px-3 mx-auto mt-0">
                 <div class="relative flex flex-col bg-white shadow-soft-xl rounded-2xl">
                     <div class="p-6 pb-0 mb-0 bg-white rounded-t-2xl">
-                        <h6 class="mb-0 font-bold text-lg">Detail Change Request #{{ $changeRequest->id }}</h6>
+                        <h6 class="mb-0 font-bold text-lg">Detail Change Request</h6>
                     </div>
                     <div class="flex-auto p-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -22,13 +22,15 @@
                             {{-- Jabatan --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Jabatan</label>
-                                <p class="text-slate-600">{{ $changeRequest->user->jabatan ?? $changeRequest->jabatan ?? '-' }}</p>
+                                <p class="text-slate-600">
+                                    {{ $changeRequest->user->jabatan ?? ($changeRequest->jabatan ?? '-') }}</p>
                             </div>
 
                             {{-- Tanggal Permintaan --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Tanggal Permintaan</label>
-                                <p class="text-slate-600">{{ \Carbon\Carbon::parse($changeRequest->created_at)->translatedFormat('d F Y') }}</p>
+                                <p class="text-slate-600">
+                                    {{ \Carbon\Carbon::parse($changeRequest->created_at)->translatedFormat('d F Y') }}</p>
                             </div>
 
                             {{-- Status Dokumen --}}
@@ -70,7 +72,9 @@
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">No Tiket</label>
                                 @if (!empty($changeRequest->no_tiket) && $changeRequest->no_tiket !== 'No Tiket')
-                                    <p class="text-slate-600">{{ \Illuminate\Support\Str::startsWith($changeRequest->no_tiket, '#') ? $changeRequest->no_tiket : '#' . $changeRequest->no_tiket }}</p>
+                                    <p class="text-slate-600">
+                                        {{ \Illuminate\Support\Str::startsWith($changeRequest->no_tiket, '#') ? $changeRequest->no_tiket : '#' . $changeRequest->no_tiket }}
+                                    </p>
                                 @else
                                     <p class="text-xs text-slate-400" style="font-style: italic !important;">#No Tiket</p>
                                 @endif

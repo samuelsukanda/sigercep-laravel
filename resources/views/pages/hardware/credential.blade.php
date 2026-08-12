@@ -781,8 +781,7 @@
             <div style="padding:12px 24px; border-bottom:1px solid #f3f4f6; background:#f9fafb;">
                 <div style="display:flex; flex-wrap:wrap; gap:14px;">
                     <div style="flex:1; min-width:220px;">
-                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Pilih PC <span
-                                style="color:#ef4444;">*</span></label>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Pilih PC</label>
                         <select id="selectPc"
                             class="select2 w-full border-gray-300 text-gray-700 outline-none transition-all"
                             onchange="onPcChange()"></select>
