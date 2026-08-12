@@ -1,0 +1,84 @@
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-4">
+    <div class="px-5 py-4">
+        <form method="GET" action="{{ route('change-request.index') }}" id="filterForm">
+            <div class="flex flex-wrap gap-3 items-end filter-wrap">
+
+                {{-- Periode Dari --}}
+                <div class="flex flex-col mr-1 filter-item" style="min-width:148px; flex:1 1 148px; max-width:180px;">
+                    <label class="text-xs font-semibold text-gray-600 mb-1.5">Periode Dari</label>
+                    <input type="text" name="periode_dari"
+                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent flatpickr"
+                        value="{{ request('periode_dari') }}"
+                        placeholder="Pilih tanggal">
+                </div>
+
+                {{-- Periode Sampai --}}
+                <div class="flex flex-col mr-1 filter-item" style="min-width:148px; flex:1 1 148px; max-width:180px;">
+                    <label class="text-xs font-semibold text-gray-600 mb-1.5">Periode Sampai</label>
+                    <input type="text" name="periode_sampai"
+                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent flatpickr"
+                        value="{{ request('periode_sampai', now()->format('d-m-Y')) }}" placeholder="Pilih tanggal">
+                </div>
+
+                {{-- Status Dokumen --}}
+                <div class="flex flex-col mr-1 filter-item" style="min-width:148px; flex:1 1 148px; max-width:180px;">
+                    <label class="text-xs font-semibold text-gray-600 mb-1.5">Status Dokumen</label>
+                    <select id="filter_status_dokumen" name="status_dokumen"
+                        class="select2 w-full border-gray-300 text-gray-700 outline-none transition-all">
+                        <option value="">Semua Status Dokumen</option>
+                        <option value="Terpenuhi" {{ request('status_dokumen') == 'Terpenuhi' ? 'selected' : '' }}>Terpenuhi</option>
+                        <option value="Dalam Proses" {{ request('status_dokumen') == 'Dalam Proses' ? 'selected' : '' }}>Dalam Proses</option>
+                        <option value="Tidak Ada" {{ request('status_dokumen') == 'Tidak Ada' ? 'selected' : '' }}>Tidak Ada</option>
+                    </select>
+                </div>
+
+                {{-- Status Pengerjaan --}}
+                <div class="flex flex-col mr-1 filter-item" style="min-width:148px; flex:1 1 148px; max-width:180px;">
+                    <label class="text-xs font-semibold text-gray-600 mb-1.5">Status Pengerjaan</label>
+                    <select id="filter_status_pengerjaan" name="status_pengerjaan"
+                        class="select2 w-full border-gray-300 text-gray-700 outline-none transition-all">
+                        <option value="">Semua Status Pengerjaan</option>
+                        <option value="Open" {{ request('status_pengerjaan') == 'Open' ? 'selected' : '' }}>Open</option>
+                        <option value="In Progress" {{ request('status_pengerjaan') == 'In Progress' ? 'selected' : '' }}>In Progress</option>
+                        <option value="Pending" {{ request('status_pengerjaan') == 'Pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="QC" {{ request('status_pengerjaan') == 'QC' ? 'selected' : '' }}>QC</option>
+                        <option value="Done" {{ request('status_pengerjaan') == 'Done' ? 'selected' : '' }}>Done</option>
+                        <option value="Closed" {{ request('status_pengerjaan') == 'Closed' ? 'selected' : '' }}>Closed</option>
+                    </select>
+                </div>
+
+                {{-- Action Buttons --}}
+                <div class="flex items-end flex-1 justify-between filter-action">
+                    <div class="flex items-end">
+                        <!-- Button Cari -->
+                        <button type="submit"
+                            class="mr-1 inline-block px-4 py-2 mb-0 text-xs font-semibold text-center text-white uppercase align-middle transition-all rounded-lg shadow-md hover:shadow-xs active:opacity-85"
+                            style="background-color: #7664E4 !important;">
+                            <i class="fas fa-search text-sm leading-normal"></i>
+                        </button>
+
+                        <!-- Button Reset -->
+                        <a href="{{ route('change-request.index') }}"
+                            class="btn-reset inline-flex items-center justify-center
+                                h-9 px-4 text-xs font-semibold text-slate-700 uppercase
+                                rounded-lg shadow-md bg-gray-200 hover:shadow-sm active:opacity-85 transition-all">
+                            Reset
+                        </a>
+                    </div>
+
+                    {{-- Tambah Data --}}
+                    @canAccess('change_request', 'create')
+                    <a href="{{ route('change-request.create') }}"
+                        class="inline-flex items-center justify-center
+                            h-9 px-4 text-xs font-semibold text-white uppercase
+                            rounded-lg shadow-md hover:shadow-sm active:opacity-85 transition-all"
+                        style="background-color: #7664E4 !important;">
+                        Tambah Data
+                    </a>
+                    @endcanAccess
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>

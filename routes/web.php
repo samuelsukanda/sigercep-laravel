@@ -43,6 +43,7 @@ use App\Http\Controllers\HardwareController;
 use App\Http\Controllers\HardwareCredentialController;
 use App\Http\Controllers\HardwareEvaluasiController;
 use App\Http\Controllers\HardwareHealthCheckController;
+use App\Http\Controllers\ChangeRequestController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserSessionController;
 use App\Http\Controllers\UserController;
@@ -327,7 +328,14 @@ Route::middleware('auth')->group(function () {
         Route::resource('hardware', HardwareController::class)->names('hardware');
     });
 
-    // Indikator Mutu
+    // Change Request
+    Route::middleware(['auth'])->group(function () {
+        Route::resource('change-request', ChangeRequestController::class)
+            ->names('change-request');
+        Route::get('/change-request/file/{id}', [ChangeRequestController::class, 'showFile'])
+            ->name('change-request.show-file');
+    });
+
     Route::middleware(['auth'])->group(function () {
         Route::get('indicators', [IndicatorController::class, 'index'])
             ->middleware('permission:mutu,read')
