@@ -18,12 +18,6 @@
             <div class="w-full max-w-full px-3 mx-auto mt-0">
 
                 {{-- Flash Message --}}
-                @if (session('success'))
-                    <div
-                        class="relative text-s w-full p-4 mb-4 text-white border border-blue-300 border-solid rounded-lg bg-gradient-to-tl from-blue-500 to-violet-500">
-                        {{ session('success') }}
-                    </div>
-                @endif
                 @if (session('error'))
                     <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50">
                         {{ session('error') }}

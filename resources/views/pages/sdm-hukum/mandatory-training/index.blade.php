@@ -17,13 +17,6 @@
                     <h3>Daftar Mandatory Training</h3>
                 </div>
 
-                @if (session('success'))
-                    <div
-                        class="relative text-s w-full p-4 mb-4 text-white border border-blue-300 border-solid rounded-lg bg-gradient-to-tl from-blue-500 to-violet-500">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
                 {{-- Filter Section --}}
                 @include('layouts.partials.sdm-hukum.mandatory-training.filter')
 

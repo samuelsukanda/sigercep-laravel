@@ -17,13 +17,6 @@
                     <h3>Daftar Mutu</h3>
                 </div>
 
-                @if (session('success'))
-                    <div
-                        class="relative text-s w-full p-4 mb-4 text-white border border-blue-300 border-solid rounded-lg bg-gradient-to-tl from-blue-500 to-violet-500">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
                 {{-- Filter Section --}}
                 @include('layouts.partials.komite-mutu.mutu.filter')
 
@@ -38,7 +31,8 @@
 @push('scripts')
     <script src="{{ asset('assets/js/datatable/datatable-mutu.js') }}"></script>
     <script src="{{ asset('assets/js/loading-filter.js') }}"></script>
-    <script src="{{ asset('assets/js/alert-delete.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('assets/js/alert-delete-swal.js') }}"></script>
     <script>
         $.fn.dataTable.ext.errMode = "none";
     </script>

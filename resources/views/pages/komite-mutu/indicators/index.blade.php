@@ -43,13 +43,6 @@
             </div>
         </div>
 
-        @if (session('success'))
-            <div
-                class="relative text-s w-full p-4 mb-4 text-white border border-blue-300 border-solid rounded-lg bg-gradient-to-tl from-blue-500 to-violet-500">
-                {{ session('success') }}
-            </div>
-        @endif
-
         @if ($errors->any())
             <div
                 class="relative text-sm w-full p-4 mb-4 text-white border border-transparent rounded-lg bg-gradient-to-tl from-red-600 to-orange-600 shadow-md">
@@ -808,6 +801,24 @@
         .btn-swal-cancel:hover {
             background-color: #4b5563 !important;
         }
+
+        .btn-swal-success {
+            background-color: #7664E4 !important;
+            color: #ffffff !important;
+            transition: background-color 0.2s !important;
+        }
+
+        .btn-swal-success:hover {
+            background-color: #6051c9 !important;
+        }
+
+        .swal2-container {
+            z-index: 99999 !important;
+        }
+
+        .swal2-backdrop-show {
+            z-index: 99998 !important;
+        }
     </style>
     <script>
         document.addEventListener('keydown', function(e) {
@@ -876,11 +887,22 @@
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    const form = document.getElementById('deleteForm');
-                    let url = "{{ route('indicators.destroy', ':id') }}";
-                    url = url.replace(':id', id);
-                    form.action = url;
-                    form.submit();
+                    Swal.fire({
+                        title: 'Terhapus!',
+                        text: 'Data berhasil dihapus.',
+                        icon: 'success',
+                        confirmButtonColor: '#7664E4',
+                        customClass: {
+                            confirmButton: 'btn-swal-success'
+                        },
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        const form = document.getElementById('deleteForm');
+                        let url = "{{ route('indicators.destroy', ':id') }}";
+                        url = url.replace(':id', id);
+                        form.action = url;
+                        form.submit();
+                    });
                 }
             });
         }

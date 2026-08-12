@@ -33,13 +33,6 @@
             <h3 class="font-bold text-2xl text-slate-800 dark:text-white">Daftar Manajemen Risiko</h3>
         </div>
 
-        @if (session('success'))
-            <div
-                class="relative text-s w-full p-4 mb-4 text-white border border-blue-300 border-solid rounded-lg bg-gradient-to-tl from-blue-500 to-violet-500">
-                {{ session('success') }}
-            </div>
-        @endif
-
         {{-- Statistics Row --}}
         <div class="flex flex-wrap -mx-3 mb-6">
             {{-- Card 1: Total Risiko --}}

@@ -504,7 +504,7 @@
             edittingId = null;
             document.getElementById('modalJudul').textContent = 'Tambah Health Check';
             document.getElementById('modalSubJudul').textContent =
-                'Catat status kesehatan seluruh komponen hardware untuk satu PC.';
+                'Catat dan pantau kondisi kesehatan seluruh komponen hardware pada setiap PC secara terstruktur.';
             setPc('');
             fpTanggal.setDate(new Date());
             renderRows({});
@@ -767,8 +767,9 @@
                             if (json.success) {
                                 Swal.fire({
                                     title: 'Terhapus!',
-                                    text: 'Data health check berhasil dihapus.',
+                                    text: 'Data berhasil dihapus.',
                                     icon: 'success',
+                                    confirmButtonColor: '#7664E4',
                                     zIndex: 20000,
                                     customClass: {
                                         confirmButton: 'btn-swal-success'
@@ -1035,7 +1036,7 @@
                         </h5>
                         <p id="modalSubJudul"
                             style="margin:0; font-size:11px; color:rgba(255,255,255,0.8); margin-top:2px;">
-                            Catat status kesehatan seluruh komponen hardware untuk satu PC.
+                            Catat dan pantau kondisi kesehatan seluruh komponen hardware pada setiap PC secara terstruktur.
                         </p>
                     </div>
                 </div>
