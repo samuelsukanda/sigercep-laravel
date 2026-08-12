@@ -67,6 +67,9 @@
                     <select name="status_approval"
                         class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white">
                         <option value="">Semua</option>
+                        <option value="Pending" {{ request('status_approval') == 'Pending' ? 'selected' : '' }}>
+                            Pending
+                        </option>
                         <option value="Approved" {{ request('status_approval') == 'Approved' ? 'selected' : '' }}>
                             Approved
                         </option>

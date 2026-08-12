@@ -57,9 +57,13 @@ class Ticket extends Model
         }
 
         if ($request->filled('status_approval')) {
-            $query->whereHas('approval', function ($q) use ($request) {
-                $q->where('approval_status', $request->status_approval);
-            });
+            if ($request->status_approval == 'Pending') {
+                $query->whereDoesntHave('approval');
+            } else {
+                $query->whereHas('approval', function ($q) use ($request) {
+                    $q->where('approval_status', $request->status_approval);
+                });
+            }
         }
 
         return $query;

@@ -43,7 +43,7 @@ class KnowledgeBaseController extends Controller
             $query->where('category', $request->category);
         }
         
-        $knowledgeBases = $query->orderByDesc('updated_at')->paginate(12)->withQueryString();
+        $knowledgeBases = $query->orderByDesc('updated_at')->paginate(9)->withQueryString();
         $categories = ['Hardware', 'Jaringan', 'Software', 'SIMRS'];
         
         $counts = [];

@@ -110,5 +110,5 @@
 </div>
 
 <div style="margin-top: 24px;">
-    {{ $knowledgeBases->links() }}
+    {{ $knowledgeBases->links('vendor.pagination.kb') }}
 </div>
