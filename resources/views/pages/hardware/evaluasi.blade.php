@@ -19,13 +19,13 @@
                     <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
                         <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
                             <label style="font-size:12px; font-weight:600; color:#4b5563;">Filter Tahun:</label>
-                            <select id="filterTahun" onchange="renderSemuaEvaluasi()"
+                            <select id="filterTahun" onchange="gantiFilterEvaluasi()"
                                 style="padding:8px 12px; font-size:13px; border:1px solid #d1d5db; border-radius:8px; outline:none; min-width:120px;">
                                 <option value="">Semua Tahun</option>
                             </select>
                             
                             <label style="font-size:12px; font-weight:600; color:#4b5563; margin-left:8px;">Bulan:</label>
-                            <select id="filterBulan" onchange="renderSemuaEvaluasi()"
+                            <select id="filterBulan" onchange="gantiFilterEvaluasi()"
                                 style="padding:8px 12px; font-size:13px; border:1px solid #d1d5db; border-radius:8px; outline:none; min-width:120px;">
                                 <option value="">Semua Bulan</option>
                                 <option value="01">Januari</option>
@@ -41,8 +41,6 @@
                                 <option value="11">November</option>
                                 <option value="12">Desember</option>
                             </select>
-
-                            <span id="totalBulan" style="font-size:12px; color:#9ca3af; margin-left:8px;"></span>
                         </div>
                         <div>
                             <button type="button" onclick="bukaModalEvaluasi()"
@@ -59,6 +57,9 @@
                 <div id="kontenEvaluasi">
                     {{-- Diisi oleh JS --}}
                 </div>
+
+                {{-- Pagination --}}
+                <div id="paginationNav" style="display:none;"></div>
 
                 {{-- Empty State --}}
                 <div id="emptyState" style="display:none; text-align:center; padding:60px 20px;">
@@ -118,6 +119,8 @@
     </style>
     <script>
         var semuaDataGlobal = [];
+        var halamanSekarang = 1;
+        var limitPerHalaman = 10;
 
         document.addEventListener('DOMContentLoaded', function() {
             muatSemuaEvaluasi();
@@ -139,6 +142,7 @@
                 })
                 .then(function(json) {
                     semuaDataGlobal = json.data || [];
+                    halamanSekarang = 1;
                     inisialisasiFilterTahun();
                     renderSemuaEvaluasi();
                 })
@@ -195,38 +199,55 @@
 
             var konten = document.getElementById('kontenEvaluasi');
             var empty = document.getElementById('emptyState');
+            var nav = document.getElementById('paginationNav');
 
             if (semua.length === 0) {
                 konten.innerHTML = '';
                 empty.style.display = 'block';
-                document.getElementById('totalBulan').textContent = '';
+                nav.style.display = 'none';
+                nav.innerHTML = '';
                 return;
             }
 
             empty.style.display = 'none';
-            document.getElementById('totalBulan').textContent = semua.length + ' bulan tersimpan';
+
+            var totalHalaman = Math.ceil(semua.length / limitPerHalaman);
+            if (halamanSekarang > totalHalaman) halamanSekarang = totalHalaman;
+            if (halamanSekarang < 1) halamanSekarang = 1;
+
+            var mulai = (halamanSekarang - 1) * limitPerHalaman;
+            var potongan = semua.slice(mulai, mulai + limitPerHalaman);
 
             var html = '';
-            semua.forEach(function(item) {
-                var namaB = namaBulan(item.bulan);
-                var jumlahKendala = item.rows.length;
+            potongan.forEach(function(item) {
+                html += cardEvaluasiHtml(item);
+            });
 
-                var barisHtml = '';
-                item.rows.forEach(function(row) {
-                    barisHtml += `
+            konten.innerHTML = html;
+            renderPaginationEvaluasi(semua.length, totalHalaman);
+        }
+
+        function cardEvaluasiHtml(item) {
+            var namaB = namaBulan(item.bulan);
+            var jumlahKendala = item.rows.length;
+
+            var barisHtml = '';
+            item.rows.forEach(function(row) {
+                barisHtml += `
                 <tr style="border-bottom:1px solid #f3f4f6;">
                     <td style="padding:12px 16px; text-align:center; font-weight:600; color:#6b7280; font-size:13px; width:52px;">${row.nomor}</td>
                     <td style="padding:12px 16px; font-size:13px; color:#374151; white-space:pre-wrap;">${escapeHtml(row.kendala || '-')}</td>
                     <td style="padding:12px 16px; font-size:13px; color:#374151; white-space:pre-wrap;">${escapeHtml(row.rtl || '-')}</td>
                 </tr>`;
-                });
+            });
 
-                html += `
+            return `
             <div style="background:#fff; border-radius:12px; box-shadow:0 1px 4px rgba(0,0,0,0.08);
                         border:1px solid #e5e7eb; margin-bottom:16px; overflow:hidden;">
-                <div style="display:flex; align-items:center; justify-content:space-between;
+                <div onclick="toggleKartu(this)" style="cursor:pointer; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
                             padding:14px 20px; background:linear-gradient(135deg,#7664E4 0%,#9b8af0 100%);">
                     <div style="display:flex; align-items:center; gap:10px;">
+                        <i class="fas fa-chevron-down kartu-chevron" style="color:#fff; font-size:12px; transition:transform 0.2s;"></i>
                         <div style="width:32px; height:32px; border-radius:8px; background:rgba(255,255,255,0.2);
                                     display:flex; align-items:center; justify-content:center;">
                             <i class="fas fa-calendar-alt" style="color:#fff; font-size:13px;"></i>
@@ -237,7 +258,7 @@
                         </div>
                     </div>
                     <div style="display:flex; gap:8px;">
-                        <button onclick="editBulan('${item.bulan}')"
+                        <button onclick="event.stopPropagation(); editBulan('${item.bulan}')"
                             style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px;
                                    font-size:11px; font-weight:600; color:#3b82f6; border:none; cursor:pointer;
                                    border-radius:6px; background:#fff;
@@ -246,7 +267,7 @@
                             onmouseout="this.style.background='#fff'; this.style.color='#3b82f6';">
                             <i class="fas fa-edit"></i> Edit
                         </button>
-                        <button onclick="hapusBulan('${item.bulan}')"
+                        <button onclick="event.stopPropagation(); hapusBulan('${item.bulan}')"
                             style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px;
                                    font-size:11px; font-weight:600; color:#ef4444; border:none; cursor:pointer;
                                    border-radius:6px; background:#fff;
@@ -257,22 +278,89 @@
                         </button>
                     </div>
                 </div>
-                <div style="overflow-x:auto;">
-                    <table style="width:100%; border-collapse:collapse;">
-                        <thead>
-                            <tr style="background:#f9fafb;">
-                                <th style="padding:10px 16px; text-align:center; font-size:11px; font-weight:700; color:#6b7280; text-transform:uppercase; letter-spacing:0.05em; width:52px;">No</th>
-                                <th style="padding:10px 16px; text-align:left; font-size:11px; font-weight:700; color:#6b7280; text-transform:uppercase; letter-spacing:0.05em;">Kendala</th>
-                                <th style="padding:10px 16px; text-align:left; font-size:11px; font-weight:700; color:#6b7280; text-transform:uppercase; letter-spacing:0.05em;">RTL (Rencana Tindak Lanjut)</th>
-                            </tr>
-                        </thead>
-                        <tbody>${barisHtml}</tbody>
-                    </table>
+                <div style="display:none;">
+                    <div style="overflow-x:auto;">
+                        <table style="width:100%; border-collapse:collapse;">
+                            <thead>
+                                <tr style="background:#f9fafb;">
+                                    <th style="padding:10px 16px; text-align:center; font-size:11px; font-weight:700; color:#6b7280; text-transform:uppercase; letter-spacing:0.05em; width:52px;">No</th>
+                                    <th style="padding:10px 16px; text-align:left; font-size:11px; font-weight:700; color:#6b7280; text-transform:uppercase; letter-spacing:0.05em;">Kendala</th>
+                                    <th style="padding:10px 16px; text-align:left; font-size:11px; font-weight:700; color:#6b7280; text-transform:uppercase; letter-spacing:0.05em;">RTL (Rencana Tindak Lanjut)</th>
+                                </tr>
+                            </thead>
+                            <tbody>${barisHtml}</tbody>
+                        </table>
+                    </div>
                 </div>
             </div>`;
-            });
+        }
 
-            konten.innerHTML = html;
+        function gantiFilterEvaluasi() {
+            halamanSekarang = 1;
+            renderSemuaEvaluasi();
+        }
+
+        function pindahHalamanEvaluasi(hal) {
+            if (hal < 1) return;
+            halamanSekarang = hal;
+            renderSemuaEvaluasi();
+        }
+
+        function renderPaginationEvaluasi(total, totalHalaman) {
+            var nav = document.getElementById('paginationNav');
+            if (totalHalaman <= 1) {
+                nav.style.display = 'none';
+                nav.innerHTML = '';
+                return;
+            }
+
+            nav.style.display = 'flex';
+            nav.style.justifyContent = 'space-between';
+            nav.style.alignItems = 'center';
+            nav.style.flexWrap = 'wrap';
+            nav.style.gap = '10px';
+            nav.style.marginTop = '8px';
+
+            var info = '<div style="font-size:12px;color:#6b7280;">Menampilkan <b>' + total +
+                '</b> data &middot; Halaman <b>' + halamanSekarang + '/' + totalHalaman + '</b></div>';
+
+            var btn = function(label, hal, disabled, active) {
+                var style = 'display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;' +
+                    'padding:0 10px;font-size:12px;font-weight:600;border-radius:8px;border:1px solid #e5e7eb;' +
+                    'background:#fff;color:#374151;cursor:pointer;';
+                if (disabled) style += 'opacity:0.4;cursor:not-allowed;';
+                if (active) style += 'background:#7664E4;border-color:#7664E4;color:#fff;';
+                var onclick = disabled ? '' : ' onclick="pindahHalamanEvaluasi(' + hal + ')"';
+                return '<button type="button" style="' + style + '"' + onclick + '>' + label + '</button>';
+            };
+
+            var angka = '';
+            var mulaiH = Math.max(1, halamanSekarang - 2);
+            var akhirH = Math.min(totalHalaman, mulaiH + 4);
+            mulaiH = Math.max(1, akhirH - 4);
+            for (var i = mulaiH; i <= akhirH; i++) {
+                angka += btn(i, i, false, i === halamanSekarang);
+            }
+
+            nav.innerHTML = info +
+                '<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
+                btn('<i class="fas fa-chevron-left"></i>', halamanSekarang - 1, halamanSekarang === 1, false) +
+                angka +
+                btn('<i class="fas fa-chevron-right"></i>', halamanSekarang + 1, halamanSekarang === totalHalaman, false) +
+                '</div>';
+        }
+
+        function toggleKartu(header) {
+            var body = header.nextElementSibling;
+            var chevron = header.querySelector('.kartu-chevron');
+            if (!body || !chevron) return;
+            if (body.style.display === 'none') {
+                body.style.display = 'block';
+                chevron.style.transform = 'rotate(180deg)';
+            } else {
+                body.style.display = 'none';
+                chevron.style.transform = 'rotate(0deg)';
+            }
         }
 
         function escapeHtml(text) {
