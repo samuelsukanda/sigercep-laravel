@@ -40,6 +40,7 @@ use App\Http\Controllers\MandatoryTrainingController;
 use App\Http\Controllers\SuratKeputusanController;
 use App\Http\Controllers\KomiteMedikController;
 use App\Http\Controllers\HardwareController;
+use App\Http\Controllers\HardwareCredentialController;
 use App\Http\Controllers\HardwareEvaluasiController;
 use App\Http\Controllers\HardwareHealthCheckController;
 use App\Http\Controllers\PermissionController;
@@ -311,6 +312,13 @@ Route::middleware('auth')->group(function () {
         Route::get('hardware/health-check/items/{id}', [HardwareHealthCheckController::class, 'getItems'])->name('hardware.health-check.items');
         Route::post('hardware/health-check/simpan', [HardwareHealthCheckController::class, 'simpan'])->name('hardware.health-check.simpan');
         Route::delete('hardware/health-check/{id}', [HardwareHealthCheckController::class, 'hapus'])->name('hardware.health-check.hapus');
+
+        // Credential Hardware
+        Route::get('hardware/credential', [HardwareCredentialController::class, 'index'])->name('hardware.credential.index');
+        Route::get('hardware/credential/data', [HardwareCredentialController::class, 'getData'])->name('hardware.credential.data');
+        Route::get('hardware/credential/items/{id}', [HardwareCredentialController::class, 'getItems'])->name('hardware.credential.items');
+        Route::post('hardware/credential/simpan', [HardwareCredentialController::class, 'simpan'])->name('hardware.credential.simpan');
+        Route::delete('hardware/credential/{id}', [HardwareCredentialController::class, 'hapus'])->name('hardware.credential.hapus');
         Route::get('hardware/{ip}/device-printer', [HardwareController::class, 'showDevicePrinter'])->name('hardware.device-printer.show');
         Route::post('hardware/{ip}/device-printer', [HardwareController::class, 'storeDevicePrinter'])->name('hardware.device-printer.store');
         Route::delete('hardware/device-printer/{id}', [HardwareController::class, 'destroyDevicePrinter'])->name('hardware.device-printer.destroy');
