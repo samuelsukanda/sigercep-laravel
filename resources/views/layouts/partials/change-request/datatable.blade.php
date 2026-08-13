@@ -4,6 +4,7 @@
             <tr>
                 <th class="px-6 py-3">No</th>
                 <th class="px-6 py-3">Tanggal Permintaan</th>
+                <th class="px-6 py-3">Permintaan Fitur</th>
                 <th class="px-6 py-3">Deskripsi</th>
                 <th class="px-6 py-3 text-center">Status Dokumen</th>
                 <th class="px-6 py-3 text-center">Status Pengerjaan</th>
