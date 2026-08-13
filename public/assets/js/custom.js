@@ -267,6 +267,11 @@ $(document).ready(function () {
         allowClear: true,
     });
 
+    $("#permintaan_fitur").select2({
+        placeholder: "Pilih Permintaan Fitur",
+        allowClear: true,
+    });
+
     $("#permintaan_pengajuan").select2({
         placeholder: "Pilih Jenis Permintaan Pengajuan",
         allowClear: true,

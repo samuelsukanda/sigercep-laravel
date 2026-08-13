@@ -476,6 +476,13 @@ return [
         'Form IT'
     ],
 
+    'permintaan_fitur' => [
+        'Sigercep',
+        'HRIS',
+        'SIMRS',
+        'Website'
+    ],
+
     'permintaan_pengajuan' => [
         'Penerbitan  Dokumen Baru',
         'Revisi Dokumen',

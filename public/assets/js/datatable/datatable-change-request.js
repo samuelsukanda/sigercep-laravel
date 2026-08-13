@@ -38,6 +38,13 @@ let table = $("#changeRequestTable").DataTable({
             },
         },
         {
+            // Permintaan Fitur
+            data: "permintaan_fitur",
+            render: function (data) {
+                return data || "-";
+            },
+        },
+        {
             // Deskripsi
             data: "deskripsi",
             render: function (data) {

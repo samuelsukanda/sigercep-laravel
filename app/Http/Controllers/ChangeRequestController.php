@@ -28,7 +28,7 @@ class ChangeRequestController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $columns = ['id', 'tanggal_formatted', 'nama', 'jabatan', 'deskripsi', 'status_dokumen', 'status_pengerjaan', 'pic_request', 'no_tiket'];
+            $columns = ['id', 'tanggal_formatted', 'nama', 'jabatan', 'permintaan_fitur', 'deskripsi', 'status_dokumen', 'status_pengerjaan', 'pic_request', 'no_tiket'];
 
             $user = Auth::user();
             $isIT = $this->isIT();
@@ -69,6 +69,7 @@ class ChangeRequestController extends Controller
                 $query->where(function ($q) use ($search) {
                     $q->where('nama', 'like', "%{$search}%")
                         ->orWhere('jabatan', 'like', "%{$search}%")
+                        ->orWhere('permintaan_fitur', 'like', "%{$search}%")
                         ->orWhere('deskripsi', 'like', "%{$search}%")
                         ->orWhere('no_tiket', 'like', "%{$search}%")
                         ->orWhere('pic_request', 'like', "%{$search}%");
@@ -99,6 +100,7 @@ class ChangeRequestController extends Controller
                     'no_cr'                 => $item->id,
                     'nama'                  => ucfirst($item->nama),
                     'jabatan'               => $item->user->jabatan ?? $item->jabatan ?? '-',
+                    'permintaan_fitur'      => $item->permintaan_fitur ?? '-',
                     'deskripsi'             => $item->deskripsi,
                     'status_dokumen'        => $item->status_dokumen ?? 'Dalam Proses',
                     'status_pengerjaan'     => $item->status_pengerjaan ?? 'Open',
@@ -137,6 +139,7 @@ class ChangeRequestController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'permintaan_fitur' => 'required|in:Sigercep,HRIS,SIMRS,Website',
             'deskripsi'      => 'required|string',
             'file_pendukung' => 'nullable|file|mimes:pdf|max:20480',
         ]);
@@ -167,6 +170,7 @@ class ChangeRequestController extends Controller
             'user_id'           => $user->id,
             'nama'              => ucfirst($user->name),
             'jabatan'           => $user->jabatan ?? '-',
+            'permintaan_fitur'  => $request->permintaan_fitur,
             'deskripsi'         => $request->deskripsi,
             'file_pendukung'    => $filePendukung,
             'file_path'         => $filePath,
@@ -237,6 +241,7 @@ class ChangeRequestController extends Controller
         $request->validate([
             'status_dokumen'    => 'required|in:Terpenuhi,Dalam Proses,Tidak Ada',
             'status_pengerjaan' => 'required|in:Open,In Progress,Pending,QC,Done,Closed',
+            'permintaan_fitur'  => 'required|in:Sigercep,HRIS,SIMRS,Website',
             'no_tiket'          => 'nullable|string|max:100',
             'pic_request'       => 'nullable|string|max:100',
             'deskripsi'         => 'required|string',
@@ -270,6 +275,7 @@ class ChangeRequestController extends Controller
 
         $updateData = [
             'deskripsi'         => $request->deskripsi,
+            'permintaan_fitur'  => $request->permintaan_fitur,
             'status_dokumen'    => $request->status_dokumen,
             'status_pengerjaan' => $request->status_pengerjaan,
             'no_tiket'          => $request->no_tiket,

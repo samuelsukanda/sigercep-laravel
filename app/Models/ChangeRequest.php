@@ -15,6 +15,7 @@ class ChangeRequest extends Model
         'user_id',
         'nama',
         'jabatan',
+        'permintaan_fitur',
         'deskripsi',
         'file_pendukung',
         'file_path',

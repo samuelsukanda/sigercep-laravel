@@ -112,6 +112,11 @@
                                     @enderror
                                 </div>
 
+                                {{-- Permintaan Fitur --}}
+                                <x-form.select name="permintaan_fitur" label="Permintaan Fitur"
+                                    :options="config('units.permintaan_fitur')"
+                                    :selected="old('permintaan_fitur', $changeRequest->permintaan_fitur)" required />
+
                                 {{-- Deskripsi --}}
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-semibold mb-1 text-slate-700">

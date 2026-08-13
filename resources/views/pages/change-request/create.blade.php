@@ -32,6 +32,10 @@
                             </div>
 
                             <div class="grid grid-cols-1 gap-4">
+                                {{-- Permintaan Fitur --}}
+                                <x-form.select name="permintaan_fitur" label="Permintaan Fitur"
+                                    :options="config('units.permintaan_fitur')" :selected="old('permintaan_fitur')" required />
+
                                 {{-- Deskripsi --}}
                                 <div>
                                     <label class="block text-sm font-semibold mb-1 text-slate-700">

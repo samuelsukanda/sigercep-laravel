@@ -26,6 +26,12 @@
                                     {{ $changeRequest->user->jabatan ?? ($changeRequest->jabatan ?? '-') }}</p>
                             </div>
 
+                            {{-- Permintaan Fitur --}}
+                            <div>
+                                <label class="block mb-1 text-sm font-semibold text-slate-700">Permintaan Fitur</label>
+                                <p class="text-slate-600">{{ $changeRequest->permintaan_fitur ?? '-' }}</p>
+                            </div>
+
                             {{-- Tanggal Permintaan --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Tanggal Permintaan</label>
