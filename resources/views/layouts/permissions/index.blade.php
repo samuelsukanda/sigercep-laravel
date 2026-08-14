@@ -58,6 +58,13 @@
 @section('content')
     <div class="perm-page">
 
+        @php
+            // Tampilan label UI: komplain_ipsrs => Komplain Ipsrs, raden.ibnu => Raden Ibnu
+            $pretty = function ($s) {
+                return $s === '*' ? 'SUPERADMIN' : ucwords(str_replace(['_', '.'], ' ', $s));
+            };
+        @endphp
+
         {{-- Header --}}
         <div class="perm-header">
             <div class="perm-header-info">
@@ -129,8 +136,10 @@
 
         {{-- Table Card --}}
         <div class="perm-card">
-            <table class="perm-table">
+            <table class="perm-table perm-table-compact">
                 <colgroup>
+                    <col>
+                    <col>
                     <col>
                     <col>
                     <col>
@@ -139,80 +148,126 @@
                 <thead>
                     <tr>
                         <th><i class="fas fa-sitemap" style="margin-right:5px"></i>Menu</th>
-                        <th>Action</th>
-                        <th>Rules (Hak Akses)</th>
+                        <th class="perm-act-head">CREATE</th>
+                        <th class="perm-act-head">READ</th>
+                        <th class="perm-act-head">UPDATE</th>
+                        <th class="perm-act-head">DELETE</th>
                         <th style="text-align:center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="permissionsTableBody">
-                    @forelse($permissions as $p)
-                        @php
-                            $badgeClass = match ($p->action) {
-                                'create' => 'badge-create',
-                                'read' => 'badge-read',
-                                'update' => 'badge-update',
-                                'delete' => 'badge-delete',
-                                default => 'badge-read',
-                            };
-                            $ruleCount = $p->rules->count();
-                        @endphp
-                        <tr data-menu="{{ strtolower($p->menu) }}" data-permission-id="{{ $p->id }}">
+                    @php
+                        $super = $permissions->firstWhere('menu', '*');
+                    @endphp
 
-                            {{-- Menu --}}
+                    @if ($super)
+                        <tr data-menu="superadmin" class="perm-super-row">
                             <td data-label="Menu">
-                                <span class="menu-chip menu-text" title="{{ $p->menu }}">{{ $p->menu }}</span>
-                            </td>
-
-                            {{-- Action --}}
-                            <td data-label="Action">
-                                <span class="action-badge {{ $badgeClass }}">
-                                    <span class="dot"></span>
-                                    {{ strtoupper($p->action) }}
+                                <span class="menu-chip menu-text superadmin-chip" title="*">
+                                    <i class="fas fa-crown"></i> SUPERADMIN
+                                    <span class="superadmin-sub">(semua akses)</span>
                                 </span>
                             </td>
-
-                            {{-- Rules ringkas --}}
-                            <td data-label="Rules">
-                                @if ($ruleCount > 0)
-                                    <span class="rule-count-badge">
-                                        <i class="fas fa-users"></i>
-                                        {{ $ruleCount }} rule aktif
-                                    </span>
-                                @else
-                                    <span class="rule-count-public">
-                                        <i class="fas fa-globe"></i> Semua user (public)
-                                    </span>
-                                @endif
+                            <td colspan="4" class="text-center">
+                                <span class="rule-count-badge">
+                                    <i class="fas fa-users"></i> {{ $super->rules->count() }} rule aktif
+                                </span>
                             </td>
-
-                            {{-- Aksi --}}
                             <td data-label="Aksi">
                                 <div class="perm-action-btns">
                                     <button type="button" class="btn-manage-rules"
-                                        onclick="openRulePanel(
-                                                    {{ $p->id }},
-                                                    '{{ addslashes($p->menu) }}',
-                                                    '{{ $p->action }}'
-                                                )">
+                                        onclick="openRulePanel({{ $super->id }}, '{{ $pretty('*') }}', '*')">
                                         <i class="fas fa-sliders"></i> Kelola
                                     </button>
-
-                                    <form action="{{ route('permissions.destroy', $p->id) }}" method="POST"
-                                        class="form-delete" data-name="{{ $p->menu }} - {{ $p->action }}"
-                                        style="display:inline;margin:0">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" class="btn-delete-perm btn-delete-trigger">
-                                            <i class="fas fa-trash-can"></i>
-                                        </button>
-                                    </form>
                                 </div>
                             </td>
+                        </tr>
+                    @endif
 
+                    @forelse($allMenus as $menu)
+                        @php
+                            $byAction = [];
+                            foreach ($permissions->where('menu', $menu) as $p) {
+                                $byAction[$p->action] = $p;
+                            }
+                        @endphp
+                        <tr data-menu="{{ strtolower($menu) }}">
+                            <td data-label="Menu">
+                                <span class="menu-chip menu-text" title="{{ $menu }}">{{ $pretty($menu) }}</span>
+                            </td>
+                            @foreach (['create', 'read', 'update', 'delete'] as $act)
+                                @php $perm = $byAction[$act] ?? null; @endphp
+                                <td data-label="{{ strtoupper($act) }}" class="text-center">
+                                    @if ($perm)
+                                        @php $cnt = $perm->rules->count(); @endphp
+                                        <button type="button"
+                                            class="perm-act-cell {{ $cnt > 0 ? 'locked' : 'public' }}"
+                                            title="Kelola {{ strtoupper($act) }} {{ $pretty($menu) }}"
+                                            onclick="openRulePanel({{ $perm->id }}, '{{ addslashes($pretty($menu)) }}', '{{ $perm->action }}')">
+                                            @if ($cnt > 0)
+                                                <i class="fas fa-lock"></i> {{ $cnt }} rule
+                                            @else
+                                                <i class="fas fa-globe"></i> Public
+                                            @endif
+                                        </button>
+                                    @else
+                                        <button type="button" class="perm-act-cell add"
+                                            title="Tambah permission {{ strtoupper($act) }} {{ $pretty($menu) }}"
+                                            onclick="openPermModal('{{ addslashes($menu) }}', '{{ $act }}')">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    @endif
+                                </td>
+                            @endforeach
+                            <td data-label="Aksi">
+                                <div class="perm-action-btns">
+                                    <div class="perm-menu-dropdown">
+                                        <button type="button" class="btn-manage-rules"
+                                            onclick="toggleMenuDropdown(this)">
+                                            <i class="fas fa-sliders"></i> Kelola
+                                            <i class="fas fa-chevron-down perm-dd-caret"></i>
+                                        </button>
+                                        <div class="perm-menu-dropdown-panel">
+                                            @foreach (['create', 'read', 'update', 'delete'] as $act)
+                                                @php $p = $byAction[$act] ?? null; @endphp
+                                                @if ($p)
+                                                    <div class="dd-item">
+                                                        <a href="javascript:;"
+                                                            onclick="openRulePanel({{ $p->id }}, '{{ addslashes($pretty($menu)) }}', '{{ $act }}')">
+                                                            <span class="dd-action">{{ strtoupper($act) }}</span>
+                                                            <span class="dd-rule">
+                                                                {{ $p->rules->count() > 0 ? $p->rules->count() . ' rule' : 'Public' }}
+                                                            </span>
+                                                        </a>
+                                                        <form action="{{ route('permissions.destroy', $p->id) }}"
+                                                            method="POST" class="form-delete dd-del"
+                                                            data-name="{{ $pretty($menu) }} - {{ strtoupper($act) }}"
+                                                            style="display:inline;margin:0">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="button"
+                                                                class="btn-delete-trigger dd-del-btn"
+                                                                title="Hapus permission">
+                                                                <i class="fas fa-trash-can"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                @else
+                                                    <a href="javascript:;"
+                                                        onclick="openPermModal('{{ addslashes($menu) }}', '{{ $act }}')">
+                                                        <span class="dd-action">{{ strtoupper($act) }}</span>
+                                                        <span class="dd-add">+ Tambah</span>
+                                                    </a>
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                     @empty
                         <tr id="emptyRow">
-                            <td colspan="4">
+                            <td colspan="6">
                                 <div class="perm-empty">
                                     <div class="perm-empty-icon"><i class="fas fa-lock-open"></i></div>
                                     <h3>Belum ada permission</h3>
@@ -300,7 +355,7 @@
                     <input type="hidden" name="_method" value="POST">
 
                     <div style="margin-bottom: 1rem;">
-                        <label for="pf-name"
+                        <label for="pf-user"
                             style="
                                    display: block;
                                    font-size: 11px;
@@ -310,9 +365,9 @@
                                    letter-spacing: 0.06em;
                                    margin-bottom: 5px;
                                ">
-                            <i class="fas fa-user" style="margin-right:4px"></i>Nama User
+                            <i class="fas fa-user" style="margin-right:4px"></i>Pilih User
                         </label>
-                        <input type="text" id="pf-name" name="name" placeholder="Masukan nama user"
+                        <select id="pf-user"
                             style="
                                 width: 100%;
                                 box-sizing: border-box;
@@ -324,85 +379,24 @@
                                 border: 1px solid #cbd5e1;
                                 border-radius: 8px;
                                 outline: none;
-                                transition: border-color 0.15s, box-shadow 0.15s;
-                            "
-                            onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
-                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Isi jika ingin memberikan akses ke
-                            user tertentu saja</div>
-                    </div>
-
-                    <div style="margin-bottom: 1rem;">
-                        <label for="pf-unit"
-                            style="
-                                   display: block;
-                                   font-size: 11px;
-                                   font-weight: 700;
-                                   color: #475569;
-                                   text-transform: uppercase;
-                                   letter-spacing: 0.06em;
-                                   margin-bottom: 5px;
-                               ">
-                            <i class="fas fa-building" style="margin-right:4px"></i>Unit / Divisi
-                        </label>
-                        <input type="text" id="pf-unit" name="unit" placeholder="Masukan Unit"
-                            style="
-                                width: 100%;
-                                box-sizing: border-box;
-                                height: 38px;
-                                padding: 0 11px;
-                                font-size: 13.5px;
-                                color: #1e293b;
-                                background: #f8fafc;
-                                border: 1px solid #cbd5e1;
-                                border-radius: 8px;
-                                outline: none;
-                                transition: border-color 0.15s, box-shadow 0.15s;
-                            "
-                            onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
-                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Kosongkan jika tidak perlu filter
-                            unit</div>
-                    </div>
-
-                    <div style="margin-bottom: 1rem;">
-                        <label for="pf-jabatan"
-                            style="
-                                   display: block;
-                                   font-size: 11px;
-                                   font-weight: 700;
-                                   color: #475569;
-                                   text-transform: uppercase;
-                                   letter-spacing: 0.06em;
-                                   margin-bottom: 5px;
-                               ">
-                            <i class="fas fa-user-tie" style="margin-right:4px"></i>Jabatan
-                        </label>
-                        <input type="text" id="pf-jabatan" name="jabatan" placeholder="Masukan Jabatan"
-                            style="
-                                width: 100%;
-                                box-sizing: border-box;
-                                height: 38px;
-                                padding: 0 11px;
-                                font-size: 13.5px;
-                                color: #1e293b;
-                                background: #f8fafc;
-                                border: 1px solid #cbd5e1;
-                                border-radius: 8px;
-                                outline: none;
-                                transition: border-color 0.15s, box-shadow 0.15s;
-                            "
-                            onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
-                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Kosongkan jika tidak perlu filter
-                            jabatan</div>
+                            ">
+                            <option value="">Pilih User...</option>
+                            @foreach ($users as $u)
+                                <option value="{{ $u->id }}">{{ $pretty($u->name) }} — {{ $u->unit ?? '-' }}</option>
+                            @endforeach
+                        </select>
+                        <input type="hidden" name="name" id="pf-name">
+                        <input type="hidden" name="unit" id="pf-unit">
+                        <input type="hidden" name="jabatan" id="pf-jabatan">
+                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Rule otomatis terisi dari user
+                            yang dipilih (nama, unit, jabatan).</div>
                     </div>
 
                     <div
                         style="padding:12px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;margin-top:.5rem">
                         <p style="font-size:.72rem;color:#64748b;margin:0;line-height:1.6">
                             <i class="fas fa-circle-info" style="color:#7664E4;margin-right:5px"></i>
-                            Minimal isi satu field. Rule akan cocok jika semua field yang diisi sesuai dengan data user.
+                            Pilih satu user sebagai rule. Rule cocok jika data user (nama/unit/jabatan) sesuai.
                         </p>
                     </div>
                 </form>
@@ -535,23 +529,33 @@
                                ">
                             Menu <span style="color: #ef4444;">*</span>
                         </label>
-                        <input type="text" id="inp-menu" name="menu" placeholder="Masukan Menu" required
-                            style="
-                                width: 100%;
-                                box-sizing: border-box;
-                                height: 38px;
-                                padding: 0 11px;
-                                font-size: 13.5px;
-                                color: #1e293b;
-                                background: #f8fafc;
-                                border: 1px solid #cbd5e1;
-                                border-radius: 8px;
-                                outline: none;
-                                transition: border-color 0.15s, box-shadow 0.15s;
-                            "
-                            onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
-                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Nama menu/modul yang akan diatur
+                                                <div style="position: relative;">
+                            <select id="inp-menu" name="menu" required
+                                style="
+                                    width: 100%;
+                                    box-sizing: border-box;
+                                    height: 38px;
+                                    padding: 0 32px 0 11px;
+                                    font-size: 13.5px;
+                                    color: #1e293b;
+                                    background: #f8fafc;
+                                    border: 1px solid #cbd5e1;
+                                    border-radius: 8px;
+                                    outline: none;
+                                    appearance: none;
+                                    -webkit-appearance: none;
+                                    cursor: pointer;
+                                    transition: border-color 0.15s, box-shadow 0.15s;
+                                "
+                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
+                                <option value="">Pilih Menu...</option>
+                                @foreach ($allMenus as $m)
+                                    <option value="{{ $m }}">{{ $pretty($m) }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Pilih menu/modul yang akan diatur
                             aksesnya</div>
                     </div>
 
@@ -582,8 +586,6 @@
                                     border: 1px solid #cbd5e1;
                                     border-radius: 8px;
                                     outline: none;
-                                    appearance: none;
-                                    -webkit-appearance: none;
                                     cursor: pointer;
                                     transition: border-color 0.15s, box-shadow 0.15s;
                                 "
@@ -594,21 +596,10 @@
                                 <option value="update">UPDATE</option>
                                 <option value="delete">DELETE</option>
                             </select>
-                            {{-- Custom chevron icon --}}
-                            <span
-                                style="
-                                position: absolute;
-                                right: 10px;
-                                top: 50%;
-                                transform: translateY(-50%);
-                                pointer-events: none;
-                                color: #94a3b8;
-                                font-size: 11px;
-                            ">&#9660;</span>
                         </div>
                     </div>
 
-                    <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 1.25rem 0;">
+                    <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 0.5rem 0;">
 
                     {{-- Rules awal (opsional) --}}
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
@@ -635,9 +626,9 @@
                     </div>
 
                     <div id="modalRulesRows" style="display: flex; flex-direction: column; gap: 8px;">
-                        <div class="modal-rule-row"
-                            style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 28px; gap: 5px; align-items: center;">
-                            <input type="text" name="rules[0][name]" placeholder="Nama user"
+                        <div class="modal-rule-row" data-rule-row
+                            style="display: grid; grid-template-columns: minmax(0, 1fr) 28px; gap: 5px; align-items: center;">
+                            <select class="rule-user-select"
                                 style="
                                     width: 100%;
                                     box-sizing: border-box;
@@ -649,43 +640,20 @@
                                     border: 1px solid #cbd5e1;
                                     border-radius: 8px;
                                     outline: none;
-                                    transition: border-color 0.15s, box-shadow 0.15s;
-                                "
-                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
-                            <input type="text" name="rules[0][unit]" placeholder="Unit"
-                                style="
-                                    width: 100%;
-                                    box-sizing: border-box;
-                                    height: 38px;
-                                    padding: 0 11px;
-                                    font-size: 13.5px;
-                                    color: #1e293b;
-                                    background: #f8fafc;
-                                    border: 1px solid #cbd5e1;
-                                    border-radius: 8px;
-                                    outline: none;
-                                    transition: border-color 0.15s, box-shadow 0.15s;
-                                "
-                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
-                            <input type="text" name="rules[0][jabatan]" placeholder="Jabatan"
-                                style="
-                                    width: 100%;
-                                    box-sizing: border-box;
-                                    height: 38px;
-                                    padding: 0 11px;
-                                    font-size: 13.5px;
-                                    color: #1e293b;
-                                    background: #f8fafc;
-                                    border: 1px solid #cbd5e1;
-                                    border-radius: 8px;
-                                    outline: none;
-                                    transition: border-color 0.15s, box-shadow 0.15s;
-                                "
-                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
-                            <div></div>
+                                ">
+                                <option value="">Pilih User...</option>
+                                @foreach ($users as $u)
+                                    <option value="{{ $u->id }}">{{ $pretty($u->name) }} — {{ $u->unit ?? '-' }}</option>
+                                @endforeach
+                            </select>
+                            <input type="hidden" name="rules[0][name]">
+                            <input type="hidden" name="rules[0][unit]">
+                            <input type="hidden" name="rules[0][jabatan]">
+                            <button type="button" class="btn-rm-row-modal"
+                                onclick="this.closest('[data-rule-row]').remove()"
+                                style="width:28px; height:28px; border-radius:6px; border:1px solid #f0959b; background:transparent; color:#993c1d; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:0.75rem; padding:0; box-shadow:none;">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </div>
                     </div>
 
@@ -991,6 +959,16 @@
         ];
     })->values()) !!}
 </script>
+
+    {{-- Embed data users untuk dropdown rule --}}
+    <script id="usersData" type="application/json">
+    {!! json_encode($users->map(fn($u) => [
+        'id'      => $u->id,
+        'name'    => $u->name,
+        'unit'    => $u->unit    ?? '',
+        'jabatan' => $u->jabatan ?? '',
+    ])->values()) !!}
+</script>
 @endsection
 
 @push('scripts')
@@ -1014,23 +992,34 @@
             const container = document.getElementById('modalRulesRows');
             if (!container) return;
 
+            const users = JSON.parse(document.getElementById('usersData').textContent);
+
             const row = document.createElement('div');
             row.className = 'modal-rule-row';
+            row.setAttribute('data-rule-row', '');
             row.style.display = 'grid';
-            row.style.gridTemplateColumns = 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 28px';
+            row.style.gridTemplateColumns = 'minmax(0, 1fr) 28px';
             row.style.gap = '5px';
             row.style.alignItems = 'center';
             row.style.marginBottom = '5px';
 
+            const i = modalRuleIndex;
             row.innerHTML = `
-                <input type="text" name="rules[` + modalRuleIndex + `][name]" placeholder="Nama user" style="width:100%; height:38px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:0 11px; font-size:13.5px; outline:none;" onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'" onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
-                <input type="text" name="rules[` + modalRuleIndex + `][unit]" placeholder="Unit" style="width:100%; height:38px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:0 11px; font-size:13.5px; outline:none;" onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'" onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
-                <input type="text" name="rules[` + modalRuleIndex + `][jabatan]" placeholder="Jabatan" style="width:100%; height:38px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:0 11px; font-size:13.5px; outline:none;" onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'" onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
-                <button type="button" class="btn-rm-row-modal" onclick="this.parentElement.remove()" style="width:28px; height:28px; border-radius:6px; border:1px solid #f0959b; background:transparent; color:#993c1d; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:0.75rem; padding:0; box-shadow:none;">
+                <select class="rule-user-select" style="width:100%; height:38px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:0 11px; font-size:13.5px; outline:none;">
+                    <option value="">Pilih User...</option>
+                    ${users.map(function (u) {
+                        return '<option value="' + u.id + '">' + (window.formatUserName ? window.formatUserName(u.name) : u.name).replace(/</g, '&lt;') + ' — ' + (u.unit || '-') + '</option>';
+                    }).join('')}
+                </select>
+                <input type="hidden" name="rules[` + i + `][name]">
+                <input type="hidden" name="rules[` + i + `][unit]">
+                <input type="hidden" name="rules[` + i + `][jabatan]">
+                <button type="button" class="btn-rm-row-modal" onclick="this.closest('[data-rule-row]').remove()" style="width:28px; height:28px; border-radius:6px; border:1px solid #f0959b; background:transparent; color:#993c1d; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:0.75rem; padding:0; box-shadow:none;">
                     <i class="fas fa-trash"></i>
                 </button>
             `;
             container.appendChild(row);
+            window.initRuleUserSelect(row.querySelector('.rule-user-select'));
             modalRuleIndex++;
         }
     </script>

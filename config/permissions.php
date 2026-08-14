@@ -1,0 +1,41 @@
+<?php
+
+return [
+    // Daftar menu/modul yang bisa diatur hak aksesnya.
+    // Menjadi sumber pilihan dropdown "Menu" pada form Tambah Permission.
+    'menus' => [
+        'bank_ilmu',
+        'bank_spo',
+        'change_request',
+        'desain_grafis',
+        'dokumen_it',
+        'hardware',
+        'helpdesk',
+        'kecelakaan_kerja',
+        'kesehatan_lingkungan',
+        'kesiapan_ambulance',
+        'komite_medik',
+        'komplain_ipsrs',
+        'laporan_aset_rusak',
+        'laporan_perilaku',
+        'manajemen_risiko',
+        'mandatory_training',
+        'mutu',
+        'outsourcing_vendor',
+        'pelaporan_ikp',
+        'pemindahan_aset',
+        'peminjaman',
+        'peminjaman_aset',
+        'pengajuan_dokumen',
+        'pengembalian_aset',
+        'peraturan_perusahaan',
+        'permissions',
+        'reports',
+        'reservasi_kendaraan',
+        'reservasi_ruangan',
+        'surat_keputusan',
+        'toner',
+        'utw',
+        'visitasi',
+    ],
+];

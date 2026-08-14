@@ -1223,3 +1223,170 @@
         display: none !important;
     }
 }
+
+/* -- Compact permission table (revamp) -- */
+.perm-table-compact colgroup col:nth-child(1) { width: 190px; }
+.perm-table-compact colgroup col:nth-child(2) { width: 110px; }
+.perm-table-compact colgroup col:nth-child(3) { width: 110px; }
+.perm-table-compact colgroup col:nth-child(4) { width: 110px; }
+.perm-table-compact colgroup col:nth-child(5) { width: 110px; }
+.perm-table-compact colgroup col:nth-child(6) { width: 150px; }
+
+.perm-table-compact .perm-act-head {
+    text-align: center !important;
+}
+
+.perm-act-cell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px 8px;
+    border-radius: 8px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: "Open Sans", sans-serif;
+    line-height: 1;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    box-shadow: none;
+}
+.perm-act-cell.public {
+    background: var(--surface3);
+    border: 1px solid var(--border-mid);
+    color: var(--hint);
+}
+.perm-act-cell.public:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.perm-act-cell.locked {
+    background: var(--accent-lt);
+    border: 1px solid rgba(118, 100, 228, 0.28);
+    color: var(--accent);
+}
+.perm-act-cell.locked:hover {
+    background: #e6e0ff;
+    border-color: var(--accent);
+}
+.perm-act-cell.add {
+    background: transparent;
+    border: 1px dashed var(--border-mid);
+    color: var(--hint);
+    font-size: 0.8rem;
+}
+.perm-act-cell.add:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-lt);
+}
+
+/* -- Superadmin row -- */
+.perm-super-row td {
+    background: rgba(118, 100, 228, 0.05) !important;
+}
+.superadmin-chip {
+    background: linear-gradient(135deg, #7664e4, #6453d4) !important;
+    border-color: transparent !important;
+    color: #fff !important;
+    max-width: none !important;
+}
+.superadmin-sub {
+    font-family: "Open Sans", sans-serif;
+    font-size: 0.65rem;
+    font-weight: 400;
+    opacity: 0.85;
+}
+
+/* -- Dropdown Kelola per menu -- */
+.perm-table td:last-child {
+    overflow: visible !important;
+}
+.perm-menu-dropdown {
+    position: relative;
+    display: inline-flex;
+}
+.perm-dd-caret {
+    font-size: 9px;
+    margin-left: 3px;
+}
+.perm-menu-dropdown-panel {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    z-index: 60;
+    min-width: 230px;
+    background: #fff;
+    border: 1px solid var(--border-mid);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+    padding: 5px;
+}
+.perm-menu-dropdown-panel a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 7px;
+    text-decoration: none;
+    color: var(--text);
+    transition: background 0.12s;
+}
+.perm-menu-dropdown-panel a:hover {
+    background: var(--surface2);
+}
+.dd-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+}
+.dd-item a {
+    flex: 1;
+}
+.dd-action {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: var(--text);
+}
+.dd-rule {
+    font-size: 0.68rem;
+    color: var(--hint);
+}
+.dd-add {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+.dd-del-btn {
+    border: none;
+    background: none;
+    color: #ef4444;
+    cursor: pointer;
+    padding: 4px 7px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    box-shadow: none;
+    transition: background 0.12s;
+}
+.dd-del-btn:hover {
+    background: #fee2e2;
+}
+
+/* Select2 dropdown di-append ke <body> (bukan di dalam panel/modal),
+   z-index default 1051 < overlay panel (99998) => pilihan tertutup.
+   Naikkan agar selalu di atas panel & modal. */
+.select2-dropdown {
+    z-index: 100010 !important;
+}
+
+/* SweetAlert2 konfirmasi hapus harus di atas side panel (99999) & modal (100001) */
+.swal2-container {
+    z-index: 100100 !important;
+}

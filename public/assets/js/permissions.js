@@ -32,12 +32,29 @@
     var permissionsData = JSON.parse(
         document.getElementById("permissionsData").textContent,
     );
+    var usersData = JSON.parse(
+        document.getElementById("usersData").textContent,
+    );
     var activePerm = null;
     var activeTab = "list";
     var ruleCounter = 1;
 
     /* ───── MODAL Tambah Permission ───── */
-    window.openPermModal = function () {
+    window.openPermModal = function (menu, action) {
+        var menuSel = document.getElementById("inp-menu");
+        var actionSel = document.getElementById("inp-action");
+
+        if (menu) {
+            if (window.jQuery && window.jQuery.fn && window.jQuery.fn.select2) {
+                window.jQuery(menuSel).val(menu).trigger("change");
+            } else {
+                menuSel.value = menu;
+            }
+        }
+        if (action) {
+            actionSel.value = action;
+        }
+
         document.getElementById("permModalOverlay").classList.add("open");
     };
 
@@ -53,18 +70,15 @@
 
     /* ───── SUBMIT ADD RULE ───── */
     window.submitAddRule = function () {
-        const form = document.getElementById("addRuleForm");
+        const userSel = document.getElementById("pf-user");
 
-        const unit = document.getElementById("pf-unit").value.trim();
-        const jabatan = document.getElementById("pf-jabatan").value.trim();
-        const name = document.getElementById("pf-name").value.trim();
-
-        if (!unit && !jabatan && !name) {
-            toastr.warning("Isi minimal satu field!", "Info");
+        if (!userSel || !userSel.value) {
+            toastr.warning("Pilih user terlebih dahulu!", "Info");
             return;
         }
 
-        form.submit();
+        fillAddRuleHidden();
+        document.getElementById("addRuleForm").submit();
     };
 
     /* ───── SIDE PANEL ───── */
@@ -228,9 +242,10 @@
     /* ───── MODAL EDIT RULE ───── */
     window.openEditRuleModal = function (ruleId, name, unit, jabatan) {
         document.getElementById("editRuleId").value = ruleId;
-        document.getElementById("edit-name").value = name || "";
-        document.getElementById("edit-unit").value = unit || "";
-        document.getElementById("edit-jabatan").value = jabatan || "";
+        document.getElementById("edit-name").value = formatUserName(name || "");
+        document.getElementById("edit-unit").value = formatUserName(unit || "");
+        document.getElementById("edit-jabatan").value =
+            formatUserName(jabatan || "");
 
         // Reset state tombol
         var btn = document.getElementById("btnSaveEditRule");
@@ -252,9 +267,18 @@
 
     window.submitEditRule = async function () {
         const ruleId = document.getElementById("editRuleId").value;
-        const name = document.getElementById("edit-name").value.trim();
-        const unit = document.getElementById("edit-unit").value.trim();
-        const jabatan = document.getElementById("edit-jabatan").value.trim();
+        const name = canonicalUserField(
+            document.getElementById("edit-name").value.trim(),
+            "name",
+        );
+        const unit = canonicalUserField(
+            document.getElementById("edit-unit").value.trim(),
+            "unit",
+        );
+        const jabatan = canonicalUserField(
+            document.getElementById("edit-jabatan").value.trim(),
+            "jabatan",
+        );
 
         if (!name && !unit && !jabatan) {
             toastr.warning("Isi minimal satu field!", "Info");
@@ -330,7 +354,6 @@
     /* ───── HELPERS ───── */
     function formatUserName(name) {
         if (!name) return "";
-
         if (name.includes(".")) {
             return name
                 .split(".")
@@ -353,6 +376,23 @@
             .join(" ");
     }
 
+    window.formatUserName = formatUserName;
+
+    /* Ubah nilai tampilan kembali ke format raw DB (raden.ibnu, dll).
+       Cocokkan dengan usersData per field, abaikan spasi/titik/underscore. */
+    function normalizeKey(s) {
+        return String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    }
+
+    function canonicalUserField(input, field) {
+        var key = normalizeKey(input);
+        if (!key) return input;
+        var hit = usersData.find(function (u) {
+            return normalizeKey(u[field]) === key;
+        });
+        return hit ? hit[field] : input;
+    }
+
     // Escape untuk innerHTML
     function esc(str) {
         return String(str)
@@ -368,10 +408,148 @@
     }
 
     function clearAddForm() {
+        var sel = document.getElementById("pf-user");
+        if (sel) {
+            if (window.jQuery && window.jQuery.fn && window.jQuery.fn.select2) {
+                window.jQuery(sel).val(null).trigger("change");
+            } else {
+                sel.value = "";
+            }
+        }
         document.getElementById("pf-unit").value = "";
         document.getElementById("pf-jabatan").value = "";
         document.getElementById("pf-name").value = "";
     }
+
+    /* ───── USER SELECT (auto-fill name/unit/jabatan) ───── */
+    function fillAddRuleHidden() {
+        var sel = document.getElementById("pf-user");
+        if (!sel) return;
+        var user = usersData.find(function (u) {
+            return String(u.id) === String(sel.value);
+        });
+        document.getElementById("pf-name").value = user ? user.name : "";
+        document.getElementById("pf-unit").value = user ? user.unit : "";
+        document.getElementById("pf-jabatan").value = user ? user.jabatan : "";
+    }
+
+    function initAddRuleUserSelect() {
+        var sel = document.getElementById("pf-user");
+        if (!sel) return;
+        var $sel = window.jQuery(sel);
+        if (window.jQuery.fn.select2) {
+            $sel.select2({
+                width: "100%",
+                placeholder: "Pilih User...",
+                allowClear: true,
+            });
+        }
+        $sel.on("change", fillAddRuleHidden);
+    }
+
+    window.initRuleUserSelect = function (select) {
+        var $sel = window.jQuery(select);
+        if (window.jQuery.fn.select2) {
+            $sel.select2({
+                width: "100%",
+                placeholder: "Pilih User...",
+                allowClear: true,
+            });
+        }
+        $sel.on("change", function () {
+            var val = window.jQuery(this).val();
+            var row = window.jQuery(this).closest("[data-rule-row]");
+            var user = usersData.find(function (u) {
+                return String(u.id) === String(val);
+            });
+            row.find('input[name$="[name]"]').val(user ? user.name : "");
+            row.find('input[name$="[unit]"]').val(user ? user.unit : "");
+            row.find('input[name$="[jabatan]"]').val(user ? user.jabatan : "");
+        });
+    };
+
+    /* ───── MENU SELECT (modal Tambah Permission) ───── */
+    function initMenuSelect() {
+        var $menu = window.jQuery("#inp-menu");
+        if (window.jQuery.fn.select2) {
+            $menu.select2({
+                width: "100%",
+                placeholder: "Pilih Menu...",
+                allowClear: false,
+            });
+        }
+    }
+
+    /* ───── DROPDOWN "Kelola" per menu ───── */
+    function closeAllDropdowns() {
+        document
+            .querySelectorAll(".perm-menu-dropdown-panel")
+            .forEach(function (p) {
+                p.style.display = "none";
+            });
+    }
+
+    window.toggleMenuDropdown = function (btn) {
+        var dd = btn.closest(".perm-menu-dropdown");
+        if (!dd) return;
+        var panel = dd.querySelector(".perm-menu-dropdown-panel");
+        var isOpen = panel.style.display === "block";
+        closeAllDropdowns();
+        if (!isOpen) {
+            panel.style.display = "block";
+            panel.style.top = "calc(100% + 6px)";
+            panel.style.bottom = "auto";
+            // Jika dropdown nyaris keluar viewport bawah, buka ke atas
+            var r = panel.getBoundingClientRect();
+            if (window.innerHeight - r.bottom < 10) {
+                panel.style.top = "auto";
+                panel.style.bottom = "calc(100% + 6px)";
+            }
+        }
+    };
+
+    document.addEventListener("click", function (e) {
+        if (!e.target.closest(".perm-menu-dropdown")) {
+            closeAllDropdowns();
+        }
+    });
+
+    /* ───── INIT ───── */
+    function onReady(fn) {
+        if (document.readyState !== "loading") fn();
+        else document.addEventListener("DOMContentLoaded", fn);
+    }
+
+    onReady(function () {
+        if (!window.jQuery) return;
+        initMenuSelect();
+        initAddRuleUserSelect();
+        document
+            .querySelectorAll(".rule-user-select")
+            .forEach(initRuleUserSelect);
+
+        // Guard duplikat menu+action sebelum simpan
+        document
+            .getElementById("permForm")
+            .addEventListener("submit", function (e) {
+                var menu = document.getElementById("inp-menu").value.trim();
+                var action = document.getElementById("inp-action").value;
+                var dup = permissionsData.some(function (p) {
+                    return p.menu === menu && p.action === action;
+                });
+                if (dup) {
+                    e.preventDefault();
+                    toastr.error(
+                        "Permission untuk menu '" +
+                            menu +
+                            "' dengan action '" +
+                            action +
+                            "' sudah ada!",
+                        "Error",
+                    );
+                }
+            });
+    });
 })();
 
 /* ───── Alert Delete Global ───── */

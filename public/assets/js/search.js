@@ -71,7 +71,9 @@
                 const menuName =
                     row.getAttribute("data-menu") || originalText.toLowerCase();
 
-                if (menuName.includes(lowerSearchTerm)) {
+                // Abaikan underscore/titik: komplain_ipsrs == komplain ipsrs
+                const norm = (s) => s.replace(/[_.]/g, "");
+                if (norm(menuName).includes(norm(lowerSearchTerm))) {
                     row.classList.remove("hidden-row");
                     visibleCount++;
                     // Apply highlight
@@ -107,7 +109,7 @@
                 const newEmptyRow = document.createElement("tr");
                 newEmptyRow.id = "searchEmptyRow";
                 newEmptyRow.innerHTML = `
-                            <td colspan="4">
+                            <td colspan="6">
                                 <div class="search-empty-result">
                                     <i class="fas fa-search"></i>
                                     <h3>Tidak ada menu yang ditemukan</h3>

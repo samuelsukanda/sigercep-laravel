@@ -11,7 +11,9 @@ class PermissionController extends Controller
     public function index()
     {
         $permissions = Permission::with('rules')->orderBy('menu')->get();
-        return view('layouts.permissions.index', compact('permissions'));
+        $users = \App\Models\User::orderBy('name')->get(['id', 'name', 'unit', 'jabatan']);
+        $allMenus = config('permissions.menus', []);
+        return view('layouts.permissions.index', compact('permissions', 'users', 'allMenus'));
     }
 
     public function store(Request $request)
