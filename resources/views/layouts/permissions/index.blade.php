@@ -37,15 +37,18 @@
             border-bottom-color: #7664E4 !important;
             background: #fff !important;
         }
+
         .rule-tab-btn.active .rule-tab-badge {
             background: #7664E4 !important;
             color: #fff !important;
         }
+
         .rule-list-icon {
             color: #7664E4 !important;
             background: #f0ecff !important;
             border-color: rgba(118, 100, 228, 0.18) !important;
         }
+
         .rule-list-item:hover {
             border-color: #7664E4 !important;
         }
@@ -187,10 +190,10 @@
                                 <div class="perm-action-btns">
                                     <button type="button" class="btn-manage-rules"
                                         onclick="openRulePanel(
-                {{ $p->id }},
-                '{{ addslashes($p->menu) }}',
-                '{{ $p->action }}'
-            )">
+                                                    {{ $p->id }},
+                                                    '{{ addslashes($p->menu) }}',
+                                                    '{{ $p->action }}'
+                                                )">
                                         <i class="fas fa-sliders"></i> Kelola
                                     </button>
 
@@ -230,13 +233,17 @@
     <div class="rule-panel" id="rulePanel" style="background: #fff;">
 
         {{-- Panel Header --}}
-        <div class="rule-panel-header" style="background: #7664E4; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; border-bottom: none; height: auto;">
+        <div class="rule-panel-header"
+            style="background: #7664E4; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; border-bottom: none; height: auto;">
             <div class="rule-panel-header-info">
-                <h3 id="panelTitle" style="margin: 0; font-size: 14px; font-weight: 700; color: #fff; line-height: 1.2; font-family: inherit;">Kelola Rules</h3>
+                <h3 id="panelTitle"
+                    style="margin: 0; font-size: 14px; font-weight: 700; color: #fff; line-height: 1.2; font-family: inherit;">
+                    Kelola Rules</h3>
                 <p style="margin: 3px 0 0 0; display: flex; align-items: center; gap: 5px;">
                     <span id="panelMenuChip"
                         style="font-family:'Courier New',monospace;font-size:.72rem;background:rgba(255,255,255,0.18);color:#fff;padding:2px 8px;border-radius:4px"></span>
-                    <span id="panelActionBadge" style="font-size:.65rem; font-weight:700; color:#fff; background:rgba(255,255,255,0.25); padding:2px 6px; border-radius:4px;"></span>
+                    <span id="panelActionBadge"
+                        style="font-size:.65rem; font-weight:700; color:#fff; background:rgba(255,255,255,0.25); padding:2px 6px; border-radius:4px;"></span>
                 </p>
             </div>
             <button class="rule-panel-close" onclick="closeRulePanel()" type="button"
@@ -260,14 +267,16 @@
         </div>
 
         {{-- Tabs --}}
-        <div class="rule-panel-tabs" style="display: flex; border-bottom: 1px solid #e2e8f0; background: #f8fafc; flex-shrink: 0;">
+        <div class="rule-panel-tabs"
+            style="display: flex; border-bottom: 1px solid #e2e8f0; background: #f8fafc; flex-shrink: 0;">
             <button class="rule-tab-btn active" id="tabBtnList" onclick="switchTab('list')" type="button"
                 style="
                     flex: 1; padding: 12px; font-size: 13px; font-weight: 600; color: #64748b; background: transparent; border: none; border-bottom: 2px solid transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;
                 "
                 onfocus="this.style.outline='none'">
                 <i class="fas fa-list-ul"></i> Daftar User
-                <span class="rule-tab-badge" id="tabCountBadge" style="background: #e2e8f0; color: #64748b; border-radius: 20px; padding: 1px 7px; font-size: 11px; font-weight: 700; min-width: 18px; text-align: center;">0</span>
+                <span class="rule-tab-badge" id="tabCountBadge"
+                    style="background: #e2e8f0; color: #64748b; border-radius: 20px; padding: 1px 7px; font-size: 11px; font-weight: 700; min-width: 18px; text-align: center;">0</span>
             </button>
             <button class="rule-tab-btn" id="tabBtnAdd" onclick="switchTab('add')" type="button"
                 style="
@@ -292,7 +301,7 @@
 
                     <div style="margin-bottom: 1rem;">
                         <label for="pf-name"
-                               style="
+                            style="
                                    display: block;
                                    font-size: 11px;
                                    font-weight: 700;
@@ -318,14 +327,14 @@
                                 transition: border-color 0.15s, box-shadow 0.15s;
                             "
                             onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
-                        >
-                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Isi jika ingin memberikan akses ke user tertentu saja</div>
+                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
+                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Isi jika ingin memberikan akses ke
+                            user tertentu saja</div>
                     </div>
 
                     <div style="margin-bottom: 1rem;">
                         <label for="pf-unit"
-                               style="
+                            style="
                                    display: block;
                                    font-size: 11px;
                                    font-weight: 700;
@@ -351,14 +360,14 @@
                                 transition: border-color 0.15s, box-shadow 0.15s;
                             "
                             onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
-                        >
-                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Kosongkan jika tidak perlu filter unit</div>
+                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
+                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Kosongkan jika tidak perlu filter
+                            unit</div>
                     </div>
 
                     <div style="margin-bottom: 1rem;">
                         <label for="pf-jabatan"
-                               style="
+                            style="
                                    display: block;
                                    font-size: 11px;
                                    font-weight: 700;
@@ -384,12 +393,13 @@
                                 transition: border-color 0.15s, box-shadow 0.15s;
                             "
                             onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
-                        >
-                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Kosongkan jika tidak perlu filter jabatan</div>
+                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
+                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Kosongkan jika tidak perlu filter
+                            jabatan</div>
                     </div>
 
-                    <div style="padding:12px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;margin-top:.5rem">
+                    <div
+                        style="padding:12px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;margin-top:.5rem">
                         <p style="font-size:.72rem;color:#64748b;margin:0;line-height:1.6">
                             <i class="fas fa-circle-info" style="color:#7664E4;margin-right:5px"></i>
                             Minimal isi satu field. Rule akan cocok jika semua field yang diisi sesuai dengan data user.
@@ -400,7 +410,8 @@
         </div>
 
         {{-- Panel Footer --}}
-        <div class="rule-panel-footer" id="panelFooter" style="padding: 1rem 1.25rem; border-top: 1px solid #e2e8f0; background: #f8fafc; display: flex; gap: 8px; justify-content: flex-end; flex-shrink: 0;">
+        <div class="rule-panel-footer" id="panelFooter"
+            style="padding: 1rem 1.25rem; border-top: 1px solid #e2e8f0; background: #f8fafc; display: flex; gap: 8px; justify-content: flex-end; flex-shrink: 0;">
             <button type="button" onclick="closeRulePanel()"
                 style="
                     height: 38px;
@@ -414,8 +425,7 @@
                     cursor: pointer;
                     transition: background 0.15s;
                 "
-                onmouseover="this.style.background='#e2e8f0'"
-                onmouseout="this.style.background='#f1f5f9'">
+                onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">
                 Tutup
             </button>
             <button type="button" id="btnSaveRule" onclick="submitAddRule()"
@@ -443,10 +453,12 @@
 
     {{-- MODAL — Tambah Permission --}}
     <div class="perm-modal-overlay" id="permModalOverlay" onclick="handleModalOverlayClick(event)">
-        <div class="perm-modal" id="permModal" style="overflow: hidden; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); border: none; max-width: 480px; width: 100%;">
+        <div class="perm-modal" id="permModal"
+            style="overflow: hidden; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); border: none; max-width: 480px; width: 100%;">
 
             {{-- ── Header ── --}}
-            <div style="
+            <div
+                style="
                 background: #7664E4;
                 padding: 1rem 1.25rem;
                 display: flex;
@@ -454,7 +466,8 @@
                 justify-content: space-between;
             ">
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="
+                    <div
+                        style="
                         width: 32px; height: 32px;
                         border-radius: 8px;
                         background: rgba(255,255,255,0.18);
@@ -464,20 +477,24 @@
                         <i class="fas fa-shield-halved" style="color: #fff; font-size: 13px;"></i>
                     </div>
                     <div>
-                        <h3 id="modalTitle" style="
+                        <h3 id="modalTitle"
+                            style="
                             margin: 0;
                             font-size: 14px;
                             font-weight: 700;
                             color: #fff;
                             line-height: 1.2;
                             font-family: inherit;
-                        ">Tambah Permission Baru</h3>
-                        <p style="
+                        ">
+                            Tambah Permission Baru</h3>
+                        <p
+                            style="
                             margin: 0;
                             font-size: 11px;
                             color: rgba(255,255,255,0.7);
                             margin-top: 1px;
-                        ">Kelola modul dan level akses sistem</p>
+                        ">
+                            Kelola modul dan level akses sistem</p>
                     </div>
                 </div>
                 <button class="perm-modal-close" onclick="closePermModal()" type="button"
@@ -499,14 +516,15 @@
                 </button>
             </div>
 
-            <form action="{{ route('permissions.store') }}" method="POST" id="permForm" style="padding: 1.375rem 1.25rem 1.25rem; margin: 0; background: #fff;">
+            <form action="{{ route('permissions.store') }}" method="POST" id="permForm"
+                style="padding: 1.375rem 1.25rem 1.25rem; margin: 0; background: #fff;">
                 @csrf
                 <div class="perm-modal-body" style="padding: 0 !important; margin-bottom: 1.375rem;">
 
                     {{-- Menu --}}
                     <div style="margin-bottom: 1rem;">
                         <label for="inp-menu"
-                               style="
+                            style="
                                    display: block;
                                    font-size: 11px;
                                    font-weight: 700;
@@ -517,12 +535,7 @@
                                ">
                             Menu <span style="color: #ef4444;">*</span>
                         </label>
-                        <input
-                            type="text"
-                            id="inp-menu"
-                            name="menu"
-                            placeholder="Masukan Menu"
-                            required
+                        <input type="text" id="inp-menu" name="menu" placeholder="Masukan Menu" required
                             style="
                                 width: 100%;
                                 box-sizing: border-box;
@@ -537,15 +550,15 @@
                                 transition: border-color 0.15s, box-shadow 0.15s;
                             "
                             onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
-                        />
-                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Nama menu/modul yang akan diatur aksesnya</div>
+                            onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
+                        <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Nama menu/modul yang akan diatur
+                            aksesnya</div>
                     </div>
 
                     {{-- Action / Level Akses --}}
                     <div style="margin-bottom: 1rem;">
                         <label for="inp-action"
-                               style="
+                            style="
                                    display: block;
                                    font-size: 11px;
                                    font-weight: 700;
@@ -557,10 +570,7 @@
                             Action / Level Akses <span style="color: #ef4444;">*</span>
                         </label>
                         <div style="position: relative;">
-                            <select
-                                id="inp-action"
-                                name="action"
-                                required
+                            <select id="inp-action" name="action" required
                                 style="
                                     width: 100%;
                                     box-sizing: border-box;
@@ -578,15 +588,15 @@
                                     transition: border-color 0.15s, box-shadow 0.15s;
                                 "
                                 onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
-                            >
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
                                 <option value="read">READ</option>
                                 <option value="create">CREATE</option>
                                 <option value="update">UPDATE</option>
                                 <option value="delete">DELETE</option>
                             </select>
                             {{-- Custom chevron icon --}}
-                            <span style="
+                            <span
+                                style="
                                 position: absolute;
                                 right: 10px;
                                 top: 50%;
@@ -602,7 +612,9 @@
 
                     {{-- Rules awal (opsional) --}}
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <span style="font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em;">Rules awal (opsional)</span>
+                        <span
+                            style="font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em;">Rules
+                            awal (opsional)</span>
                         <button type="button" onclick="addModalRuleRow()"
                             style="
                                 font-size: 11px !important;
@@ -617,14 +629,14 @@
                                 font-weight: 700 !important;
                                 box-shadow: none !important;
                             "
-                            onmouseover="this.style.opacity='0.8'"
-                            onmouseout="this.style.opacity='1'">
+                            onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
                             <i class="fas fa-plus"></i> Tambah baris
                         </button>
                     </div>
 
                     <div id="modalRulesRows" style="display: flex; flex-direction: column; gap: 8px;">
-                        <div class="modal-rule-row" style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 28px; gap: 5px; align-items: center;">
+                        <div class="modal-rule-row"
+                            style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 28px; gap: 5px; align-items: center;">
                             <input type="text" name="rules[0][name]" placeholder="Nama user"
                                 style="
                                     width: 100%;
@@ -640,8 +652,7 @@
                                     transition: border-color 0.15s, box-shadow 0.15s;
                                 "
                                 onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
-                            >
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
                             <input type="text" name="rules[0][unit]" placeholder="Unit"
                                 style="
                                     width: 100%;
@@ -657,8 +668,7 @@
                                     transition: border-color 0.15s, box-shadow 0.15s;
                                 "
                                 onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
-                            >
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
                             <input type="text" name="rules[0][jabatan]" placeholder="Jabatan"
                                 style="
                                     width: 100%;
@@ -674,12 +684,11 @@
                                     transition: border-color 0.15s, box-shadow 0.15s;
                                 "
                                 onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
-                            >
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
                             <div></div>
                         </div>
                     </div>
-                    
+
                     <div style="font-size: 11px; color: #64748b; margin-top: 8px;">
                         <i class="fas fa-info-circle"></i>
                         Kosongkan jika ingin semua user dapat mengakses. Rule bisa ditambah setelah disimpan.
@@ -688,7 +697,8 @@
                 </div>
 
                 {{-- Footer --}}
-                <div style="
+                <div
+                    style="
                     border-top: 1px solid #f1f5f9;
                     padding-top: 1rem;
                     display: flex;
@@ -709,8 +719,7 @@
                             cursor: pointer;
                             transition: background 0.15s;
                         "
-                        onmouseover="this.style.background='#e2e8f0'"
-                        onmouseout="this.style.background='#f1f5f9'">
+                        onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">
                         Batal
                     </button>
                     <button type="submit"
@@ -741,9 +750,11 @@
 
     {{-- MODAL — Edit Rule --}}
     <div class="perm-modal-overlay" id="editRuleModalOverlay" onclick="handleEditRuleOverlayClick(event)">
-        <div class="perm-modal" id="editRuleModal" style="overflow: hidden; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); border: none; max-width: 480px; width: 100%;">
+        <div class="perm-modal" id="editRuleModal"
+            style="overflow: hidden; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); border: none; max-width: 480px; width: 100%;">
 
-            <div style="
+            <div
+                style="
                 background: #7664E4;
                 padding: 1rem 1.25rem;
                 display: flex;
@@ -751,7 +762,8 @@
                 justify-content: space-between;
             ">
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="
+                    <div
+                        style="
                         width: 32px; height: 32px;
                         border-radius: 8px;
                         background: rgba(255,255,255,0.18);
@@ -761,20 +773,24 @@
                         <i class="fas fa-pen-to-square" style="color: #fff; font-size: 13px;"></i>
                     </div>
                     <div>
-                        <h3 id="editModalTitle" style="
+                        <h3 id="editModalTitle"
+                            style="
                             margin: 0;
                             font-size: 14px;
                             font-weight: 700;
                             color: #fff;
                             line-height: 1.2;
                             font-family: inherit;
-                        ">Edit Rule</h3>
-                        <p style="
+                        ">
+                            Edit Rule</h3>
+                        <p
+                            style="
                             margin: 0;
                             font-size: 11px;
                             color: rgba(255,255,255,0.7);
                             margin-top: 1px;
-                        ">Ubah filter hak akses untuk user</p>
+                        ">
+                            Ubah filter hak akses untuk user</p>
                     </div>
                 </div>
                 <button class="perm-modal-close" onclick="closeEditRuleModal()" type="button"
@@ -796,13 +812,14 @@
                 </button>
             </div>
 
-            <div class="perm-modal-body" style="padding: 1.375rem 1.25rem 1.25rem !important; margin: 0; background: #fff;">
+            <div class="perm-modal-body"
+                style="padding: 1.375rem 1.25rem 1.25rem !important; margin: 0; background: #fff;">
                 {{-- ID rule disimpan di sini --}}
                 <input type="hidden" id="editRuleId">
 
                 <div style="margin-bottom: 1rem;">
                     <label for="edit-name"
-                           style="
+                        style="
                                display: block;
                                font-size: 11px;
                                font-weight: 700;
@@ -828,14 +845,14 @@
                             transition: border-color 0.15s, box-shadow 0.15s;
                         "
                         onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                        onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
-                    >
-                    <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Kosongkan jika tidak perlu filter nama</div>
+                        onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
+                    <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Kosongkan jika tidak perlu filter nama
+                    </div>
                 </div>
 
                 <div style="margin-bottom: 1rem;">
                     <label for="edit-unit"
-                           style="
+                        style="
                                display: block;
                                font-size: 11px;
                                font-weight: 700;
@@ -861,14 +878,14 @@
                             transition: border-color 0.15s, box-shadow 0.15s;
                         "
                         onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                        onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
-                    >
-                    <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Kosongkan jika tidak perlu filter unit</div>
+                        onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
+                    <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Kosongkan jika tidak perlu filter unit
+                    </div>
                 </div>
 
                 <div style="margin-bottom: 1rem;">
                     <label for="edit-jabatan"
-                           style="
+                        style="
                                display: block;
                                font-size: 11px;
                                font-weight: 700;
@@ -894,9 +911,9 @@
                             transition: border-color 0.15s, box-shadow 0.15s;
                         "
                         onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
-                        onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"
-                    >
-                    <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Kosongkan jika tidak perlu filter jabatan</div>
+                        onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
+                    <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Kosongkan jika tidak perlu filter
+                        jabatan</div>
                 </div>
 
                 <div style="padding:12px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;margin-top:.5rem">
@@ -907,7 +924,8 @@
                 </div>
 
                 {{-- Footer --}}
-                <div style="
+                <div
+                    style="
                     border-top: 1px solid #f1f5f9;
                     padding-top: 1rem;
                     display: flex;
@@ -929,8 +947,7 @@
                             cursor: pointer;
                             transition: background 0.15s;
                         "
-                        onmouseover="this.style.background='#e2e8f0'"
-                        onmouseout="this.style.background='#f1f5f9'">
+                        onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">
                         Batal
                     </button>
                     <button type="button" id="btnSaveEditRule" onclick="submitEditRule()"
@@ -996,7 +1013,7 @@
         window.addModalRuleRow = function() {
             const container = document.getElementById('modalRulesRows');
             if (!container) return;
-            
+
             const row = document.createElement('div');
             row.className = 'modal-rule-row';
             row.style.display = 'grid';
@@ -1004,7 +1021,7 @@
             row.style.gap = '5px';
             row.style.alignItems = 'center';
             row.style.marginBottom = '5px';
-            
+
             row.innerHTML = `
                 <input type="text" name="rules[` + modalRuleIndex + `][name]" placeholder="Nama user" style="width:100%; height:38px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:0 11px; font-size:13.5px; outline:none;" onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'" onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
                 <input type="text" name="rules[` + modalRuleIndex + `][unit]" placeholder="Unit" style="width:100%; height:38px; background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:0 11px; font-size:13.5px; outline:none;" onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'" onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">

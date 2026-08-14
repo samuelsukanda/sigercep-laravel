@@ -206,5 +206,16 @@ class PermissionSeeder extends Seeder
                 $permission->rules()->createMany($superRules);
             }
         }
+
+        // CHANGE REQUEST - HANYA UNIT TEKNOLOGI DAN INFORMASI
+        foreach ($fullActions as $action) {
+            $permission = Permission::create([
+                'menu' => 'change_request',
+                'action' => $action
+            ]);
+            $permission->rules()->create([
+                'unit' => 'teknologi dan informasi'
+            ]);
+        }
     }
 }
