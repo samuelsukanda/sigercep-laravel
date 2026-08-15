@@ -44,6 +44,7 @@ use App\Http\Controllers\HardwareCredentialController;
 use App\Http\Controllers\HardwareEvaluasiController;
 use App\Http\Controllers\HardwareHealthCheckController;
 use App\Http\Controllers\ChangeRequestController;
+use App\Http\Controllers\ApprovalMappingController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserSessionController;
 use App\Http\Controllers\UserController;
@@ -62,6 +63,10 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])
     ->middleware();
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Dev-login: hanya aktif di environment local untuk testing manual
+Route::get('/dev-login', [AuthController::class, 'devLoginPage'])->name('dev-login');
+Route::get('/dev-login/{id}', [AuthController::class, 'devLogin'])->name('dev-login.as');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -334,6 +339,14 @@ Route::middleware('auth')->group(function () {
             ->names('change-request');
         Route::get('/change-request/file/{id}', [ChangeRequestController::class, 'showFile'])
             ->name('change-request.show-file');
+        Route::post('/change-request/{id}/approve', [ChangeRequestController::class, 'approve'])
+            ->name('change-request.approve');
+    });
+
+    // Panel Atasan Langsung (approval mapping) - khusus IT
+    Route::middleware(['auth'])->group(function () {
+        Route::resource('approval-mapping', ApprovalMappingController::class)
+            ->names('approval-mapping');
     });
 
     Route::middleware(['auth'])->group(function () {

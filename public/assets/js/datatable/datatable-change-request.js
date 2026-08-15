@@ -83,13 +83,6 @@ let table = $("#changeRequestTable").DataTable({
             },
         },
         {
-            // PIC Request
-            data: "pic_request",
-            render: function (data) {
-                return data || "-";
-            },
-        },
-        {
             // No Tiket
             data: "no_tiket",
             render: function (data) {
@@ -100,12 +93,45 @@ let table = $("#changeRequestTable").DataTable({
             },
         },
         {
+            // Status Approval
+            data: "approval_1_status",
+            render: function (data, type, row) {
+                const s1 = row.approval_1_status || "Menunggu";
+                const s2 = row.approval_2_status || "Menunggu";
+                let text, style;
+                if (s2 === "Disetujui") {
+                    text = "Approved";
+                    style = "background-color:#0f766e; color:#ffffff;";
+                } else if (s1 === "Disetujui") {
+                    text = "Approved by " + (row.approval_1_by || "-");
+                    style = "background-color:#d1fae5; color:#065f46;";
+                } else if (s1 === "Ditolak" || s2 === "Ditolak") {
+                    text = "Ditolak";
+                    style = "background-color:#fee2e2; color:#991b1b;";
+                } else {
+                    text = "Pending";
+                    style = "background-color:#fef3c7; color:#92400e;";
+                }
+                return `<span class="px-2.5 py-0.5 text-xs font-semibold rounded-full" style="${style}">${text}</span>`;
+            },
+        },
+        {
             // Aksi
             data: null,
             orderable: false,
             searchable: false,
             render: function (data) {
                 let btn = `<div class="flex items-center justify-center gap-2">`;
+
+                if (data.approvable_level > 0) {
+                    btn += `
+                    <a href="/change-request/${data.id}"
+                        class="px-2 py-1 text-xs font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700"
+                        title="Setujui / Tolak Request">
+                        <i class="fas fa-check-double"></i> Approve
+                    </a>
+                    `;
+                }
 
                 if (data.can_update) {
                     btn += `

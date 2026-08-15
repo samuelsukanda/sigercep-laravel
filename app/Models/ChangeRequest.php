@@ -15,6 +15,7 @@ class ChangeRequest extends Model
         'user_id',
         'nama',
         'jabatan',
+        'jabatan_id',
         'permintaan_fitur',
         'deskripsi',
         'file_pendukung',
@@ -23,7 +24,14 @@ class ChangeRequest extends Model
         'status_dokumen',
         'status_pengerjaan',
         'no_tiket',
-        'pic_request',
+        'approval_1_status',
+        'approval_1_by',
+        'approval_1_at',
+        'approval_1_note',
+        'approval_2_status',
+        'approval_2_by',
+        'approval_2_at',
+        'approval_2_note',
     ];
 
     public function user()

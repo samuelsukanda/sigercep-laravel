@@ -67,7 +67,7 @@
                     </div>
 
                     {{-- Tambah Data --}}
-                    @canAccess('change_request', 'create')
+                    @if (\App\Helpers\PermissionHelper::canManageChangeRequest())
                     <a href="{{ route('change-request.create') }}"
                         class="inline-flex items-center justify-center
                             h-9 px-4 text-xs font-semibold text-white uppercase
@@ -75,7 +75,7 @@
                         style="background-color: #7664E4 !important;">
                         Tambah Data
                     </a>
-                    @endcanAccess
+                    @endif
                 </div>
 
             </div>

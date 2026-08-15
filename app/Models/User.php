@@ -17,6 +17,8 @@ class User extends Authenticatable
         'role',
         'nik',
         'jabatan',
+        'unit_id',
+        'jabatan_id',
         'status_karyawan',
         'last_seen_at', 
     ];
@@ -38,5 +40,10 @@ class User extends Authenticatable
     public function approvals()
     {
         return $this->hasMany(TicketApproval::class, 'admin_id');
+    }
+
+    public function jabatan()
+    {
+        return $this->belongsTo(Jabatan::class, 'jabatan_id');
     }
 }

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Models\User;
+use App\Models\Jabatan;
+use App\Models\ApprovalMapping;
 
 class AuthController extends Controller
 {
@@ -68,14 +70,21 @@ class AuthController extends Controller
             'email'           => $apiUser['email'],
             'nik'             => data_get($apiUser, 'karyawan.nik'),
             'unit'            => data_get($apiUser, 'karyawan.unit.name'),
+            'unit_id'         => data_get($apiUser, 'karyawan.unit.id'),
             'jabatan'         => data_get($apiUser, 'karyawan.jabatan.name'),
+            'jabatan_id'      => data_get($apiUser, 'karyawan.jabatan.id'),
             'status_karyawan' => $statusKaryawan,
         ];
+
+        $this->syncJabatanMaster($apiUser);
 
         $user = User::updateOrCreate(
             ['email' => $userData['email']],
             $userData
         );
+
+        // Backfill id ke mapping lama yang cocok lewat teks (SPV/Supervisor dll ter-linking otomatis bila sama persis)
+        $this->syncMappingIds($user);
 
         session([
             'hris_token' => $token,
@@ -84,6 +93,19 @@ class AuthController extends Controller
 
         Auth::login($user, $remember);
 
+        return redirect()->intended('/dashboard');
+    }
+
+    public function devLoginPage()
+    {
+        if (!app()->environment('local')) abort(404);
+        return view('dev-login', ['users' => User::orderBy('id')->get()]);
+    }
+
+    public function devLogin($id)
+    {
+        if (!app()->environment('local')) abort(404);
+        Auth::login(User::findOrFail($id));
         return redirect()->intended('/dashboard');
     }
 
@@ -108,5 +130,33 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/login');
+    }
+
+    private function syncJabatanMaster($apiUser)
+    {
+        $jb = data_get($apiUser, 'karyawan.jabatan');
+
+        if (is_array($jb) && !empty($jb['id'])) {
+            Jabatan::updateOrCreate(['id' => $jb['id']], [
+                'nama'          => $jb['name'] ?? null,
+                'manager_id'    => $jb['manager_id'] ?? null,
+                'level_approve' => $jb['level_approve'] ?? null,
+            ]);
+        }
+    }
+
+    private function syncMappingIds(User $user)
+    {
+        if (!$user->jabatan_id || !$user->jabatan) return;
+
+        $jabatan = strtolower(trim($user->jabatan));
+
+        ApprovalMapping::whereRaw('LOWER(requester_jabatan) = ?', [$jabatan])
+            ->whereNull('requester_jabatan_id')
+            ->update(['requester_jabatan_id' => $user->jabatan_id]);
+
+        ApprovalMapping::whereRaw('LOWER(approver_jabatan) = ?', [$jabatan])
+            ->whereNull('approver_jabatan_id')
+            ->update(['approver_jabatan_id' => $user->jabatan_id]);
     }
 }

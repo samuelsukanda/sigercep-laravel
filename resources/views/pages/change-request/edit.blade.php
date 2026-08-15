@@ -100,18 +100,6 @@
                                     @enderror
                                 </div>
 
-                                {{-- PIC Request --}}
-                                <div>
-                                    <label class="block text-sm font-semibold mb-1 text-slate-700">PIC Request</label>
-                                    <input type="text" name="pic_request"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('pic_request') border-red-500 @enderror"
-                                        value="{{ old('pic_request', $changeRequest->pic_request) }}"
-                                        placeholder="Nama PIC (opsional)">
-                                    @error('pic_request')
-                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
                                 {{-- Permintaan Fitur --}}
                                 <x-form.select name="permintaan_fitur" label="Permintaan Fitur"
                                     :options="config('units.permintaan_fitur')"

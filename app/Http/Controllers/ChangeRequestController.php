@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ApprovalMapping;
 use App\Models\ChangeRequest;
+use App\Models\User;
 use App\Helpers\PermissionHelper;
+use App\Notifications\ChangeRequestApprovalNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -13,8 +16,7 @@ class ChangeRequestController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:change_request,read')->only(['index', 'show']);
-        $this->middleware('permission:change_request,create')->only(['create', 'store']);
+        // Akses baca/buat mengikuti aturan jabatan (IT, peminta, approver) via PermissionHelper::canManageChangeRequest
         $this->middleware('permission:change_request,update')->only(['edit', 'update']);
         $this->middleware('permission:change_request,delete')->only(['destroy']);
     }
@@ -25,19 +27,139 @@ class ChangeRequestController extends Controller
         return $user && strtolower(trim($user->unit ?? '')) == 'teknologi dan informasi';
     }
 
+    /* Level approval yang bisa dilakukan user login terhadap CR (0 = tidak berhak) */
+    private function approvableLevel(ChangeRequest $cr)
+    {
+        $user = Auth::user();
+        if (!$user) return 0;
+
+        $mapping = ApprovalMapping::findForRequester($cr->jabatan_id, $cr->jabatan ?? '');
+
+        if ($cr->approval_1_status === 'Menunggu' && $mapping) {
+            if (ApprovalMapping::matches($mapping->approver_jabatan_id, $mapping->approver_jabatan, $user->jabatan_id, $user->jabatan ?? '')) {
+                return 1;
+            }
+        }
+
+        if ($cr->approval_1_status === 'Disetujui' && $cr->approval_2_status === 'Menunggu') {
+            if ($this->isStage2User($user)) {
+                return 2;
+            }
+        }
+
+        return 0;
+    }
+
+    private function isStage2User($user)
+    {
+        $stage2Id = config('approvals.stage2_jabatan_id');
+        if ($stage2Id && $user->jabatan_id == $stage2Id) return true;
+
+        return strtolower(trim($user->jabatan ?? '')) === strtolower(trim(config('approvals.stage2_jabatan')));
+    }
+
+    private function isApproverStage2($mapping)
+    {
+        if (!$mapping) return false;
+
+        $stage2Id = config('approvals.stage2_jabatan_id');
+        if ($stage2Id && $mapping->approver_jabatan_id == $stage2Id) return true;
+
+        return strtolower(trim($mapping->approver_jabatan ?? '')) === strtolower(trim(config('approvals.stage2_jabatan')));
+    }
+
+    private function notifyUsersByJabatanId($jabatanId, $message, $cr)
+    {
+        User::where('jabatan_id', $jabatanId)
+            ->get()
+            ->each->notify(new ChangeRequestApprovalNotification($cr, $message));
+    }
+
+    private function notifyStage2($message, $cr)
+    {
+        $stage2Id = config('approvals.stage2_jabatan_id');
+
+        if ($stage2Id) {
+            $this->notifyUsersByJabatanId($stage2Id, $message, $cr);
+        } else {
+            $this->notifyUsersByJabatan(config('approvals.stage2_jabatan'), $message, $cr);
+        }
+    }
+
+    private function notifyApprover1($mapping, $message, $cr)
+    {
+        if ($mapping->approver_jabatan_id) {
+            $this->notifyUsersByJabatanId($mapping->approver_jabatan_id, $message, $cr);
+        } else {
+            $this->notifyUsersByJabatan($mapping->approver_jabatan, $message, $cr);
+        }
+    }
+
+    private function notifyUsersByJabatan($jabatan, $message, $cr)
+    {
+        User::whereRaw('LOWER(jabatan) = ?', [strtolower(trim($jabatan))])
+            ->get()
+            ->each->notify(new ChangeRequestApprovalNotification($cr, $message));
+    }
+
+    private function notifyRequester(ChangeRequest $cr, $decision, $level)
+    {
+        if ($cr->user) {
+            $cr->user->notify(new ChangeRequestApprovalNotification(
+                $cr,
+                'Change Request #' . $cr->id . ' Anda ' . $decision . ' pada Tahap ' . $level . '.',
+            ));
+        }
+    }
+
     public function index(Request $request)
     {
+        if (!PermissionHelper::canManageChangeRequest()) {
+            abort(403);
+        }
+
         if ($request->ajax()) {
-            $columns = ['id', 'tanggal_formatted', 'nama', 'jabatan', 'permintaan_fitur', 'deskripsi', 'status_dokumen', 'status_pengerjaan', 'pic_request', 'no_tiket'];
+            $columns = ['id', 'tanggal_formatted', 'nama', 'jabatan', 'permintaan_fitur', 'deskripsi', 'status_dokumen', 'status_pengerjaan', 'no_tiket'];
 
             $user = Auth::user();
             $isIT = $this->isIT();
+            $myJabatan = strtolower(trim($user->jabatan ?? ''));
 
             $query = ChangeRequest::query();
 
-            // User biasa hanya melihat CR milik sendiri
             if (!$isIT) {
-                $query->where('user_id', $user->id);
+                $query->where(function ($q) use ($user, $myJabatan) {
+                    // Request milik sendiri
+                    $q->where('user_id', $user->id);
+
+                    // Menunggu approval tahap 1 -> user adalah atasan peminta
+                    $q->orWhere(function ($q2) use ($user, $myJabatan) {
+                        $q2->where('approval_1_status', 'Menunggu')
+                            ->where(function ($q3) use ($user, $myJabatan) {
+                                // cocok lewat jabatan_id (dari HRIS)
+                                $requesterIds = ApprovalMapping::where('approver_jabatan_id', $user->jabatan_id)
+                                    ->pluck('requester_jabatan_id');
+                                $q3->whereIn('jabatan_id', $requesterIds);
+
+                                // fallback teks untuk CR lama yang belum punya jabatan_id
+                                $requesterTexts = ApprovalMapping::whereRaw('LOWER(approver_jabatan) = ?', [$myJabatan])
+                                    ->pluck('requester_jabatan');
+                                if ($requesterTexts->count()) {
+                                    $q3->orWhere(function ($q4) use ($requesterTexts) {
+                                        $q4->whereNull('jabatan_id')->whereIn('jabatan', $requesterTexts);
+                                    });
+                                }
+                            });
+                    });
+
+                    // Menunggu approval tahap 2 -> user adalah Manajer Umum
+                    if ($this->isStage2User($user)) {
+                        $q->orWhere(function ($q3) {
+                            $q3->where('approval_1_status', 'Disetujui')
+                                ->where('approval_2_status', 'Menunggu');
+                        });
+                    }
+                });
             }
 
             if ($request->filled('periode_dari')) {
@@ -71,8 +193,7 @@ class ChangeRequestController extends Controller
                         ->orWhere('jabatan', 'like', "%{$search}%")
                         ->orWhere('permintaan_fitur', 'like', "%{$search}%")
                         ->orWhere('deskripsi', 'like', "%{$search}%")
-                        ->orWhere('no_tiket', 'like', "%{$search}%")
-                        ->orWhere('pic_request', 'like', "%{$search}%");
+                        ->orWhere('no_tiket', 'like', "%{$search}%");
                 });
             }
 
@@ -104,8 +225,11 @@ class ChangeRequestController extends Controller
                     'deskripsi'             => $item->deskripsi,
                     'status_dokumen'        => $item->status_dokumen ?? 'Dalam Proses',
                     'status_pengerjaan'     => $item->status_pengerjaan ?? 'Open',
-                    'pic_request'           => $item->pic_request ?? '-',
                     'no_tiket'              => $item->no_tiket ?? 'No Tiket',
+                    'approval_1_status'     => $item->approval_1_status ?? 'Menunggu',
+                    'approval_1_by'         => $item->approval_1_by ?? null,
+                    'approval_2_status'     => $item->approval_2_status ?? 'Menunggu',
+                    'approvable_level'      => $this->approvableLevel($item),
                     'created_at_timestamp'  => Carbon::parse($item->created_at)->timestamp,
                     'tanggal_formatted'     => '
                     <div class="flex flex-col">
@@ -133,7 +257,20 @@ class ChangeRequestController extends Controller
 
     public function create()
     {
-        return view('pages.change-request.create');
+        if (!PermissionHelper::canManageChangeRequest()) {
+            abort(403);
+        }
+
+        $user = Auth::user();
+        $mapping = ApprovalMapping::findForRequester($user->jabatan_id, $user->jabatan ?? '');
+        $approverName = $mapping
+            ? ($mapping->approverJabatan->nama ?? $mapping->approver_jabatan)
+            : null;
+
+        return view('pages.change-request.create', [
+            'canRequest'   => (bool) $mapping,
+            'approverName' => $approverName,
+        ]);
     }
 
     public function store(Request $request)
@@ -145,6 +282,13 @@ class ChangeRequestController extends Controller
         ]);
 
         $user = Auth::user();
+
+        // Hanya jabatan struktural yang terdaftar di mapping yang boleh mengajukan
+        $mapping = ApprovalMapping::findForRequester($user->jabatan_id, $user->jabatan ?? '');
+        if (!$mapping) {
+            return redirect()->route('change-request.index')
+                ->with('error', 'Hanya jabatan struktural yang terdaftar yang dapat mengajukan Change Request.');
+        }
 
         $filePendukung = null;
         $filePath      = null;
@@ -166,32 +310,42 @@ class ChangeRequestController extends Controller
             $filePath      = $targetPath;
         }
 
-        ChangeRequest::create([
+        $cr = ChangeRequest::create([
             'user_id'           => $user->id,
             'nama'              => ucfirst($user->name),
             'jabatan'           => $user->jabatan ?? '-',
+            'jabatan_id'        => $user->jabatan_id,
             'permintaan_fitur'  => $request->permintaan_fitur,
             'deskripsi'         => $request->deskripsi,
             'file_pendukung'    => $filePendukung,
             'file_path'         => $filePath,
             'status_dokumen'    => 'Dalam Proses',
             'status_pengerjaan' => 'Open',
+            'approval_1_status' => 'Menunggu',
+            'approval_2_status' => 'Menunggu',
         ]);
 
-        return redirect()->route('change-request.index')->with('success', 'Change Request berhasil dikirim.');
+        $this->notifyApprover1(
+            $mapping,
+            'Change Request #' . $cr->id . ' dari ' . $cr->nama . ' menunggu persetujuan Anda.',
+            $cr,
+        );
+
+        return redirect()->route('change-request.index')->with('success', 'Change Request berhasil dikirim dan menunggu approval.');
     }
 
     public function show(string $id)
     {
         $user = Auth::user();
         $changeRequest = ChangeRequest::findOrFail($id);
+        $approvableLevel = $this->approvableLevel($changeRequest);
 
-        // User biasa hanya bisa melihat milik sendiri
-        if (!$this->isIT() && $changeRequest->user_id !== $user->id) {
+        // User biasa hanya bisa melihat milik sendiri; approver boleh melihat request yang menunggu persetujuannya
+        if (!$this->isIT() && $changeRequest->user_id !== $user->id && $approvableLevel === 0) {
             abort(403, 'Akses ditolak.');
         }
 
-        return view('pages.change-request.detail', compact('changeRequest'));
+        return view('pages.change-request.detail', compact('changeRequest', 'approvableLevel'));
     }
 
     public function showFile($id)
@@ -219,6 +373,63 @@ class ChangeRequestController extends Controller
         ]);
     }
 
+    public function approve(Request $request, string $id)
+    {
+        $cr = ChangeRequest::findOrFail($id);
+        $level = $this->approvableLevel($cr);
+        if ($level === 0) {
+            abort(403, 'Anda tidak berhak menyetujui request ini.');
+        }
+
+        $request->validate([
+            'decision' => 'required|in:Disetujui,Ditolak',
+            'note'     => 'required_if:decision,Ditolak|nullable|string|max:500',
+        ]);
+
+        $user = Auth::user();
+        $isRejected = $request->decision === 'Ditolak';
+        $field = 'approval_' . $level;
+
+        $cr->{$field . '_status'} = $request->decision;
+        $cr->{$field . '_by'} = $user->name;
+        $cr->{$field . '_at'} = now();
+        $cr->{$field . '_note'} = $request->note;
+
+        if ($level === 1) {
+            if ($isRejected) {
+                $cr->approval_2_status = 'Ditolak';
+                $cr->save();
+                $this->notifyRequester($cr, 'Ditolak', 1);
+            } else {
+                $mapping = ApprovalMapping::findForRequester($cr->jabatan_id, $cr->jabatan ?? '');
+
+                if ($this->isApproverStage2($mapping)) {
+                    // Atasan langsung = Manajer Umum, tahap 2 otomatis disetujui
+                    $cr->approval_2_status = 'Disetujui';
+                    $cr->approval_2_by = $user->name;
+                    $cr->approval_2_at = now();
+                    $cr->approval_2_note = 'Atasan langsung adalah Manajer Umum (otomatis).';
+                    $cr->save();
+                    $this->notifyRequester($cr, 'Disetujui', 2);
+                } else {
+                    $cr->approval_2_status = 'Menunggu';
+                    $cr->save();
+                    $this->notifyRequester($cr, 'Disetujui', 1);
+                    $this->notifyStage2(
+                        'Change Request #' . $cr->id . ' dari ' . $cr->nama . ' menunggu persetujuan Anda.',
+                        $cr,
+                    );
+                }
+            }
+        } else {
+            // Level 2
+            $cr->save();
+            $this->notifyRequester($cr, $isRejected ? 'Ditolak' : 'Disetujui', 2);
+        }
+
+        return redirect()->back()->with('success', 'Approval Tahap ' . $level . ' berhasil disimpan.');
+    }
+
     public function edit(string $id)
     {
         // Hanya user IT yang boleh edit
@@ -243,7 +454,6 @@ class ChangeRequestController extends Controller
             'status_pengerjaan' => 'required|in:Open,In Progress,Pending,QC,Done,Closed',
             'permintaan_fitur'  => 'required|in:Sigercep,HRIS,SIMRS,Website',
             'no_tiket'          => 'nullable|string|max:100',
-            'pic_request'       => 'nullable|string|max:100',
             'deskripsi'         => 'required|string',
             'created_at'        => 'nullable|date',
             'file_pendukung'    => 'nullable|file|mimes:pdf|max:20480',
@@ -279,7 +489,6 @@ class ChangeRequestController extends Controller
             'status_dokumen'    => $request->status_dokumen,
             'status_pengerjaan' => $request->status_pengerjaan,
             'no_tiket'          => $request->no_tiket,
-            'pic_request'       => $request->pic_request,
             'file_pendukung'    => $filePendukung,
             'file_path'         => $filePath,
         ];
