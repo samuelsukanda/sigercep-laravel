@@ -35,70 +35,72 @@
                                         disabled>
                                 </div>
 
-                                {{-- Tanggal Permintaan --}}
-                                <div>
-                                    <label class="block text-sm font-semibold mb-1 text-slate-700">Tanggal
-                                        Permintaan</label>
-                                    <input type="text" id="created_at" name="created_at"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('created_at') border-red-500 @enderror"
-                                        value="{{ old('created_at', \Carbon\Carbon::parse($changeRequest->created_at)->format('d-m-Y')) }}"
-                                        placeholder="Pilih Tanggal">
-                                    @error('created_at')
-                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                @if($isIT ?? false)
+                                    {{-- Tanggal Permintaan --}}
+                                    <div>
+                                        <label class="block text-sm font-semibold mb-1 text-slate-700">Tanggal
+                                            Permintaan</label>
+                                        <input type="text" id="created_at" name="created_at"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('created_at') border-red-500 @enderror"
+                                            value="{{ old('created_at', \Carbon\Carbon::parse($changeRequest->created_at)->format('d-m-Y')) }}"
+                                            placeholder="Pilih Tanggal">
+                                        @error('created_at')
+                                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
 
-                                {{-- Status Dokumen --}}
-                                <div>
-                                    <label class="block text-sm font-semibold mb-1 text-slate-700">
-                                        Status Dokumen
-                                    </label>
-                                    <select name="status_dokumen"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('status_dokumen') border-red-500 @enderror"
-                                        required>
-                                        @foreach (['Terpenuhi', 'Dalam Proses', 'Tidak Ada'] as $sd)
-                                            <option value="{{ $sd }}"
-                                                {{ old('status_dokumen', $changeRequest->status_dokumen ?? 'Dalam Proses') == $sd ? 'selected' : '' }}>
-                                                {{ $sd }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('status_dokumen')
-                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                    {{-- Status Dokumen --}}
+                                    <div>
+                                        <label class="block text-sm font-semibold mb-1 text-slate-700">
+                                            Status Dokumen
+                                        </label>
+                                        <select name="status_dokumen"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('status_dokumen') border-red-500 @enderror"
+                                            required>
+                                            @foreach (['Terpenuhi', 'Dalam Proses', 'Tidak Ada'] as $sd)
+                                                <option value="{{ $sd }}"
+                                                    {{ old('status_dokumen', $changeRequest->status_dokumen ?? 'Dalam Proses') == $sd ? 'selected' : '' }}>
+                                                    {{ $sd }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('status_dokumen')
+                                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
 
-                                {{-- Status Pengerjaan --}}
-                                <div>
-                                    <label class="block text-sm font-semibold mb-1 text-slate-700">
-                                        Status Pengerjaan
-                                    </label>
-                                    <select name="status_pengerjaan"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('status_pengerjaan') border-red-500 @enderror"
-                                        required>
-                                        @foreach (['Open', 'In Progress', 'Pending', 'QC', 'Done', 'Closed'] as $sp)
-                                            <option value="{{ $sp }}"
-                                                {{ old('status_pengerjaan', $changeRequest->status_pengerjaan ?? 'Open') == $sp ? 'selected' : '' }}>
-                                                {{ $sp }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('status_pengerjaan')
-                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                    {{-- Status Pengerjaan --}}
+                                    <div>
+                                        <label class="block text-sm font-semibold mb-1 text-slate-700">
+                                            Status Pengerjaan
+                                        </label>
+                                        <select name="status_pengerjaan"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('status_pengerjaan') border-red-500 @enderror"
+                                            required>
+                                            @foreach (['Open', 'In Progress', 'Pending', 'QC', 'Done', 'Closed'] as $sp)
+                                                <option value="{{ $sp }}"
+                                                    {{ old('status_pengerjaan', $changeRequest->status_pengerjaan ?? 'Open') == $sp ? 'selected' : '' }}>
+                                                    {{ $sp }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('status_pengerjaan')
+                                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
 
-                                {{-- No Tiket --}}
-                                <div>
-                                    <label class="block text-sm font-semibold mb-1 text-slate-700">No Tiket</label>
-                                    <input type="text" name="no_tiket"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('no_tiket') border-red-500 @enderror"
-                                        value="{{ old('no_tiket', $changeRequest->no_tiket) }}"
-                                        placeholder="Nomor tiket (opsional)">
-                                    @error('no_tiket')
-                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                    {{-- No Tiket --}}
+                                    <div>
+                                        <label class="block text-sm font-semibold mb-1 text-slate-700">No Tiket</label>
+                                        <input type="text" name="no_tiket"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('no_tiket') border-red-500 @enderror"
+                                            value="{{ old('no_tiket', $changeRequest->no_tiket) }}"
+                                            placeholder="Nomor tiket (opsional)">
+                                        @error('no_tiket')
+                                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                @endif
 
                                 {{-- Permintaan Fitur --}}
                                 <x-form.select name="permintaan_fitur" label="Permintaan Fitur"

@@ -207,15 +207,60 @@ class PermissionSeeder extends Seeder
             }
         }
 
-        // CHANGE REQUEST - HANYA UNIT TEKNOLOGI DAN INFORMASI
+        // CHANGE REQUEST - FULL AKSES UNTUK UNIT IT + JABATAN STRUKTURAL (semua Manajer termasuk Manajer Umum, plus peminta)
+        $changeRequestJabatan = [
+            // Manajer (approver)
+            'manajer casemix',
+            'manajer penunjang medik',
+            'manajer pelayanan medik',
+            'manajer keperawatan',
+            'manajer pemasaran dan layanan pelanggan',
+            'manajer umum',
+            'manajer keuangan dan akuntansi',
+            'manajer sdm dan hukum',
+            // Peminta struktural
+            'supervisor pelayanan dan mutu jkn (pjs)',
+            'supervisor administrasi klaim jkn (pjs)',
+            'supervisor sdm dan logistik penunjang',
+            'kepala instalasi farmasi',
+            'kepala instalasi rekam medik',
+            'kepala instalasi gizi',
+            'kepala instalasi laboratorium',
+            'kepala instalasi rehabilitasi medik (pjs)',
+            'kepala instalasi radiologi',
+            'supervisor sdm dan logistik medik',
+            'supervisor mutu layanan dan disiplin medik',
+            'kepala instalasi gawat darurat',
+            'kepala instalasi dialisis',
+            'kepala instalasi rawat jalan',
+            'kepala instalasi kamar bersalin',
+            'kepala instalasi kamar operasi & cssd',
+            'kepala instalasi rawat intensive (pjs)',
+            'kepala instalasi rawat inap',
+            'supervisor asuhan dan mutu keperawatan dan kebidanan',
+            'supervisor pemasaran',
+            'supervisor penjualan',
+            'supervisor layanan pelanggan',
+            'koordinator admisi',
+            'supervisor pengadaan asset dan tata grha',
+            'supervisor pemeliharaan',
+            'supervisor it',
+            'supervisor akuntansi',
+            'supervisor keuangan',
+            'supervisor sdm dan hukum',
+            'ketua komite mutu',
+            'ppi',
+        ];
+
+        $changeRequestRules = array_map(fn($jb) => ['jabatan' => $jb], $changeRequestJabatan);
+        $changeRequestRules[] = ['unit' => 'teknologi dan informasi'];
+
         foreach ($fullActions as $action) {
             $permission = Permission::create([
                 'menu' => 'change_request',
                 'action' => $action
             ]);
-            $permission->rules()->create([
-                'unit' => 'teknologi dan informasi'
-            ]);
+            $permission->rules()->createMany($changeRequestRules);
         }
     }
 }

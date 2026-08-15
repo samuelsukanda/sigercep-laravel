@@ -17,15 +17,22 @@ class ChangeRequestController extends Controller
 {
     public function __construct()
     {
-        // Akses baca/buat mengikuti aturan jabatan (IT, peminta, approver) via PermissionHelper::canManageChangeRequest
-        $this->middleware('permission:change_request,update')->only(['edit', 'update']);
-        $this->middleware('permission:change_request,delete')->only(['destroy']);
+        // Akses baca/buat mengikuti aturan jabatan (IT, peminta, approver) via PermissionHelper::canManageChangeRequest.
+        // Edit/hapus diverifikasi per-record di method (pemilik atau IT).
     }
 
     private function isIT()
     {
         $user = Auth::user();
         return $user && strtolower(trim($user->unit ?? '')) == 'teknologi dan informasi';
+    }
+
+    /* Manajer (jabatan mengandung kata "manajer") diberi akses penuh CRUD, termasuk Manajer Umum. */
+    private function isManager($user = null)
+    {
+        $user = $user ?: Auth::user();
+        if (!$user) return false;
+        return str_contains(strtolower(trim($user->jabatan ?? '')), 'manajer');
     }
 
     /* Level approval yang bisa dilakukan user login terhadap CR (0 = tidak berhak) */
@@ -238,7 +245,9 @@ class ChangeRequestController extends Controller
             $canDelete = PermissionHelper::canAccess('change_request', 'delete');
 
             $data = [];
+            $isManager = $this->isManager();
             foreach ($records as $item) {
+                $isOwner = $item->user_id === $user->id;
                 $data[] = [
                     'id'                    => $item->id,
                     'no_cr'                 => $item->id,
@@ -259,9 +268,9 @@ class ChangeRequestController extends Controller
                         <span>' . Carbon::parse($item->created_at)->translatedFormat('d F Y') . '</span>
                     </div>
                 ',
-                    'can_update'            => $canUpdate,
-                    'can_read'              => $canRead,
-                    'can_delete'            => $canDelete,
+                    'can_update'            => $isOwner || $isManager || $canUpdate,
+                    'can_read'              => $isOwner || $isManager || $canRead,
+                    'can_delete'            => $isOwner || $isManager || $canDelete,
                 ];
             }
 
@@ -455,30 +464,34 @@ class ChangeRequestController extends Controller
 
     public function edit(string $id)
     {
-        // Hanya user IT yang boleh edit
-        if (!$this->isIT()) {
-            abort(403, 'Hanya user IT yang dapat mengedit Change Request.');
+        $changeRequest = ChangeRequest::findOrFail($id);
+        $user = Auth::user();
+        $isIT = $this->isIT();
+        $isManager = $this->isManager();
+        $isOwner = $changeRequest->user_id === $user->id && PermissionHelper::canManageChangeRequest();
+
+        if (!$isIT && !$isManager && !$isOwner) {
+            abort(403, 'Anda hanya dapat mengedit Change Request milik sendiri atau sebagai manajer.');
         }
 
-        $changeRequest = ChangeRequest::findOrFail($id);
-        return view('pages.change-request.edit', compact('changeRequest'));
+        return view('pages.change-request.edit', compact('changeRequest', 'isIT'));
     }
 
     public function update(Request $request, string $id)
     {
-        if (!$this->isIT()) {
-            abort(403, 'Hanya user IT yang dapat mengedit Change Request.');
+        $changeRequest = ChangeRequest::findOrFail($id);
+        $user = Auth::user();
+        $isIT = $this->isIT();
+        $isManager = $this->isManager();
+        $isOwner = $changeRequest->user_id === $user->id && PermissionHelper::canManageChangeRequest();
+
+        if (!$isIT && !$isManager && !$isOwner) {
+            abort(403, 'Anda hanya dapat mengedit Change Request milik sendiri atau sebagai manajer.');
         }
 
-        $changeRequest = ChangeRequest::findOrFail($id);
-
         $request->validate([
-            'status_dokumen'    => 'required|in:Terpenuhi,Dalam Proses,Tidak Ada',
-            'status_pengerjaan' => 'required|in:Open,In Progress,Pending,QC,Done,Closed',
             'permintaan_fitur'  => 'required|in:Sigercep,HRIS,SIMRS,Website',
-            'no_tiket'          => 'nullable|string|max:100',
             'deskripsi'         => 'required|string',
-            'created_at'        => 'nullable|date',
             'file_pendukung'    => 'nullable|file|mimes:pdf|max:20480',
         ]);
 
@@ -507,20 +520,30 @@ class ChangeRequestController extends Controller
         }
 
         $updateData = [
-            'deskripsi'         => $request->deskripsi,
             'permintaan_fitur'  => $request->permintaan_fitur,
-            'status_dokumen'    => $request->status_dokumen,
-            'status_pengerjaan' => $request->status_pengerjaan,
-            'no_tiket'          => $request->no_tiket,
+            'deskripsi'         => $request->deskripsi,
             'file_pendukung'    => $filePendukung,
             'file_path'         => $filePath,
         ];
 
-        if ($request->filled('created_at')) {
-            try {
-                $updateData['created_at'] = Carbon::createFromFormat('d-m-Y', $request->created_at)->startOfDay();
-            } catch (\Exception $e) {
-                $updateData['created_at'] = Carbon::parse($request->created_at)->startOfDay();
+        if ($isIT) {
+            $request->validate([
+                'status_dokumen'    => 'required|in:Terpenuhi,Dalam Proses,Tidak Ada',
+                'status_pengerjaan' => 'required|in:Open,In Progress,Pending,QC,Done,Closed',
+                'no_tiket'          => 'nullable|string|max:100',
+                'created_at'        => 'nullable|date',
+            ]);
+
+            $updateData['status_dokumen']    = $request->status_dokumen;
+            $updateData['status_pengerjaan'] = $request->status_pengerjaan;
+            $updateData['no_tiket']          = $request->no_tiket;
+
+            if ($request->filled('created_at')) {
+                try {
+                    $updateData['created_at'] = Carbon::createFromFormat('d-m-Y', $request->created_at)->startOfDay();
+                } catch (\Exception $e) {
+                    $updateData['created_at'] = Carbon::parse($request->created_at)->startOfDay();
+                }
             }
         }
 
@@ -532,6 +555,14 @@ class ChangeRequestController extends Controller
     public function destroy(string $id)
     {
         $changeRequest = ChangeRequest::findOrFail($id);
+        $user = Auth::user();
+        $isIT = $this->isIT();
+        $isManager = $this->isManager();
+        $isOwner = $changeRequest->user_id === $user->id && PermissionHelper::canManageChangeRequest();
+
+        if (!$isIT && !$isManager && !$isOwner) {
+            abort(403, 'Anda hanya dapat menghapus Change Request milik sendiri atau sebagai manajer.');
+        }
 
         if ($changeRequest->file_path && Storage::disk('public')->exists($changeRequest->file_path)) {
             Storage::disk('public')->delete($changeRequest->file_path);

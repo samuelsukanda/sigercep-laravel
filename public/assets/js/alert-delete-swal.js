@@ -59,18 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
       cancelButtonText: "Batal"
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          title: "Terhapus!",
-          text: "Data berhasil dihapus.",
-          icon: "success",
-          confirmButtonColor: "#7664E4",
-          customClass: {
-            confirmButton: "btn-swal-success"
-          },
-          confirmButtonText: "OK"
-        }).then(() => {
-          form.submit();
-        });
+        form.submit();
       }
     });
   });

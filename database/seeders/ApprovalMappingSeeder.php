@@ -52,7 +52,7 @@ class ApprovalMappingSeeder extends Seeder
             ['PPI', 'Manajer Umum'],
         ];
 
-        ApprovalMapping::query()->delete();
+        ApprovalMapping::query()->truncate();
 
         foreach ($data as [$requester, $approver]) {
             ApprovalMapping::create([
