@@ -41,9 +41,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(TicketApproval::class, 'admin_id');
     }
-
-    public function jabatan()
-    {
-        return $this->belongsTo(Jabatan::class, 'jabatan_id');
-    }
 }

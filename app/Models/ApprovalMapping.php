@@ -16,21 +16,28 @@ class ApprovalMapping extends Model
         'approver_jabatan',
         'requester_jabatan_id',
         'approver_jabatan_id',
+        'requester_user_id',
+        'approver_user_id',
     ];
 
-    public function requesterJabatan()
+    public function requesterUser()
     {
-        return $this->belongsTo(Jabatan::class, 'requester_jabatan_id');
+        return $this->belongsTo(User::class, 'requester_user_id');
     }
 
-    public function approverJabatan()
+    public function approverUser()
     {
-        return $this->belongsTo(Jabatan::class, 'approver_jabatan_id');
+        return $this->belongsTo(User::class, 'approver_user_id');
     }
 
-    /* Temukan mapping peminta: cocokkan id dulu, fallback ke teks. */
-    public static function findForRequester($jabatanId, $jabatanText)
+    /* Temukan mapping peminta: cocokkan user_id dulu, lalu jabatan_id, lalu teks. */
+    public static function findForRequester($userId, $jabatanId, $jabatanText)
     {
+        if ($userId) {
+            $m = self::where('requester_user_id', $userId)->first();
+            if ($m) return $m;
+        }
+
         if ($jabatanId) {
             $m = self::where('requester_jabatan_id', $jabatanId)->first();
             if ($m) return $m;
@@ -43,15 +50,19 @@ class ApprovalMapping extends Model
         return null;
     }
 
-    /* Cocokkan jabatan user dengan jabatan mapping: id dulu, fallback teks. */
-    public static function matches($mappingJabatanId, $mappingJabatanText, $userJabatanId, $userJabatanText)
+    /* Cocokkan approver mapping dengan user: user_id dulu, lalu jabatan_id, lalu teks. */
+    public static function matchesApprover(ApprovalMapping $mapping, $userId, $userJabatanId, $userJabatanText)
     {
-        if ($mappingJabatanId && $userJabatanId) {
-            return (int) $mappingJabatanId === (int) $userJabatanId;
+        if ($mapping->approver_user_id) {
+            return (int) $mapping->approver_user_id === (int) $userId;
         }
 
-        if ($mappingJabatanText && $userJabatanText) {
-            return strtolower(trim($mappingJabatanText)) === strtolower(trim($userJabatanText));
+        if ($mapping->approver_jabatan_id && $userJabatanId) {
+            return (int) $mapping->approver_jabatan_id === (int) $userJabatanId;
+        }
+
+        if ($mapping->approver_jabatan && $userJabatanText) {
+            return strtolower(trim($mapping->approver_jabatan)) === strtolower(trim($userJabatanText));
         }
 
         return false;

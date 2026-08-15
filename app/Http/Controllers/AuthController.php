@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Models\User;
-use App\Models\Jabatan;
 use App\Models\ApprovalMapping;
 
 class AuthController extends Controller
@@ -76,14 +75,12 @@ class AuthController extends Controller
             'status_karyawan' => $statusKaryawan,
         ];
 
-        $this->syncJabatanMaster($apiUser);
-
         $user = User::updateOrCreate(
             ['email' => $userData['email']],
             $userData
         );
 
-        // Backfill id ke mapping lama yang cocok lewat teks (SPV/Supervisor dll ter-linking otomatis bila sama persis)
+        // Backfill id ke mapping lama yang cocok lewat teks
         $this->syncMappingIds($user);
 
         session([
@@ -130,19 +127,6 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/login');
-    }
-
-    private function syncJabatanMaster($apiUser)
-    {
-        $jb = data_get($apiUser, 'karyawan.jabatan');
-
-        if (is_array($jb) && !empty($jb['id'])) {
-            Jabatan::updateOrCreate(['id' => $jb['id']], [
-                'nama'          => $jb['name'] ?? null,
-                'manager_id'    => $jb['manager_id'] ?? null,
-                'level_approve' => $jb['level_approve'] ?? null,
-            ]);
-        }
     }
 
     private function syncMappingIds(User $user)

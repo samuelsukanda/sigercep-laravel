@@ -167,7 +167,39 @@
                     </li>
                 @endauth
 
+                {{-- Atasan Langsung (hanya untuk yang bisa update change_request) --}}
+                @canAccess('change_request', 'update')
+                <li class="flex items-center px-2">
+                    <a href="{{ route('approval-mapping.index') }}"
+                        title="Atasan Langsung"
+                        class="relative p-0 text-sm transition-all ease-nav-brand group"
+                        style="color: #7664E4 !important;">
+                        <i class="fas fa-user-check cursor-pointer"></i>
+
+                        {{-- Tooltip --}}
+                        <span style="
+                            display: none;
+                            position: absolute;
+                            top: calc(100% + 10px);
+                            right: 50%;
+                            transform: translateX(50%);
+                            background: #1e1b4b;
+                            color: #fff;
+                            font-size: 11px;
+                            font-weight: 600;
+                            white-space: nowrap;
+                            padding: 4px 10px;
+                            border-radius: 6px;
+                            pointer-events: none;
+                            z-index: 9999;
+                            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                        " class="navbar-tooltip">Atasan Langsung</span>
+                    </a>
+                </li>
+                @endcanAccess
+
                 {{-- Permissions --}}
+
                 @php
                     $user = Auth::user();
                     $canAccessPermissions = false;
@@ -311,5 +343,32 @@
                 location.reload();
             });
         }
+
+        // Tooltip hover untuk ikon navbar
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.navbar-tooltip').forEach(function (tooltip) {
+                const parent = tooltip.closest('a');
+                if (!parent) return;
+
+                parent.addEventListener('mouseenter', function () {
+                    tooltip.style.display = 'block';
+                    tooltip.style.opacity = '0';
+                    tooltip.style.transform = 'translateX(50%) translateY(4px)';
+                    tooltip.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+                    requestAnimationFrame(() => {
+                        tooltip.style.opacity = '1';
+                        tooltip.style.transform = 'translateX(50%) translateY(0)';
+                    });
+                });
+
+                parent.addEventListener('mouseleave', function () {
+                    tooltip.style.opacity = '0';
+                    tooltip.style.transform = 'translateX(50%) translateY(4px)';
+                    setTimeout(() => {
+                        tooltip.style.display = 'none';
+                    }, 200);
+                });
+            });
+        });
     </script>
 @endpush

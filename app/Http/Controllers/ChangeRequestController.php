@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ApprovalMapping;
 use App\Models\ChangeRequest;
 use App\Models\User;
+use App\Models\Setting;
 use App\Helpers\PermissionHelper;
 use App\Notifications\ChangeRequestApprovalNotification;
 use Illuminate\Http\Request;
@@ -33,10 +34,10 @@ class ChangeRequestController extends Controller
         $user = Auth::user();
         if (!$user) return 0;
 
-        $mapping = ApprovalMapping::findForRequester($cr->jabatan_id, $cr->jabatan ?? '');
+        $mapping = ApprovalMapping::findForRequester($cr->user_id, $cr->jabatan_id, $cr->jabatan ?? '');
 
         if ($cr->approval_1_status === 'Menunggu' && $mapping) {
-            if (ApprovalMapping::matches($mapping->approver_jabatan_id, $mapping->approver_jabatan, $user->jabatan_id, $user->jabatan ?? '')) {
+            if (ApprovalMapping::matchesApprover($mapping, $user->id, $user->jabatan_id, $user->jabatan ?? '')) {
                 return 1;
             }
         }
@@ -52,6 +53,10 @@ class ChangeRequestController extends Controller
 
     private function isStage2User($user)
     {
+        // User khusus terpilih dari panel (settings)
+        $stage2UserId = Setting::get('stage2_user_id');
+        if ($stage2UserId && $user->id == $stage2UserId) return true;
+
         $stage2Id = config('approvals.stage2_jabatan_id');
         if ($stage2Id && $user->jabatan_id == $stage2Id) return true;
 
@@ -61,6 +66,10 @@ class ChangeRequestController extends Controller
     private function isApproverStage2($mapping)
     {
         if (!$mapping) return false;
+
+        // User approver = user tahap 2 terpilih
+        $stage2UserId = Setting::get('stage2_user_id');
+        if ($stage2UserId && $mapping->approver_user_id == $stage2UserId) return true;
 
         $stage2Id = config('approvals.stage2_jabatan_id');
         if ($stage2Id && $mapping->approver_jabatan_id == $stage2Id) return true;
@@ -77,10 +86,14 @@ class ChangeRequestController extends Controller
 
     private function notifyStage2($message, $cr)
     {
-        $stage2Id = config('approvals.stage2_jabatan_id');
+        // User khusus terpilih dari panel
+        $stage2UserId = Setting::get('stage2_user_id');
 
-        if ($stage2Id) {
-            $this->notifyUsersByJabatanId($stage2Id, $message, $cr);
+        if ($stage2UserId) {
+            $user = User::find($stage2UserId);
+            if ($user) $user->notify(new ChangeRequestApprovalNotification($cr, $message));
+        } elseif (config('approvals.stage2_jabatan_id')) {
+            $this->notifyUsersByJabatanId(config('approvals.stage2_jabatan_id'), $message, $cr);
         } else {
             $this->notifyUsersByJabatan(config('approvals.stage2_jabatan'), $message, $cr);
         }
@@ -88,7 +101,10 @@ class ChangeRequestController extends Controller
 
     private function notifyApprover1($mapping, $message, $cr)
     {
-        if ($mapping->approver_jabatan_id) {
+        if ($mapping->approver_user_id) {
+            $user = User::find($mapping->approver_user_id);
+            if ($user) $user->notify(new ChangeRequestApprovalNotification($cr, $message));
+        } elseif ($mapping->approver_jabatan_id) {
             $this->notifyUsersByJabatanId($mapping->approver_jabatan_id, $message, $cr);
         } else {
             $this->notifyUsersByJabatan($mapping->approver_jabatan, $message, $cr);
@@ -136,10 +152,17 @@ class ChangeRequestController extends Controller
                     $q->orWhere(function ($q2) use ($user, $myJabatan) {
                         $q2->where('approval_1_status', 'Menunggu')
                             ->where(function ($q3) use ($user, $myJabatan) {
+                                // cocok lewat user approver (mapping per-akun)
+                                $requesterUserIds = ApprovalMapping::where('approver_user_id', $user->id)
+                                    ->pluck('requester_user_id');
+                                if ($requesterUserIds->count()) {
+                                    $q3->whereIn('user_id', $requesterUserIds);
+                                }
+
                                 // cocok lewat jabatan_id (dari HRIS)
                                 $requesterIds = ApprovalMapping::where('approver_jabatan_id', $user->jabatan_id)
                                     ->pluck('requester_jabatan_id');
-                                $q3->whereIn('jabatan_id', $requesterIds);
+                                $q3->orWhereIn('jabatan_id', $requesterIds);
 
                                 // fallback teks untuk CR lama yang belum punya jabatan_id
                                 $requesterTexts = ApprovalMapping::whereRaw('LOWER(approver_jabatan) = ?', [$myJabatan])
@@ -262,9 +285,9 @@ class ChangeRequestController extends Controller
         }
 
         $user = Auth::user();
-        $mapping = ApprovalMapping::findForRequester($user->jabatan_id, $user->jabatan ?? '');
+        $mapping = ApprovalMapping::findForRequester($user->id, $user->jabatan_id, $user->jabatan ?? '');
         $approverName = $mapping
-            ? ($mapping->approverJabatan->nama ?? $mapping->approver_jabatan)
+            ? ($mapping->approverUser->name ?? $mapping->approver_jabatan)
             : null;
 
         return view('pages.change-request.create', [
@@ -283,11 +306,11 @@ class ChangeRequestController extends Controller
 
         $user = Auth::user();
 
-        // Hanya jabatan struktural yang terdaftar di mapping yang boleh mengajukan
-        $mapping = ApprovalMapping::findForRequester($user->jabatan_id, $user->jabatan ?? '');
+        // Hanya user / jabatan yang terdaftar di mapping yang boleh mengajukan
+        $mapping = ApprovalMapping::findForRequester($user->id, $user->jabatan_id, $user->jabatan ?? '');
         if (!$mapping) {
             return redirect()->route('change-request.index')
-                ->with('error', 'Hanya jabatan struktural yang terdaftar yang dapat mengajukan Change Request.');
+                ->with('error', 'Hanya user / jabatan yang terdaftar yang dapat mengajukan Change Request.');
         }
 
         $filePendukung = null;
@@ -401,7 +424,7 @@ class ChangeRequestController extends Controller
                 $cr->save();
                 $this->notifyRequester($cr, 'Ditolak', 1);
             } else {
-                $mapping = ApprovalMapping::findForRequester($cr->jabatan_id, $cr->jabatan ?? '');
+                $mapping = ApprovalMapping::findForRequester($cr->user_id, $cr->jabatan_id, $cr->jabatan ?? '');
 
                 if ($this->isApproverStage2($mapping)) {
                     // Atasan langsung = Manajer Umum, tahap 2 otomatis disetujui

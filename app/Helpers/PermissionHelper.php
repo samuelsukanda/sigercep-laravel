@@ -5,10 +5,11 @@ namespace App\Helpers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Permission;
 use App\Models\ApprovalMapping;
+use App\Models\Setting;
 
 class PermissionHelper
 {
-    /* Akses modul Change Request: IT, jabatan peminta (mapping), atau approver (mapping/tahap 2) */
+    /* Akses modul Change Request: IT, user peminta (mapping per-user), approver (mapping/tahap 2) */
     public static function canManageChangeRequest($user = null)
     {
         $user = $user ?: Auth::user();
@@ -20,7 +21,14 @@ class PermissionHelper
         if ($unit === 'teknologi dan informasi') return true;
         if (self::isStage2($user)) return true;
 
-        // Cocokkan lewat jabatan_id (dari HRIS) dulu
+        // Cocokkan lewat user (mapping per-akun) dulu
+        if (ApprovalMapping::where('requester_user_id', $user->id)
+            ->orWhere('approver_user_id', $user->id)
+            ->exists()) {
+            return true;
+        }
+
+        // Lalu lewat jabatan_id (dari HRIS)
         if ($user->jabatan_id) {
             $byId = ApprovalMapping::where(function ($q) use ($user) {
                 $q->where('requester_jabatan_id', $user->jabatan_id)
@@ -41,6 +49,10 @@ class PermissionHelper
     {
         $user = $user ?: Auth::user();
         if (!$user) return false;
+
+        // User khusus terpilih dari panel (settings)
+        $stage2UserId = Setting::get('stage2_user_id');
+        if ($stage2UserId && $user->id == $stage2UserId) return true;
 
         $stage2Id = config('approvals.stage2_jabatan_id');
         if ($stage2Id && $user->jabatan_id == $stage2Id) return true;

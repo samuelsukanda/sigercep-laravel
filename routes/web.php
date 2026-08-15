@@ -347,6 +347,8 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth'])->group(function () {
         Route::resource('approval-mapping', ApprovalMappingController::class)
             ->names('approval-mapping');
+        Route::post('approval-mapping/stage2-user', [ApprovalMappingController::class, 'saveStage2User'])
+            ->name('approval-mapping.stage2-user');
     });
 
     Route::middleware(['auth'])->group(function () {

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ApprovalMapping;
-use App\Models\Jabatan;
 use App\Models\User;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 
 class ApprovalMappingController extends Controller
@@ -20,17 +20,18 @@ class ApprovalMappingController extends Controller
     public function index()
     {
         $this->ensureIT();
-        $mappings = ApprovalMapping::orderBy('requester_jabatan')->get();
+        $mappings = ApprovalMapping::with(['requesterUser', 'approverUser'])
+            ->orderBy('requester_jabatan')->get();
         $stage2 = config('approvals.stage2_jabatan');
-        $jabatanList = collect(config('units.utw'))
-            ->concat(Jabatan::orderBy('nama')->pluck('nama'))
-            ->concat(User::whereNotNull('jabatan')->pluck('jabatan'))
+        $stage2UserId = Setting::get('stage2_user_id');
+        $users = User::orderBy('name')->get(['id', 'name', 'username', 'unit', 'jabatan']);
+        $jabatanList = collect(User::whereNotNull('jabatan')->pluck('jabatan'))
             ->concat($mappings->pluck('requester_jabatan'))
             ->concat($mappings->pluck('approver_jabatan'))
             ->filter()
             ->unique()
             ->values();
-        return view('pages.approval-mapping.index', compact('mappings', 'stage2', 'jabatanList'));
+        return view('pages.approval-mapping.index', compact('mappings', 'stage2', 'stage2UserId', 'users', 'jabatanList'));
     }
 
     public function store(Request $request)
@@ -39,11 +40,13 @@ class ApprovalMappingController extends Controller
         $data = $request->validate([
             'requester_jabatan' => 'required|string|max:100|unique:approval_mappings,requester_jabatan',
             'approver_jabatan'  => 'required|string|max:100',
+            'requester_user_id' => 'nullable|exists:users,id',
+            'approver_user_id'  => 'nullable|exists:users,id',
         ]);
         $data['requester_jabatan_id'] = $this->resolveJabatanId($data['requester_jabatan']);
         $data['approver_jabatan_id'] = $this->resolveJabatanId($data['approver_jabatan']);
         ApprovalMapping::create($data);
-        return redirect()->route('approval-mapping.index')->with('success', 'Mapping atasan langsung berhasil ditambahkan.');
+        return redirect()->route('approval-mapping.index')->with('success', 'Mapping approver 1 berhasil ditambahkan.');
     }
 
     public function update(Request $request, $id)
@@ -53,32 +56,40 @@ class ApprovalMappingController extends Controller
         $data = $request->validate([
             'requester_jabatan' => 'required|string|max:100|unique:approval_mappings,requester_jabatan,' . $mapping->id,
             'approver_jabatan'  => 'required|string|max:100',
+            'requester_user_id' => 'nullable|exists:users,id',
+            'approver_user_id'  => 'nullable|exists:users,id',
         ]);
         $data['requester_jabatan_id'] = $this->resolveJabatanId($data['requester_jabatan']);
         $data['approver_jabatan_id'] = $this->resolveJabatanId($data['approver_jabatan']);
         $mapping->update($data);
-        return redirect()->route('approval-mapping.index')->with('success', 'Mapping atasan langsung berhasil diperbarui.');
+        return redirect()->route('approval-mapping.index')->with('success', 'Mapping approver 1 berhasil diperbarui.');
     }
 
-    /* Cari jabatan_id (dari HRIS) untuk nama jabatan: master dulu, lalu users. */
+    /* Cari jabatan_id (dari HRIS) untuk nama jabatan: dari user yang memegang jabatan tsb. */
     private function resolveJabatanId($nama)
     {
         $nama = trim($nama ?? '');
         if ($nama === '') return null;
 
-        $jb = Jabatan::whereRaw('LOWER(nama) = ?', [strtolower($nama)])->first();
-        if ($jb) return $jb->id;
-
         $user = User::whereRaw('LOWER(jabatan) = ?', [strtolower($nama)])->first();
-        if ($user && $user->jabatan_id) return $user->jabatan_id;
+        return $user && $user->jabatan_id ? $user->jabatan_id : null;
+    }
 
-        return null;
+    /* Simpan user tahap 2 (Manajer Umum) ke settings. */
+    public function saveStage2User(Request $request)
+    {
+        $this->ensureIT();
+        $data = $request->validate([
+            'stage2_user_id' => 'nullable|exists:users,id',
+        ]);
+        Setting::set('stage2_user_id', $data['stage2_user_id'] ?? null);
+        return redirect()->route('approval-mapping.index')->with('success', 'Mapping approver 2 berhasil disimpan.');
     }
 
     public function destroy($id)
     {
         $this->ensureIT();
         ApprovalMapping::findOrFail($id)->delete();
-        return redirect()->route('approval-mapping.index')->with('success', 'Mapping atasan langsung berhasil dihapus.');
+        return redirect()->route('approval-mapping.index')->with('success', 'Mapping approver 1 berhasil dihapus.');
     }
 }

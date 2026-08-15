@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\ApprovalMapping;
 use App\Models\ChangeRequest;
-use App\Models\Jabatan;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -15,22 +15,13 @@ class TestingUserSeeder extends Seeder
     {
         $users = [
             [
-                'name'            => 'Test Supervisor Akuntansi',
-                'username'        => 'req.akuntansi@rs-hamori.co.id',
-                'unit'            => 'Akuntansi',
-                'unit_id'         => 9001,
-                'jabatan'         => 'Supervisor Akuntansi',
-                'jabatan_id'      => 9001,
-                'nik'             => '91001',
-            ],
-            [
-                'name'            => 'Test SPV Akuntansi (HRIS-style)',
+                'name'            => 'Test SPV Akuntansi',
                 'username'        => 'spv.akuntansi@rs-hamori.co.id',
                 'unit'            => 'Akuntansi',
                 'unit_id'         => 9001,
                 'jabatan'         => 'SPV Akuntansi',
                 'jabatan_id'      => 9001,
-                'nik'             => '91002',
+                'nik'             => '91001',
             ],
             [
                 'name'            => 'Test Manajer Keuangan',
@@ -39,6 +30,24 @@ class TestingUserSeeder extends Seeder
                 'unit_id'         => 9001,
                 'jabatan'         => 'Manajer Keuangan dan Akuntansi',
                 'jabatan_id'      => 9002,
+                'nik'             => '91002',
+            ],
+            [
+                'name'            => 'Test SPV Casemix',
+                'username'        => 'spv.casemix@rs-hamori.co.id',
+                'unit'            => 'casemix',
+                'unit_id'         => 9004,
+                'jabatan'         => 'SPV Casemix',
+                'jabatan_id'      => 9005,
+                'nik'             => '91003',
+            ],
+              [
+                'name'            => 'Test Manajer Casemix',
+                'username'        => 'appr.casemix@rs-hamori.co.id',
+                'unit'            => 'casemix',
+                'unit_id'         => 9004,
+                'jabatan'         => 'Manajer Casemix',
+                'jabatan_id'      => 9006,
                 'nik'             => '91003',
             ],
             [
@@ -68,24 +77,19 @@ class TestingUserSeeder extends Seeder
         ChangeRequest::whereIn('user_id', $testUserIds)->delete();
         DB::table('notifications')->whereIn('notifiable_id', $testUserIds)->delete();
 
-        // Master jabatan (id dari HRIS / buatan untuk testing)
-        Jabatan::upsert([
-            ['id' => 9001, 'nama' => 'Supervisor Akuntansi',      'manager_id' => 9002, 'level_approve' => 2],
-            ['id' => 9002, 'nama' => 'Manajer Keuangan dan Akuntansi', 'manager_id' => 9003, 'level_approve' => 3],
-            ['id' => 9003, 'nama' => 'Manajer Umum',              'manager_id' => null, 'level_approve' => 4],
-            ['id' => 9004, 'nama' => 'Operasional IT Technical Support', 'manager_id' => 9003, 'level_approve' => 1],
-        ], ['id'], ['nama', 'manager_id', 'level_approve']);
-
         // User tes
         foreach ($users as $u) {
             User::updateOrCreate(['username' => $u['username']], $u + ['email' => $u['username'], 'status_karyawan' => 'active']);
         }
 
-        // Link mapping: atasan langsung peminta
+        // Link mapping: atasan langsung peminta (per-user + id jabatan)
         ApprovalMapping::where('requester_jabatan', 'Supervisor Akuntansi')
-            ->update(['requester_jabatan_id' => 9001]);
+            ->update(['requester_jabatan_id' => 9001, 'requester_user_id' => User::where('username', 'req.akuntansi@rs-hamori.co.id')->value('id')]);
         ApprovalMapping::where('approver_jabatan', 'Manajer Keuangan dan Akuntansi')
-            ->update(['approver_jabatan_id' => 9002]);
+            ->update(['approver_jabatan_id' => 9002, 'approver_user_id' => User::where('username', 'appr.keuangan@rs-hamori.co.id')->value('id')]);
+
+        // Tahap 2: user Manajer Umum terpilih
+        Setting::set('stage2_user_id', User::where('username', 'mum@rs-hamori.co.id')->value('id'));
 
         $this->command->info('5 user testing berhasil di-seed.');
     }
