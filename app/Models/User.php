@@ -42,11 +42,12 @@ class User extends Authenticatable
         return $this->hasMany(TicketApproval::class, 'admin_id');
     }
 
-    /* Nama tampilan untuk dropdown: format username "raden.ibnu" -> "Raden Ibnu". Nama sudah benar dibiarkan. */
+    /* Nama tampilan untuk dropdown: "raden.ibnu" -> "Raden Ibnu", "sammuel" -> "Sammuel". Nama yang sudah pakai huruf kapital dibiarkan. */
     public function getDisplayNameAttribute()
     {
         $name = trim($this->name ?? '');
-        if ($name === '' || !str_contains($name, '.')) return $this->name;
+        if ($name === '') return $this->name;
+        if ($name !== strtolower($name)) return $this->name;
         return ucwords(str_replace('.', ' ', strtolower($name)));
     }
 }
