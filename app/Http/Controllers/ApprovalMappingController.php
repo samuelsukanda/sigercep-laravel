@@ -62,7 +62,7 @@ class ApprovalMappingController extends Controller
         $data['requester_jabatan_id'] = $this->resolveJabatanId($data['requester_jabatan']);
         $data['approver_jabatan_id'] = $this->resolveJabatanId($data['approver_jabatan']);
         $mapping->update($data);
-        return redirect()->route('approval-mapping.index')->with('success', 'Mapping approver 1 berhasil diperbarui.');
+        return redirect()->route('approval-mapping.index')->with('success', 'Mapping approver 1 berhasil diperbarui.')->withFragment('mapping-list');
     }
 
     /* Cari jabatan_id (dari HRIS) untuk nama jabatan: dari user yang memegang jabatan tsb. */

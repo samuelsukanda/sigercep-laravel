@@ -330,6 +330,129 @@
             transform: scale(1.08);
         }
 
+        .am-btn-edit {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+        }
+
+        .am-btn-edit:hover {
+            background: #d97706;
+            color: #fff;
+            transform: scale(1.08);
+        }
+
+        /* ===== EDIT MODAL ===== */
+        .am-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .am-modal {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
+            width: 100%;
+            max-width: 640px;
+            overflow: hidden;
+            animation: amModalIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes amModalIn {
+            from { opacity: 0; transform: scale(0.92) translateY(12px); }
+            to   { opacity: 1; transform: scale(1)   translateY(0); }
+        }
+
+        .am-modal-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 24px;
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        }
+
+        .am-modal-header-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .am-modal-header h2 {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            margin: 0 0 2px;
+        }
+
+        .am-modal-header p {
+            color: rgba(255,255,255,0.8);
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .am-modal-body {
+            padding: 24px;
+        }
+
+        .am-modal-section {
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .am-modal-section.requester {
+            background: #f8f9ff;
+            border: 1px solid rgba(118, 100, 228, 0.12);
+        }
+
+        .am-modal-section.approver {
+            background: #f8fff9;
+            border: 1px solid rgba(16, 185, 129, 0.12);
+        }
+
+        .am-modal-section-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 0 0 12px;
+        }
+
+        .am-modal-section.requester .am-modal-section-title { color: #7664E4; }
+        .am-modal-section.approver  .am-modal-section-title { color: #059669; }
+
+        .am-modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            padding: 16px 24px;
+            border-top: 1px solid #f1f5f9;
+            background: #fafafa;
+        }
+
+        .am-btn-cancel {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .am-btn-cancel:hover {
+            background: #e2e8f0;
+            transform: translateY(-1px);
+        }
+
         /* ===== TABLE ===== */
         .am-table {
             width: 100%;
@@ -450,6 +573,106 @@
 @endpush
 
 @section('content')
+    {{-- ===== EDIT MODAL (Alpine.js) ===== --}}
+    <div x-data="editMappingModal()" @keydown.escape.window="close()">
+        <template x-if="open">
+            <div class="am-modal-overlay" @click.self="close()">
+                <div class="am-modal" @click.stop>
+
+                    {{-- Modal Header --}}
+                    <div class="am-modal-header">
+                        <div class="am-modal-header-icon"><i class="fas fa-edit"></i></div>
+                        <div>
+                            <h2>Edit Mapping Approver</h2>
+                            <p>Ubah nama, jabatan requester dan approver</p>
+                        </div>
+                    </div>
+
+                    {{-- Modal Body --}}
+                    <form :action="url" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="_method" value="PUT">
+
+                        <div class="am-modal-body">
+
+                            {{-- Requester Section --}}
+                            <div class="am-modal-section requester">
+                                <p class="am-modal-section-title">
+                                    <i class="fas fa-user mr-1"></i> Requester
+                                </p>
+                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                                    <div class="am-field">
+                                        <label class="am-label">User Requester</label>
+                                        <div class="am-select-wrap">
+                                            <select name="requester_user_id" class="am-select" x-model="reqUserId"
+                                                @change="reqJabatan = $event.target.selectedOptions[0].dataset.jabatan || reqJabatan">
+                                                <option value="">— Pilih user —</option>
+                                                @foreach ($users as $u)
+                                                    <option value="{{ $u->id }}" data-jabatan="{{ $u->jabatan }}">
+                                                        {{ $u->name }} — {{ $u->jabatan }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="am-field">
+                                        <label class="am-label">Jabatan Requester <span style="color:#ef4444">*</span></label>
+                                        <input type="text" name="requester_jabatan" required
+                                            list="jabatanList" class="am-input"
+                                            placeholder="Jabatan requester"
+                                            x-model="reqJabatan">
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Approver Section --}}
+                            <div class="am-modal-section approver">
+                                <p class="am-modal-section-title">
+                                    <i class="fas fa-user-check mr-1"></i> Approver 1
+                                </p>
+                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                                    <div class="am-field">
+                                        <label class="am-label">User Approver 1</label>
+                                        <div class="am-select-wrap">
+                                            <select name="approver_user_id" class="am-select" x-model="apprUserId"
+                                                @change="apprJabatan = $event.target.selectedOptions[0].dataset.jabatan || apprJabatan">
+                                                <option value="">— Pilih user —</option>
+                                                @foreach ($users as $u)
+                                                    <option value="{{ $u->id }}" data-jabatan="{{ $u->jabatan }}">
+                                                        {{ $u->name }} — {{ $u->jabatan }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="am-field">
+                                        <label class="am-label">Jabatan Approver 1 <span style="color:#ef4444">*</span></label>
+                                        <input type="text" name="approver_jabatan" required
+                                            list="jabatanList" class="am-input"
+                                            placeholder="Jabatan approver"
+                                            x-model="apprJabatan">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {{-- Modal Footer --}}
+                        <div class="am-modal-footer">
+                            <button type="button" class="am-btn am-btn-cancel" @click="close()">
+                                <i class="fas fa-times"></i> Batal
+                            </button>
+                            <button type="submit" class="am-btn am-btn-amber">
+                                <i class="fas fa-save"></i> Simpan Perubahan
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </template>
+    </div>
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex flex-wrap -mx-3">
             <div class="w-full max-w-full px-3 mx-auto mt-0">
@@ -610,7 +833,7 @@
                 </div>
 
                 {{-- ===== DAFTAR MAPPING ===== --}}
-                <div class="am-card">
+                <div class="am-card" id="mapping-list">
                     <div class="am-card-header">
                         <div class="am-card-icon slate">
                             <i class="fas fa-list-ul"></i>
@@ -654,16 +877,17 @@
                                                     method="POST">
                                                     @csrf
                                                     @method('PUT')
-
+ 
                                                     <td style="text-align:center;">
                                                         <span
                                                             style="font-size:11px; color:#94a3b8; font-weight:600;">{{ $i + 1 }}</span>
                                                     </td>
-
+ 
                                                     {{-- Peminta --}}
                                                     <td style="min-width:220px;">
                                                         <input type="text" name="requester_jabatan"
-                                                            value="{{ $mapping->requester_jabatan }}" required
+                                                            value="{{ $mapping->requester_jabatan }}" required readonly
+                                                            style="background-color: #f1f5f9; cursor: not-allowed;"
                                                             list="jabatanList" class="am-table-input"
                                                             placeholder="Jabatan peminta">
                                                         <select name="requester_user_id"
@@ -678,11 +902,12 @@
                                                             @endforeach
                                                         </select>
                                                     </td>
-
+ 
                                                     {{-- Atasan --}}
                                                     <td style="min-width:220px;">
                                                         <input type="text" name="approver_jabatan"
-                                                            value="{{ $mapping->approver_jabatan }}" required
+                                                            value="{{ $mapping->approver_jabatan }}" required readonly
+                                                            style="background-color: #f1f5f9; cursor: not-allowed;"
                                                             list="jabatanList" class="am-table-input"
                                                             placeholder="Jabatan atasan">
                                                         <select name="approver_user_id"
@@ -697,14 +922,14 @@
                                                             @endforeach
                                                         </select>
                                                     </td>
-
+ 
                                                     {{-- Tahap 2 --}}
                                                     <td style="text-align:center;">
                                                         <span class="am-badge-stage2">
                                                             {{ $stage2 }}
                                                         </span>
                                                     </td>
-
+ 
                                                     {{-- Aksi --}}
                                                     <td>
                                                         <div
@@ -713,19 +938,33 @@
                                                                 class="am-btn-icon am-btn-save">
                                                                 <i class="fas fa-check"></i>
                                                             </button>
-                                                </form>
-                                                <form action="{{ route('approval-mapping.destroy', $mapping->id) }}"
-                                                    method="POST"
-                                                    onsubmit="return confirm('Yakin ingin menghapus mapping ini?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" title="Hapus" class="am-btn-icon am-btn-del">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </form>
-                            </div>
-                            </td>
-                            </tr>
+                                                            <button type="button" title="Edit mapping"
+                                                                class="am-btn-icon am-btn-edit"
+                                                                onclick="window.dispatchEvent(new CustomEvent('open-edit-modal', { detail: {
+                                                                    url: '{{ route('approval-mapping.update', $mapping->id) }}',
+                                                                    reqUserId: '{{ $mapping->requester_user_id ?? '' }}',
+                                                                    reqJabatan: '{{ addslashes($mapping->requester_jabatan) }}',
+                                                                    apprUserId: '{{ $mapping->approver_user_id ?? '' }}',
+                                                                    apprJabatan: '{{ addslashes($mapping->approver_jabatan) }}'
+                                                                } }))">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
+                                                            </form>
+                                                            <form action="{{ route('approval-mapping.destroy', $mapping->id) }}"
+                                                                method="POST"
+                                                                style="display:inline;"
+                                                                class="delete-form">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" title="Hapus"
+                                                                    class="am-btn-icon am-btn-del delete-button"
+                                                                    data-confirm="Yakin ingin menghapus mapping approver ini?">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                </tr>
                         @endforeach
                         </tbody>
                         </table>
@@ -738,7 +977,7 @@
     </div>
 
     <script>
-        // Pilih user -> isi jabatan otomatis
+        // Pilih user -> isi jabatan otomatis (form tambah)
         document.querySelectorAll('.js-user-peminta').forEach(function(sel) {
             sel.addEventListener('change', function() {
                 var opt = sel.selectedOptions[0];
@@ -761,5 +1000,35 @@
                 }
             });
         });
+
+        // Alpine.js component for Edit Modal
+        function editMappingModal() {
+            return {
+                open: false,
+                url: '',
+                reqUserId: '',
+                reqJabatan: '',
+                apprUserId: '',
+                apprJabatan: '',
+                init() {
+                    window.addEventListener('open-edit-modal', (e) => {
+                        this.url        = e.detail.url;
+                        this.reqUserId  = e.detail.reqUserId;
+                        this.reqJabatan = e.detail.reqJabatan;
+                        this.apprUserId = e.detail.apprUserId;
+                        this.apprJabatan = e.detail.apprJabatan;
+                        this.open = true;
+                    });
+                },
+                close() {
+                    this.open = false;
+                }
+            };
+        }
     </script>
 @endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('assets/js/alert-delete-swal.js') }}"></script>
+@endpush
