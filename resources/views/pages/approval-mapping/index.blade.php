@@ -223,8 +223,6 @@
             color: #1e293b;
             transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
             outline: none;
-            appearance: none;
-            -webkit-appearance: none;
         }
 
         .am-input:hover,
@@ -242,19 +240,6 @@
 
         .am-select-wrap {
             position: relative;
-        }
-
-        .am-select-wrap::after {
-            content: '\f078';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 10px;
-            color: #94a3b8;
-            pointer-events: none;
         }
 
         /* ===== BUTTONS ===== */
@@ -529,8 +514,8 @@
 
         .am-table-select {
             width: 100%;
-            padding: 5px 10px;
-            font-size: 11px;
+            padding: 4px 6px;
+            font-size: 10.5px;
             border: 1.5px solid #e2e8f0;
             border-radius: 7px;
             background: #f8fafc;
@@ -718,7 +703,7 @@
                                             <option value="">— Gunakan jabatan: {{ $stage2 }} —</option>
                                             @foreach ($users as $u)
                                                 <option value="{{ $u->id }}" @selected($stage2UserId == $u->id)>
-                                                    {{ $u->name }} — {{ $u->jabatan }} ({{ $u->unit }})
+                                                    {{ $u->display_name }} — {{ $u->jabatan }} ({{ $u->unit }})
                                                 </option>
                                             @endforeach
                                         </select>
@@ -762,7 +747,7 @@
                                                 <option value="">— Pilih user —</option>
                                                 @foreach ($users as $u)
                                                     <option value="{{ $u->id }}" data-jabatan="{{ $u->jabatan }}">
-                                                        {{ $u->name }} — {{ $u->jabatan }}
+                                                        {{ $u->display_name }} — {{ $u->jabatan }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -791,7 +776,7 @@
                                                 @foreach ($users as $u)
                                                     <option value="{{ $u->id }}"
                                                         data-jabatan="{{ $u->jabatan }}">
-                                                        {{ $u->name }} — {{ $u->jabatan }}
+                                                        {{ $u->display_name }} — {{ $u->jabatan }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -873,7 +858,7 @@
                                                     </td>
 
                                                     {{-- Peminta --}}
-                                                    <td style="min-width:220px;">
+                                                    <td style="min-width:140px;">
                                                         <input type="text" name="requester_jabatan"
                                                             value="{{ $mapping->requester_jabatan }}" required readonly
                                                             style="background-color: #f1f5f9; cursor: not-allowed;"
@@ -886,14 +871,14 @@
                                                                 <option value="{{ $u->id }}"
                                                                     data-jabatan="{{ $u->jabatan }}"
                                                                     @selected($mapping->requester_user_id == $u->id)>
-                                                                    {{ $u->name }} — {{ $u->jabatan }}
+                                                                    {{ $u->display_name }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
                                                     </td>
 
                                                     {{-- Atasan --}}
-                                                    <td style="min-width:220px;">
+                                                    <td style="min-width:140px;">
                                                         <input type="text" name="approver_jabatan"
                                                             value="{{ $mapping->approver_jabatan }}" required readonly
                                                             style="background-color: #f1f5f9; cursor: not-allowed;"
@@ -906,7 +891,7 @@
                                                                 <option value="{{ $u->id }}"
                                                                     data-jabatan="{{ $u->jabatan }}"
                                                                     @selected($mapping->approver_user_id == $u->id)>
-                                                                    {{ $u->name }} — {{ $u->jabatan }}
+                                                                    {{ $u->display_name }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -972,10 +957,11 @@
             var $ctx = context ? $(context) : $(document);
 
             // Stage2 user
-            $ctx.find('select[name="stage2_user_id"]').select2({
-                placeholder: '— Gunakan jabatan —',
-                width: '100%',
-                dropdownParent: $ctx.find('select[name="stage2_user_id"]').parent()
+            $ctx.find('select[name="stage2_user_id"]').each(function() {
+                $(this).select2({
+                    placeholder: '— Gunakan jabatan —',
+                    width: '100%'
+                });
             });
 
             // Requester user (form tambah + tabel)
@@ -983,8 +969,7 @@
                 var $sel = $(this);
                 $sel.select2({
                     placeholder: '— Pilih user —',
-                    width: '100%',
-                    dropdownParent: $sel.parent()
+                    width: '100%'
                 });
                 // Auto-fill jabatan saat pilih user
                 $sel.on('select2:select select2:clear', function() {
@@ -1002,8 +987,7 @@
                 var $sel = $(this);
                 $sel.select2({
                     placeholder: '— Pilih user —',
-                    width: '100%',
-                    dropdownParent: $sel.parent()
+                    width: '100%'
                 });
                 $sel.on('select2:select select2:clear', function() {
                     var opt = this.options[this.selectedIndex];

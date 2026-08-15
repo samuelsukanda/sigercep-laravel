@@ -167,17 +167,17 @@
                     </li>
                 @endauth
 
-                {{-- Atasan Langsung (hanya untuk yang bisa update change_request) --}}
-                @canAccess('change_request', 'update')
-                <li class="flex items-center px-2">
-                    <a href="{{ route('approval-mapping.index') }}"
-                        title="Atasan Langsung"
-                        class="relative p-0 text-sm transition-all ease-nav-brand group"
-                        style="color: #7664E4 !important;">
-                        <i class="fas fa-user-check cursor-pointer"></i>
+                {{-- Approval Change Request --}}
+                @if (Auth::check() && strtolower(trim(Auth::user()->unit ?? '')) === 'teknologi dan informasi')
+                    <li class="flex items-center px-2">
+                        <a href="{{ route('approval-mapping.index') }}" title="Approval Change Request"
+                            class="relative p-0 text-sm transition-all ease-nav-brand group"
+                            style="color: #7664E4 !important;">
+                            <i class="fas fa-user-check cursor-pointer"></i>
 
-                        {{-- Tooltip --}}
-                        <span style="
+                            {{-- Tooltip --}}
+                            <span
+                                style="
                             display: none;
                             position: absolute;
                             top: calc(100% + 10px);
@@ -193,13 +193,13 @@
                             pointer-events: none;
                             z-index: 9999;
                             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-                        " class="navbar-tooltip">Atasan Langsung</span>
-                    </a>
-                </li>
-                @endcanAccess
+                        "
+                                class="navbar-tooltip">Approval Change Request</span>
+                        </a>
+                    </li>
+                @endif
 
                 {{-- Permissions --}}
-
                 @php
                     $user = Auth::user();
                     $canAccessPermissions = false;
@@ -345,12 +345,12 @@
         }
 
         // Tooltip hover untuk ikon navbar
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.navbar-tooltip').forEach(function (tooltip) {
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.navbar-tooltip').forEach(function(tooltip) {
                 const parent = tooltip.closest('a');
                 if (!parent) return;
 
-                parent.addEventListener('mouseenter', function () {
+                parent.addEventListener('mouseenter', function() {
                     tooltip.style.display = 'block';
                     tooltip.style.opacity = '0';
                     tooltip.style.transform = 'translateX(50%) translateY(4px)';
@@ -361,7 +361,7 @@
                     });
                 });
 
-                parent.addEventListener('mouseleave', function () {
+                parent.addEventListener('mouseleave', function() {
                     tooltip.style.opacity = '0';
                     tooltip.style.transform = 'translateX(50%) translateY(4px)';
                     setTimeout(() => {
