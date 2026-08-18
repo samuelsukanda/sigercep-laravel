@@ -71,10 +71,6 @@ Route::get('/dev-login/{id}', [AuthController::class, 'devLogin'])->name('dev-lo
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/layouts/app', function () {
-        return view('app');
-    })->name('app');
-
     // Permission Management Routes
     Route::middleware(['auth'])
         ->prefix('permissions')

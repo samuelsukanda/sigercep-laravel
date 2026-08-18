@@ -23,9 +23,6 @@
 
         {{-- Footer --}}
         @includeIf('layouts.partials.footer')
-
-        {{-- Fixed Plugin --}}
-        {{-- @include('layouts.partials.fixed') --}}
     </main>
 
     @stack('modals')

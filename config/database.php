@@ -62,20 +62,6 @@ return [
             ]) : [],
         ],
 
-        'mysql_old' => [
-            'driver' => 'mysql',
-            'host' => env('DB_OLD_HOST', '192.168.10.100'),
-            'port' => env('DB_OLD_PORT', '3306'),
-            'database' => env('DB_OLD_DATABASE', 'sigercep_db'),
-            'username' => env('DB_OLD_USERNAME', 'sammuel'),
-            'password' => env('DB_OLD_PASSWORD', '!Hamori24$!'),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'strict' => false,
-            'engine' => null,
-        ],
-
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),
