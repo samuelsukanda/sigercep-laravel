@@ -27,11 +27,11 @@ class ChangeRequest extends Model
         'approval_1_status',
         'approval_1_by',
         'approval_1_at',
-        'approval_1_note',
+        'approval_1_ttd',
         'approval_2_status',
         'approval_2_by',
         'approval_2_at',
-        'approval_2_note',
+        'approval_2_ttd',
     ];
 
     public function user()

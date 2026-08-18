@@ -104,19 +104,16 @@
                             @endif
                         </div>
 
-                        <div class="mt-6">
-                            <a href="{{ route('change-request.index') }}"
-                                class="inline-block px-6 py-2 text-xs font-semibold text-slate-700 uppercase bg-gray-200 rounded-lg shadow-md hover:shadow-xs active:opacity-85">
-                                Kembali
-                            </a>
-                        </div>
-
                         {{-- Approval 2 Tahap --}}
                         <div class="mt-8 rounded-xl border border-gray-200 overflow-hidden">
                             <div class="px-4 py-3 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
-                                <h6 class="font-bold text-sm text-slate-700"><i class="fas fa-check-double mr-1"></i> Persetujuan</h6>
+                                <h6 class="font-bold text-sm text-slate-700"><i class="fas fa-check-double mr-1"></i>
+                                    Persetujuan</h6>
                                 @php
-                                    $approvalTotal = ($changeRequest->approval_1_status ?? 'Menunggu') . ' / ' . ($changeRequest->approval_2_status ?? 'Menunggu');
+                                    $approvalTotal =
+                                        ($changeRequest->approval_1_status ?? 'Menunggu') .
+                                        ' / ' .
+                                        ($changeRequest->approval_2_status ?? 'Menunggu');
                                 @endphp
                                 <span class="text-xs font-semibold text-slate-500">{{ $approvalTotal }}</span>
                             </div>
@@ -142,51 +139,183 @@
                                     @endphp
                                     <div class="rounded-lg border border-gray-100 p-3">
                                         <div class="flex items-center justify-between">
-                                            <span class="text-xs font-semibold text-slate-600 uppercase tracking-wide">{{ $label }}</span>
-                                            <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full" style="{{ $badgeColor($status) }}">
+                                            <span
+                                                class="text-xs font-semibold text-slate-600 uppercase tracking-wide">{{ $label }}</span>
+                                            <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full"
+                                                style="{{ $badgeColor($status) }}">
                                                 {{ $status }}
                                             </span>
                                         </div>
                                         @if ($changeRequest->{$field . '_at'})
                                             <div class="mt-2 text-xs text-slate-500">
                                                 Oleh <b>{{ $changeRequest->{$field . '_by'} ?? '-' }}</b>
-                                                • {{ \Carbon\Carbon::parse($changeRequest->{$field . '_at'})->translatedFormat('d F Y H:i') }}
+                                                •
+                                                {{ \Carbon\Carbon::parse($changeRequest->{$field . '_at'})->translatedFormat('d F Y H:i') }}
                                             </div>
                                         @endif
-                                        @if ($changeRequest->{$field . '_note'})
-                                            <div class="mt-1 text-xs text-slate-600 italic">"{{ $changeRequest->{$field . '_note'} }}"</div>
+                                        @if ($changeRequest->{$field . '_ttd'})
+                                            <div class="mt-2">
+                                                <img src="{{ $changeRequest->{$field . '_ttd'} }}" alt="Tanda tangan"
+                                                    class="border rounded bg-white" style="max-height:80px;">
+                                            </div>
                                         @endif
                                     </div>
                                 @endforeach
 
                                 @if ($approvableLevel > 0)
                                     <form action="{{ route('change-request.approve', $changeRequest->id) }}" method="POST"
-                                        class="mt-4 rounded-lg bg-indigo-50 border border-indigo-100 p-3"
-                                        onsubmit="return confirm('Simpan persetujuan ini?')">
+                                        id="approveForm" class="mt-4 rounded-lg bg-indigo-50 border border-indigo-100 p-3">
                                         @csrf
-                                        <input type="hidden" name="decision" value="" id="approvalDecision">
+                                        <input type="hidden" name="decision" value="Disetujui" id="approvalDecision">
                                         <p class="text-xs font-semibold text-indigo-700 uppercase tracking-wide mb-2">
-                                            <i class="fas fa-user-check mr-1"></i> Anda menyetujui tahap ini
+                                            <i class="fas fa-user-check mr-1"></i> Approval
                                         </p>
-                                        <textarea name="note" rows="2" required placeholder="Catatan (wajib diisi)..." maxlength="500"
-                                            class="w-full px-3 py-2 border border-indigo-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent"></textarea>
-                                        <div class="mt-2 flex gap-2">
-                                            <button type="submit" onclick="document.getElementById('approvalDecision').value='Disetujui'"
-                                                class="px-4 py-2 text-xs font-semibold text-white bg-green-600 rounded-lg hover:bg-green-700">
-                                                <i class="fas fa-check mr-1"></i> Setujui
-                                            </button>
-                                            <button type="submit" onclick="document.getElementById('approvalDecision').value='Ditolak'"
-                                                class="px-4 py-2 text-xs font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700">
-                                                <i class="fas fa-times mr-1"></i> Tolak
-                                            </button>
+                                        <div class="border rounded shadow-sm bg-white p-4">
+                                            <div style="width: 100%; height: 200px; position: relative;">
+                                                <canvas id="approval-signature-pad" class="rounded"
+                                                    style="border: 2px solid #9e9e9e; width: 100%; height: 100%; touch-action: none; display: block;"></canvas>
+                                            </div>
+                                            <input type="hidden" name="tanda_tangan" id="approval_tanda_tangan">
+                                            <div class="mt-4 flex gap-2" style="align-items: center; flex-wrap: wrap;">
+                                                <button type="submit"
+                                                    class="relative mb-2 mr-1 text-white border border-solid rounded-lg bg-gradient-to-tl from-emerald-500 to-teal-400 border-emerald-300 px-4 py-2 flex items-center gap-2">
+                                                    <i class="fa fa-check mr-1"></i> Approve
+                                                </button>
+                                                <button type="button" id="approval-undo"
+                                                    class="relative mb-2 mr-1 text-white border border-solid rounded-lg bg-gradient-to-tl from-zinc-800 to-zinc-700 border-slate-100 px-4 py-2 flex items-center gap-2">
+                                                    <i class="fa fa-undo mr-1"></i> Undo
+                                                </button>
+                                                <button type="button" id="approval-clear"
+                                                    class="relative mb-2 text-white border border-red-300 border-solid rounded-lg bg-gradient-to-tl from-red-600 to-orange-600 px-4 py-2 flex items-center gap-2">
+                                                    <i class="fa fa-trash mr-1"></i> Clear
+                                                </button>
+                                            </div>
                                         </div>
                                     </form>
                                 @endif
                             </div>
                         </div>
+
+                        <div class="my-6">
+                            <a href="{{ route('change-request.index') }}"
+                                class="inline-block px-6 py-2 text-xs font-semibold text-slate-700 uppercase bg-gray-200 rounded-lg shadow-md hover:shadow-xs active:opacity-85">
+                                Kembali
+                            </a>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+@push('styles')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .btn-swal-approve {
+            background-color: #10b981 !important;
+            color: #ffffff !important;
+            transition: background-color 0.2s !important;
+        }
+
+        .btn-swal-approve:hover {
+            background-color: #059669 !important;
+        }
+
+        .btn-swal-cancel {
+            background-color: #6b7280 !important;
+            color: #ffffff !important;
+            transition: background-color 0.2s !important;
+        }
+
+        .btn-swal-cancel:hover {
+            background-color: #4b5563 !important;
+        }
+    </style>
+@endpush
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const canvas = document.getElementById("approval-signature-pad");
+            const form = document.getElementById("approveForm");
+            const clearBtn = document.getElementById("approval-clear");
+            const undoBtn = document.getElementById("approval-undo");
+            const ttdInput = document.getElementById("approval_tanda_tangan");
+            const decisionInput = document.getElementById("approvalDecision");
+
+            if (!canvas || !form || !clearBtn || !undoBtn || !ttdInput) return;
+
+            function resizeCanvas() {
+                const ratio = Math.max(window.devicePixelRatio || 1, 1);
+                const width = canvas.offsetWidth;
+                const height = canvas.offsetHeight;
+                canvas.width = width * ratio;
+                canvas.height = height * ratio;
+                canvas.getContext("2d").scale(ratio, ratio);
+            }
+
+            window.addEventListener("resize", resizeCanvas);
+            resizeCanvas();
+
+            const signaturePad = new SignaturePad(canvas, {
+                backgroundColor: "rgb(255,255,255)",
+            });
+
+            clearBtn.addEventListener("click", function() {
+                signaturePad.clear();
+            });
+
+            undoBtn.addEventListener("click", function() {
+                const data = signaturePad.toData();
+                if (data.length) {
+                    data.pop();
+                    signaturePad.fromData(data);
+                }
+            });
+
+            form.addEventListener("submit", function(e) {
+                if (decisionInput.value === "Disetujui" && signaturePad.isEmpty()) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Tanda Tangan Kosong',
+                        text: 'Silakan isi tanda tangan terlebih dahulu sebelum menyetujui.',
+                        customClass: {
+                            confirmButton: 'btn-swal-approve'
+                        },
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+                e.preventDefault();
+                ttdInput.value = signaturePad.isEmpty() ? '' : signaturePad.toDataURL('image/png');
+                Swal.fire({
+                    title: 'Konfirmasi Persetujuan',
+                    text: 'Apakah Anda yakin?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    customClass: {
+                        confirmButton: 'btn-swal-approve',
+                        cancelButton: 'btn-swal-cancel'
+                    },
+                    confirmButtonText: 'Ya, Setujui',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Berhasil!",
+                            text: "Persetujuan sedang diproses...",
+                            icon: "success",
+                            showConfirmButton: false
+                        });
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
+@endpush

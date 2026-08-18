@@ -155,39 +155,34 @@ class ChangeRequestController extends Controller
                     // Request milik sendiri
                     $q->where('user_id', $user->id);
 
-                    // Menunggu approval tahap 1 -> user adalah atasan peminta
+                    // User adalah approver (atasan langsung) untuk request ini
+                    // tanpa syarat status -> request yang sudah disetujui tetap tampil sebagai log/riwayat
                     $q->orWhere(function ($q2) use ($user, $myJabatan) {
-                        $q2->where('approval_1_status', 'Menunggu')
-                            ->where(function ($q3) use ($user, $myJabatan) {
-                                // cocok lewat user approver (mapping per-akun)
-                                $requesterUserIds = ApprovalMapping::where('approver_user_id', $user->id)
-                                    ->pluck('requester_user_id');
-                                if ($requesterUserIds->count()) {
-                                    $q3->whereIn('user_id', $requesterUserIds);
-                                }
+                        // cocok lewat user approver (mapping per-akun)
+                        $requesterUserIds = ApprovalMapping::where('approver_user_id', $user->id)
+                            ->pluck('requester_user_id');
+                        if ($requesterUserIds->count()) {
+                            $q2->whereIn('user_id', $requesterUserIds);
+                        }
 
-                                // cocok lewat jabatan_id (dari HRIS)
-                                $requesterIds = ApprovalMapping::where('approver_jabatan_id', $user->jabatan_id)
-                                    ->pluck('requester_jabatan_id');
-                                $q3->orWhereIn('jabatan_id', $requesterIds);
+                        // cocok lewat jabatan_id (dari HRIS)
+                        $requesterIds = ApprovalMapping::where('approver_jabatan_id', $user->jabatan_id)
+                            ->pluck('requester_jabatan_id');
+                        $q2->orWhereIn('jabatan_id', $requesterIds);
 
-                                // fallback teks untuk CR lama yang belum punya jabatan_id
-                                $requesterTexts = ApprovalMapping::whereRaw('LOWER(approver_jabatan) = ?', [$myJabatan])
-                                    ->pluck('requester_jabatan');
-                                if ($requesterTexts->count()) {
-                                    $q3->orWhere(function ($q4) use ($requesterTexts) {
-                                        $q4->whereNull('jabatan_id')->whereIn('jabatan', $requesterTexts);
-                                    });
-                                }
+                        // fallback teks untuk CR lama yang belum punya jabatan_id
+                        $requesterTexts = ApprovalMapping::whereRaw('LOWER(approver_jabatan) = ?', [$myJabatan])
+                            ->pluck('requester_jabatan');
+                        if ($requesterTexts->count()) {
+                            $q2->orWhere(function ($q4) use ($requesterTexts) {
+                                $q4->whereNull('jabatan_id')->whereIn('jabatan', $requesterTexts);
                             });
+                        }
                     });
 
-                    // Menunggu approval tahap 2 -> user adalah Manajer Umum
+                    // User adalah Manajer Umum (tahap 2) -> lihat semua CR yang lolos tahap 1 (riwayat)
                     if ($this->isStage2User($user)) {
-                        $q->orWhere(function ($q3) {
-                            $q3->where('approval_1_status', 'Disetujui')
-                                ->where('approval_2_status', 'Menunggu');
-                        });
+                        $q->orWhere('approval_1_status', 'Disetujui');
                     }
                 });
             }
@@ -372,9 +367,19 @@ class ChangeRequestController extends Controller
         $changeRequest = ChangeRequest::findOrFail($id);
         $approvableLevel = $this->approvableLevel($changeRequest);
 
-        // User biasa hanya bisa melihat milik sendiri; approver boleh melihat request yang menunggu persetujuannya
-        if (!$this->isIT() && $changeRequest->user_id !== $user->id && $approvableLevel === 0) {
-            abort(403, 'Akses ditolak.');
+        // IT, pemilik, manajer, atau approver yang berelasi dengan request ini boleh melihat detail
+        // (approver tetap boleh lihat meski sudah menyetujui -> approvableLevel jadi 0)
+        if (!$this->isIT() && !$this->isManager()) {
+            $isOwner = $changeRequest->user_id === $user->id;
+            $mapping = ApprovalMapping::findForRequester($changeRequest->user_id, $changeRequest->jabatan_id, $changeRequest->jabatan ?? '');
+            $isApprover = $mapping && (
+                ApprovalMapping::matchesApprover($mapping, $user->id, $user->jabatan_id, $user->jabatan ?? '')
+                || $this->isApproverStage2($mapping)
+            );
+
+            if (!$isOwner && !$isApprover) {
+                abort(403, 'Akses ditolak.');
+            }
         }
 
         return view('pages.change-request.detail', compact('changeRequest', 'approvableLevel'));
@@ -415,7 +420,7 @@ class ChangeRequestController extends Controller
 
         $request->validate([
             'decision' => 'required|in:Disetujui,Ditolak',
-            'note'     => 'required_if:decision,Ditolak|nullable|string|max:500',
+            'tanda_tangan' => 'required_if:decision,Disetujui|nullable|string',
         ]);
 
         $user = Auth::user();
@@ -425,7 +430,7 @@ class ChangeRequestController extends Controller
         $cr->{$field . '_status'} = $request->decision;
         $cr->{$field . '_by'} = $user->name;
         $cr->{$field . '_at'} = now();
-        $cr->{$field . '_note'} = $request->note;
+        $cr->{$field . '_ttd'} = $request->tanda_tangan;
 
         if ($level === 1) {
             if ($isRejected) {
@@ -440,7 +445,7 @@ class ChangeRequestController extends Controller
                     $cr->approval_2_status = 'Disetujui';
                     $cr->approval_2_by = $user->name;
                     $cr->approval_2_at = now();
-                    $cr->approval_2_note = 'Atasan langsung adalah Manajer Umum (otomatis).';
+                    $cr->approval_2_ttd = $request->tanda_tangan;
                     $cr->save();
                     $this->notifyRequester($cr, 'Disetujui', 2);
                 } else {
