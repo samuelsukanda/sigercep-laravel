@@ -66,6 +66,7 @@
                             <!-- 🔴 DOT -->
                             @if ($unreadCount > 0)
                                 <span
+                                    id="notif-badge"
                                     style="
                                         position: absolute;
                                         top: -7px;
@@ -106,7 +107,7 @@
                                     Notifikasi
                                 </div>
 
-                                <div style="max-height: 400px; overflow-y: auto;">
+                                <div style="max-height: 400px; overflow-y: auto;" id="notif-list">
 
                                     @forelse(auth()->user()->unreadNotifications as $notification)
                                         <div class="px-5 py-4 hover:bg-gray-50 border-b last:border-0">
@@ -152,7 +153,7 @@
                                 </div>
 
                                 @if ($unreadCount > 0)
-                                    <div class="px-2 py-1 border-t">
+                                    <div class="px-2 py-1 border-t" id="notif-markall">
                                         <a href="{{ route('notifications.read-all') }}" class="text-xs text-gray-500"
                                             onmouseover="this.style.color='#2563eb'"
                                             onmouseout="this.style.color='#6b7280'">
@@ -300,74 +301,105 @@
 </nav>
 <!-- end Navbar -->
 
-@push('script')
+@push('scripts')
     <script>
-        function markAndRedirect(event, id, url) {
-            event.preventDefault();
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof Echo === 'undefined') {
+                return;
+            }
 
-            fetch('/notifications/read/' + id, {
-                    method: 'GET',
+            const userId = {{ auth()->user()->id }};
+
+            window.Echo = new Echo({
+                broadcaster: 'reverb',
+                key: '{{ config('reverb.apps.apps.0.key') }}',
+                wsHost: '{{ config('reverb.servers.reverb.hostname') }}',
+                wsPort: {{ config('reverb.servers.reverb.port') }},
+                wssPort: {{ config('reverb.servers.reverb.port') }},
+                forceTLS: {{ config('reverb.apps.apps.0.options.scheme') === 'https' ? 'true' : 'false' }},
+                enabledTransports: ['ws', 'wss'],
+                authEndpoint: '/broadcasting/auth',
+                auth: {
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     }
-                })
-                .then(() => {
-                    // hapus elemen notif dari DOM
-                    event.target.closest('.border-b').remove();
-
-                    window.location.href = url;
-                });
-            .catch(() => {
-                window.location.href = url; // fallback tetap redirect
-            });
-        }
-
-        function markOnly(id) {
-            fetch('/notifications/read/' + id, {
-                method: 'GET',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 }
-            }).then(() => {
-                location.reload(); // biar langsung hilang
             });
-        }
 
-        function markAllRead() {
-            fetch('/notifications/read-all', {
-                method: 'GET',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            function appendNotif(n) {
+                const list = document.getElementById('notif-list');
+                if (!list) return;
+
+                // buang pesan kosong
+                const empty = list.querySelector('.notif-empty');
+                if (empty) empty.remove();
+
+                // update badge
+                const btn = document.querySelector('.fa-bell')?.closest('button');
+                let badge = document.getElementById('notif-badge');
+                if (badge) {
+                    const count = parseInt(badge.textContent, 10) || 0;
+                    badge.textContent = (count + 1) > 99 ? '99+' : (count + 1);
+                } else if (btn) {
+                    badge = document.createElement('span');
+                    badge.id = 'notif-badge';
+                    badge.style.cssText = 'position:absolute;top:-7px;right:-11px;min-width:14px;height:14px;padding:0 3px;background:red;color:white;font-size:9px;font-weight:bold;border-radius:999px;display:flex;align-items:center;justify-content:center;line-height:1;';
+                    badge.textContent = '1';
+                    btn.appendChild(badge);
                 }
-            }).then(() => {
-                location.reload();
-            });
-        }
 
-        // Tooltip hover untuk ikon navbar
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.navbar-tooltip').forEach(function(tooltip) {
-                const parent = tooltip.closest('a');
-                if (!parent) return;
+                // tampilkan footer "tandai semua"
+                const markAll = document.getElementById('notif-markall');
+                if (markAll) markAll.style.display = '';
 
-                parent.addEventListener('mouseenter', function() {
-                    tooltip.style.display = 'block';
-                    tooltip.style.opacity = '0';
-                    tooltip.style.transform = 'translateX(50%) translateY(4px)';
-                    tooltip.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-                    requestAnimationFrame(() => {
-                        tooltip.style.opacity = '1';
-                        tooltip.style.transform = 'translateX(50%) translateY(0)';
-                    });
-                });
+                // prepend item notifikasi baru
+                const item = document.createElement('div');
+                item.className = 'px-5 py-4 hover:bg-gray-50 border-b';
+                item.style.borderBottom = '1px solid #e5e7eb';
 
-                parent.addEventListener('mouseleave', function() {
-                    tooltip.style.opacity = '0';
-                    tooltip.style.transform = 'translateX(50%) translateY(4px)';
-                    setTimeout(() => {
-                        tooltip.style.display = 'none';
-                    }, 200);
-                });
+                const row = document.createElement('div');
+                row.className = 'flex items-start';
+                row.style.cssText = 'display:flex;align-items:flex-start;';
+
+                const dot = document.createElement('div');
+                dot.style.cssText = 'width:8px;height:8px;background:red;border-radius:50%;margin-top:6px;margin-right:10px;flex-shrink:0;';
+
+                const body = document.createElement('div');
+                body.style.cssText = 'flex:1;';
+
+                const link = document.createElement('a');
+                link.href = '/notifications/' + n.id + '/go';
+
+                const msg = document.createElement('div');
+                msg.className = 'text-sm text-gray-800 font-medium';
+                msg.textContent = n.message || 'Notifikasi baru';
+
+                const time = document.createElement('div');
+                time.className = 'text-xs text-gray-500 mt-1';
+                time.textContent = 'Baru saja';
+
+                link.appendChild(msg);
+                link.appendChild(time);
+
+                const markRead = document.createElement('div');
+                markRead.className = 'mt-2';
+                const markLink = document.createElement('a');
+                markLink.href = '/notifications/' + n.id + '/read';
+                markLink.className = 'text-xs text-gray-500';
+                markLink.textContent = 'Tandai sudah dibaca';
+                markRead.appendChild(markLink);
+
+                body.appendChild(link);
+                body.appendChild(markRead);
+                row.appendChild(dot);
+                row.appendChild(body);
+                item.appendChild(row);
+
+                list.prepend(item);
+            }
+
+            window.Echo.private('App.Models.User.' + userId).notification(function (n) {
+                appendNotif(n);
             });
         });
     </script>

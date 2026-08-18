@@ -123,15 +123,7 @@ let table = $("#changeRequestTable").DataTable({
             render: function (data) {
                 let btn = `<div class="flex items-center justify-center gap-2">`;
 
-                if (data.approvable_level > 0) {
-                    btn += `
-                    <a href="/change-request/${data.id}"
-                        class="px-2 py-1 text-xs font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700"
-                        title="Setujui / Tolak Request">
-                        <i class="fas fa-check-double"></i> Approve
-                    </a>
-                    `;
-                }
+
 
                 if (data.can_update) {
                     btn += `
