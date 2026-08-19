@@ -13,9 +13,7 @@
         <div class="flex flex-wrap -mx-3">
             <div class="w-full max-w-full px-3 mx-auto mt-0">
                 {{-- Header --}}
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3>Daftar Tiket Helpdesk</h3>
-                </div>
+                <x-page-header icon="fa-headset" title="Daftar Tiket Helpdesk" subtitle="Kelola tiket helpdesk Anda" />
 
                 {{-- Filter Section --}}
                 @include('layouts.partials.helpdesk.user.filter')

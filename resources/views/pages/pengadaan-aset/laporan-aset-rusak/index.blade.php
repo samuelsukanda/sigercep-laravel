@@ -13,9 +13,7 @@
         <div class="flex flex-wrap -mx-3">
             <div class="w-full max-w-full px-3 mx-auto mt-0">
                 {{-- Header --}}
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3>Daftar Laporan Aset Rusak</h3>
-                </div>
+                <x-page-header icon="fa-triangle-exclamation" title="Daftar Laporan Aset Rusak" subtitle="Kelola laporan aset rusak" />
 
                 {{-- Filter Section --}}
                 @include('layouts.partials.pengadaan-aset.laporan-aset-rusak.filter')

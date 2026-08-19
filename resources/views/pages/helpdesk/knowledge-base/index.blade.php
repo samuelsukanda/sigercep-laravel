@@ -14,9 +14,7 @@
             <div class="w-full max-w-full px-3 mx-auto mt-0">
 
                 {{-- Header --}}
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3>Daftar Knowledge Base</h3>
-                </div>
+                <x-page-header icon="fa-lightbulb" title="Daftar Knowledge Base" subtitle="Kelola knowledge base" />
 
                 {{-- Filter Section --}}
                 @include('layouts.partials.knowledge-base.filter')

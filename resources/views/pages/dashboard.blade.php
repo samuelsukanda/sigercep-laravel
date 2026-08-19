@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'SIGERCEP')
+@section('title', 'SIGERCEP - Dashboard')
 
 @php
     $initialsOf = fn($name) => collect(explode(' ', trim((string) $name)))

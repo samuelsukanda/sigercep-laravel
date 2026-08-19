@@ -19,7 +19,11 @@
             </a>
 
             {{-- Page --}}
-            <h5 class="font-bold capitalize mt-2" style="color: #7664E4 !important;">Dashboard</h5>
+            @php
+                $navTitle = trim(strip_tags((string) $__env->yieldContent('title', 'SIGERCEP')));
+                $navTitle = str_replace('SIGERCEP - ', '', $navTitle);
+            @endphp
+            <h5 class="font-bold capitalize mt-2" style="color: #7664E4 !important;">{{ $navTitle }}</h5>
         </div>
 
         <div class="flex items-center mt-2 grow sm:mt-0 sm:mr-6 md:mr-0 lg:flex lg:basis-auto">
@@ -253,13 +257,13 @@
                         ">
 
                         <!-- Item Setting -->
-                        {{-- <li class="relative">
-                            <a href="{{ route('roles.index') }}"
-                        class="dark:hover:bg-slate-900 ease py-1.2 clear-both block w-full whitespace-nowrap rounded-lg px-4 duration-300 hover:bg-gray-200 hover:text-slate-700 lg:transition-colors text-sm font-semibold dark:text-white">
-                        <i class="fas fa-cog mr-2"></i>
-                        Settings
-                        </a>
-                </li> --}}
+                        <li class="relative">
+                            <a href="{{ route('profile') }}"
+                                class="dark:hover:bg-slate-900 ease py-1.2 clear-both block w-full whitespace-nowrap rounded-lg px-4 duration-300 hover:bg-gray-200 hover:text-slate-700 lg:transition-colors text-sm font-semibold dark:text-white">
+                                <i class="fas fa-user mr-2"></i>
+                                Profil
+                            </a>
+                        </li>
 
                         <!-- Item Logout -->
                         <li class="relative">

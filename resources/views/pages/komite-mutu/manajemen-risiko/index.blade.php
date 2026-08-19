@@ -29,9 +29,7 @@
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
         {{-- Header Section --}}
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="font-bold text-2xl text-slate-800 dark:text-white">Daftar Manajemen Risiko</h3>
-        </div>
+        <x-page-header icon="fa-chart-line" title="Daftar Manajemen Risiko" subtitle="Kelola data manajemen risiko" />
 
         {{-- Statistics Row --}}
         <div class="flex flex-wrap -mx-3 mb-6">

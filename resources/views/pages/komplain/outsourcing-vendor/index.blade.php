@@ -13,9 +13,7 @@
         <div class="flex flex-wrap -mx-3">
             <div class="w-full max-w-full px-3 mx-auto mt-0">
                 {{-- Header --}}
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3>Daftar Komplain Outsourcing Vendor</h3>
-                </div>
+                <x-page-header icon="fa-handshake" title="Daftar Komplain Outsourcing Vendor" subtitle="Kelola komplain outsourcing vendor" />
 
                 {{-- Filter Section --}}
                 @include('layouts.partials.komplain.outsourcing-vendor.filter')
