@@ -270,3 +270,25 @@ html.dark .signature-canvas {
 html.dark hr {
     border-color: #334155;
 }
+
+/* ---------- Theme controls ---------- */
+html.dark .theme-label {
+    color: #94a3b8;
+}
+
+html.dark .dark-toggle {
+    background: #334155;
+    border-color: #475569;
+}
+
+html.dark .dark-toggle .dark-toggle-sun {
+    color: #94a3b8;
+}
+
+html.dark .dark-toggle .dark-toggle-moon {
+    color: #c7d2fe;
+}
+
+html.dark .dark-toggle .dark-toggle-knob {
+    transform: translateX(30px);
+}

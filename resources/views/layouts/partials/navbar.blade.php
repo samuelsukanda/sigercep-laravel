@@ -69,9 +69,7 @@
 
                             <!-- 🔴 DOT -->
                             @if ($unreadCount > 0)
-                                <span
-                                    id="notif-badge"
-                                    class="notif-badge">
+                                <span id="notif-badge" class="notif-badge">
                                     {{ $unreadCount > 99 ? '99+' : $unreadCount }}
                                 </span>
                             @endif
@@ -228,10 +226,10 @@
                     </li>
                 @endif
 
-                {{-- Tema: mode + warna --}}
+                {{-- Tema: warna --}}
                 <li class="relative flex items-center px-2">
                     <button type="button" @click.stop="themeOpen = !themeOpen; notifOpen = false; logoutOpen = false"
-                        class="block p-0 text-sm relative" style="color:var(--accent);" title="Ganti tema">
+                        class="block p-0 text-sm relative" style="color:var(--accent);" title="Pilih warna tema">
                         <i class="fas fa-palette"></i>
                     </button>
 
@@ -244,26 +242,55 @@
                         x-transition:leave-end="opacity-0 translate-y-2 scale-95"
                         class="bg-white rounded-xl shadow-xl border border-gray-200 z-50 dark:bg-slate-850 dark:border-slate-700"
                         style="display:none; position:fixed; top:70px; right:20px; width:220px;">
-                        <div class="px-4 py-3 text-sm font-semibold text-gray-700 border-b dark:text-white dark:border-slate-700">
-                            Tampilan
+                        <div
+                            class="px-4 py-3 text-sm font-semibold text-gray-700 border-b dark:text-white dark:border-slate-700">
+                            Warna Tema
                         </div>
                         <div class="px-4 py-3">
-                            <div class="mb-2 text-xs font-semibold text-gray-500 uppercase">Mode</div>
-                            <button type="button" onclick="SIGERCEP.toggleDark()" id="darkModeLabel"
-                                class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white">
-                                <i class="fas fa-moon mr-2"></i> Mode Gelap
-                            </button>
-                            <div class="mt-3 mb-2 text-xs font-semibold text-gray-500 uppercase">Warna Tema</div>
-                            <div class="flex flex-wrap gap-2">
-                                <button type="button" class="w-7 h-7 rounded-full" style="background:#7664E4" data-theme="violet" title="Ungu" onclick="SIGERCEP.setTheme('violet')"></button>
-                                <button type="button" class="w-7 h-7 rounded-full" style="background:#2563eb" data-theme="blue" title="Biru" onclick="SIGERCEP.setTheme('blue')"></button>
-                                <button type="button" class="w-7 h-7 rounded-full" style="background:#059669" data-theme="green" title="Hijau" onclick="SIGERCEP.setTheme('green')"></button>
-                                <button type="button" class="w-7 h-7 rounded-full" style="background:#ea580c" data-theme="orange" title="Oranye" onclick="SIGERCEP.setTheme('orange')"></button>
-                                <button type="button" class="w-7 h-7 rounded-full" style="background:#e11d48" data-theme="red" title="Merah" onclick="SIGERCEP.setTheme('red')"></button>
-                                <button type="button" class="w-7 h-7 rounded-full" style="background:#0891b2" data-theme="cyan" title="Cyan" onclick="SIGERCEP.setTheme('cyan')"></button>
+                            <div class="theme-label">Pilih warna tema</div>
+                            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                                <button type="button" class="theme-swatch" style="background:#7664E4"
+                                    data-theme="violet" title="Ungu"
+                                    onclick="SIGERCEP.setTheme('violet')"></button>
+                                <button type="button" class="theme-swatch" style="background:#2f6690"
+                                    data-theme="blue" title="Biru Tua" onclick="SIGERCEP.setTheme('blue')"></button>
+                                <button type="button" class="theme-swatch" style="background:#84a98c"
+                                    data-theme="green" title="Hijau Sage"
+                                    onclick="SIGERCEP.setTheme('green')"></button>
+                                <button type="button" class="theme-swatch" style="background:#f48c06"
+                                    data-theme="orange" title="Oranye"
+                                    onclick="SIGERCEP.setTheme('orange')"></button>
+                                <button type="button" class="theme-swatch" style="background:#fcbf49"
+                                    data-theme="red" title="Amber" onclick="SIGERCEP.setTheme('red')"></button>
+                                <button type="button" class="theme-swatch" style="background:#ffb3c6"
+                                    data-theme="cyan" title="Merah Muda"
+                                    onclick="SIGERCEP.setTheme('cyan')"></button>
+                                <button type="button" class="theme-swatch" style="background:#17c3b2"
+                                    data-theme="teal" title="Teal" onclick="SIGERCEP.setTheme('teal')"></button>
+                                <button type="button" class="theme-swatch" style="background:#bc4749"
+                                    data-theme="rust" title="Merah Tanah"
+                                    onclick="SIGERCEP.setTheme('rust')"></button>
+                                <button type="button" class="theme-swatch" style="background:#99582a"
+                                    data-theme="cream" title="Coklat" onclick="SIGERCEP.setTheme('cream')"></button>
+                                <button type="button" class="theme-swatch" style="background:#81c3d7"
+                                    data-theme="sky" title="Biru Muda" onclick="SIGERCEP.setTheme('sky')"></button>
+                                <button type="button" class="theme-swatch" style="background:#f07167"
+                                    data-theme="coral" title="Koral" onclick="SIGERCEP.setTheme('coral')"></button>
+                                <button type="button" class="theme-swatch" style="background:#adc178"
+                                    data-theme="sage" title="Sage" onclick="SIGERCEP.setTheme('sage')"></button>
                             </div>
                         </div>
                     </div>
+                </li>
+
+                {{-- Toggle dark mode --}}
+                <li class="relative flex items-center px-2">
+                    <button type="button" onclick="SIGERCEP.toggleDark()" class="dark-toggle"
+                        title="Mode gelap / terang" aria-label="Mode gelap / terang">
+                        <i class="fas fa-sun dark-toggle-sun"></i>
+                        <span class="dark-toggle-knob"></span>
+                        <i class="fas fa-moon dark-toggle-moon"></i>
+                    </button>
                 </li>
 
                 {{-- Logout --}}
@@ -326,7 +353,7 @@
 
 @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             if (typeof Echo === 'undefined') {
                 return;
             }
@@ -385,7 +412,8 @@
                 row.style.cssText = 'display:flex;align-items:flex-start;';
 
                 const dot = document.createElement('div');
-                dot.style.cssText = 'width:8px;height:8px;background:red;border-radius:50%;margin-top:6px;margin-right:10px;flex-shrink:0;';
+                dot.style.cssText =
+                    'width:8px;height:8px;background:red;border-radius:50%;margin-top:6px;margin-right:10px;flex-shrink:0;';
 
                 const body = document.createElement('div');
                 body.style.cssText = 'flex:1;';
@@ -421,7 +449,7 @@
                 list.prepend(item);
             }
 
-            window.Echo.private('App.Models.User.' + userId).notification(function (n) {
+            window.Echo.private('App.Models.User.' + userId).notification(function(n) {
                 appendNotif(n);
             });
         });

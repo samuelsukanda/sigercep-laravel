@@ -20,11 +20,17 @@
     --slate-100: #f1f5f9;
 }
 
-:root[data-theme="blue"]   { --accent: #2563eb; }
-:root[data-theme="green"]  { --accent: #059669; }
-:root[data-theme="orange"] { --accent: #ea580c; }
-:root[data-theme="red"]    { --accent: #e11d48; }
-:root[data-theme="cyan"]   { --accent: #0891b2; }
+:root[data-theme="blue"]   { --accent: #2f6690; }
+:root[data-theme="green"]  { --accent: #84a98c; }
+:root[data-theme="orange"] { --accent: #f48c06; }
+:root[data-theme="red"]    { --accent: #fcbf49; }
+:root[data-theme="cyan"]   { --accent: #ffb3c6; }
+:root[data-theme="teal"]   { --accent: #17c3b2; }
+:root[data-theme="rust"]   { --accent: #bc4749; }
+:root[data-theme="cream"]  { --accent: #99582a; }
+:root[data-theme="sky"]    { --accent: #81c3d7; }
+:root[data-theme="coral"]  { --accent: #f07167; }
+:root[data-theme="sage"]   { --accent: #adc178; }
 
 /* ---------- Typography ---------- */
 body,
@@ -646,4 +652,71 @@ aside a.bg-blue-500\/13 {
     .dash-col {
         width: 33.3333%;
     }
+}
+
+/* ===== Theme controls (navbar) ===== */
+.theme-swatch {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.theme-swatch:hover {
+    transform: scale(1.12);
+}
+
+.theme-swatch.active {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-focus);
+}
+
+.theme-label {
+    margin-bottom: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--slate-500);
+}
+
+.dark-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 58px;
+    height: 28px;
+    padding: 0 7px;
+    border: 1px solid var(--slate-200);
+    border-radius: 999px;
+    background: var(--slate-100);
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.dark-toggle .dark-toggle-sun {
+    font-size: 12px;
+    color: #f59e0b;
+}
+
+.dark-toggle .dark-toggle-moon {
+    font-size: 12px;
+    color: #6366f1;
+}
+
+.dark-toggle .dark-toggle-knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.28);
+    transition: transform 0.22s ease;
+    z-index: 1;
 }

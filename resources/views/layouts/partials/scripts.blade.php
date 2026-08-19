@@ -21,4 +21,4 @@
 {{-- Custom JS --}}
 <script src="{{ asset('assets/js/custom.js') }}"></script>
 {{-- Theme toggle JS --}}
-<script src="{{ asset('assets/js/theme.js') }}"></script>
+<script src="{{ asset('assets/js/theme.js') }}?v=2"></script>

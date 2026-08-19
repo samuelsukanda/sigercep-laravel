@@ -2,14 +2,11 @@ window.SIGERCEP = window.SIGERCEP || {};
 (function () {
     'use strict';
 
-    function applyDarkUI() {
-        var on = document.documentElement.classList.contains('dark');
-        var lbl = document.getElementById('darkModeLabel');
-        if (lbl) {
-            lbl.innerHTML = on
-                ? '<i class="fas fa-sun mr-2"></i> Mode Terang'
-                : '<i class="fas fa-moon mr-2"></i> Mode Gelap';
-        }
+    function setActiveSwatch() {
+        var current = document.documentElement.getAttribute('data-theme') || 'violet';
+        document.querySelectorAll('.theme-swatch').forEach(function (btn) {
+            btn.classList.toggle('active', btn.getAttribute('data-theme') === current);
+        });
     }
 
     SIGERCEP.toggleDark = function () {
@@ -18,7 +15,6 @@ window.SIGERCEP = window.SIGERCEP || {};
         try {
             localStorage.setItem('sigercep-dark', root.classList.contains('dark') ? 'on' : 'off');
         } catch (e) { }
-        applyDarkUI();
     };
 
     SIGERCEP.setTheme = function (name) {
@@ -26,7 +22,8 @@ window.SIGERCEP = window.SIGERCEP || {};
         try {
             localStorage.setItem('sigercep-theme', name);
         } catch (e) { }
+        setActiveSwatch();
     };
 
-    document.addEventListener('DOMContentLoaded', applyDarkUI);
+    document.addEventListener('DOMContentLoaded', setActiveSwatch);
 })();
