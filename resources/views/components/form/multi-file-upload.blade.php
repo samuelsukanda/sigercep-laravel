@@ -175,7 +175,7 @@
 
                 {{-- Add More --}}
                 <label for="{{ $inputId }}"
-                    onmouseover="this.style.background='rgba(118,100,228,0.15)'; this.style.color='#7664E4'; this.style.transform='scale(1)'"
+                    onmouseover="this.style.background='var(--accent-soft)'; this.style.color='var(--accent)'; this.style.transform='scale(1)'"
                     onmouseout="this.style.background='#fff7ed'; this.style.color='#ea580c'; this.style.transform='scale(1)'"
                     style="
                         margin-top:16px;

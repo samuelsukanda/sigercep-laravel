@@ -25,7 +25,7 @@
                 @elseif (is_array($element))
                     @foreach ($element as $page => $url)
                         @if ($page == $paginator->currentPage())
-                            <span aria-current="page" style="display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;padding:0 10px;font-size:12px;font-weight:600;border-radius:8px;border:1px solid #7664E4;background:#7664E4;color:#fff;">{{ $page }}</span>
+                            <span aria-current="page" style="display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;padding:0 10px;font-size:12px;font-weight:600;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:#fff;">{{ $page }}</span>
                         @else
                             <a href="{{ $url }}" style="display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;padding:0 10px;font-size:12px;font-weight:600;border-radius:8px;border:1px solid #e5e7eb;background:#fff;color:#374151;text-decoration:none;">{{ $page }}</a>
                         @endif

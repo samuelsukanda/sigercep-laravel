@@ -9,19 +9,19 @@
                 @if (!$canRequest)
                     <div class="relative flex flex-col bg-white shadow-soft-xl rounded-2xl overflow-hidden">
                         {{-- Header gradient bar --}}
-                        <div class="h-1.5 w-full" style="background: #7664E4;">
+                        <div class="h-1.5 w-full" style="background: var(--accent);">
                         </div>
 
                         <div class="flex flex-col items-center text-center px-10 pt-14 pb-16">
 
                             {{-- Icon lingkaran ungu (terpusat, berdiri sendiri) --}}
                             <div class="flex items-center justify-center pt-4 pb-2 rounded-full mb-5">
-                                <i class="fas fa-lock text-2xl" style="color:#7664E4;"></i>
+                                <i class="fas fa-lock text-2xl" style="color:var(--accent);"></i>
                             </div>
 
                             {{-- Judul & Subtitle --}}
                             <h5 class="font-bold text-2xl text-slate-800">Akses Tidak Tersedia</h5>
-                            <p class="text-sm font-semibold mb-5" style="color:#7664E4;">Change Request</p>
+                            <p class="text-sm font-semibold mb-5" style="color:var(--accent);">Change Request</p>
 
                             {{-- Description --}}
                             <p class="text-sm text-slate-500 max-w-sm leading-relaxed mb-6">
@@ -33,7 +33,7 @@
                             {{-- Info box --}}
                             <div class="flex items-start gap-3 text-left rounded-xl px-5 py-4 mb-8 w-full max-w-sm"
                                 style="background-color:#f5f3ff; border:1px solid #ddd6fe;">
-                                <i class="fas fa-info-circle mt-0.5 flex-shrink-0 mr-2" style="color:#7664E4;"></i>
+                                <i class="fas fa-info-circle mt-0.5 flex-shrink-0 mr-2" style="color:var(--accent);"></i>
                                 <p class="text-xs leading-relaxed" style="color:#5c4ebd;">
                                     Jika Anda merasa memiliki hak akses, silakan hubungi Administrator sistem untuk
                                     mendaftarkan jabatan Anda.
@@ -43,7 +43,7 @@
                             {{-- Back button --}}
                             <a href="{{ route('change-request.index') }}"
                                 class="inline-flex items-center gap-2 px-8 py-2.5 mb-2 text-sm font-semibold text-white rounded-xl shadow-md hover:opacity-90 transition-all duration-200"
-                                style="background-color: #7664E4;">
+                                style="background-color: var(--accent);">
                                 <i class="fas fa-arrow-left text-xs mr-2"></i>
                                 Kembali ke Daftar
                             </a>

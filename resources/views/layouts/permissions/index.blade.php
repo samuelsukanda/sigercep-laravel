@@ -15,9 +15,9 @@
             width: 28px !important;
             height: 28px !important;
             border-radius: 6px !important;
-            border: 1px solid rgba(118, 100, 228, 0.22) !important;
+            border: 1px solid var(--accent-focus) !important;
             background: transparent !important;
-            color: #7664E4 !important;
+            color: var(--accent) !important;
             font-size: 0.75rem !important;
             cursor: pointer !important;
             flex-shrink: 0 !important;
@@ -28,29 +28,29 @@
 
         .btn-rule-edit:hover {
             background: #f0ecff !important;
-            border-color: #7664E4 !important;
-            color: #6453d4 !important;
+            border-color: var(--accent) !important;
+            color: var(--accent-strong) !important;
         }
 
         .rule-tab-btn.active {
-            color: #7664E4 !important;
-            border-bottom-color: #7664E4 !important;
+            color: var(--accent) !important;
+            border-bottom-color: var(--accent) !important;
             background: #fff !important;
         }
 
         .rule-tab-btn.active .rule-tab-badge {
-            background: #7664E4 !important;
+            background: var(--accent) !important;
             color: #fff !important;
         }
 
         .rule-list-icon {
-            color: #7664E4 !important;
+            color: var(--accent) !important;
             background: #f0ecff !important;
-            border-color: rgba(118, 100, 228, 0.18) !important;
+            border-color: var(--accent-focus) !important;
         }
 
         .rule-list-item:hover {
-            border-color: #7664E4 !important;
+            border-color: var(--accent) !important;
         }
     </style>
 @endpush
@@ -289,7 +289,7 @@
 
         {{-- Panel Header --}}
         <div class="rule-panel-header"
-            style="background: #7664E4; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; border-bottom: none; height: auto;">
+            style="background: var(--accent); padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; border-bottom: none; height: auto;">
             <div class="rule-panel-header-info">
                 <h3 id="panelTitle"
                     style="margin: 0; font-size: 14px; font-weight: 700; color: #fff; line-height: 1.2; font-family: inherit;">
@@ -395,7 +395,7 @@
                     <div
                         style="padding:12px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;margin-top:.5rem">
                         <p style="font-size:.72rem;color:#64748b;margin:0;line-height:1.6">
-                            <i class="fas fa-circle-info" style="color:#7664E4;margin-right:5px"></i>
+                            <i class="fas fa-circle-info" style="color:var(--accent);margin-right:5px"></i>
                             Pilih satu user sebagai rule. Rule cocok jika data user (nama/unit/jabatan) sesuai.
                         </p>
                     </div>
@@ -429,7 +429,7 @@
                     font-size: 13px;
                     font-weight: 700;
                     color: #fff;
-                    background: #7664E4;
+                    background: var(--accent);
                     border: none;
                     border-radius: 8px;
                     cursor: pointer;
@@ -438,8 +438,8 @@
                     gap: 7px;
                     transition: background 0.15s, box-shadow 0.15s;
                 "
-                onmouseover="this.style.background='#6453d4'; this.style.boxShadow='0 4px 12px rgba(118,100,228,0.35)'"
-                onmouseout="this.style.background='#7664E4'; this.style.boxShadow='none'">
+                onmouseover="this.style.background='var(--accent-strong)'; this.style.boxShadow='0 4px 12px var(--accent-shadow)'"
+                onmouseout="this.style.background='var(--accent)'; this.style.boxShadow='none'">
                 <i class="fas fa-plus"></i> Tambah Rule
             </button>
         </div>
@@ -453,7 +453,7 @@
             {{-- ── Header ── --}}
             <div
                 style="
-                background: #7664E4;
+                background: var(--accent);
                 padding: 1rem 1.25rem;
                 display: flex;
                 align-items: center;
@@ -547,7 +547,7 @@
                                     cursor: pointer;
                                     transition: border-color 0.15s, box-shadow 0.15s;
                                 "
-                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                                 onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
                                 <option value="">Pilih Menu...</option>
                                 @foreach ($allMenus as $m)
@@ -589,7 +589,7 @@
                                     cursor: pointer;
                                     transition: border-color 0.15s, box-shadow 0.15s;
                                 "
-                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                                 onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
                                 <option value="read">READ</option>
                                 <option value="create">CREATE</option>
@@ -609,7 +609,7 @@
                         <button type="button" onclick="addModalRuleRow()"
                             style="
                                 font-size: 11px !important;
-                                color: #7664E4 !important;
+                                color: var(--accent) !important;
                                 background: none !important;
                                 border: none !important;
                                 cursor: pointer !important;
@@ -697,7 +697,7 @@
                             font-size: 13px;
                             font-weight: 700;
                             color: #fff;
-                            background: #7664E4;
+                            background: var(--accent);
                             border: none;
                             border-radius: 8px;
                             cursor: pointer;
@@ -706,8 +706,8 @@
                             gap: 7px;
                             transition: background 0.15s, box-shadow 0.15s;
                         "
-                        onmouseover="this.style.background='#6453d4'; this.style.boxShadow='0 4px 12px rgba(118,100,228,0.35)'"
-                        onmouseout="this.style.background='#7664E4'; this.style.boxShadow='none'">
+                        onmouseover="this.style.background='var(--accent-strong)'; this.style.boxShadow='0 4px 12px var(--accent-shadow)'"
+                        onmouseout="this.style.background='var(--accent)'; this.style.boxShadow='none'">
                         <i class="fas fa-save" style="font-size: 12px;"></i>
                         Simpan
                     </button>
@@ -723,7 +723,7 @@
 
             <div
                 style="
-                background: #7664E4;
+                background: var(--accent);
                 padding: 1rem 1.25rem;
                 display: flex;
                 align-items: center;
@@ -812,7 +812,7 @@
                             outline: none;
                             transition: border-color 0.15s, box-shadow 0.15s;
                         "
-                        onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                        onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                         onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
                     <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Kosongkan jika tidak perlu filter nama
                     </div>
@@ -845,7 +845,7 @@
                             outline: none;
                             transition: border-color 0.15s, box-shadow 0.15s;
                         "
-                        onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                        onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                         onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
                     <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Kosongkan jika tidak perlu filter unit
                     </div>
@@ -878,7 +878,7 @@
                             outline: none;
                             transition: border-color 0.15s, box-shadow 0.15s;
                         "
-                        onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                        onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                         onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
                     <div style="font-size: 11px; color: #64748b; margin-top: 4px;">Kosongkan jika tidak perlu filter
                         jabatan</div>
@@ -886,7 +886,7 @@
 
                 <div style="padding:12px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;margin-top:.5rem">
                     <p style="font-size:.72rem;color:#64748b;margin:0;line-height:1.6">
-                        <i class="fas fa-circle-info" style="color:#7664E4;margin-right:5px"></i>
+                        <i class="fas fa-circle-info" style="color:var(--accent);margin-right:5px"></i>
                         Minimal isi satu field. Rule cocok jika semua field yang diisi sesuai data user.
                     </p>
                 </div>
@@ -925,7 +925,7 @@
                             font-size: 13px;
                             font-weight: 700;
                             color: #fff;
-                            background: #7664E4;
+                            background: var(--accent);
                             border: none;
                             border-radius: 8px;
                             cursor: pointer;
@@ -934,8 +934,8 @@
                             gap: 7px;
                             transition: background 0.15s, box-shadow 0.15s;
                         "
-                        onmouseover="this.style.background='#6453d4'; this.style.boxShadow='0 4px 12px rgba(118,100,228,0.35)'"
-                        onmouseout="this.style.background='#7664E4'; this.style.boxShadow='none'">
+                        onmouseover="this.style.background='var(--accent-strong)'; this.style.boxShadow='0 4px 12px var(--accent-shadow)'"
+                        onmouseout="this.style.background='var(--accent)'; this.style.boxShadow='none'">
                         <i class="fas fa-floppy-disk"></i> Simpan Perubahan
                     </button>
                 </div>

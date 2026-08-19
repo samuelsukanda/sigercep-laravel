@@ -89,7 +89,7 @@
                     <!-- Button Cari -->
                     <button type="submit"
                         class="mr-1 inline-block px-4 py-2 mb-0 text-xs font-semibold text-center text-white uppercase align-middle transition-all rounded-lg shadow-md hover:shadow-xs active:opacity-85"
-                        style="background-color: #7664E4 !important;">
+                        style="background-color: var(--accent) !important;">
 
                         <!-- Flat Search Icon -->
                         <i class="fas fa-search text-sm leading-normal"></i>

@@ -59,7 +59,7 @@
                     {{-- ── Header ── --}}
                     <div
                         style="
-                    background: #7664E4;
+                    background: var(--accent);
                     padding: 1rem 1.25rem;
                     display: flex;
                     align-items: center;
@@ -141,7 +141,7 @@
                                 outline: none;
                                 transition: border-color 0.15s, box-shadow 0.15s;
                             "
-                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                                 onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
                             @error('tanggal')
                                 <span
@@ -172,9 +172,9 @@
                                             onchange="
                                                 var span = this.nextElementSibling;
                                                 if (this.checked) {
-                                                    span.style.background='#7664E4';
+                                                    span.style.background='var(--accent)';
                                                     span.style.color='#fff';
-                                                    span.style.borderColor='#7664E4';
+                                                    span.style.borderColor='var(--accent)';
                                                 } else {
                                                     span.style.background='#f1f5f9';
                                                     span.style.color='#475569';

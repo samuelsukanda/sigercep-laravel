@@ -1,5 +1,5 @@
 <!-- Navbar -->
-<nav x-data="{ notifOpen: false, logoutOpen: false }"
+<nav x-data="{ notifOpen: false, logoutOpen: false, themeOpen: false }"
     class="relative flex flex-wrap items-center justify-between px-0 py-2 mx-6 transition-all ease-in shadow-none duration-250 rounded-2xl lg:flex-nowrap lg:justify-start"
     navbar-main navbar-scroll="false">
     <div class="mt-4 flex items-center justify-between w-full px-4 flex-wrap-inherit">
@@ -10,11 +10,11 @@
                 sidenav-trigger>
                 <div class="w-4.5 overflow-hidden">
                     <i class="ease mb-0.75 relative block h-0.5 rounded-sm transition-all"
-                        style="background-color: #7664E4 !important;"></i>
+                        style="background-color: var(--accent) !important;"></i>
                     <i class="ease mb-0.75 relative block h-0.5 rounded-sm transition-all"
-                        style="background-color: #7664E4 !important;"></i>
+                        style="background-color: var(--accent) !important;"></i>
                     <i class="ease relative block h-0.5 rounded-sm transition-all"
-                        style="background-color: #7664E4 !important;"></i>
+                        style="background-color: var(--accent) !important;"></i>
                 </div>
             </a>
 
@@ -23,7 +23,7 @@
                 $navTitle = trim(strip_tags((string) $__env->yieldContent('title', 'SIGERCEP')));
                 $navTitle = str_replace('SIGERCEP - ', '', $navTitle);
             @endphp
-            <h5 class="font-bold capitalize mt-2" style="color: #7664E4 !important;">{{ $navTitle }}</h5>
+            <h5 class="font-bold capitalize mt-2" style="color: var(--accent) !important;">{{ $navTitle }}</h5>
         </div>
 
         <div class="flex items-center mt-2 grow sm:mt-0 sm:mr-6 md:mr-0 lg:flex lg:basis-auto">
@@ -34,20 +34,20 @@
                     <div class="flex items-center space-x-3">
                         @if (Auth::check())
                             <span class="text-sm font-semibold uppercase"
-                                style="color: #7664E4 !important;">{{ ucwords(str_replace('.', ' ', Auth::user()->name)) }}</span>
+                                style="color: var(--accent) !important;">{{ ucwords(str_replace('.', ' ', Auth::user()->name)) }}</span>
                         @endif
                     </div>
                 </li>
                 <li class="flex items-center h-full px-1 cursor-pointer">
                     <div class="flex items-center space-x-3">
-                        <span class="text-sm font-semibold" style="color: #7664E4 !important;"> - </span>
+                        <span class="text-sm font-semibold" style="color: var(--accent) !important;"> - </span>
                     </div>
                 </li>
                 <li class="flex items-center h-full pr-2 cursor-pointer" title="Jabatan">
                     <div class="flex items-center space-x-3">
                         @if (Auth::check())
                             <span class="text-sm font-semibold uppercase"
-                                style="color: #7664E4 !important;">{{ Auth::user()->jabatan }}</span>
+                                style="color: var(--accent) !important;">{{ Auth::user()->jabatan }}</span>
                         @endif
                     </div>
                 </li>
@@ -59,7 +59,7 @@
                         <!-- BUTTON NOTIF -->
 
                         <button type="button" @click.stop="notifOpen = !notifOpen; logoutOpen = false"
-                            class="block p-0 text-sm relative" style="color:#7664E4;">
+                            class="block p-0 text-sm relative" style="color:var(--accent);">
 
 
                             <!-- ICON BELL -->
@@ -158,7 +158,7 @@
                     <li class="flex items-center px-2">
                         <a href="{{ route('approval-mapping.index') }}" title="Approval Change Request"
                             class="relative p-0 text-sm transition-all ease-nav-brand group"
-                            style="color: #7664E4 !important;">
+                            style="color: var(--accent) !important;">
                             <i class="fas fa-user-check cursor-pointer"></i>
 
                             {{-- Tooltip --}}
@@ -208,25 +208,63 @@
                 @if ($canAccessPermissions)
                     <li class="flex items-center px-2">
                         <a href="{{ route('permissions.index') }}" title="Permission"
-                            class="p-0 text-sm transition-all ease-nav-brand" style="color: #7664E4 !important;">
+                            class="p-0 text-sm transition-all ease-nav-brand" style="color: var(--accent) !important;">
                             <i class="cursor-pointer fa fa-cog"></i>
                         </a>
                     </li>
 
                     <li class="flex items-center px-2">
                         <a href="{{ route('user.monitoring') }}" title="Monitoring User"
-                            class="p-0 text-sm transition-all ease-nav-brand" style="color: #7664E4 !important;">
+                            class="p-0 text-sm transition-all ease-nav-brand" style="color: var(--accent) !important;">
                             <i class="cursor-pointer fa fa-signal"></i>
                         </a>
                     </li>
 
                     <li class="flex items-center px-2">
                         <a href="{{ route('users') }}" title="Daftar User"
-                            class="p-0 text-sm transition-all ease-nav-brand" style="color: #7664E4 !important;">
+                            class="p-0 text-sm transition-all ease-nav-brand" style="color: var(--accent) !important;">
                             <i class="cursor-pointer fa fa-users"></i>
                         </a>
                     </li>
                 @endif
+
+                {{-- Tema: mode + warna --}}
+                <li class="relative flex items-center px-2">
+                    <button type="button" @click.stop="themeOpen = !themeOpen; notifOpen = false; logoutOpen = false"
+                        class="block p-0 text-sm relative" style="color:var(--accent);" title="Ganti tema">
+                        <i class="fas fa-palette"></i>
+                    </button>
+
+                    <div x-show="themeOpen" @click.away="themeOpen = false"
+                        x-transition:enter="transition ease-out duration-100"
+                        x-transition:enter-start="opacity-0 translate-y-2 scale-95"
+                        x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                        x-transition:leave-end="opacity-0 translate-y-2 scale-95"
+                        class="bg-white rounded-xl shadow-xl border border-gray-200 z-50 dark:bg-slate-850 dark:border-slate-700"
+                        style="display:none; position:fixed; top:70px; right:20px; width:220px;">
+                        <div class="px-4 py-3 text-sm font-semibold text-gray-700 border-b dark:text-white dark:border-slate-700">
+                            Tampilan
+                        </div>
+                        <div class="px-4 py-3">
+                            <div class="mb-2 text-xs font-semibold text-gray-500 uppercase">Mode</div>
+                            <button type="button" onclick="SIGERCEP.toggleDark()" id="darkModeLabel"
+                                class="w-full text-left px-3 py-2 rounded-lg text-sm font-semibold bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-white">
+                                <i class="fas fa-moon mr-2"></i> Mode Gelap
+                            </button>
+                            <div class="mt-3 mb-2 text-xs font-semibold text-gray-500 uppercase">Warna Tema</div>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" class="w-7 h-7 rounded-full" style="background:#7664E4" data-theme="violet" title="Ungu" onclick="SIGERCEP.setTheme('violet')"></button>
+                                <button type="button" class="w-7 h-7 rounded-full" style="background:#2563eb" data-theme="blue" title="Biru" onclick="SIGERCEP.setTheme('blue')"></button>
+                                <button type="button" class="w-7 h-7 rounded-full" style="background:#059669" data-theme="green" title="Hijau" onclick="SIGERCEP.setTheme('green')"></button>
+                                <button type="button" class="w-7 h-7 rounded-full" style="background:#ea580c" data-theme="orange" title="Oranye" onclick="SIGERCEP.setTheme('orange')"></button>
+                                <button type="button" class="w-7 h-7 rounded-full" style="background:#e11d48" data-theme="red" title="Merah" onclick="SIGERCEP.setTheme('red')"></button>
+                                <button type="button" class="w-7 h-7 rounded-full" style="background:#0891b2" data-theme="cyan" title="Cyan" onclick="SIGERCEP.setTheme('cyan')"></button>
+                            </div>
+                        </div>
+                    </div>
+                </li>
 
                 {{-- Logout --}}
                 <li class="relative flex items-center px-2">
@@ -241,7 +279,7 @@
                         x-transition:leave-start="opacity-100 translate-y-0 scale-100"
                         x-transition:leave-end="opacity-0 translate-y-2 scale-95"
                         class="block p-0 text-sm transition-all ease-nav-brand" aria-expanded="false"
-                        style="color: #7664E4 !important;">
+                        style="color: var(--accent) !important;">
                         <i class="fa fa-power-off" title="Logout"></i>
                     </a>
 

@@ -20,3 +20,5 @@
 <script src="https://cdn.jsdelivr.net/npm/pusher-js@8.4.0/dist/web/pusher.min.js"></script>
 {{-- Custom JS --}}
 <script src="{{ asset('assets/js/custom.js') }}"></script>
+{{-- Theme toggle JS --}}
+<script src="{{ asset('assets/js/theme.js') }}"></script>

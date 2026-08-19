@@ -63,7 +63,7 @@
                                 {{-- Button Tambah --}}
                                 <button type="button" onclick="bukaModalTambah()"
                                     class="inline-flex items-center justify-center h-9 px-4 text-xs font-semibold text-white uppercase rounded-lg shadow-md hover:shadow-sm active:opacity-85 transition-all"
-                                    style="background-color: #7664E4 !important;">
+                                    style="background-color: var(--accent) !important;">
                                     Tambah Data
                                 </button>
                             </div>
@@ -292,7 +292,7 @@
                     'padding:0 10px;font-size:12px;font-weight:600;border-radius:8px;border:1px solid #e5e7eb;' +
                     'background:#fff;color:#374151;cursor:pointer;';
                 if (disabled) style += 'opacity:0.4;cursor:not-allowed;';
-                if (active) style += 'background:#7664E4;border-color:#7664E4;color:#fff;';
+                if (active) style += 'background:var(--accent);border-color:var(--accent);color:#fff;';
                 var onclick = disabled ? '' : ' onclick="pindahHalaman(' + hal + ')"';
                 return '<button type="button" style="' + style + '"' + onclick + '>' + label + '</button>';
             };
@@ -370,7 +370,7 @@
             <div style="background:#fff; border-radius:12px; box-shadow:0 1px 4px rgba(0,0,0,0.08);
                         border:1px solid #e5e7eb; margin-bottom:16px; overflow:hidden;">
                 <div onclick="toggleKartu(this)" style="cursor:pointer; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
-                            padding:14px 20px; background:linear-gradient(135deg,#7664E4 0%,#9b8af0 100%);">
+                            padding:14px 20px; background:linear-gradient(135deg,var(--accent-grad-1) 0%,var(--accent-grad-3) 100%);">
                     <div style="display:flex; align-items:center; gap:12px;">
                         <i class="fas fa-chevron-down kartu-chevron" style="color:#fff; font-size:12px; transition:transform 0.2s;"></i>
                         <div style="width:36px; height:36px; border-radius:10px; background:rgba(255,255,255,0.2);
@@ -566,7 +566,7 @@
             var btn = document.querySelector('[onclick="saveHealthCheck()"]');
             if (!btn) return;
             btn.innerHTML = '<i class="fas fa-save"></i> Simpan';
-            btn.style.background = '#7664E4';
+            btn.style.background = 'var(--accent)';
             btn.disabled = false;
         }
 
@@ -593,7 +593,7 @@
                 th.style.background = '#f5f3ff';
                 th.innerHTML = `
                     <td colspan="5" style="padding:8px 8px 8px 8px; border-bottom:1px solid #e5e7eb; border-top:2px solid #e5e7eb;">
-                        <span style="font-size:11px; font-weight:800; color:#7664E4; text-transform:uppercase; letter-spacing:0.05em;">
+                        <span style="font-size:11px; font-weight:800; color:var(--accent); text-transform:uppercase; letter-spacing:0.05em;">
                             <i class="fas fa-chevron-circle-right" style="margin-right:6px;"></i>${category}
                         </span>
                     </td>`;
@@ -720,7 +720,7 @@
                         btn.disabled = false;
                         setTimeout(function() {
                             btn.innerHTML = originalHTML;
-                            btn.style.background = '#7664E4';
+                            btn.style.background = 'var(--accent)';
                         }, 1800);
                     }
                 })
@@ -730,7 +730,7 @@
                     btn.disabled = false;
                     setTimeout(function() {
                         btn.innerHTML = originalHTML;
-                        btn.style.background = '#7664E4';
+                        btn.style.background = 'var(--accent)';
                     }, 1800);
                 });
         }
@@ -767,7 +767,7 @@
                                     title: 'Terhapus!',
                                     text: 'Data berhasil dihapus.',
                                     icon: 'success',
-                                    confirmButtonColor: '#7664E4',
+                                    confirmButtonColor: 'var(--accent)',
                                     zIndex: 20000,
                                     customClass: {
                                         confirmButton: 'btn-swal-success'
@@ -803,7 +803,7 @@
         }
 
         .btn-swal-success {
-            background-color: #7664E4 !important;
+            background-color: var(--accent) !important;
             color: #ffffff !important;
             transition: background-color 0.2s !important;
         }
@@ -861,7 +861,7 @@
             justify-content: space-between;
             padding: 16px 24px;
             border-radius: 16px 16px 0 0;
-            background: #7664E4;
+            background: var(--accent);
             flex-shrink: 0;
         }
 
@@ -1090,23 +1090,23 @@
                                 <tr>
                                     <th
                                         style="color:#fff; text-align:center; font-weight:700; font-size:12px; padding:10px 8px;
-                                               border-radius:8px 0 0 0; background:#7664E4; letter-spacing:0.04em;">
+                                               border-radius:8px 0 0 0; background:var(--accent); letter-spacing:0.04em;">
                                         No</th>
                                     <th
                                         style="color:#fff; text-align:left; font-weight:700; font-size:12px; padding:10px 12px;
-                                               background:#7664E4; letter-spacing:0.04em;">
+                                               background:var(--accent); letter-spacing:0.04em;">
                                         Component</th>
                                     <th
                                         style="color:#fff; text-align:center; font-weight:700; font-size:12px; padding:10px 8px;
-                                               background:#7664E4; letter-spacing:0.04em;">
+                                               background:var(--accent); letter-spacing:0.04em;">
                                         Value</th>
                                     <th
                                         style="color:#fff; text-align:center; font-weight:700; font-size:12px; padding:10px 8px;
-                                               background:#7664E4; letter-spacing:0.04em;">
+                                               background:var(--accent); letter-spacing:0.04em;">
                                         Status</th>
                                     <th
                                         style="color:#fff; text-align:left; font-weight:700; font-size:12px; padding:10px 8px;
-                                               border-radius:0 8px 0 0; background:#7664E4; letter-spacing:0.04em;">
+                                               border-radius:0 8px 0 0; background:var(--accent); letter-spacing:0.04em;">
                                         Notes</th>
                                 </tr>
                             </thead>
@@ -1145,9 +1145,9 @@
                 <button type="button" onclick="saveHealthCheck()"
                     style="display:inline-flex; align-items:center; gap:8px; padding:9px 24px;
                            font-size:13px; font-weight:700; color:#fff; border:none; cursor:pointer;
-                           border-radius:8px; background:#7664E4; box-shadow:0 2px 8px rgba(118,100,228,0.35);
+                           border-radius:8px; background:var(--accent); box-shadow:0 2px 8px var(--accent-shadow);
                            transition:background 0.15s;"
-                    onmouseover="this.style.background='#6453d4'" onmouseout="this.style.background='#7664E4'">
+                    onmouseover="this.style.background='var(--accent-strong)'" onmouseout="this.style.background='var(--accent)'">
                     <i class="fas fa-save"></i> Simpan
                 </button>
             </div>

@@ -1265,7 +1265,7 @@
 }
 .perm-act-cell.locked {
     background: var(--accent-lt);
-    border: 1px solid rgba(118, 100, 228, 0.28);
+    border: 1px solid var(--accent-shadow);
     color: var(--accent);
 }
 .perm-act-cell.locked:hover {
@@ -1286,10 +1286,10 @@
 
 /* -- Superadmin row -- */
 .perm-super-row td {
-    background: rgba(118, 100, 228, 0.05) !important;
+    background: var(--accent-soft) !important;
 }
 .superadmin-chip {
-    background: linear-gradient(135deg, #7664e4, #6453d4) !important;
+    background: linear-gradient(135deg, var(--accent), var(--accent-strong)) !important;
     border-color: transparent !important;
     color: #fff !important;
     max-width: none !important;

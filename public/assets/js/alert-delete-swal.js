@@ -20,7 +20,7 @@ swalStyle.innerHTML = `
     background-color: #4b5563 !important;
   }
   .swal2-container .btn-swal-success {
-    background-color: #7664E4 !important;
+    background-color: var(--accent) !important;
     color: #ffffff !important;
     border: none !important;
     transition: background-color 0.2s !important;

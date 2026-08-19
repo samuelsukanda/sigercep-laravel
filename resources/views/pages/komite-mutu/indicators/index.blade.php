@@ -213,8 +213,8 @@
                             <a href="{{ route('indicators.index', ['jenis' => $opt, 'tahun' => $tahun]) }}"
                                 class="px-4 py-2 text-xs font-bold rounded-lg transition-all border"
                                 style="{{ $isActive
-                                    ? 'background-color: #7664E4 !important; color: white !important; border-color: transparent !important; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1) !important;'
-                                    : 'background-color: transparent !important; color: #7664E4 !important; border-color: #7664E4 !important;' }} margin-right: 8px !important; margin-bottom: 8px !important;">
+                                    ? 'background-color: var(--accent) !important; color: white !important; border-color: transparent !important; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1) !important;'
+                                    : 'background-color: transparent !important; color: var(--accent) !important; border-color: var(--accent) !important;' }} margin-right: 8px !important; margin-bottom: 8px !important;">
                                 {{ $opt }}
                             </a>
                         @endforeach
@@ -795,7 +795,7 @@
         }
 
         .btn-swal-success {
-            background-color: #7664E4 !important;
+            background-color: var(--accent) !important;
             color: #ffffff !important;
             transition: background-color 0.2s !important;
         }
@@ -883,7 +883,7 @@
                         title: 'Terhapus!',
                         text: 'Data berhasil dihapus.',
                         icon: 'success',
-                        confirmButtonColor: '#7664E4',
+                        confirmButtonColor: 'var(--accent)',
                         customClass: {
                             confirmButton: 'btn-swal-success'
                         },

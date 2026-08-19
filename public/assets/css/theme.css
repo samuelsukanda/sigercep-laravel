@@ -6,16 +6,25 @@
 
 :root {
     --accent: #7664E4;
-    --accent-strong: #5f4dd6;
-    --accent-soft: rgba(118, 100, 228, 0.12);
-    --accent-focus: rgba(118, 100, 228, 0.2);
-    --accent-shadow: rgba(95, 77, 214, 0.28);
+    --accent-strong: color-mix(in srgb, var(--accent) 78%, #0f172a);
+    --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
+    --accent-focus: color-mix(in srgb, var(--accent) 20%, transparent);
+    --accent-shadow: color-mix(in srgb, var(--accent) 28%, transparent);
+    --accent-grad-1: var(--accent);
+    --accent-grad-2: color-mix(in srgb, var(--accent) 78%, #fff);
+    --accent-grad-3: color-mix(in srgb, var(--accent) 58%, #fff);
     --slate-700: #334155;
     --slate-500: #64748b;
     --slate-300: #cbd5e1;
     --slate-200: #e2e8f0;
     --slate-100: #f1f5f9;
 }
+
+:root[data-theme="blue"]   { --accent: #2563eb; }
+:root[data-theme="green"]  { --accent: #059669; }
+:root[data-theme="orange"] { --accent: #ea580c; }
+:root[data-theme="red"]    { --accent: #e11d48; }
+:root[data-theme="cyan"]   { --accent: #0891b2; }
 
 /* ---------- Typography ---------- */
 body,
@@ -534,7 +543,7 @@ aside a.bg-blue-500\/13 {
 
 /* ===== PAGE HEADER (component) ===== */
 .pg-header {
-    background: linear-gradient(135deg, #7664E4 0%, #9b8df0 60%, #b8aef6 100%);
+    background: linear-gradient(135deg, var(--accent-grad-1) 0%, var(--accent-grad-2) 60%, var(--accent-grad-3) 100%);
     border-radius: 20px;
     padding: 24px 28px;
     margin-bottom: 24px;

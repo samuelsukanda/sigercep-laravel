@@ -44,7 +44,7 @@
 
                         <tr>
                             <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
-                                style="color: #7664E4 !important;">
+                                style="color: var(--accent) !important;">
                                 Analisa IT
                             </td>
                             <td class="w-3/4 px-4 py-3 align-top">
@@ -54,7 +54,7 @@
 
                         <tr>
                             <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
-                                style="color: #7664E4 !important;">
+                                style="color: var(--accent) !important;">
                                 Tindakan / Rencana
                             </td>
                             <td class="w-3/4 px-4 py-3 align-top">
@@ -64,7 +64,7 @@
 
                         <tr>
                             <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
-                                style="color: #7664E4 !important;">
+                                style="color: var(--accent) !important;">
                                 Estimasi Penyelesaian
                             </td>
                             <td class="w-3/4 px-4 py-3 align-top">
@@ -74,7 +74,7 @@
 
                         <tr>
                             <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
-                                style="color: #7664E4 !important;">
+                                style="color: var(--accent) !important;">
                                 {{ $labelDate }}
                             </td>
                             <td class="w-3/4 px-4 py-3 align-top">
@@ -85,7 +85,7 @@
                         @if ($ticket->approval && $ticket->approval->approval_status == 'Need Clarification')
                             <tr>
                                 <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
-                                    style="color: #7664E4 !important;">
+                                    style="color: var(--accent) !important;">
                                     Tanggal Selesai
                                 </td>
                                 <td class="w-3/4 px-4 py-3 align-top">
@@ -96,7 +96,7 @@
 
                         <tr>
                             <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
-                                style="color: #7664E4 !important;">
+                                style="color: var(--accent) !important;">
                                 {{ $labelBy }}
                             </td>
                             <td class="w-3/4 px-4 py-3 align-top">
@@ -107,7 +107,7 @@
                         @if ($ticket->approval->approval_note)
                             <tr>
                                 <td class="w-1/4 px-4 py-3 font-semibold bg-gray-50 border-r border-gray-300 align-top"
-                                    style="color: #7664E4 !important;">
+                                    style="color: var(--accent) !important;">
                                     {{ $labelNote }}
                                 </td>
                                 <td class="w-3/4 px-4 py-3 align-top">

@@ -44,7 +44,7 @@
                             <button type="button" onclick="bukaModalEvaluasi()"
                                 style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px;
                                        font-size:12px; font-weight:600; color:#fff; border:none; cursor:pointer;
-                                       border-radius:8px; background:#7664E4; box-shadow:0 2px 6px rgba(118,100,228,0.4);">
+                                       border-radius:8px; background:var(--accent); box-shadow:0 2px 6px var(--accent-shadow);">
                                 TAMBAH DATA
                             </button>
                         </div>
@@ -72,7 +72,7 @@
                     <a href="{{ route('hardware.index') }}"
                         style="display:inline-flex; align-items:center; gap:8px; margin-top:16px; padding:10px 20px;
                                font-size:13px; font-weight:600; color:#fff; border:none; cursor:pointer;
-                               border-radius:8px; background:#7664E4; text-decoration:none;">
+                               border-radius:8px; background:var(--accent); text-decoration:none;">
                         <i class="fas fa-arrow-left"></i> Ke Halaman Hardware
                     </a>
                 </div>
@@ -106,7 +106,7 @@
         }
 
         .btn-swal-success {
-            background-color: #7664E4 !important;
+            background-color: var(--accent) !important;
             color: #ffffff !important;
             transition: background-color 0.2s !important;
         }
@@ -243,7 +243,7 @@
             <div style="background:#fff; border-radius:12px; box-shadow:0 1px 4px rgba(0,0,0,0.08);
                         border:1px solid #e5e7eb; margin-bottom:16px; overflow:hidden;">
                 <div onclick="toggleKartu(this)" style="cursor:pointer; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
-                            padding:14px 20px; background:linear-gradient(135deg,#7664E4 0%,#9b8af0 100%);">
+                            padding:14px 20px; background:linear-gradient(135deg,var(--accent-grad-1) 0%,var(--accent-grad-3) 100%);">
                     <div style="display:flex; align-items:center; gap:10px;">
                         <i class="fas fa-chevron-down kartu-chevron" style="color:#fff; font-size:12px; transition:transform 0.2s;"></i>
                         <div style="width:32px; height:32px; border-radius:8px; background:rgba(255,255,255,0.2);
@@ -327,7 +327,7 @@
                     'padding:0 10px;font-size:12px;font-weight:600;border-radius:8px;border:1px solid #e5e7eb;' +
                     'background:#fff;color:#374151;cursor:pointer;';
                 if (disabled) style += 'opacity:0.4;cursor:not-allowed;';
-                if (active) style += 'background:#7664E4;border-color:#7664E4;color:#fff;';
+                if (active) style += 'background:var(--accent);border-color:var(--accent);color:#fff;';
                 var onclick = disabled ? '' : ' onclick="pindahHalamanEvaluasi(' + hal + ')"';
                 return '<button type="button" style="' + style + '"' + onclick + '>' + label + '</button>';
             };
@@ -431,7 +431,7 @@
             semua.forEach(function(item) {
                 var namaB = namaBulan(item.bulan);
                 semuaRows +=
-                    `<tr><td colspan="3" style="padding:12px 10px 6px; font-weight:700; font-size:14px; color:#7664E4; border:none; border-top:2px solid #7664E4;">${namaB}</td></tr>`;
+                    `<tr><td colspan="3" style="padding:12px 10px 6px; font-weight:700; font-size:14px; color:var(--accent); border:none; border-top:2px solid var(--accent);">${namaB}</td></tr>`;
                 item.rows.forEach(function(row) {
                     semuaRows += `<tr>
                 <td style="border:1px solid #ddd;padding:10px;text-align:center;font-weight:600;color:#555;">${row.nomor}</td>
@@ -453,10 +453,10 @@
         <title>${title}</title>
         <style>
             body { font-family: Arial, sans-serif; padding: 30px; color: #333; }
-            h2 { text-align: center; color: #7664E4; margin-bottom: 4px; }
+            h2 { text-align: center; color: var(--accent); margin-bottom: 4px; }
             p { text-align: center; color: #666; font-size: 13px; margin-top: 0 }
             table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 13px; }
-            th { background-color: #7664E4; color: white; padding: 10px; text-align: left; border: 1px solid #7664E4; }
+            th { background-color: var(--accent); color: white; padding: 10px; text-align: left; border: 1px solid var(--accent); }
             th:first-child { text-align: center; width: 50px; }
             @media print { body { padding: 15px; } }
         </style>
@@ -521,13 +521,13 @@
                     <textarea rows="2" placeholder="Masukkan kendala..."
                         style="width:100%; padding:8px 12px; font-size:13px; border:1px solid #e5e7eb;
                                border-radius:8px; outline:none; resize:none; font-family:inherit;"
-                        onfocus="this.style.borderColor='#7664E4'" onblur="this.style.borderColor='#e5e7eb'">${kendala || ''}</textarea>
+                        onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='#e5e7eb'">${kendala || ''}</textarea>
                 </td>
                 <td style="padding:8px 16px; border-bottom:1px solid #f3f4f6;">
                     <textarea rows="2" placeholder="Masukkan rencana tindak lanjut..."
                         style="width:100%; padding:8px 12px; font-size:13px; border:1px solid #e5e7eb;
                                border-radius:8px; outline:none; resize:none; font-family:inherit;"
-                        onfocus="this.style.borderColor='#7664E4'" onblur="this.style.borderColor='#e5e7eb'">${rtl || ''}</textarea>
+                        onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='#e5e7eb'">${rtl || ''}</textarea>
                 </td>
                 <td style="padding:8px 16px; text-align:center; border-bottom:1px solid #f3f4f6;">
                     <button type="button" onclick="hapusBarisEvaluasi(this)"
@@ -634,7 +634,7 @@
                     btn.disabled = false;
                     setTimeout(function() {
                         btn.innerHTML = originalHTML;
-                        btn.style.background = '#7664E4';
+                        btn.style.background = 'var(--accent)';
                     }, 1800);
                 })
                 .catch(function() {
@@ -643,7 +643,7 @@
                     btn.disabled = false;
                     setTimeout(function() {
                         btn.innerHTML = originalHTML;
-                        btn.style.background = '#7664E4';
+                        btn.style.background = 'var(--accent)';
                     }, 1800);
                 });
         }
@@ -664,7 +664,7 @@
                 style="display:flex; align-items:center; justify-content:space-between; padding:20px 24px; border-bottom:1px solid #e5e7eb;">
                 <div style="display:flex; align-items:center; gap:12px;">
                     <div
-                        style="width:36px; height:36px; border-radius:8px; background:#7664E4;
+                        style="width:36px; height:36px; border-radius:8px; background:var(--accent);
                             display:flex; align-items:center; justify-content:center;">
                         <i class="fas fa-plus" style="color:#fff; font-size:14px;"></i>
                     </div>
@@ -691,7 +691,7 @@
                     <input type="month" id="bulanEvaluasi"
                         style="padding:6px 12px; font-size:13px; border:1px solid #d1d5db; border-radius:8px; outline:none;"
                         value="{{ now()->format('Y-m') }}" onchange="updateJudulBulan()">
-                    <span id="judulBulanEvaluasi" style="font-size:13px; font-weight:600; color:#7664E4;"></span>
+                    <span id="judulBulanEvaluasi" style="font-size:13px; font-weight:600; color:var(--accent);"></span>
                 </div>
             </div>
 
@@ -699,7 +699,7 @@
             <div style="flex:1; overflow-y:auto; padding:20px 24px;">
                 <table style="width:100%; border-collapse:collapse; font-size:13px;">
                     <thead>
-                        <tr style="background-color:#7664E4;">
+                        <tr style="background-color:var(--accent);">
                             <th
                                 style="color:#fff; text-align:center; font-weight:600; padding:12px 16px;
                                    border-radius:8px 0 0 0; width:56px;">
@@ -723,7 +723,7 @@
                     <button type="button" onclick="tambahBarisEvaluasi()"
                         style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px;
                            font-size:11px; font-weight:600; color:#fff; border:none; cursor:pointer;
-                           border-radius:8px; background:#7664E4; box-shadow:0 1px 4px rgba(0,0,0,0.2);">
+                           border-radius:8px; background:var(--accent); box-shadow:0 1px 4px rgba(0,0,0,0.2);">
                         <i class="fas fa-plus"></i> Tambah Baris
                     </button>
                 </div>
@@ -736,7 +736,7 @@
                 <button type="button" onclick="saveEvaluasi()"
                     style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px;
                        font-size:11px; font-weight:600; color:#fff; border:none; cursor:pointer;
-                       border-radius:8px; background:#7664E4; box-shadow:0 1px 4px rgba(0,0,0,0.2);">
+                       border-radius:8px; background:var(--accent); box-shadow:0 1px 4px rgba(0,0,0,0.2);">
                     <i class="fas fa-save"></i> Simpan
                 </button>
                 <button type="button" onclick="tutupModalEvaluasi()"

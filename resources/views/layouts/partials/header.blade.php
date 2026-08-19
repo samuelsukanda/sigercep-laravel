@@ -4,6 +4,19 @@
 
 <head>
     <meta charset="UTF-8">
+    <script>
+        (function () {
+            try {
+                var dark = localStorage.getItem('sigercep-dark');
+                var theme = localStorage.getItem('sigercep-theme');
+                var root = document.documentElement;
+                if (theme) root.setAttribute('data-theme', theme);
+                if (dark === 'on' || (dark === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    root.classList.add('dark');
+                }
+            } catch (e) { }
+        })();
+    </script>
     <title>@yield('title', 'SIGERCEP')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Sistem Informasi dan Gangguan Rumah Sakit Rujukan (SIGERCEP) - pengelolaan helpdesk, komplain, aset, dan dokumen." />
@@ -34,5 +47,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
     {{-- Theme CSS (redesign overrides) --}}
     <link rel="stylesheet" href="{{ asset('assets/css/theme.css') }}">
+    {{-- Dark theme overrides --}}
+    <link rel="stylesheet" href="{{ asset('assets/css/dark-theme.css') }}">
 </head>
 {{-- end Header --}}

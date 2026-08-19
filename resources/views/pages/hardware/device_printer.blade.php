@@ -40,7 +40,7 @@
                         <h6 class="mb-0 font-bold text-lg">Detail Device & Printer PC</h6>
                         <button type="button" onclick="openModal()"
                             class="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold text-white uppercase rounded-lg shadow-md hover:shadow-sm active:opacity-85 transition-all"
-                            style="background-color: #7664E4 !important;">
+                            style="background-color: var(--accent) !important;">
                             <i class="fas fa-plus mr-1"></i> Tambah Device & Printer
                         </button>
                     </div>
@@ -200,7 +200,7 @@
                     {{-- ── Header ── --}}
                     <div
                         style="
-                    background: #7664E4;
+                    background: var(--accent);
                     padding: 1rem 1.25rem;
                     display: flex;
                     align-items: center;
@@ -288,7 +288,7 @@
                                 outline: none;
                                 transition: border-color 0.15s, box-shadow 0.15s;
                             "
-                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                                 onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
                         </div>
 
@@ -327,7 +327,7 @@
                                         cursor: pointer;
                                         transition: border-color 0.15s, box-shadow 0.15s;
                                     "
-                                        onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                        onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                                         onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
                                         <option value="">Pilih jenis</option>
                                         <option value="Printer" {{ old('jenis') == 'Printer' ? 'selected' : '' }}>Printer
@@ -391,7 +391,7 @@
                                         cursor: pointer;
                                         transition: border-color 0.15s, box-shadow 0.15s;
                                     "
-                                        onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                        onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                                         onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
                                         <option value="Baik" {{ old('kondisi', 'Baik') == 'Baik' ? 'selected' : '' }}>Baik
                                         </option>
@@ -451,7 +451,7 @@
                                     cursor: pointer;
                                     transition: border-color 0.15s, box-shadow 0.15s;
                                 "
-                                    onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                    onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                                     onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
                                     <option value="">Pilih Merk/Type</option>
                                 </select>
@@ -483,7 +483,7 @@
                                     outline: none;
                                     transition: border-color 0.15s, box-shadow 0.15s;
                                 "
-                                    onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                    onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                                     onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
                             </div>
 
@@ -522,7 +522,7 @@
                                 min-height: 78px;
                                 transition: border-color 0.15s, box-shadow 0.15s;
                             "
-                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                                 onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">{{ old('keterangan') }}</textarea>
                         </div>
 
@@ -555,12 +555,12 @@
                                     cursor: pointer;
                                     transition: border-color 0.15s, background-color 0.15s;
                                 "
-                                    onmouseover="this.style.borderColor='#7664E4'; this.style.backgroundColor='#f1f0fd';"
+                                    onmouseover="this.style.borderColor='var(--accent)'; this.style.backgroundColor='#f1f0fd';"
                                     onmouseout="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc';">
                                     <div
                                         style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; text-align: center; pointer-events: none;">
                                         <i class="fas fa-cloud-upload-alt"
-                                            style="font-size: 24px; color: #7664E4; margin-bottom: 6px;"></i>
+                                            style="font-size: 24px; color: var(--accent); margin-bottom: 6px;"></i>
                                         <span id="file_upload_label"
                                             style="font-size: 12px; font-weight: 600; color: #475569;">Pilih atau tarik foto ke
                                             sini</span>
@@ -606,7 +606,7 @@
                                 font-size: 13px;
                                 font-weight: 700;
                                 color: #fff;
-                                background: #7664E4;
+                                background: var(--accent);
                                 border: none;
                                 border-radius: 8px;
                                 cursor: pointer;
@@ -615,8 +615,8 @@
                                 gap: 7px;
                                 transition: background 0.15s, box-shadow 0.15s;
                             "
-                                onmouseover="this.style.background='#6453d4'; this.style.boxShadow='0 4px 12px rgba(118,100,228,0.35)'"
-                                onmouseout="this.style.background='#7664E4'; this.style.boxShadow='none'">
+                                onmouseover="this.style.background='var(--accent-strong)'; this.style.boxShadow='0 4px 12px var(--accent-shadow)'"
+                                onmouseout="this.style.background='var(--accent)'; this.style.boxShadow='none'">
                                 <i class="fas fa-save" style="font-size: 12px;"></i>
                                 Simpan
                             </button>
@@ -651,7 +651,7 @@
                     {{-- Header --}}
                     <div
                         style="
-                    background: #7664E4;
+                    background: var(--accent);
                     padding: 1rem 1.25rem;
                     display: flex;
                     align-items: center;
@@ -720,13 +720,13 @@
                             font-size: 13px;
                             font-weight: 600;
                             color: #fff;
-                            background: #7664E4;
+                            background: var(--accent);
                             border: none;
                             border-radius: 8px;
                             cursor: pointer;
                             transition: background 0.15s;
                         "
-                            onmouseover="this.style.background='#6453d4'" onmouseout="this.style.background='#7664E4'">
+                            onmouseover="this.style.background='var(--accent-strong)'" onmouseout="this.style.background='var(--accent)'">
                             Tutup
                         </button>
                     </div>
@@ -758,7 +758,7 @@
 
                 {{-- Header --}}
                 <div
-                    style="background: #7664E4; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between;">
+                    style="background: var(--accent); padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between;">
                     <div style="display: flex; align-items: center; gap: 10px;">
                         <div
                             style="width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
@@ -793,7 +793,7 @@
                         </label>
                         <input type="text" id="edit_nama_perangkat" name="nama_perangkat" required
                             style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 11px; font-size: 13.5px; color: #1e293b; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; transition: border-color 0.15s, box-shadow 0.15s;"
-                            onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                            onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                             onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
                     </div>
 
@@ -809,7 +809,7 @@
                             <div style="position: relative;">
                                 <select id="edit_jenis" name="jenis" required
                                     style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 32px 0 11px; font-size: 13.5px; color: #1e293b; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; appearance: none; -webkit-appearance: none; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s;"
-                                    onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                    onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                                     onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
                                     <option value="Printer">Printer</option>
                                     <option value="Scanner">Scanner</option>
@@ -834,7 +834,7 @@
                             <div style="position: relative;">
                                 <select id="edit_kondisi" name="kondisi"
                                     style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 32px 0 11px; font-size: 13.5px; color: #1e293b; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; appearance: none; -webkit-appearance: none; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s;"
-                                    onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                    onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                                     onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
                                     <option value="Baik">Baik</option>
                                     <option value="Rusak Ringan">Rusak Ringan</option>
@@ -858,7 +858,7 @@
                             style="position: relative; display: block; margin-bottom: 8px;">
                             <select id="edit_merk_type_select"
                                 style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 32px 0 11px; font-size: 13.5px; color: #1e293b; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; appearance: none; -webkit-appearance: none; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s;"
-                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                                 onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
                                 <option value="">Pilih Merk/Type</option>
                             </select>
@@ -870,7 +870,7 @@
                         <div id="edit_merk_type_input_container" style="display: none;">
                             <input type="text" id="edit_merk_type_input" placeholder="Tulis Merk/Type"
                                 style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 11px; font-size: 13.5px; color: #1e293b; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; transition: border-color 0.15s, box-shadow 0.15s;"
-                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                                 onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
                         </div>
 
@@ -887,7 +887,7 @@
                         <textarea id="edit_keterangan" name="keterangan" rows="4"
                             placeholder="Keterangan tambahan, nomor seri, dll..."
                             style="width: 100%; box-sizing: border-box; padding: 9px 11px; font-size: 13.5px; color: #1e293b; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; resize: vertical; font-family: inherit; line-height: 1.55; min-height: 90px; transition: border-color 0.15s, box-shadow 0.15s;"
-                            onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                            onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                             onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'"></textarea>
                     </div>
 
@@ -900,9 +900,9 @@
                             Batal
                         </button>
                         <button type="submit"
-                            style="height: 38px; padding: 0 20px; font-size: 13px; font-weight: 700; color: #fff; background: #7664E4; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: background 0.15s, box-shadow 0.15s;"
-                            onmouseover="this.style.background='#6453d4'; this.style.boxShadow='0 4px 12px rgba(118,100,228,0.35)'"
-                            onmouseout="this.style.background='#7664E4'; this.style.boxShadow='none'">
+                            style="height: 38px; padding: 0 20px; font-size: 13px; font-weight: 700; color: #fff; background: var(--accent); border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: background 0.15s, box-shadow 0.15s;"
+                            onmouseover="this.style.background='var(--accent-strong)'; this.style.boxShadow='0 4px 12px var(--accent-shadow)'"
+                            onmouseout="this.style.background='var(--accent)'; this.style.boxShadow='none'">
                             <i class="fas fa-save" style="font-size: 12px;"></i>
                             Simpan
                         </button>
@@ -1242,7 +1242,7 @@
             const label = document.getElementById('file_upload_label');
             if (label && input.files && input.files[0]) {
                 label.innerText = 'Foto terpilih: ' + input.files[0].name;
-                label.style.color = '#7664E4';
+                label.style.color = 'var(--accent)';
             } else if (label) {
                 label.innerText = 'Pilih atau tarik foto ke sini';
                 label.style.color = '#475569';

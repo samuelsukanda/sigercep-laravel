@@ -6,7 +6,7 @@
     <style>
         /* ===== PAGE HEADER ===== */
         .am-page-header {
-            background: linear-gradient(135deg, #7664E4 0%, #9b8df0 60%, #b8aef6 100%);
+            background: linear-gradient(135deg, var(--accent-grad-1) 0%, var(--accent-grad-2) 60%, var(--accent-grad-3) 100%);
             border-radius: 20px;
             padding: 28px 32px;
             margin-bottom: 24px;
@@ -73,8 +73,8 @@
         .am-card {
             background: #fff;
             border-radius: 18px;
-            border: 1px solid rgba(118, 100, 228, 0.1);
-            box-shadow: 0 4px 24px rgba(118, 100, 228, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--accent-soft);
+            box-shadow: 0 4px 24px var(--accent-soft), 0 1px 4px rgba(0, 0, 0, 0.04);
             margin-bottom: 20px;
             overflow: hidden;
         }
@@ -85,7 +85,7 @@
             gap: 12px;
             padding: 18px 24px;
             border-bottom: 1px solid #f3f4f6;
-            background: linear-gradient(to right, rgba(118, 100, 228, 0.03), transparent);
+            background: linear-gradient(to right, var(--accent-soft), transparent);
         }
 
         .am-card-icon {
@@ -105,8 +105,8 @@
         }
 
         .am-card-icon.indigo {
-            background: rgba(118, 100, 228, 0.12);
-            color: #7664E4;
+            background: var(--accent-soft);
+            color: var(--accent);
         }
 
         .am-card-icon.slate {
@@ -143,8 +143,8 @@
         }
 
         .am-alert.info {
-            background: rgba(118, 100, 228, 0.07);
-            border: 1px solid rgba(118, 100, 228, 0.15);
+            background: var(--accent-soft);
+            border: 1px solid var(--accent-soft);
             color: #4c3d9e;
         }
 
@@ -178,8 +178,8 @@
         }
 
         .am-alert.info .am-alert-icon {
-            background: rgba(118, 100, 228, 0.15);
-            color: #7664E4;
+            background: var(--accent-soft);
+            color: var(--accent);
         }
 
         .am-alert.warning .am-alert-icon {
@@ -233,9 +233,9 @@
 
         .am-input:focus,
         .am-select:focus {
-            border-color: #7664E4;
+            border-color: var(--accent);
             background: #fff;
-            box-shadow: 0 0 0 3px rgba(118, 100, 228, 0.12);
+            box-shadow: 0 0 0 3px var(--accent-soft);
         }
 
         .am-select-wrap {
@@ -258,14 +258,14 @@
         }
 
         .am-btn-primary {
-            background: linear-gradient(135deg, #7664E4, #9b8df0);
+            background: linear-gradient(135deg, var(--accent-grad-1), var(--accent-grad-2));
             color: #fff;
-            box-shadow: 0 4px 12px rgba(118, 100, 228, 0.35);
+            box-shadow: 0 4px 12px var(--accent-shadow);
         }
 
         .am-btn-primary:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(118, 100, 228, 0.45);
+            box-shadow: 0 6px 18px var(--accent-shadow);
         }
 
         .am-btn-amber {
@@ -407,7 +407,7 @@
 
         .am-modal-section.requester {
             background: #f8f9ff;
-            border: 1px solid rgba(118, 100, 228, 0.12);
+            border: 1px solid var(--accent-soft);
         }
 
         .am-modal-section.approver {
@@ -424,7 +424,7 @@
         }
 
         .am-modal-section.requester .am-modal-section-title {
-            color: #7664E4;
+            color: var(--accent);
         }
 
         .am-modal-section.approver .am-modal-section-title {
@@ -457,7 +457,7 @@
         }
 
         .am-table thead tr {
-            background: linear-gradient(to right, rgba(118, 100, 228, 0.05), rgba(118, 100, 228, 0.02));
+            background: linear-gradient(to right, var(--accent-soft), var(--accent-soft));
         }
 
         .am-table thead th {
@@ -466,8 +466,8 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.06em;
-            color: #7664E4;
-            border-bottom: 2px solid rgba(118, 100, 228, 0.12);
+            color: var(--accent);
+            border-bottom: 2px solid var(--accent-soft);
             white-space: nowrap;
         }
 
@@ -481,7 +481,7 @@
         }
 
         .am-table tbody tr:hover {
-            background: rgba(118, 100, 228, 0.03);
+            background: var(--accent-soft);
         }
 
         .am-table td {
@@ -507,9 +507,9 @@
         }
 
         .am-table-input:focus {
-            border-color: #7664E4;
+            border-color: var(--accent);
             background: #fff;
-            box-shadow: 0 0 0 3px rgba(118, 100, 228, 0.1);
+            box-shadow: 0 0 0 3px var(--accent-soft);
         }
 
         .am-table-select {
@@ -526,9 +526,9 @@
         }
 
         .am-table-select:focus {
-            border-color: #7664E4;
+            border-color: var(--accent);
             background: #fff;
-            box-shadow: 0 0 0 2px rgba(118, 100, 228, 0.1);
+            box-shadow: 0 0 0 2px var(--accent-soft);
         }
 
         .am-badge-stage2 {
@@ -557,7 +557,7 @@
         .am-empty-icon {
             width: 64px;
             height: 64px;
-            background: rgba(118, 100, 228, 0.08);
+            background: var(--accent-soft);
             border-radius: 20px;
             display: flex;
             align-items: center;
@@ -659,7 +659,7 @@
                                 icon: 'success',
                                 title: 'Berhasil',
                                 text: {!! json_encode(session('success')) !!},
-                                confirmButtonColor: '#7664E4',
+                                confirmButtonColor: 'var(--accent)',
                                 confirmButtonText: 'OK',
                                 customClass: { confirmButton: 'btn-swal-success' }
                             });
@@ -673,7 +673,7 @@
                                 icon: 'error',
                                 title: 'Error',
                                 text: {!! json_encode(session('error')) !!},
-                                confirmButtonColor: '#7664E4',
+                                confirmButtonColor: 'var(--accent)',
                                 confirmButtonText: 'OK',
                                 customClass: { confirmButton: 'btn-swal-success' }
                             });
@@ -735,9 +735,9 @@
 
                                 {{-- Kolom Requester --}}
                                 <div
-                                    style="background:#f8f9ff; border-radius:14px; padding:14px; border:1px solid rgba(118,100,228,0.1);">
+                                    style="background:#f8f9ff; border-radius:14px; padding:14px; border:1px solid var(--accent-soft);">
                                     <p
-                                        style="font-size:11px; font-weight:700; color:#7664E4; text-transform:uppercase; letter-spacing:0.05em; margin:0 0 12px;">
+                                        style="font-size:11px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.05em; margin:0 0 12px;">
                                         <i class="fas fa-user mr-1"></i> Requester
                                     </p>
                                     <div class="am-field" style="margin-bottom:10px;">
@@ -817,7 +817,7 @@
                             <p class="am-card-subtitle">Edit langsung di tabel, lalu klik tombol simpan</p>
                         </div>
                         <span
-                            style="background:rgba(118,100,228,0.1); color:#7664E4; font-size:11px; font-weight:700; padding:4px 12px; border-radius:999px;">
+                            style="background:var(--accent-soft); color:var(--accent); font-size:11px; font-weight:700; padding:4px 12px; border-radius:999px;">
                             {{ $mappings->count() }} mapping
                         </span>
                     </div>

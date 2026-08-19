@@ -9,7 +9,7 @@
                     class="inline-flex items-center justify-center
                             h-9 px-4 text-xs font-semibold text-white uppercase
                             rounded-lg shadow-md hover:shadow-sm active:opacity-85 transition-all"
-                    style="background-color: #7664E4 !important;">
+                    style="background-color: var(--accent) !important;">
                     Tambah Data
                 </a>
                 @endcanAccess

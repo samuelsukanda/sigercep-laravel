@@ -8,53 +8,53 @@
         <div class="flex flex-wrap -mx-3">
 
             <div class="w-full md:w-1/2 xl:w-1/3 px-3">
-                <label class="block  text-sm font-semibold" style="color: #7664E4 !important;">No.
+                <label class="block  text-sm font-semibold" style="color: var(--accent) !important;">No.
                     Tiket</label>
                 <p class="text-slate-600">{{ $ticket->ticket_number }}</p>
             </div>
 
             <div class="w-full md:w-1/2 xl:w-1/3 px-3">
-                <label class="block  text-sm font-semibold" style="color: #7664E4 !important;">Nama
+                <label class="block  text-sm font-semibold" style="color: var(--accent) !important;">Nama
                     Pelapor</label>
                 <p class="text-slate-600">{{ ucwords(str_replace('.', ' ', $ticket->user->name ?? '-')) }}</p>
             </div>
 
             <div class="w-full md:w-1/2 xl:w-1/3 px-3">
-                <label class="block  text-sm font-semibold" style="color: #7664E4 !important;">Divisi</label>
+                <label class="block  text-sm font-semibold" style="color: var(--accent) !important;">Divisi</label>
                 <p class="text-slate-600"> {{ $ticket->user->unit ?? '-' }}</p>
             </div>
 
             <div class="w-full md:w-1/2 xl:w-1/3 px-3">
-                <label class="block  text-sm font-semibold" style="color: #7664E4 !important;">Jabatan</label>
+                <label class="block  text-sm font-semibold" style="color: var(--accent) !important;">Jabatan</label>
                 <p class="text-slate-600"> {{ $ticket->user->jabatan ?? '-' }}</p>
             </div>
 
             <div class="w-full md:w-1/2 xl:w-1/3 px-3">
-                <label class="block  text-sm font-semibold" style="color: #7664E4 !important;">Tanggal/Jam</label>
+                <label class="block  text-sm font-semibold" style="color: var(--accent) !important;">Tanggal/Jam</label>
                 <p class="text-slate-600">
                     {{ \Carbon\Carbon::parse($ticket->created_at)->translatedFormat('d F Y H:i') }}
                 </p>
             </div>
 
             <div class="w-full md:w-1/2 xl:w-1/3 px-3">
-                <label class="block  text-sm font-semibold" style="color: #7664E4 !important;">Status
+                <label class="block  text-sm font-semibold" style="color: var(--accent) !important;">Status
                     Tiket</label>
                 <p class="text-slate-600">{{ $ticket->status ?? '-' }}</p>
             </div>
 
             <div class="w-full px-3">
-                <label class="block  text-sm font-semibold" style="color: #7664E4 !important;">Deskripsi</label>
+                <label class="block  text-sm font-semibold" style="color: var(--accent) !important;">Deskripsi</label>
                 <p class="text-slate-600">{{ $ticket->description }}</p>
             </div>
 
             <div class="w-full px-3">
-                <label class="block  text-sm font-semibold" style="color: #7664E4 !important;">Penanganan</label>
+                <label class="block  text-sm font-semibold" style="color: var(--accent) !important;">Penanganan</label>
                 <p class="text-slate-600">{{ $ticket->penanganan }}</p>
             </div>
 
             <div class="w-full px-3" x-data="previewModal()">
 
-                <label class="block text-sm font-semibold" style="color: #7664E4;">
+                <label class="block text-sm font-semibold" style="color: var(--accent);">
                     Lampiran Pendukung
                 </label>
 

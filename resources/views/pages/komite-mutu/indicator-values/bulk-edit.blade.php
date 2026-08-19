@@ -92,7 +92,7 @@
                 </span>
                 <button type="button" onclick="openAddModal()"
                     class="inline-flex items-center justify-center px-4 py-2 text-xs font-bold uppercase rounded-lg shadow-md hover:shadow-lg active:opacity-85 transition-all text-white"
-                    style="background-color: #7664E4 !important; color: white !important;">
+                    style="background-color: var(--accent) !important; color: white !important;">
                     <i class="fas fa-plus mr-2"></i> Tambah Indikator
                 </button>
             </div>
@@ -321,7 +321,7 @@
                 {{-- ── Header ── --}}
                 <div
                     style="
-                    background: #7664E4;
+                    background: var(--accent);
                     padding: 1rem 1.25rem;
                     display: flex;
                     align-items: center;
@@ -411,7 +411,7 @@
                                     outline: none;
                                     transition: border-color 0.15s, box-shadow 0.15s;
                                 "
-                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                                 onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'">
                                 <option value="<" {{ old('operator') == '<' ? 'selected' : '' }}>&lt;</option>
                                 <option value="<=" {{ old('operator') == '<=' ? 'selected' : '' }}>&le;</option>
@@ -448,7 +448,7 @@
                                     outline: none;
                                     transition: border-color 0.15s, box-shadow 0.15s;
                                 "
-                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                                 onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
                         </div>
                     </div>
@@ -482,7 +482,7 @@
                                 outline: none;
                                 transition: border-color 0.15s, box-shadow 0.15s;
                             "
-                            onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                            onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                             onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
                     </div>
 
@@ -515,7 +515,7 @@
                                     outline: none;
                                     transition: border-color 0.15s, box-shadow 0.15s;
                                 "
-                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                                 onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
                         </div>
                         <div>
@@ -546,7 +546,7 @@
                                     outline: none;
                                     transition: border-color 0.15s, box-shadow 0.15s;
                                 "
-                                onfocus="this.style.borderColor='#7664E4'; this.style.boxShadow='0 0 0 3px rgba(118,100,228,0.12)'"
+                                onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-soft)'"
                                 onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" />
                         </div>
                     </div>
@@ -584,7 +584,7 @@
                                 font-size: 13px;
                                 font-weight: 700;
                                 color: #fff;
-                                background: #7664E4;
+                                background: var(--accent);
                                 border: none;
                                 border-radius: 8px;
                                 cursor: pointer;
@@ -593,8 +593,8 @@
                                 gap: 7px;
                                 transition: background 0.15s, box-shadow 0.15s;
                             "
-                            onmouseover="this.style.background='#6453d4'; this.style.boxShadow='0 4px 12px rgba(118,100,228,0.35)'"
-                            onmouseout="this.style.background='#7664E4'; this.style.boxShadow='none'">
+                            onmouseover="this.style.background='var(--accent-strong)'; this.style.boxShadow='0 4px 12px var(--accent-shadow)'"
+                            onmouseout="this.style.background='var(--accent)'; this.style.boxShadow='none'">
                             <i class="fas fa-save" style="font-size: 12px;"></i>
                             Simpan
                         </button>
@@ -938,7 +938,7 @@
         }
 
         .btn-swal-success {
-            background-color: #7664E4 !important;
+            background-color: var(--accent) !important;
             color: #ffffff !important;
             transition: background-color 0.2s !important;
         }
@@ -1142,7 +1142,7 @@
                         title: 'Terhapus!',
                         text: 'Data berhasil dihapus.',
                         icon: 'success',
-                        confirmButtonColor: '#7664E4',
+                        confirmButtonColor: 'var(--accent)',
                         customClass: {
                             confirmButton: 'btn-swal-success'
                         },

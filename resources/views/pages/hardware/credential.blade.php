@@ -33,7 +33,7 @@
                             <div class="flex items-end gap-2">
                                 <button type="button" onclick="bukaModalTambah()"
                                     class="inline-flex items-center justify-center h-9 px-4 text-xs font-semibold text-white uppercase rounded-lg shadow-md hover:shadow-sm active:opacity-85 transition-all"
-                                    style="background-color: #7664E4 !important;">
+                                    style="background-color: var(--accent) !important;">
                                     Tambah Data
                                 </button>
                             </div>
@@ -90,7 +90,7 @@
         }
 
         .btn-swal-success {
-            background-color: #7664E4 !important;
+            background-color: var(--accent) !important;
             color: #ffffff !important;
             transition: background-color 0.2s !important;
         }
@@ -238,7 +238,7 @@
                     'padding:0 10px;font-size:12px;font-weight:600;border-radius:8px;border:1px solid #e5e7eb;' +
                     'background:#fff;color:#374151;cursor:pointer;';
                 if (disabled) style += 'opacity:0.4;cursor:not-allowed;';
-                if (active) style += 'background:#7664E4;border-color:#7664E4;color:#fff;';
+                if (active) style += 'background:var(--accent);border-color:var(--accent);color:#fff;';
                 var onclick = disabled ? '' : ' onclick="pindahHalaman(' + hal + ')"';
                 return '<button type="button" style="' + style + '"' + onclick + '>' + label + '</button>';
             };
@@ -310,7 +310,7 @@
             <div style="background:#fff; border-radius:12px; box-shadow:0 1px 4px rgba(0,0,0,0.08);
                         border:1px solid #e5e7eb; margin-bottom:16px; overflow:hidden;">
                 <div onclick="toggleKartu(this)" style="cursor:pointer; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
-                            padding:14px 20px; background:linear-gradient(135deg,#7664E4 0%,#9b8af0 100%);">
+                            padding:14px 20px; background:linear-gradient(135deg,var(--accent-grad-1) 0%,var(--accent-grad-3) 100%);">
                     <div style="display:flex; align-items:center; gap:12px;">
                         <i class="fas fa-chevron-down kartu-chevron" style="color:#fff; font-size:12px; transition:transform 0.2s;"></i>
                         <div style="width:36px; height:36px; border-radius:10px; background:rgba(255,255,255,0.2);
@@ -511,7 +511,7 @@
             var btn = document.querySelector('[onclick="simpanCredential()"]');
             if (!btn) return;
             btn.innerHTML = '<i class="fas fa-save"></i> Simpan';
-            btn.style.background = '#7664E4';
+            btn.style.background = 'var(--accent)';
             btn.disabled = false;
         }
 
@@ -672,13 +672,13 @@
                     } else {
                         btn.disabled = false;
                         btn.innerHTML = originalHTML;
-                        btn.style.background = '#7664E4';
+                        btn.style.background = 'var(--accent)';
                     }
                 })
                 .catch(function() {
                     btn.disabled = false;
                     btn.innerHTML = originalHTML;
-                    btn.style.background = '#7664E4';
+                    btn.style.background = 'var(--accent)';
                 });
         }
 
@@ -750,7 +750,7 @@
                 margin:auto;">
             {{-- Modal Header --}}
             <div
-                style="display:flex; align-items:center; justify-content:space-between; padding:16px 24px; border-radius:16px 16px 0 0; background:#7664E4;">
+                style="display:flex; align-items:center; justify-content:space-between; padding:16px 24px; border-radius:16px 16px 0 0; background:var(--accent);">
                 <div style="display:flex; align-items:center; gap:12px;">
                     <div
                         style="width:36px; height:36px; border-radius:10px; background:rgba(255,255,255,0.18);
@@ -800,7 +800,7 @@
                 </div>
                 <button type="button" onclick="tambahBaris()"
                     style="display:inline-flex; align-items:center; gap:6px; padding:8px 14px;
-                           font-size:12px; font-weight:600; color:#7664E4; border:1px solid #7664E4; cursor:pointer;
+                           font-size:12px; font-weight:600; color:var(--accent); border:1px solid var(--accent); cursor:pointer;
                            border-radius:8px; background:#fff; transition:background 0.15s;"
                     onmouseover="this.style.background='#f5f3ff'" onmouseout="this.style.background='#fff'">
                     <i class="fas fa-plus"></i> Tambah Akun
@@ -851,9 +851,9 @@
                 <button type="button" onclick="simpanCredential()"
                     style="display:inline-flex; align-items:center; gap:8px; padding:8px 20px;
                        font-size:12px; font-weight:700; color:#fff; border:none; cursor:pointer;
-                       border-radius:8px; background:#7664E4; box-shadow:0 2px 8px rgba(118,100,228,0.35);
+                       border-radius:8px; background:var(--accent); box-shadow:0 2px 8px var(--accent-shadow);
                        transition:background 0.15s;"
-                    onmouseover="this.style.background='#6453d4'" onmouseout="this.style.background='#7664E4'">
+                    onmouseover="this.style.background='var(--accent-strong)'" onmouseout="this.style.background='var(--accent)'">
                     <i class="fas fa-save"></i> Simpan
                 </button>
             </div>
