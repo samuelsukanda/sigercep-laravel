@@ -33,6 +33,8 @@
                     </div>
                 @endif
 
+                <x-page-header icon="fa-print" title="Device & Printer" subtitle="Detail device & printer PC" />
+
                 <div class="relative flex flex-col bg-white shadow-soft-xl rounded-2xl">
                     <div class="p-6 pb-0 mb-0 bg-white rounded-t-2xl flex justify-between items-center">
                         <h6 class="mb-0 font-bold text-lg">Detail Device & Printer PC</h6>

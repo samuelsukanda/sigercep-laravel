@@ -13,10 +13,7 @@
         <div class="flex flex-wrap -mx-3">
             <div class="w-full max-w-full px-3 mx-auto mt-0">
                 {{-- Header --}}
-                <div class="mb-6">
-                    <h3 class="mb-1 text-xl font-bold tracking-tight text-slate-800">Change Request</h3>
-                    <p class="text-sm font-semibold text-slate-500">Kelola permintaan fitur dan perubahan sistem</p>
-                </div>
+                <x-page-header icon="fa-code-branch" title="Change Request" subtitle="Kelola permintaan fitur dan perubahan sistem" />
 
                 {{-- Filter Section --}}
                 @include('layouts.partials.change-request.filter')

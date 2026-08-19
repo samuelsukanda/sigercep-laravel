@@ -27,21 +27,13 @@
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
         {{-- Header Section --}}
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-            <div>
-                <h3 class="font-bold text-2xl text-slate-800 dark:text-white">Indikator Mutu</h3>
-            </div>
-
-            <div class="flex items-center gap-3">
-                @canAccess('mutu', 'update')
-                <a href="{{ route('indicator-values.bulk-edit', ['tahun' => $tahun, 'jenis' => $jenis]) }}"
-                    class="inline-flex items-center justify-center px-4 py-2 text-xs font-bold uppercase rounded-lg shadow-md hover:shadow-lg active:opacity-85 transition-all hover:scale-102"
-                    style="background-color: #7664E4 !important; color: white !important;">
-                    <i class="fas fa-edit mr-2"></i> Input Capaian Bulanan
-                </a>
-                @endcanAccess
-            </div>
-        </div>
+        <x-page-header icon="fa-chart-column" title="Indikator Mutu" subtitle="Monitoring capaian indikator mutu">
+            @canAccess('mutu', 'update')
+            <a href="{{ route('indicator-values.bulk-edit', ['tahun' => $tahun, 'jenis' => $jenis]) }}" class="pg-btn">
+                <i class="fas fa-edit"></i> Input Capaian Bulanan
+            </a>
+            @endcanAccess
+        </x-page-header>
 
         @if ($errors->any())
             <div

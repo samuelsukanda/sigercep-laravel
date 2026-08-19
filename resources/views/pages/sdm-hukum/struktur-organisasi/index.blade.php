@@ -4,9 +4,7 @@
 
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
-        <div class="flex justify-between items-center mb-4">
-            <h6 class="text-xl font-bold text-slate-700 dark:text-white">Struktur Organisasi</h6>
-        </div>
+        <x-page-header icon="fa-sitemap" title="Struktur Organisasi" subtitle="Bagan struktur organisasi rumah sakit" />
 
         <div class="w-full overflow-hidden">
             <img src="{{ asset('images/struktur-organisasi.png') }}" alt="struktur-organisasi"

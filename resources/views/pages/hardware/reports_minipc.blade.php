@@ -12,9 +12,7 @@
         <div class="flex flex-wrap -mx-3">
             <div class="w-full max-w-full px-3 mx-auto mt-0">
                 {{-- Header --}}
-                <div class="flex justify-between items-center mb-4">
-                    <h3>Laporan Bulanan Ceklis Mini PC & Laptop</h3>
-                </div>
+                <x-page-header icon="fa-laptop" title="Laporan Bulanan Ceklis Mini PC & Laptop" subtitle="Laporan bulanan ceklis Mini PC & Laptop" />
 
                 {{-- Filter Section --}}
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-4">

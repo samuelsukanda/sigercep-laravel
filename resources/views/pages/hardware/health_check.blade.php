@@ -8,9 +8,7 @@
             <div class="w-full max-w-full px-3 mx-auto mt-0">
 
                 {{-- Header --}}
-                <div class="flex items-center justify-between mb-4 w-full">
-                    <h3>Health Check Hardware</h3>
-                </div>
+                <x-page-header icon="fa-heart-pulse" title="Health Check Hardware" subtitle="Pemeriksaan kesehatan hardware" />
 
                 {{-- Filter --}}
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-4">

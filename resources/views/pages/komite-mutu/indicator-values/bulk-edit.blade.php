@@ -15,18 +15,11 @@
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
         {{-- Header Section --}}
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-            <div>
-                <h3 class="font-bold text-2xl text-gray-900 dark:text-white">Input Capaian Bulanan</h3>
-            </div>
-
-            <div>
-                <a href="{{ route('indicators.index', ['tahun' => $tahun, 'jenis' => $jenis]) }}"
-                    class="inline-flex items-center justify-center px-4 py-2 text-xs font-bold text-slate-700 uppercase bg-gray-200 rounded-lg shadow-md hover:shadow-lg active:opacity-85 transition-all">
-                    <i class="fas fa-arrow-left mr-2"></i> Kembali
-                </a>
-            </div>
-        </div>
+        <x-page-header icon="fa-pen-to-square" title="Input Capaian Bulanan" subtitle="Input capaian indikator per bulan">
+            <a href="{{ route('indicators.index', ['tahun' => $tahun, 'jenis' => $jenis]) }}" class="pg-btn">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </a>
+        </x-page-header>
 
         @if ($errors->any())
             <div

@@ -8,9 +8,7 @@
             <div class="w-full max-w-full px-3 mx-auto mt-0">
 
                 {{-- Header --}}
-                <div class="flex items-center justify-between mb-4 w-full">
-                    <h3>Evaluasi Hardware</h3>
-                </div>
+                <x-page-header icon="fa-chart-simple" title="Evaluasi Hardware" subtitle="Evaluasi kinerja hardware" />
 
                 {{-- Filter Tahun & Aksi --}}
                 <div

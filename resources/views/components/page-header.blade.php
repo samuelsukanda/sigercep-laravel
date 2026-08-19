@@ -9,5 +9,6 @@
                 <p class="pg-header-sub">{{ $subtitle }}</p>
             @endif
         </div>
+        <div class="pg-header-actions">{{ $actions ?? '' }}</div>
     </div>
 </div>

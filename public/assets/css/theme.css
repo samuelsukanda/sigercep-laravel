@@ -599,6 +599,34 @@ aside a.bg-blue-500\/13 {
     margin: 0;
 }
 
+.pg-header-actions {
+    margin-left: auto;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pg-header-actions .pg-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff;
+    color: var(--accent-strong);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pg-header-actions .pg-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.18);
+}
+
 @media (min-width: 640px) {
     .dash-col {
         width: 50%;
