@@ -2,258 +2,297 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use App\Models\Ticket;
+use App\Helpers\PermissionHelper;
+use App\Models\BankIlmu;
+use App\Models\BankSpo;
+use App\Models\ChangeRequest;
+use App\Models\DesainGrafis;
+use App\Models\DokumenIT;
+use App\Models\Hardware;
+use App\Models\KecelakaanKerja;
+use App\Models\KesehatanLingkungan;
+use App\Models\KesiapanAmbulance;
+use App\Models\KomiteMedik;
 use App\Models\KomplainIpsrs;
 use App\Models\KomplainOutsourcingVendor;
-use App\Models\KesehatanLingkungan;
-use App\Models\ReservasiRuangan;
-use App\Models\ReservasiKendaraan;
-use App\Models\DesainGrafis;
-use App\Models\KecelakaanKerja;
-use App\Models\KesiapanAmbulance;
-use App\Models\Mutu;
-use App\Models\ManajemenRisiko;
-use App\Models\PelaporanIkp;
-use App\Models\PengajuanDokumen;
-use App\Models\BankIlmu;
-use App\Models\LaporanPerilaku;
-use App\Models\Visitasi;
-use App\Models\PeminjamanAset;
-use App\Models\PemindahanAset;
-use App\Models\PengembalianAset;
 use App\Models\LaporanAsetRusak;
-use App\Models\Peminjaman;
-use App\Models\Toner;
-use App\Models\BankSpo;
-use App\Models\Utw;
-use App\Models\PeraturanPerusahaan;
+use App\Models\LaporanPerilaku;
 use App\Models\MandatoryTraining;
+use App\Models\ManajemenRisiko;
+use App\Models\Mutu;
+use App\Models\PelaporanIkp;
+use App\Models\PemindahanAset;
+use App\Models\Peminjaman;
+use App\Models\PeminjamanAset;
+use App\Models\PengajuanDokumen;
+use App\Models\PengembalianAset;
+use App\Models\PeraturanPerusahaan;
+use App\Models\ReservasiKendaraan;
+use App\Models\ReservasiRuangan;
 use App\Models\SuratKeputusan;
-use App\Models\KomiteMedik;
-use App\Models\Hardware;
+use App\Models\Ticket;
+use App\Models\Toner;
+use App\Models\Utw;
+use App\Models\Visitasi;
 
 class DashboardController extends Controller
 {
-
     public function index()
     {
+        $can = fn ($menu, $action) => PermissionHelper::canAccess($menu, $action);
 
-        // Tiket
-        // Admin
-        $totalTicketsAdmin = Ticket::count();
-        $latestTicketAdmin = Ticket::latest('created_at')->first();
-        $lastInputTimeTicketAdmin = $latestTicketAdmin ? $latestTicketAdmin->created_at->diffForHumans() : 'Belum ada data';
-        // Users
-        $totalTicketsUser = Ticket::where('user_id', Auth::id())->count();
-        $latestTicketUser = Ticket::where('user_id', Auth::id())->latest('created_at')->first();
-        $lastInputTimeTicketUser = $latestTicketUser ? $latestTicketUser->created_at->diffForHumans() : 'Belum ada data';
+        $groups = $this->unitGroups();
 
-        // Komplain IPSRS
-        $totalKomplainIpsrs = KomplainIpsrs::count();
-        $latestIpsrs = KomplainIpsrs::latest('created_at')->first();
-        $lastInputTimeIpsrs = $latestIpsrs ? $latestIpsrs->created_at->diffForHumans() : 'Belum ada data';
+        // Rekap per unit + data grafik
+        $units = [];
+        $chartLabels = [];
+        for ($i = 0; $i < 6; $i++) {
+            $chartLabels[] = now()->subMonths(5 - $i)->translatedFormat('M Y');
+        }
 
-        // Komplain Outsourcing Vendor
-        $totalKomplainOutsourcingVendor = KomplainOutsourcingVendor::count();
-        $latestVendor = KomplainOutsourcingVendor::latest('created_at')->first();
-        $lastInputTimeVendor = $latestVendor ? $latestVendor->created_at->diffForHumans() : 'Belum ada data';
+        $palette = ['#7664E4', '#059669', '#d97706', '#0ea5e9', '#dc2626', '#0891b2', '#7c3aed', '#16a34a', '#e11d48', '#6366f1'];
+        $chartUnits = [];
+        $colorIdx = 0;
 
-        // Kesehatan Lingkungan
-        $totalKesehatanLingkungan = KesehatanLingkungan::count();
-        $latestKesehatanLingkungan = KesehatanLingkungan::latest('created_at')->first();
-        $lastInputTimeKesehatanLingkungan = $latestKesehatanLingkungan ? $latestKesehatanLingkungan->created_at->diffForHumans() : 'Belum ada data';
+        foreach ($groups as $group) {
+            $modules = [];
 
-        // Reservasi Ruangan
-        $totalReservasiRuangan = ReservasiRuangan::count();
-        $latestRuangan = ReservasiRuangan::latest('created_at')->first();
-        $lastInputTimeRuangan = $latestRuangan ? $latestRuangan->created_at->diffForHumans() : 'Belum ada data';
+            foreach ($group['modules'] as [$menu, $model, $label, $icon]) {
+                if (!$can($menu, 'read')) {
+                    continue;
+                }
 
-        // Reservasi Kendaraan
-        $totalReservasiKendaraan = ReservasiKendaraan::count();
-        $latestKendaraan = ReservasiKendaraan::latest('created_at')->first();
-        $lastInputTimeKendaraan = $latestKendaraan ? $latestKendaraan->created_at->diffForHumans() : 'Belum ada data';
+                $stats = $this->scopedQuery($menu, $model)
+                    ->selectRaw('COUNT(*) as c, MAX(created_at) as latest')
+                    ->first();
+                $count = (int) $stats->c;
+                $last = $stats->latest ? \Carbon\Carbon::parse($stats->latest)->diffForHumans() : 'Belum ada data';
 
-        // Desain Grafis
-        $totalDesainGrafis = DesainGrafis::count();
-        $latestDesain = DesainGrafis::latest('created_at')->first();
-        $lastInputTimeDesain = $latestDesain ? $latestDesain->created_at->diffForHumans() : 'Belum ada data';
+                $modules[] = [
+                    'label' => $label,
+                    'icon' => $icon,
+                    'count' => $count,
+                    'last' => $last,
+                    'route' => $this->moduleRoute($menu),
+                ];
+            }
 
-        // K3RS
-        $totalK3RS = KecelakaanKerja::count();
-        $latestK3RS = KecelakaanKerja::latest('created_at')->first();
-        $lastInputTimeK3RS = $latestK3RS ? $latestK3RS->created_at->diffForHumans() : 'Belum ada data';
+            if ($modules) {
+                $units[] = [
+                    'name' => $group['name'],
+                    'icon' => $group['icon'],
+                    'modules' => $modules,
+                ];
 
-        // Mutu
-        $totalMutu = Mutu::count();
-        $latestMutu = Mutu::latest('created_at')->first();
-        $lastInputTimeMutu = $latestMutu ? $latestMutu->created_at->diffForHumans() : 'Belum ada data';
+                $monthly = array_fill(0, 6, 0);
+                foreach ($group['modules'] as [$menu, $model]) {
+                    if (!$can($menu, 'read')) {
+                        continue;
+                    }
+                    $monthStart = now()->subMonths(5)->startOfMonth();
+                    $rows = $this->scopedQuery($menu, $model)
+                        ->where('created_at', '>=', $monthStart)
+                        ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as ym, COUNT(*) as c")
+                        ->groupBy('ym')
+                        ->pluck('c', 'ym');
 
-        // Bank SPO
-        $totalBankSpo = BankSpo::where('jenis_spo', 'SPO Utama')->count();
-        $latestBankSpo = BankSpo::where('jenis_spo', 'SPO Utama')
+                    foreach ($rows as $ym => $c) {
+                        for ($i = 0; $i < 6; $i++) {
+                            if ($ym === now()->subMonths(5 - $i)->format('Y-m')) {
+                                $monthly[$i] += (int) $c;
+                            }
+                        }
+                    }
+                }
+
+                $chartUnits[] = [
+                    'name' => $group['name'],
+                    'color' => $palette[$colorIdx % count($palette)],
+                    'data' => $monthly,
+                ];
+                $colorIdx++;
+            }
+        }
+
+        // Aktivitas terbaru
+        $recentTickets = $this->scopedQuery('helpdesk', Ticket::class)
+            ->with('user')
             ->latest('created_at')
-            ->first();
-        $lastInputTimeBankSpo = $latestBankSpo
-            ? $latestBankSpo->created_at->diffForHumans()
-            : 'Belum ada data';
+            ->limit(5)
+            ->get();
+        $recentKomplain = KomplainIpsrs::latest('created_at')->limit(5)->get();
+        $recentReservasi = ReservasiRuangan::latest('created_at')->limit(5)->get();
 
-        // Bank Ilmu
-        $totalBankIlmu = BankIlmu::count();
-        $latestBankIlmu = BankIlmu::latest('created_at')->first();
-        $lastInputTimeBankIlmu = $latestBankIlmu ? $latestBankIlmu->created_at->diffForHumans() : 'Belum ada data';
-
-        // Laporan Perilaku
-        $totalLaporanPerilaku = LaporanPerilaku::count();
-        $latestLaporanPerilaku = LaporanPerilaku::latest('created_at')->first();
-        $lastInputTimeLaporanPerilaku = $latestLaporanPerilaku ? $latestLaporanPerilaku->created_at->diffForHumans() : 'Belum ada data';
-
-        // Manajemen Risiko
-        $totalManajemenRisiko = ManajemenRisiko::count();
-        $latestManajemenRisiko = ManajemenRisiko::latest('created_at')->first();
-        $lastInputTimeManajemenRisiko = $latestManajemenRisiko ? $latestManajemenRisiko->created_at->diffForHumans() : 'Belum ada data';
-
-        // Pelaporan IKP
-        $totalPelaporanIkp = PelaporanIkp::count();
-        $latestPelaporanIkp = PelaporanIkp::latest('created_at')->first();
-        $lastInputTimePelaporanIkp = $latestPelaporanIkp ? $latestPelaporanIkp->created_at->diffForHumans() : 'Belum ada data';
-
-        // Pengajuan Dokumen
-        $totalPengajuanDokumen = PengajuanDokumen::count();
-        $latestPengajuanDokumen = PengajuanDokumen::latest('created_at')->first();
-        $lastInputTimePengajuanDokumen = $latestPengajuanDokumen ? $latestPengajuanDokumen->created_at->diffForHumans() : 'Belum ada data';
-
-        // UTW
-        $totalUtw = Utw::count();
-        $latestUtw = Utw::latest('created_at')->first();
-        $lastInputTimeUtw = $latestUtw ? $latestUtw->created_at->diffForHumans() : 'Belum ada data';
-
-        // PeraturanPerusahaan
-        $totalPeraturanPerusahaan = PeraturanPerusahaan::count();
-        $latestPeraturanPerusahaan = PeraturanPerusahaan::latest('created_at')->first();
-        $lastInputTimePeraturanPerusahaan = $latestPeraturanPerusahaan ? $latestPeraturanPerusahaan->created_at->diffForHumans() : 'Belum ada data';
-
-        // Mandatory Training
-        $totalMandatoryTraining = MandatoryTraining::count();
-        $latestMandatoryTraining = MandatoryTraining::latest('created_at')->first();
-        $lastInputTimeMandatoryTraining = $latestMandatoryTraining ? $latestMandatoryTraining->created_at->diffForHumans() : 'Belum ada data';
-
-        // Surat Keputusan
-        $totalSuratKeputusan = SuratKeputusan::count();
-        $latestSuratKeputusan = SuratKeputusan::latest('created_at')->first();
-        $lastInputTimeSuratKeputusan = $latestSuratKeputusan ? $latestSuratKeputusan->created_at->diffForHumans() : 'Belum ada data';
-
-        // Visitasi
-        $totalVisitasi = Visitasi::count();
-        $latestVisitasi = Visitasi::latest('created_at')->first();
-        $lastInputTimeVisitasi = $latestVisitasi ? $latestVisitasi->created_at->diffForHumans() : 'Belum ada data';
-
-        // Peminjaman Aset
-        $totalPeminjamanAset = PeminjamanAset::count();
-        $latestPeminjamanAset = PeminjamanAset::latest('created_at')->first();
-        $lastInputTimePeminjamanAset = $latestPeminjamanAset ? $latestPeminjamanAset->created_at->diffForHumans() : 'Belum ada data';
-
-        // Pemindahan Aset
-        $totalPemindahanAset = PemindahanAset::count();
-        $latestPemindahanAset = PemindahanAset::latest('created_at')->first();
-        $lastInputTimePemindahanAset = $latestPemindahanAset ? $latestPemindahanAset->created_at->diffForHumans() : 'Belum ada data';
-
-        // Pengembalian Aset
-        $totalPengembalianAset = PengembalianAset::count();
-        $latestPengembalianAset = PengembalianAset::latest('created_at')->first();
-        $lastInputTimePengembalianAset = $latestPengembalianAset ? $latestPengembalianAset->created_at->diffForHumans() : 'Belum ada data';
-
-        // Laporan Aset Rusak
-        $totalLaporanAsetRusak = LaporanAsetRusak::count();
-        $latestLaporanAsetRusak = LaporanAsetRusak::latest('created_at')->first();
-        $lastInputTimeLaporanAsetRusak = $latestLaporanAsetRusak ? $latestLaporanAsetRusak->created_at->diffForHumans() : 'Belum ada data';
-
-        // Komte Medik
-        $totalKomiteMedik = KomiteMedik::count();
-        $latestKomiteMedik = KomiteMedik::latest('created_at')->first();
-        $lastInputTimeKomiteMedik = $latestKomiteMedik ? $latestKomiteMedik->created_at->diffForHumans() : 'Belum ada data';
-
-        // Peminjaman
-        $totalPeminjaman = Peminjaman::count();
-        $latestPeminjaman = Peminjaman::latest('created_at')->first();
-        $lastInputTimePeminjaman = $latestPeminjaman ? $latestPeminjaman->created_at->diffForHumans() : 'Belum ada data';
-
-        // Kesiapan Ambulance
-        $totalAmbulance = KesiapanAmbulance::count();
-        $latestAmbulance = KesiapanAmbulance::latest('created_at')->first();
-        $lastInputTimeAmbulance = $latestAmbulance ? $latestAmbulance->created_at->diffForHumans() : 'Belum ada data';
-
-        // Toner
-        $totalToner = Toner::count();
-        $latestToner = Toner::latest('created_at')->first();
-        $lastInputTimeToner = $latestToner ? $latestToner->created_at->diffForHumans() : 'Belum ada data';
-
-        // Hardware
-        $totalHardware = Hardware::count();
-        $latestHardware = Hardware::latest('created_at')->first();
-        $lastInputTimeHardware = $latestHardware ? $latestHardware->created_at->diffForHumans() : 'Belum ada data';
+        $canManageHelpdesk = $can('helpdesk', 'manage');
+        $ticketShowRoute = fn ($id) => $canManageHelpdesk ? route('admin.helpdesk.show', $id) : route('helpdesk.show', $id);
+        $ticketIndexRoute = $canManageHelpdesk ? route('admin.helpdesk.index') : route('helpdesk.index');
 
         return view('pages.dashboard', compact(
-            'totalTicketsAdmin',
-            'totalTicketsUser',
-            'lastInputTimeTicketAdmin',
-            'lastInputTimeTicketUser',
-            'totalKomplainIpsrs',
-            'lastInputTimeIpsrs',
-            'totalKomplainOutsourcingVendor',
-            'lastInputTimeVendor',
-            'totalKesehatanLingkungan',
-            'lastInputTimeKesehatanLingkungan',
-            'totalReservasiRuangan',
-            'lastInputTimeRuangan',
-            'totalReservasiKendaraan',
-            'lastInputTimeKendaraan',
-            'totalDesainGrafis',
-            'lastInputTimeDesain',
-            'totalK3RS',
-            'lastInputTimeK3RS',
-            'totalMutu',
-            'lastInputTimeMutu',
-            'totalBankSpo',
-            'lastInputTimeBankSpo',
-            'totalBankIlmu',
-            'lastInputTimeBankIlmu',
-            'totalLaporanPerilaku',
-            'lastInputTimeLaporanPerilaku',
-            'totalManajemenRisiko',
-            'lastInputTimeManajemenRisiko',
-            'totalPelaporanIkp',
-            'lastInputTimePelaporanIkp',
-            'totalPengajuanDokumen',
-            'lastInputTimePengajuanDokumen',
-            'totalUtw',
-            'lastInputTimeUtw',
-            'totalPeraturanPerusahaan',
-            'lastInputTimePeraturanPerusahaan',
-            'totalMandatoryTraining',
-            'lastInputTimeMandatoryTraining',
-            'totalSuratKeputusan',
-            'lastInputTimeSuratKeputusan',
-            'totalVisitasi',
-            'lastInputTimeVisitasi',
-            'totalPeminjamanAset',
-            'lastInputTimePeminjamanAset',
-            'totalPemindahanAset',
-            'lastInputTimePemindahanAset',
-            'totalPengembalianAset',
-            'lastInputTimePengembalianAset',
-            'totalLaporanAsetRusak',
-            'lastInputTimeLaporanAsetRusak',
-            'totalKomiteMedik',
-            'lastInputTimeKomiteMedik',
-            'totalPeminjaman',
-            'lastInputTimePeminjaman',
-            'totalAmbulance',
-            'lastInputTimeAmbulance',
-            'totalToner',
-            'lastInputTimeToner',
-            'totalHardware',
-            'lastInputTimeHardware'
+            'units',
+            'chartLabels',
+            'chartUnits',
+            'recentTickets',
+            'recentKomplain',
+            'recentReservasi',
+            'ticketShowRoute',
+            'ticketIndexRoute'
         ));
+    }
+
+    private function scopedQuery(string $menu, string $model)
+    {
+        if ($menu === 'helpdesk' && !PermissionHelper::canAccess('helpdesk', 'manage')) {
+            return $model::where('user_id', auth()->id());
+        }
+
+        return $model::query();
+    }
+
+    private function moduleRoute(string $menu): string
+    {
+        $routes = [
+            'helpdesk' => PermissionHelper::canAccess('helpdesk', 'manage') ? 'admin.helpdesk.index' : 'helpdesk.index',
+            'dokumen_it' => 'dokumen-it.index',
+            'bank_ilmu' => 'bank-ilmu.index',
+            'hardware' => 'hardware.index',
+            'change_request' => 'change-request.index',
+            'komplain_ipsrs' => 'komplain.ipsrs.index',
+            'outsourcing_vendor' => 'komplain.outsourcing-vendor.index',
+            'kesehatan_lingkungan' => 'komplain.kesehatan-lingkungan.index',
+            'reservasi_ruangan' => 'reservasi.ruangan.index',
+            'reservasi_kendaraan' => 'reservasi.kendaraan.index',
+            'desain_grafis' => 'desain-grafis.index',
+            'kecelakaan_kerja' => 'kecelakaan-kerja.index',
+            'kesiapan_ambulance' => 'kesiapan-ambulance.index',
+            'mutu' => 'komite-mutu.mutu.index',
+            'bank_spo' => 'komite-mutu.bank-spo.index',
+            'manajemen_risiko' => 'komite-mutu.manajemen-risiko.index',
+            'pelaporan_ikp' => 'komite-mutu.pelaporan-ikp.index',
+            'pengajuan_dokumen' => 'komite-mutu.pengajuan-dokumen.index',
+            'laporan_perilaku' => 'komite-mutu.laporan-perilaku.index',
+            'utw' => 'sdm-hukum.utw.index',
+            'peraturan_perusahaan' => 'sdm-hukum.peraturan-perusahaan.index',
+            'surat_keputusan' => 'sdm-hukum.surat-keputusan.index',
+            'mandatory_training' => 'sdm-hukum.mandatory-training.index',
+            'peminjaman_aset' => 'pengadaan-aset.peminjaman-aset.index',
+            'pengembalian_aset' => 'pengadaan-aset.pengembalian-aset.index',
+            'pemindahan_aset' => 'pengadaan-aset.pemindahan-aset.index',
+            'laporan_aset_rusak' => 'pengadaan-aset.laporan-aset-rusak.index',
+            'komite_medik' => 'komite-medik.index',
+            'toner' => 'toner.index',
+            'visitasi' => 'visitasi.index',
+            'peminjaman' => 'peminjaman.index',
+        ];
+
+        return $routes[$menu] ?? '#';
+    }
+
+    private function unitGroups(): array
+    {
+        return [
+            'helpdesk' => [
+                'name' => 'IT',
+                'icon' => 'fa-laptop-code',
+                'modules' => [
+                    ['helpdesk', Ticket::class, 'Helpdesk', 'fa-headset'],
+                    ['dokumen_it', DokumenIT::class, 'Dokumen IT', 'fa-file-alt'],
+                    ['hardware', Hardware::class, 'Ceklis Hardware', 'fa-server'],
+                    ['change_request', ChangeRequest::class, 'Change Request', 'fa-code-branch'],
+                ],
+            ],
+            'bank-ilmu' => [
+                'name' => 'Bank Ilmu',
+                'icon' => 'fa-book',
+                'modules' => [
+                    ['bank_ilmu', BankIlmu::class, 'Bank Ilmu', 'fa-book'],
+                ],
+            ],
+            'komplain' => [
+                'name' => 'Komplain',
+                'icon' => 'fa-wrench',
+                'modules' => [
+                    ['komplain_ipsrs', KomplainIpsrs::class, 'Komplain IPSRS', 'fa-wrench'],
+                    ['outsourcing_vendor', KomplainOutsourcingVendor::class, 'Outsourcing Vendor', 'fa-building'],
+                    ['kesehatan_lingkungan', KesehatanLingkungan::class, 'Kesehatan Lingkungan', 'fa-leaf'],
+                ],
+            ],
+            'reservasi' => [
+                'name' => 'Reservasi',
+                'icon' => 'fa-calendar-days',
+                'modules' => [
+                    ['reservasi_ruangan', ReservasiRuangan::class, 'Ruangan', 'fa-door-open'],
+                    ['reservasi_kendaraan', ReservasiKendaraan::class, 'Kendaraan', 'fa-car'],
+                ],
+            ],
+            'kreatif' => [
+                'name' => 'Kreatif',
+                'icon' => 'fa-palette',
+                'modules' => [
+                    ['desain_grafis', DesainGrafis::class, 'Desain Grafis', 'fa-palette'],
+                ],
+            ],
+            'k3rs' => [
+                'name' => 'K3RS',
+                'icon' => 'fa-radiation',
+                'modules' => [
+                    ['kecelakaan_kerja', KecelakaanKerja::class, 'Kecelakaan Kerja', 'fa-user-shield'],
+                ],
+            ],
+            'ambulance' => [
+                'name' => 'Kesiapan Ambulance',
+                'icon' => 'fa-notes-medical',
+                'modules' => [
+                    ['kesiapan_ambulance', KesiapanAmbulance::class, 'Kesiapan Ambulance', 'fa-notes-medical'],
+                ],
+            ],
+            'mutu' => [
+                'name' => 'Komite Mutu',
+                'icon' => 'fa-clipboard-check',
+                'modules' => [
+                    ['mutu', Mutu::class, 'Mutu', 'fa-chart-line'],
+                    ['bank_spo', BankSpo::class, 'Bank SPO', 'fa-book-open'],
+                    ['manajemen_risiko', ManajemenRisiko::class, 'Manajemen Risiko', 'fa-shield-halved'],
+                    ['pelaporan_ikp', PelaporanIkp::class, 'Pelaporan IKP', 'fa-file-medical'],
+                    ['pengajuan_dokumen', PengajuanDokumen::class, 'Pengajuan Dokumen', 'fa-file-signature'],
+                    ['laporan_perilaku', LaporanPerilaku::class, 'Laporan Perilaku', 'fa-user-check'],
+                ],
+            ],
+            'sdm' => [
+                'name' => 'SDM & Hukum',
+                'icon' => 'fa-balance-scale',
+                'modules' => [
+                    ['utw', Utw::class, 'UTW', 'fa-balance-scale'],
+                    ['peraturan_perusahaan', PeraturanPerusahaan::class, 'Peraturan Perusahaan', 'fa-file-contract'],
+                    ['surat_keputusan', SuratKeputusan::class, 'Surat Keputusan', 'fa-file-invoice'],
+                    ['mandatory_training', MandatoryTraining::class, 'Mandatory Training', 'fa-user-graduate'],
+                ],
+            ],
+            'aset' => [
+                'name' => 'Pengadaan Aset',
+                'icon' => 'fa-warehouse',
+                'modules' => [
+                    ['peminjaman_aset', PeminjamanAset::class, 'Peminjaman Aset', 'fa-truck-ramp-box'],
+                    ['pengembalian_aset', PengembalianAset::class, 'Pengembalian Aset', 'fa-rotate-left'],
+                    ['pemindahan_aset', PemindahanAset::class, 'Pemindahan Aset', 'fa-right-left'],
+                    ['laporan_aset_rusak', LaporanAsetRusak::class, 'Laporan Aset Rusak', 'fa-triangle-exclamation'],
+                ],
+            ],
+            'komite-medik' => [
+                'name' => 'Komite Medik',
+                'icon' => 'fa-laptop-medical',
+                'modules' => [
+                    ['komite_medik', KomiteMedik::class, 'Komite Medik', 'fa-laptop-medical'],
+                ],
+            ],
+            'lainnya' => [
+                'name' => 'Lainnya',
+                'icon' => 'fa-boxes-stacked',
+                'modules' => [
+                    ['toner', Toner::class, 'Toner', 'fa-print'],
+                    ['visitasi', Visitasi::class, 'Visitasi', 'fa-paper-plane'],
+                    ['peminjaman', Peminjaman::class, 'Peminjaman Barang', 'fa-hand-holding'],
+                ],
+            ],
+        ];
     }
 }

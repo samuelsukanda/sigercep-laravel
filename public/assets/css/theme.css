@@ -236,3 +236,310 @@ aside a.bg-blue-500\/13 {
 .shadow-soft-2xl {
     box-shadow: 0 6px 24px -6px rgba(15, 23, 42, 0.1), 0 2px 6px -2px var(--accent-shadow) !important;
 }
+
+/* ---------- Dashboard ---------- */
+.dash-hero {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #fff;
+    border: 1px solid var(--slate-100);
+    border-left: 4px solid var(--accent);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 24px rgba(15, 23, 42, 0.05);
+}
+
+.dash-hero-chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.9rem;
+    background: var(--accent);
+    color: #fff;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.dash-hero-kicker {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.dash-hero-title {
+    margin-top: 0.1rem;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #1e293b;
+    letter-spacing: -0.02em;
+}
+
+.dash-hero-sub {
+    margin-top: 0.2rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--slate-500);
+}
+
+.dash-unit-title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+}
+
+.dash-unit-chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 0.6rem;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+.dash-unit-title > span {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--slate-500);
+    white-space: nowrap;
+}
+
+.dash-unit-line {
+    flex: 1;
+    height: 1px;
+    background: var(--slate-200);
+}
+
+.dash-module-col {
+    display: flex;
+}
+
+.dash-module-card {
+    position: relative;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.9rem;
+    padding: 1.1rem 1.25rem;
+    background: #fff;
+    border: 1px solid var(--slate-100);
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 24px rgba(15, 23, 42, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.dash-module-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.dash-module-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(15, 23, 42, 0.06), 0 20px 40px var(--accent-shadow);
+    border-color: var(--accent-soft);
+}
+
+.dash-module-card:hover::before {
+    opacity: 1;
+}
+
+.dash-module-top {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.dash-module-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.9rem;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 1.05rem;
+    flex-shrink: 0;
+}
+
+.dash-module-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--slate-500);
+}
+
+.dash-module-count {
+    margin-top: 0.1rem;
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: #1e293b;
+    line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+}
+
+.dash-module-last {
+    margin-top: 0.3rem;
+    font-size: 0.75rem;
+    color: var(--slate-500);
+}
+
+.dash-module-last-dot {
+    display: inline-block;
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 9999px;
+    background: #059669;
+    margin-right: 0.4rem;
+    vertical-align: middle;
+}
+
+.dash-panel {
+    background: #fff;
+    border: 1px solid var(--slate-100);
+    border-radius: 1rem;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 24px rgba(15, 23, 42, 0.05);
+    padding: 1.25rem 1.5rem;
+}
+
+.dash-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.dash-panel-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
+    letter-spacing: -0.01em;
+}
+
+.dash-panel-sub {
+    margin-top: 0.15rem;
+    font-size: 0.75rem;
+    color: var(--slate-500);
+}
+
+.dash-panel-link {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+}
+
+.dash-panel-link:hover {
+    color: var(--accent-strong);
+    text-decoration: underline;
+}
+
+.dash-chart-wrap {
+    position: relative;
+    height: 340px;
+}
+
+.dash-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dash-list-item {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.8rem 0.5rem;
+    border-bottom: 1px solid var(--slate-100);
+    border-radius: 0.6rem;
+    transition: background-color 0.15s ease;
+}
+
+.dash-list-item:last-child {
+    border-bottom: 0;
+}
+
+.dash-list-item:hover {
+    background: var(--slate-100);
+}
+
+.dash-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 0.75rem;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.dash-list-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+    flex: 1;
+}
+
+.dash-list-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1e293b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dash-list-sub {
+    font-size: 0.75rem;
+    color: var(--slate-500);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dash-list-empty {
+    padding: 1.25rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--slate-500);
+}
+
+@media (min-width: 640px) {
+    .dash-col {
+        width: 50%;
+    }
+}
+
+@media (min-width: 1280px) {
+    .dash-col {
+        width: 33.3333%;
+    }
+}

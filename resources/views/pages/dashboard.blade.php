@@ -2,1032 +2,261 @@
 
 @section('title', 'SIGERCEP')
 
+@php
+    $initialsOf = fn($name) => collect(explode(' ', trim((string) $name)))
+        ->take(2)
+        ->map(fn($w) => strtoupper(mb_substr($w, 0, 1)))
+        ->join('') ?:
+    '?';
+@endphp
+
 @section('content')
-    <!-- cards -->
     <div class="w-full px-6 py-6 mx-auto">
 
-        <!-- cards row 1 -->
+        {{-- Hero --}}
+        <div class="dash-hero mb-8">
+            <div class="dash-hero-chip">
+                <i class="fas fa-hospital"></i>
+            </div>
+            <div>
+                <p class="dash-hero-kicker">SIGERCEP &middot; Dashboard</p>
+                <h3 class="dash-hero-title">Selamat datang, {{ auth()->user()->display_name }}</h3>
+                <p class="dash-hero-sub">
+                    {{ ucwords(auth()->user()->jabatan ?? '') }}
+                    @if (auth()->user()->unit)
+                        &middot; {{ ucwords(auth()->user()->unit) }}
+                    @endif
+                    &middot; {{ now()->translatedFormat('l, d F Y') }}
+                </p>
+            </div>
+        </div>
+
+        {{-- Rekap per unit --}}
+        @foreach ($units as $unit)
+            <div class="mb-8">
+                <div class="dash-unit-title">
+                    <div class="dash-unit-chip">
+                        <i class="fas {{ $unit['icon'] }}"></i>
+                    </div>
+                    <span>{{ $unit['name'] }}</span>
+                    <div class="dash-unit-line"></div>
+                </div>
+
+                <div class="flex flex-wrap -mx-3">
+                    @foreach ($unit['modules'] as $module)
+                        <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-6 xl:w-1/4 dash-module-col">
+                            <a href="{{ route($module['route']) }}" class="dash-module-card">
+                                <div class="dash-module-top">
+                                    <span class="dash-module-icon">
+                                        <i class="fas {{ $module['icon'] }}"></i>
+                                    </span>
+                                    <span class="dash-module-label">{{ $module['label'] }}</span>
+                                </div>
+                                <div>
+                                    <p class="dash-module-count">{{ number_format($module['count']) }}</p>
+                                    <p class="dash-module-last">
+                                        <span class="dash-module-last-dot"></span>{{ $module['last'] }}
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endforeach
+
+        {{-- Grafik tren --}}
+        @if (count($chartUnits))
+            <div class="mb-8">
+                <div class="dash-panel">
+                    <div class="dash-panel-head">
+                        <div>
+                            <h5 class="dash-panel-title">Tren Aktivitas 6 Bulan</h5>
+                            <p class="dash-panel-sub">Jumlah entri per unit</p>
+                        </div>
+                    </div>
+                    <div class="dash-chart-wrap">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        {{-- Aktivitas terbaru --}}
         <div class="flex flex-wrap -mx-3">
-            <!-- card1 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            @if (auth()->user()->role == 'superadmin')
-                                <div class="flex-none w-2/3 max-w-full px-3">
-                                    <div>
-                                        <p
-                                            class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                            Helpdesk
-                                        </p>
-                                        <span class="mb-0 font-semibold text-sm dark:text-white">IT Helpdesk</span>
-                                        <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                            Total Data: {{ $totalTicketsAdmin }}
-                                        </h5>
-                                        <p class="mb-0 dark:text-white dark:opacity-60">
-                                            <span
-                                                class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeTicketAdmin }}</span>
-                                        </p>
+            <div class="w-full max-w-full px-3 mb-6 dash-col">
+                <div class="dash-panel">
+                    <div class="dash-panel-head">
+                        <div>
+                            <h5 class="dash-panel-title">Tiket Terbaru</h5>
+                            <p class="dash-panel-sub">Helpdesk IT</p>
+                        </div>
+                        <a href="{{ $ticketIndexRoute }}" class="dash-panel-link">Lihat semua</a>
+                    </div>
+                    <ul class="dash-list">
+                        @forelse ($recentTickets as $ticket)
+                            <li>
+                                <a href="{{ $ticketShowRoute($ticket->id) }}" class="dash-list-item">
+                                    <span class="dash-avatar">{{ $initialsOf($ticket->user?->display_name) }}</span>
+                                    <div class="dash-list-main">
+                                        <span class="dash-list-title">{{ $ticket->ticket_number }}</span>
+                                        <span class="dash-list-sub">{{ $ticket->category }} &middot;
+                                            {{ $ticket->user?->display_name }}</span>
+                                        <span class="dash-list-sub">{{ $ticket->created_at->diffForHumans() }}</span>
                                     </div>
-                                </div>
-                            @else
-                                <div class="flex-none w-2/3 max-w-full px-3">
-                                    <div>
-                                        <p
-                                            class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                            Helpdesk
-                                        </p>
-                                        <span class="mb-0 font-semibold text-sm dark:text-white">IT Helpdesk</span>
-                                        <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                            Total Data: {{ $totalTicketsUser }}
-                                        </h5>
-                                        <p class="mb-0 dark:text-white dark:opacity-60">
+                                    <x-badge.status-badge :status="$ticket->status" />
+                                </a>
+                            </li>
+                        @empty
+                            <li class="dash-list-empty">Belum ada data</li>
+                        @endforelse
+                    </ul>
+                </div>
+            </div>
+
+            <div class="w-full max-w-full px-3 mb-6 dash-col">
+                <div class="dash-panel">
+                    <div class="dash-panel-head">
+                        <div>
+                            <h5 class="dash-panel-title">Komplain Terbaru</h5>
+                            <p class="dash-panel-sub">Komplain IPSRS</p>
+                        </div>
+                        <a href="{{ route('komplain.ipsrs.index') }}" class="dash-panel-link">Lihat semua</a>
+                    </div>
+                    <ul class="dash-list">
+                        @forelse ($recentKomplain as $komplain)
+                            <li>
+                                <a href="{{ route('komplain.ipsrs.show', $komplain->id) }}" class="dash-list-item">
+                                    <span class="dash-avatar">{{ $initialsOf($komplain->nama) }}</span>
+                                    <div class="dash-list-main">
+                                        <span class="dash-list-title">{{ $komplain->nama }}</span>
+                                        <span class="dash-list-sub">{{ $komplain->unit }} &middot;
+                                            {{ \Carbon\Carbon::parse($komplain->tanggal)->translatedFormat('d F Y') }}</span>
+                                        @if ($komplain->kendala)
                                             <span
-                                                class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeTicketUser }}</span>
-                                        </p>
+                                                class="dash-list-sub">{{ \Illuminate\Support\Str::limit($komplain->kendala, 40) }}</span>
+                                        @endif
                                     </div>
-                                </div>
-                            @endif
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-500 to-violet-500">
-                                    <i class="fas fa-ticket text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- cards row 1 -->
-        <div class="flex flex-wrap mt-6 -mx-3">
-            <!-- card1 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Bank Ilmu
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Bank Ilmu</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalBankIlmu }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeBankIlmu }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-500 to-violet-500">
-                                    <i class="fas fa-book text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- cards row 2 -->
-        <div class="flex flex-wrap mt-6 -mx-3">
-            <!-- card1 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Komplain
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">IPSRS</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalKomplainIpsrs }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeIpsrs }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-500 to-violet-500">
-                                    <i class="fas fa-wrench text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                    <x-badge.status-badge :status="$komplain->status" />
+                                </a>
+                            </li>
+                        @empty
+                            <li class="dash-list-empty">Belum ada data</li>
+                        @endforelse
+                    </ul>
                 </div>
             </div>
 
-            <!-- card2 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Komplain
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Outsourcing Vendor</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalKomplainOutsourcingVendor }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeVendor }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-red-600 to-orange-600">
-                                    <i class="fas fa-wrench text-lg text-white"></i>
-                                </div>
-                            </div>
+            <div class="w-full max-w-full px-3 mb-6 dash-col">
+                <div class="dash-panel">
+                    <div class="dash-panel-head">
+                        <div>
+                            <h5 class="dash-panel-title">Reservasi Terbaru</h5>
+                            <p class="dash-panel-sub">Reservasi Ruangan</p>
                         </div>
+                        <a href="{{ route('reservasi.ruangan.index') }}" class="dash-panel-link">Lihat semua</a>
                     </div>
-                </div>
-            </div>
-
-            <!-- card3 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Komplain
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Kesehatan Lingkungan</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalKesehatanLingkungan }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeKesehatanLingkungan }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-700 to-cyan-500 border-cyan-200">
-                                    <i class="fas fa-wrench text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- cards row 3 -->
-        <div class="flex flex-wrap mt-6 -mx-3">
-            <!-- card1 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Reservasi
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Ruangan</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalReservasiRuangan }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeRuangan }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-500 to-violet-500">
-                                    <i class="fa-solid fa-calendar-days text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- card2 -->
-            <div class="w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Reservasi
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Kendaraan</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalReservasiKendaraan }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeKendaraan }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-red-600 to-orange-600">
-                                    <i class="fa-solid fa-calendar-days text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- cards row 4 -->
-        <div class="flex flex-wrap mt-6 -mx-3">
-            <!-- card1 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Desain Grafis
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Desain Grafis</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalDesainGrafis }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeDesain }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-500 to-violet-500">
-                                    <i class="fas fa-palette text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- cards row 5 -->
-        <div class="flex flex-wrap mt-6 -mx-3">
-            <!-- card1 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        K3RS
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Kecelakaan Kerja</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalK3RS }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500">
-                                            {{ $lastInputTimeK3RS }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-500 to-violet-500">
-                                    <i class="fas fa-radiation text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- cards row 6 -->
-        <div class="flex flex-wrap mt-6 -mx-3">
-            <!-- card1 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Komite Mutu
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Mutu</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalMutu }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeMutu }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-500 to-violet-500">
-                                    <i class="fas fa-users text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- card2 -->
-            <div class="w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Komite Mutu
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Bank SPO</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalBankSpo }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeBankSpo }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-red-600 to-orange-600">
-                                    <i class="fas fa-users text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- card3 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Komite Mutu
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Manajemen Risiko</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalManajemenRisiko }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeManajemenRisiko }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-700 to-cyan-500 border-cyan-200">
-                                    <i class="fas fa-users text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- card4 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Komite Mutu
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Pelaporan IKP</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalPelaporanIkp }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimePelaporanIkp }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-orange-500 to-yellow-500">
-                                    <i class="fas fa-users text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- cards row 7 -->
-        <div class="flex flex-wrap mt-6 -mx-3">
-            <!-- card1 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Komite Mutu
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Pengajuan Dokumen</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalPengajuanDokumen }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimePengajuanDokumen }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-500 to-violet-500">
-                                    <i class="fas fa-users text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- card2 -->
-            <div class="w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Komite Mutu
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Laporan Perilaku</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalLaporanPerilaku }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeLaporanPerilaku }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-red-600 to-orange-600">
-                                    <i class="fas fa-users text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- cards row 8 -->
-        <div class="flex flex-wrap mt-6 -mx-3">
-            <!-- card1 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        SDM & Hukum
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">UTW</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalUtw }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeUtw }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-500 to-violet-500">
-                                    <i class="fas fa-balance-scale text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- card2 -->
-            <div class="w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        SDM & Hukum
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Peraturan Perusahaan</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalPeraturanPerusahaan }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimePeraturanPerusahaan }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-red-600 to-orange-600">
-                                    <i class="fas fa-balance-scale text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- card3 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        SDM & Hukum
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Surat Keputusan</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalSuratKeputusan }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeSuratKeputusan }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-700 to-cyan-500 border-cyan-200">
-                                    <i class="fas fa-balance-scale text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- card4 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        SDM & Hukum
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Mandatory Training</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalMandatoryTraining }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeMandatoryTraining }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-orange-500 to-yellow-500">
-                                    <i class="fas fa-balance-scale text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- cards row 9 -->
-        <div class="flex flex-wrap mt-6 -mx-3">
-            <!-- card1 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Pengadaan Aset
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Peminjaman Aset</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalPeminjamanAset }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimePeminjamanAset }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-500 to-violet-500">
-                                    <i class="fas fa-warehouse text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- card2 -->
-            <div class="w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Pengadaan Aset
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Pengembalian Aset</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalPengembalianAset }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimePengembalianAset }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-red-600 to-orange-600">
-                                    <i class="fas fa-warehouse text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- card3 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Pengadaan Aset
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Pemindahan Aset</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalPemindahanAset }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimePemindahanAset }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-700 to-cyan-500 border-cyan-200">
-                                    <i class="fas fa-warehouse text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- card4 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Pengadaan Aset
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Laporan Aset Rusak</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalLaporanAsetRusak }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeLaporanAsetRusak }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-orange-500 to-yellow-500">
-                                    <i class="fas fa-warehouse text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- cards row 10 -->
-        <div class="flex flex-wrap mt-6 -mx-3">
-            <!-- card1 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Komite Medik
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Medik</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalKomiteMedik }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeKomiteMedik }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-500 to-violet-500">
-                                    <i class="fas fa-laptop-medical text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- cards row 11 -->
-        <div class="flex flex-wrap mt-6 -mx-3">
-            <!-- card1 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Ambulance
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Kesiapan Ambulance</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalAmbulance }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeAmbulance }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-500 to-violet-500">
-                                    <i class="fas fa-notes-medical text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- cards row 12 -->
-        <div class="flex flex-wrap mt-6 -mx-3">
-            <!-- card1 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Toner
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Toner</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalToner }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeToner }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-500 to-violet-500">
-                                    <i class="fas fa-print text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- cards row 13 -->
-        <div class="flex flex-wrap mt-6 -mx-3">
-            <!-- card1 -->
-            <div class="w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Visitasi
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Visitasi</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalVisitasi }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimeVisitasi }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-500 to-violet-500">
-                                    <i class="fas fa-paper-plane text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- cards row 14 -->
-        <div class="flex flex-wrap mt-6 -mx-3">
-            <!-- card1 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Peminjaman
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Peminjaman Barang</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalPeminjaman }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span
-                                            class="text-sm font-semibold leading-normal text-emerald-500">{{ $lastInputTimePeminjaman }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-500 to-violet-500">
-                                    <i class="fas fa-hand-holding text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- cards row 15 -->
-        <div class="flex flex-wrap mt-6 -mx-3">
-            <!-- card1 -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
-                <div
-                    class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <div class="flex flex-row -mx-3">
-                            <div class="flex-none w-2/3 max-w-full px-3">
-                                <div>
-                                    <p
-                                        class="mb-0 font-sans text-md font-bold leading-normal uppercase dark:text-white dark:opacity-60">
-                                        Hardware
-                                    </p>
-                                    <span class="mb-0 font-semibold text-sm dark:text-white">Ceklis Hardware</span>
-                                    <h5 class="mb-0 font-bold text-sm dark:text-white">
-                                        Total Data: {{ $totalHardware }}
-                                    </h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-semibold leading-normal text-emerald-500">
-                                            {{ $lastInputTimeHardware }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="px-3 text-right basis-1/3">
-                                <div
-                                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tl from-blue-500 to-violet-500">
-                                    <i class="fas fa-server text-lg text-white"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <ul class="dash-list">
+                        @forelse ($recentReservasi as $reservasi)
+                            <li>
+                                <a href="{{ route('reservasi.ruangan.show', $reservasi->id) }}" class="dash-list-item">
+                                    <span class="dash-avatar">{{ $initialsOf($reservasi->nama) }}</span>
+                                    <div class="dash-list-main">
+                                        <span class="dash-list-title">{{ $reservasi->nama }}</span>
+                                        <span class="dash-list-sub">{{ $reservasi->ruang }} &middot;
+                                            {{ \Carbon\Carbon::parse($reservasi->tanggal)->translatedFormat('d F Y') }}</span>
+                                        <span class="dash-list-sub">{{ $reservasi->jam_mulai }} -
+                                            {{ $reservasi->jam_selesai }}</span>
+                                    </div>
+                                    <x-badge.status-badge :status="$reservasi->approval" />
+                                </a>
+                            </li>
+                        @empty
+                            <li class="dash-list-empty">Belum ada data</li>
+                        @endforelse
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const canvas = document.getElementById("trendChart");
+            if (!canvas || typeof Chart === "undefined") return;
+
+            const chart = @json(['labels' => $chartLabels, 'units' => $chartUnits]);
+
+            new Chart(canvas, {
+                type: "line",
+                data: {
+                    labels: chart.labels,
+                    datasets: chart.units.map(function(u) {
+                        return {
+                            label: u.name,
+                            data: u.data,
+                            borderColor: u.color,
+                            backgroundColor: u.color + "22",
+                            tension: 0.35,
+                            fill: true,
+                            pointRadius: 4,
+                            pointBackgroundColor: "#ffffff",
+                            pointBorderColor: u.color,
+                            pointBorderWidth: 2,
+                            borderWidth: 2.5,
+                        };
+                    }),
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: "index",
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: {
+                            position: "bottom",
+                            labels: {
+                                usePointStyle: true,
+                                boxWidth: 8,
+                                padding: 16,
+                                font: {
+                                    family: "Plus Jakarta Sans",
+                                    size: 12
+                                },
+                            },
+                        },
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0,
+                                font: {
+                                    family: "Plus Jakarta Sans"
+                                }
+                            },
+                            grid: {
+                                color: "#f1f5f9"
+                            },
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    family: "Plus Jakarta Sans"
+                                }
+                            },
+                            grid: {
+                                display: false
+                            },
+                        },
+                    },
+                },
+            });
+        });
+    </script>
+@endpush
