@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Mutu;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
+use App\Helpers\PermissionHelper;
 
 class MutuController extends Controller
 {
@@ -16,10 +19,73 @@ class MutuController extends Controller
         $this->middleware('permission:mutu,delete')->only(['destroy']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $mutu = Mutu::all();
-        return view('pages.komite-mutu.mutu.index', compact('mutu'));
+        if ($request->ajax()) {
+            $columns = ['indikator', 'periode', 'unit', 'pj_data', 'numerator', 'penumerator', 'capaian'];
+
+            $query = Mutu::query();
+
+            if ($request->has('search') && !empty($request->search['value'])) {
+                $search = $request->search['value'];
+                $query->where(function ($q) use ($search) {
+                    $q->where('indikator', 'like', "%{$search}%")
+                        ->orWhere('periode', 'like', "%{$search}%")
+                        ->orWhere('unit', 'like', "%{$search}%")
+                        ->orWhere('pj_data', 'like', "%{$search}%")
+                        ->orWhere('numerator', 'like', "%{$search}%")
+                        ->orWhere('penumerator', 'like', "%{$search}%")
+                        ->orWhere('capaian', 'like', "%{$search}%");
+                });
+            }
+
+            $recordsTotal = Mutu::count();
+            $recordsFiltered = $query->count();
+
+            if ($request->has('order')) {
+                $orderColumn = $columns[$request->order[0]['column']] ?? 'id';
+                $orderDir = $request->order[0]['dir'] ?? 'desc';
+                $query->orderBy($orderColumn, $orderDir);
+            } else {
+                $query->orderBy('id', 'desc');
+            }
+
+            $start = $request->start ?? 0;
+            $length = $request->length ?? 10;
+
+            $records = $query->skip($start)->take($length)->get();
+
+            $canUpdate = PermissionHelper::canAccess('mutu', 'update');
+            $canRead = PermissionHelper::canAccess('mutu', 'read');
+            $canDelete = PermissionHelper::canAccess('mutu', 'delete');
+
+            $data = [];
+
+            foreach ($records as $item) {
+                $data[] = [
+                    'id' => $item->id,
+                    'indikator' => Str::limit($item->indikator, 50),
+                    'periode' => $item->periode,
+                    'unit' => $item->unit,
+                    'pj_data' => $item->pj_data,
+                    'numerator' => $item->numerator,
+                    'penumerator' => $item->penumerator,
+                    'capaian' => $item->capaian,
+                    'can_update' => $canUpdate,
+                    'can_read' => $canRead,
+                    'can_delete' => $canDelete,
+                ];
+            }
+
+            return response()->json([
+                'draw' => intval($request->draw),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data,
+            ]);
+        }
+
+        return view('pages.komite-mutu.mutu.index');
     }
 
     public function create()

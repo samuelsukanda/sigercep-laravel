@@ -13,59 +13,6 @@
             </tr>
         </thead>
         <tbody class="text-s text-slate-500 bg-white">
-            @forelse ($k3rs as $item)
-                <tr class="hover:bg-gray-50 transition-colors">
-                    <td class="px-6 py-4 font-medium">{{ ucwords(strtolower($item->nama)) }}</td>
-                    <td class="px-6 py-4">{{ $item->unit }}</td>
-                    <td class="px-6 py-4">{{ $item->no_hp }}</td>
-                    <td class="px-6 py-4">
-                        @php
-                            try {
-                                $jamDisplay = \Carbon\Carbon::createFromFormat('H:i:s', $item->jam)->format('H:i');
-                            } catch (\Exception $e) {
-                                $jamDisplay = $item->jam ?? '-';
-                            }
-                        @endphp
-                        {{ $jamDisplay }} WIB
-                    </td>
-                    <td class="px-6 py-4" data-order="{{ \Carbon\Carbon::parse($item->tanggal)->timestamp }}">
-                        <div class="flex flex-col">
-                            <span>{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}</span>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
-                            {{ $item->jenis_kecelakaan }}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4">{{ Str::limit($item->lokasi_kecelakaan, 30) }}</td>
-                    <td class="px-6 py-4 space-x-2 text-center">
-                        @canAccess('kecelakaan_kerja', 'update')
-                        <x-button.action href="{{ route('kecelakaan-kerja.edit', $item->id) }}" icon="pen-to-square"
-                            color="emerald" title="Edit" />
-                        @endcanAccess
-
-                        @canAccess('kecelakaan_kerja', 'read')
-                        <x-button.action href="{{ route('kecelakaan-kerja.show', $item->id) }}" icon="eye"
-                            color="emerald" title="Lihat Data" />
-                        @endcanAccess
-
-                        @canAccess('kecelakaan_kerja', 'delete')
-                        <x-button.action href="{{ route('kecelakaan-kerja.destroy', $item->id) }}" icon="trash"
-                            color="red" type="button" method="DELETE" title="Hapus" />
-                        @endcanAccess
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="8" class="px-6 py-8 text-center text-gray-500">
-                        <div class="flex flex-col items-center gap-2">
-                            <i class="fas fa-inbox text-4xl text-gray-400"></i>
-                            <p>Tidak ada data kesiapan ambulance ditemukan</p>
-                        </div>
-                    </td>
-                </tr>
-            @endforelse
         </tbody>
     </table>
 </div>

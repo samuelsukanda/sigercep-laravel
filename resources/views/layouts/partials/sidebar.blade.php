@@ -105,8 +105,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="fas fa-file-alt relative top-0 text-sm leading-normal"
-                                style="color: #266ef3 !important;"></i>
+                            <i class="fas fa-file-alt relative top-0 text-sm leading-normal"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Dokumen IT</span>
                     </div>
@@ -225,8 +224,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="fas fa-book relative top-0 text-sm leading-normal"
-                                style="color: #47b1d1 !important;"></i>
+                            <i class="fas fa-book relative top-0 text-sm leading-normal"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Bank Ilmu</span>
                     </div>
@@ -507,8 +505,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="fas fa-balance-scale relative top-0 text-sm leading-normal"
-                                style="color: #ee8a0f !important;"></i>
+                            <i class="fas fa-balance-scale relative top-0 text-sm leading-normal"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">SDM & Hukum</span>
                     </div>
@@ -586,8 +583,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="fas fa-warehouse relative top-0 text-sm leading-normal"
-                                style="color: #362ea8 !important;"></i>
+                            <i class="fas fa-warehouse relative top-0 text-sm leading-normal"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Pengadaan & Aset</span>
                     </div>
@@ -656,8 +652,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="fas fa-laptop-medical relative top-0 text-sm leading-normal"
-                                style="color: #47b1d1 !important;"></i>
+                            <i class="fas fa-laptop-medical relative top-0 text-sm leading-normal"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Komite Medik</span>
                     </div>
@@ -747,8 +742,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="fas fa-paper-plane relative top-0 text-sm leading-normal"
-                                style="color: #eec524 !important;"></i>
+                            <i class="fas fa-paper-plane relative top-0 text-sm leading-normal"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Visitasi</span>
                     </div>
@@ -778,8 +772,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="fas fa-hand-holding relative top-0 text-sm leading-normal"
-                                style="color: #cb72f1 !important;"></i>
+                            <i class="fas fa-hand-holding relative top-0 text-sm leading-normal"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Peminjaman</span>
                     </div>

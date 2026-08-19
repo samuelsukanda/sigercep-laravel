@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\LaporanPerilaku;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use App\Helpers\PermissionHelper;
 
 class LaporanPerilakuController extends Controller
 {
@@ -20,39 +21,85 @@ class LaporanPerilakuController extends Controller
 
     public function index(Request $request)
     {
-        $isFiltered = $request->hasAny([
-            'periode_dari',
-            'periode_sampai',
-        ]);
+        if ($request->ajax()) {
+            $columns = ['nama', 'nik', 'unit', 'tanggal', 'kategori_laporan', 'keterangan_perilaku'];
 
-        $validator = Validator::make($request->all(), [
-            'periode_dari'   => 'nullable|date_format:d-m-Y',
-            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
-        ], [
-            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
-        ]);
+            $query = LaporanPerilaku::query();
 
-        if ($validator->fails()) {
-            return redirect()->route('komite-mutu.laporan-perilaku.index')
-                ->withErrors($validator)
-                ->withInput();
+            if ($request->filled('periode_dari')) {
+                try {
+                    $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
+                    $query->whereDate('tanggal', '>=', $startDate);
+                } catch (\Exception $e) {
+                }
+            }
+
+            if ($request->filled('periode_sampai')) {
+                try {
+                    $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
+                    $query->whereDate('tanggal', '<=', $endDate);
+                } catch (\Exception $e) {
+                }
+            }
+
+            if ($request->has('search') && !empty($request->search['value'])) {
+                $search = $request->search['value'];
+                $query->where(function ($q) use ($search) {
+                    $q->where('nama', 'like', "%{$search}%")
+                        ->orWhere('nik', 'like', "%{$search}%")
+                        ->orWhere('unit', 'like', "%{$search}%")
+                        ->orWhere('kategori_laporan', 'like', "%{$search}%")
+                        ->orWhere('keterangan_perilaku', 'like', "%{$search}%");
+                });
+            }
+
+            $recordsTotal = LaporanPerilaku::count();
+            $recordsFiltered = $query->count();
+
+            if ($request->has('order')) {
+                $orderColumn = $columns[$request->order[0]['column']] ?? 'tanggal';
+                $orderDir = $request->order[0]['dir'] ?? 'desc';
+                $query->orderBy($orderColumn, $orderDir);
+            } else {
+                $query->orderBy('tanggal', 'desc');
+            }
+
+            $start = $request->start ?? 0;
+            $length = $request->length ?? 10;
+
+            $records = $query->skip($start)->take($length)->get();
+
+            $canUpdate = PermissionHelper::canAccess('laporan_perilaku', 'update');
+            $canRead = PermissionHelper::canAccess('laporan_perilaku', 'read');
+            $canDelete = PermissionHelper::canAccess('laporan_perilaku', 'delete');
+
+            $data = [];
+
+            foreach ($records as $item) {
+                $data[] = [
+                    'id' => $item->id,
+                    'nama' => ucwords(strtolower($item->nama)),
+                    'nik' => $item->nik,
+                    'unit' => $item->unit,
+                    'tanggal_timestamp' => Carbon::parse($item->tanggal)->timestamp,
+                    'tanggal_formatted' => Carbon::parse($item->tanggal)->translatedFormat('d F Y'),
+                    'kategori_laporan' => $item->kategori_laporan,
+                    'keterangan_perilaku' => Str::limit($item->keterangan_perilaku, 50),
+                    'can_update' => $canUpdate,
+                    'can_read' => $canRead,
+                    'can_delete' => $canDelete,
+                ];
+            }
+
+            return response()->json([
+                'draw' => intval($request->draw),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data,
+            ]);
         }
 
-        $query = LaporanPerilaku::query();
-
-        if ($request->filled('periode_dari')) {
-            $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
-            $query->whereDate('tanggal', '>=', $startDate);
-        }
-
-        if ($request->filled('periode_sampai')) {
-            $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
-            $query->whereDate('tanggal', '<=', $endDate);
-        }
-
-        $laporanPerilaku = $query->orderBy('tanggal', 'desc')->get();
-
-        return view('pages.komite-mutu.laporan-perilaku.index', compact('laporanPerilaku', 'isFiltered'));
+        return view('pages.komite-mutu.laporan-perilaku.index');
     }
 
     public function create()

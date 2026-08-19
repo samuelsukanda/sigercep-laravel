@@ -31,7 +31,7 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/js/datatable-pengembalian-aset.js') }}"></script>
+    <script src="{{ asset('assets/js/datatable/datatable-pengembalian-aset.js') }}"></script>
     <script src="{{ asset('assets/js/loading-filter.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('assets/js/alert-delete-swal.js') }}"></script>

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\MandatoryTraining;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Validator;
+use App\Helpers\PermissionHelper;
 
 class MandatoryTrainingController extends Controller
 {
@@ -21,39 +21,76 @@ class MandatoryTrainingController extends Controller
 
     public function index(Request $request)
     {
-        $isFiltered = $request->hasAny([
-            'periode_dari',
-            'periode_sampai',
-        ]);
+        if ($request->ajax()) {
+            $columns = ['file_pdf', 'created_at'];
 
-        $validator = Validator::make($request->all(), [
-            'periode_dari'   => 'nullable|date_format:d-m-Y',
-            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
-        ], [
-            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
-        ]);
+            $query = MandatoryTraining::query();
 
-        if ($validator->fails()) {
-            return redirect()->route('sdm-hukum.mandatory-training.index')
-                ->withErrors($validator)
-                ->withInput();
+            if ($request->filled('periode_dari')) {
+                try {
+                    $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
+                    $query->whereDate('created_at', '>=', $startDate);
+                } catch (\Exception $e) {
+                }
+            }
+
+            if ($request->filled('periode_sampai')) {
+                try {
+                    $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
+                    $query->whereDate('created_at', '<=', $endDate);
+                } catch (\Exception $e) {
+                }
+            }
+
+            if ($request->has('search') && !empty($request->search['value'])) {
+                $search = $request->search['value'];
+                $query->where('file_pdf', 'like', "%{$search}%");
+            }
+
+            $recordsTotal = MandatoryTraining::count();
+            $recordsFiltered = $query->count();
+
+            if ($request->has('order')) {
+                $orderColumn = $columns[$request->order[0]['column']] ?? 'created_at';
+                $orderDir = $request->order[0]['dir'] ?? 'desc';
+                $query->orderBy($orderColumn, $orderDir);
+            } else {
+                $query->orderBy('created_at', 'desc');
+            }
+
+            $start = $request->start ?? 0;
+            $length = $request->length ?? 10;
+
+            $records = $query->skip($start)->take($length)->get();
+
+            $canUpdate = PermissionHelper::canAccess('mandatory_training', 'update');
+            $canRead = PermissionHelper::canAccess('mandatory_training', 'read');
+            $canDelete = PermissionHelper::canAccess('mandatory_training', 'delete');
+
+            $data = [];
+
+            foreach ($records as $item) {
+                $data[] = [
+                    'id' => $item->id,
+                    'file_pdf' => $item->file_pdf,
+                    'tanggal_timestamp' => Carbon::parse($item->created_at)->timestamp,
+                    'tanggal_formatted' => Carbon::parse($item->created_at)->translatedFormat('d F Y'),
+                    'tanggal_time' => Carbon::parse($item->created_at)->format('H:i'),
+                    'can_update' => $canUpdate,
+                    'can_read' => $canRead,
+                    'can_delete' => $canDelete,
+                ];
+            }
+
+            return response()->json([
+                'draw' => intval($request->draw),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data,
+            ]);
         }
 
-        $query = MandatoryTraining::query();
-
-        if ($request->filled('periode_dari')) {
-            $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
-            $query->whereDate('created_at', '>=', $startDate);
-        }
-
-        if ($request->filled('periode_sampai')) {
-            $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
-            $query->whereDate('created_at', '<=', $endDate);
-        }
-
-        $mandatoryTraining = $query->orderBy('created_at', 'desc')->get();
-
-        return view('pages.sdm-hukum.mandatory-training.index', compact('mandatoryTraining', 'isFiltered'));
+        return view('pages.sdm-hukum.mandatory-training.index');
     }
 
     public function create()

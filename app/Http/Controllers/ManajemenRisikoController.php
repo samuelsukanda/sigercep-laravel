@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\DaftarRisiko;
-use Illuminate\Support\Facades\Validator;
+use App\Helpers\PermissionHelper;
 
 class ManajemenRisikoController extends Controller
 {
@@ -18,6 +18,117 @@ class ManajemenRisikoController extends Controller
 
     public function index(Request $request)
     {
+        if ($request->ajax()) {
+
+            $columns = [
+                '',
+                'id',
+                'unit',
+                'risiko',
+                'kode_risiko',
+                'sebab',
+                'dampak',
+                'pengendalian',
+                'analisis_tingkat',
+                'target_waktu',
+                'mitigasi_tw1_tingkat',
+                'mitigasi_tw2_tingkat',
+                'mitigasi_tw3_tingkat',
+                'mitigasi_tw4_tingkat',
+            ];
+
+            $query = DaftarRisiko::query();
+
+            if ($request->filled('unit')) {
+                $query->where('unit', $request->unit);
+            }
+
+            if ($request->filled('tingkat')) {
+                $query->where('analisis_tingkat', $request->tingkat);
+            }
+
+            if ($request->filled('kode_risiko')) {
+                $query->where('kode_risiko', $request->kode_risiko);
+            }
+
+            if ($request->has('search') && !empty($request->search['value'])) {
+                $search = $request->search['value'];
+
+                $query->where(function ($q) use ($search) {
+                    $q->where('unit', 'like', "%{$search}%")
+                        ->orWhere('risiko', 'like', "%{$search}%")
+                        ->orWhere('kode_risiko', 'like', "%{$search}%")
+                        ->orWhere('sebab', 'like', "%{$search}%")
+                        ->orWhere('dampak', 'like', "%{$search}%")
+                        ->orWhere('pengendalian', 'like', "%{$search}%")
+                        ->orWhere('analisis_tingkat', 'like', "%{$search}%")
+                        ->orWhere('target_waktu', 'like', "%{$search}%")
+                        ->orWhere('mitigasi_tw1_tingkat', 'like', "%{$search}%")
+                        ->orWhere('mitigasi_tw2_tingkat', 'like', "%{$search}%")
+                        ->orWhere('mitigasi_tw3_tingkat', 'like', "%{$search}%")
+                        ->orWhere('mitigasi_tw4_tingkat', 'like', "%{$search}%");
+                });
+            }
+
+            $recordsTotal = DaftarRisiko::count();
+            $recordsFiltered = $query->count();
+
+            if ($request->has('order')) {
+                $orderColumn = $columns[$request->order[0]['column']] ?? 'id';
+                $orderDir = $request->order[0]['dir'] ?? 'asc';
+                $query->orderBy($orderColumn, $orderDir);
+            } else {
+                $query->orderBy('id', 'asc');
+            }
+
+            $start = $request->start ?? 0;
+            $length = $request->length ?? 10;
+
+            $records = $query->skip($start)->take($length)->get();
+
+            $canUpdate = PermissionHelper::canAccess('manajemen_risiko', 'update');
+            $canRead = PermissionHelper::canAccess('manajemen_risiko', 'read');
+            $canDelete = PermissionHelper::canAccess('manajemen_risiko', 'delete');
+
+            $data = [];
+
+            foreach ($records as $item) {
+                $data[] = [
+                    'id' => $item->id,
+                    'no_urut' => $item->no_urut ?? $item->id,
+                    'unit' => $item->unit,
+                    'risiko' => $item->risiko,
+                    'kode_risiko' => $item->kode_risiko,
+                    'sebab' => $item->sebab,
+                    'dampak' => $item->dampak,
+                    'pengendalian' => $item->pengendalian,
+                    'efektif' => (bool) $item->efektif,
+                    'tidak_efektif' => (bool) $item->tidak_efektif,
+                    'analisis_tingkat' => $item->analisis_tingkat,
+                    'analisis_nilai' => $item->analisis_nilai !== null ? (float) $item->analisis_nilai : null,
+                    'target_waktu' => $item->target_waktu,
+                    'mitigasi_tw1_tingkat' => $item->mitigasi_tw1_tingkat,
+                    'mitigasi_tw1_nilai' => $item->mitigasi_tw1_nilai !== null ? (float) $item->mitigasi_tw1_nilai : null,
+                    'mitigasi_tw2_tingkat' => $item->mitigasi_tw2_tingkat,
+                    'mitigasi_tw2_nilai' => $item->mitigasi_tw2_nilai !== null ? (float) $item->mitigasi_tw2_nilai : null,
+                    'mitigasi_tw3_tingkat' => $item->mitigasi_tw3_tingkat,
+                    'mitigasi_tw3_nilai' => $item->mitigasi_tw3_nilai !== null ? (float) $item->mitigasi_tw3_nilai : null,
+                    'mitigasi_tw4_tingkat' => $item->mitigasi_tw4_tingkat,
+                    'mitigasi_tw4_nilai' => $item->mitigasi_tw4_nilai !== null ? (float) $item->mitigasi_tw4_nilai : null,
+                    'can_update' => $canUpdate,
+                    'can_read' => $canRead,
+                    'can_delete' => $canDelete,
+                ];
+            }
+
+            return response()->json([
+                'draw' => intval($request->draw),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data,
+            ]);
+        }
+
         $unitFilter = $request->get('unit');
         $tingkatFilter = $request->get('tingkat');
         $kodeFilter = $request->get('kode_risiko');
@@ -27,22 +138,6 @@ class ManajemenRisikoController extends Controller
         $tingkatOptions = ['Sangat Rendah', 'Rendah', 'Sedang', 'Tinggi', 'Sangat Tinggi'];
         $kodeOptions = DaftarRisiko::select('kode_risiko')->whereNotNull('kode_risiko')->distinct()->orderBy('kode_risiko')->pluck('kode_risiko');
 
-        $query = DaftarRisiko::query();
-
-        if ($unitFilter) {
-            $query->where('unit', $unitFilter);
-        }
-        
-        if ($tingkatFilter) {
-            $query->where('analisis_tingkat', $tingkatFilter);
-        }
-
-        if ($kodeFilter) {
-            $query->where('kode_risiko', $kodeFilter);
-        }
-
-        $risikos = $query->latest()->get();
-
         // Statistics
         $totalRisiko = DaftarRisiko::count();
         $totalTinggiSangatTinggi = DaftarRisiko::whereIn('analisis_tingkat', ['Tinggi', 'Sangat Tinggi'])->count();
@@ -51,7 +146,7 @@ class ManajemenRisikoController extends Controller
         $isFiltered = $request->hasAny(['unit', 'tingkat', 'kode_risiko']);
 
         return view('pages.komite-mutu.manajemen-risiko.index', compact(
-            'risikos', 'unitFilter', 'tingkatFilter', 'kodeFilter', 
+            'unitFilter', 'tingkatFilter', 'kodeFilter',
             'unitOptions', 'tingkatOptions', 'kodeOptions',
             'totalRisiko', 'totalTinggiSangatTinggi', 'jumlahUnit', 'isFiltered'
         ));

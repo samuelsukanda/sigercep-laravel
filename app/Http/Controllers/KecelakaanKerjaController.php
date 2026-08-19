@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\KecelakaanKerja;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use App\Helpers\PermissionHelper;
 
 class KecelakaanKerjaController extends Controller
 {
@@ -21,39 +22,92 @@ class KecelakaanKerjaController extends Controller
 
     public function index(Request $request)
     {
-        $isFiltered = $request->hasAny([
-            'periode_dari',
-            'periode_sampai',
-        ]);
+        if ($request->ajax()) {
+            $columns = ['nama', 'unit', 'no_hp', 'jam', 'tanggal', 'jenis_kecelakaan', 'lokasi_kecelakaan'];
 
-        $validator = Validator::make($request->all(), [
-            'periode_dari'   => 'nullable|date_format:d-m-Y',
-            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
-        ], [
-            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
-        ]);
+            $query = KecelakaanKerja::query();
 
-        if ($validator->fails()) {
-            return redirect()->route('kecelakaan-kerja.index')
-                ->withErrors($validator)
-                ->withInput();
+            if ($request->filled('periode_dari')) {
+                try {
+                    $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
+                    $query->whereDate('tanggal', '>=', $startDate);
+                } catch (\Exception $e) {
+                }
+            }
+
+            if ($request->filled('periode_sampai')) {
+                try {
+                    $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
+                    $query->whereDate('tanggal', '<=', $endDate);
+                } catch (\Exception $e) {
+                }
+            }
+
+            if ($request->has('search') && !empty($request->search['value'])) {
+                $search = $request->search['value'];
+                $query->where(function ($q) use ($search) {
+                    $q->where('nama', 'like', "%{$search}%")
+                        ->orWhere('unit', 'like', "%{$search}%")
+                        ->orWhere('no_hp', 'like', "%{$search}%")
+                        ->orWhere('jenis_kecelakaan', 'like', "%{$search}%")
+                        ->orWhere('lokasi_kecelakaan', 'like', "%{$search}%");
+                });
+            }
+
+            $recordsTotal = KecelakaanKerja::count();
+            $recordsFiltered = $query->count();
+
+            if ($request->has('order')) {
+                $orderColumn = $columns[$request->order[0]['column']] ?? 'tanggal';
+                $orderDir = $request->order[0]['dir'] ?? 'desc';
+                $query->orderBy($orderColumn, $orderDir);
+            } else {
+                $query->orderBy('tanggal', 'desc')->orderBy('jam', 'desc');
+            }
+
+            $start = $request->start ?? 0;
+            $length = $request->length ?? 10;
+
+            $records = $query->skip($start)->take($length)->get();
+
+            $canUpdate = PermissionHelper::canAccess('kecelakaan_kerja', 'update');
+            $canRead = PermissionHelper::canAccess('kecelakaan_kerja', 'read');
+            $canDelete = PermissionHelper::canAccess('kecelakaan_kerja', 'delete');
+
+            $data = [];
+
+            foreach ($records as $item) {
+                try {
+                    $jamDisplay = Carbon::createFromFormat('H:i:s', $item->jam)->format('H:i');
+                } catch (\Exception $e) {
+                    $jamDisplay = $item->jam ?? '-';
+                }
+
+                $data[] = [
+                    'id' => $item->id,
+                    'nama' => ucwords(strtolower($item->nama)),
+                    'unit' => $item->unit,
+                    'no_hp' => $item->no_hp,
+                    'jam_formatted' => $jamDisplay . ' WIB',
+                    'tanggal_timestamp' => Carbon::parse($item->tanggal)->timestamp,
+                    'tanggal_formatted' => Carbon::parse($item->tanggal)->translatedFormat('d F Y'),
+                    'jenis_kecelakaan' => $item->jenis_kecelakaan,
+                    'lokasi_kecelakaan' => Str::limit($item->lokasi_kecelakaan, 30),
+                    'can_update' => $canUpdate,
+                    'can_read' => $canRead,
+                    'can_delete' => $canDelete,
+                ];
+            }
+
+            return response()->json([
+                'draw' => intval($request->draw),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data,
+            ]);
         }
 
-        $query = KecelakaanKerja::query();
-
-        if ($request->filled('periode_dari')) {
-            $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
-            $query->whereDate('tanggal', '>=', $startDate);
-        }
-
-        if ($request->filled('periode_sampai')) {
-            $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
-            $query->whereDate('tanggal', '<=', $endDate);
-        }
-
-        $k3rs = $query->orderBy('tanggal', 'desc')->orderBy('jam', 'desc')->get();
-
-        return view('pages.kecelakaan-kerja.index', compact('k3rs', 'isFiltered'));
+        return view('pages.kecelakaan-kerja.index');
     }
 
     public function create()

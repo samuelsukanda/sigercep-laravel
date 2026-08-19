@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Utw;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Validator;
+use App\Helpers\PermissionHelper;
 
 class UtwController extends Controller
 {
@@ -21,44 +21,84 @@ class UtwController extends Controller
 
     public function index(Request $request)
     {
-        $isFiltered = $request->hasAny([
-            'periode_dari',
-            'periode_sampai',
-            'unit'
-        ]);
+        if ($request->ajax()) {
+            $columns = ['file_pdf', 'unit', 'created_at'];
 
-        $validator = Validator::make($request->all(), [
-            'periode_dari'   => 'nullable|date_format:d-m-Y',
-            'periode_sampai' => 'nullable|date_format:d-m-Y|after_or_equal:periode_dari',
-        ], [
-            'periode_sampai.after_or_equal' => 'Periode Sampai harus lebih besar atau sama dengan Periode Dari.',
-        ]);
+            $query = Utw::query();
 
-        if ($validator->fails()) {
-            return redirect()->route('sdm-hukum.utw.index')
-                ->withErrors($validator)
-                ->withInput();
+            if ($request->filled('periode_dari')) {
+                try {
+                    $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
+                    $query->whereDate('created_at', '>=', $startDate);
+                } catch (\Exception $e) {
+                }
+            }
+
+            if ($request->filled('periode_sampai')) {
+                try {
+                    $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
+                    $query->whereDate('created_at', '<=', $endDate);
+                } catch (\Exception $e) {
+                }
+            }
+
+            if ($request->filled('unit')) {
+                $query->where('unit', $request->unit);
+            }
+
+            if ($request->has('search') && !empty($request->search['value'])) {
+                $search = $request->search['value'];
+                $query->where(function ($q) use ($search) {
+                    $q->where('file_pdf', 'like', "%{$search}%")
+                        ->orWhere('unit', 'like', "%{$search}%");
+                });
+            }
+
+            $recordsTotal = Utw::count();
+            $recordsFiltered = $query->count();
+
+            if ($request->has('order')) {
+                $orderColumn = $columns[$request->order[0]['column']] ?? 'created_at';
+                $orderDir = $request->order[0]['dir'] ?? 'desc';
+                $query->orderBy($orderColumn, $orderDir);
+            } else {
+                $query->orderBy('created_at', 'desc');
+            }
+
+            $start = $request->start ?? 0;
+            $length = $request->length ?? 10;
+
+            $records = $query->skip($start)->take($length)->get();
+
+            $canUpdate = PermissionHelper::canAccess('utw', 'update');
+            $canRead = PermissionHelper::canAccess('utw', 'read');
+            $canDelete = PermissionHelper::canAccess('utw', 'delete');
+
+            $data = [];
+
+            foreach ($records as $item) {
+                $data[] = [
+                    'id' => $item->id,
+                    'file_pdf' => $item->file_pdf,
+                    'unit' => $item->unit,
+                    'created_at_timestamp' => Carbon::parse($item->created_at)->timestamp,
+                    'created_at_formatted' => Carbon::parse($item->created_at)->translatedFormat('d F Y'),
+                    'created_at_time' => Carbon::parse($item->created_at)->format('H:i') . ' WIB',
+                    'can_update' => $canUpdate,
+                    'can_read' => $canRead,
+                    'can_delete' => $canDelete,
+                ];
+            }
+
+            return response()->json([
+                'draw' => intval($request->draw),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data,
+            ]);
         }
 
-        $query = Utw::query();
-
-        if ($request->filled('periode_dari')) {
-            $startDate = Carbon::createFromFormat('d-m-Y', $request->periode_dari)->startOfDay();
-            $query->whereDate('created_at', '>=', $startDate);
-        }
-
-        if ($request->filled('periode_sampai')) {
-            $endDate = Carbon::createFromFormat('d-m-Y', $request->periode_sampai)->endOfDay();
-            $query->whereDate('created_at', '<=', $endDate);
-        }
-
-        if ($request->filled('unit')) {
-            $query->where('unit', $request->unit);
-        }
-
-        $utw = $query->orderBy('created_at', 'desc')->get();
-
-        return view('pages.sdm-hukum.utw.index', compact('utw', 'isFiltered'));
+        return view('pages.sdm-hukum.utw.index');
     }
 
     public function create()

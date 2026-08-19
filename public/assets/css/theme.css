@@ -1,0 +1,238 @@
+/* ============================================================
+   SIGERCEP Theme — single-accent redesign overrides
+   Accent: #7664E4 (violet) | Font: Plus Jakarta Sans
+   Dimuat setelah custom.css; hapus file ini untuk rollback.
+   ============================================================ */
+
+:root {
+    --accent: #7664E4;
+    --accent-strong: #5f4dd6;
+    --accent-soft: rgba(118, 100, 228, 0.12);
+    --accent-focus: rgba(118, 100, 228, 0.2);
+    --accent-shadow: rgba(95, 77, 214, 0.28);
+    --slate-700: #334155;
+    --slate-500: #64748b;
+    --slate-300: #cbd5e1;
+    --slate-200: #e2e8f0;
+    --slate-100: #f1f5f9;
+}
+
+/* ---------- Typography ---------- */
+body,
+.font-sans {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+    letter-spacing: -0.01em;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+}
+
+/* ---------- Gradient -> solid single-hue ---------- */
+.bg-gradient-to-tl {
+    background-image: none;
+}
+
+/* Stat icon circles + primary links -> accent violet */
+.from-blue-500.to-violet-500,
+.from-blue-700.to-cyan-500 {
+    background-color: var(--accent);
+}
+
+/* Semantic neutrals -> solid slate */
+.from-zinc-800.to-zinc-700,
+.from-slate-600.to-slate-300,
+.from-gray-400.to-gray-600 {
+    background-color: var(--slate-700);
+}
+
+/* Success -> solid emerald */
+.from-emerald-500.to-teal-400 {
+    background-color: #059669;
+}
+
+/* Warning -> solid amber */
+.from-orange-500.to-yellow-500,
+.from-orange-500.to-amber-400 {
+    background-color: #d97706;
+}
+
+/* Danger -> solid red */
+.from-red-600.to-orange-600,
+.from-red-500.to-pink-500 {
+    background-color: #dc2626;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+    transition: all 0.15s ease-in-out;
+    box-shadow: none;
+}
+
+.btn:hover {
+    box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.12);
+}
+
+.btn:active,
+.btn:focus:active {
+    transform: translateY(1px) scale(0.99);
+}
+
+.btn-gray {
+    background: var(--slate-700);
+    border-color: var(--slate-700);
+}
+
+.btn-gray:hover {
+    background: #1e293b;
+    border-color: #1e293b;
+}
+
+.btn-red {
+    background: #dc2626;
+    border-color: #dc2626;
+}
+
+.btn-red:hover {
+    background: #b91c1c;
+    border-color: #b91c1c;
+}
+
+/* ---------- Focus rings (a11y) ---------- */
+.btn:focus,
+.signature-canvas:focus,
+.datatable-custom-wrapper .dataTables_length select:focus,
+.datatable-custom-wrapper .dataTables_filter input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--accent-focus);
+    border-color: var(--accent);
+}
+
+/* ---------- DataTables ---------- */
+/* Sembunyikan indikator processing titik-titik bawaan, pakai overlay custom */
+.dataTables_processing {
+    display: none !important;
+}
+
+.datatable-custom-wrapper .dataTables_paginate .paginate_button.current,
+.datatable-custom-wrapper .dataTables_paginate .paginate_button.current:hover {
+    background: var(--accent) !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 2px 8px -1px var(--accent-shadow);
+}
+
+.datatable-custom-wrapper .dataTables_paginate .paginate_button:hover {
+    background: var(--slate-100) !important;
+    color: var(--accent-strong) !important;
+    border-color: var(--slate-200) !important;
+}
+
+.datatable-custom th {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.datatable-custom td,
+.datatable-custom tbody td {
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Select2 ---------- */
+.select2-container--default .select2-selection--single:focus,
+.select2-container--default.select2-container--focus .select2-selection--single,
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px var(--accent-focus);
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: var(--accent);
+}
+
+/* ---------- Flatpickr (override material_blue) ---------- */
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover,
+.flatpickr-day.today.selected {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.flatpickr-day.today {
+    border-color: var(--accent);
+}
+
+.flatpickr-day:hover {
+    background: var(--accent-soft);
+    border-color: transparent;
+}
+
+.flatpickr-months .flatpickr-month,
+.flatpickr-current-month,
+.flatpickr-prev-month:hover svg,
+.flatpickr-next-month:hover svg {
+    fill: var(--accent);
+    color: var(--accent);
+}
+
+/* ---------- Sidebar: unify all trigger icon colors ---------- */
+aside ul > li > a > div i {
+    color: var(--accent) !important;
+}
+
+aside div.items-center ul > li > a:hover {
+    background-color: var(--accent-soft);
+    color: var(--accent-strong);
+}
+
+aside a.bg-blue-500\/13 {
+    background-color: var(--accent-soft);
+}
+
+/* ---------- Navbar ---------- */
+.notif-badge {
+    position: absolute;
+    top: -7px;
+    right: -11px;
+    min-width: 14px;
+    height: 14px;
+    padding: 0 3px;
+    background: #dc2626;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.notif-read-link:hover {
+    color: var(--accent) !important;
+}
+
+/* ---------- Skip link (a11y) ---------- */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 10000;
+    padding: 0.75rem 1.25rem;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border-radius: 0 0 0.5rem 0;
+}
+
+.skip-link:focus {
+    left: 0;
+}
+
+/* ---------- Cards: tinted shadow ---------- */
+.shadow-xl,
+.shadow-soft-2xl {
+    box-shadow: 0 6px 24px -6px rgba(15, 23, 42, 0.1), 0 2px 6px -2px var(--accent-shadow) !important;
+}

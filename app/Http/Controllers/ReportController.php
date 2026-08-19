@@ -8,12 +8,82 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\TicketsExport;
+use Illuminate\Support\Str;
 
 class ReportController extends Controller
 {
 
     public function summary(Request $request)
     {
+
+        if ($request->ajax()) {
+            $orderable = ['ticket_number', 'created_at', 'category', 'urgency', 'description', 'status', 'resolved_at'];
+
+            $query = Ticket::with(['user', 'approval'])->filter($request);
+
+            if ($request->has('search') && !empty($request->search['value'])) {
+                $search = $request->search['value'];
+                $query->where(function ($q) use ($search) {
+                    $q->where('ticket_number', 'like', "%{$search}%")
+                        ->orWhere('category', 'like', "%{$search}%")
+                        ->orWhere('urgency', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%")
+                        ->orWhere('status', 'like', "%{$search}%")
+                        ->orWhereHas('user', function ($q2) use ($search) {
+                            $q2->where('name', 'like', "%{$search}%")
+                                ->orWhere('unit', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('approval', function ($q2) use ($search) {
+                            $q2->where('approval_status', 'like', "%{$search}%")
+                                ->orWhere('approved_by', 'like', "%{$search}%")
+                                ->orWhere('duration', 'like', "%{$search}%");
+                        });
+                });
+            }
+
+            $recordsTotal = Ticket::count();
+            $recordsFiltered = $query->count();
+
+            if ($request->has('order')) {
+                $orderColumn = $orderable[$request->order[0]['column']] ?? 'created_at';
+                $orderDir = $request->order[0]['dir'] ?? 'desc';
+                $query->orderBy($orderColumn, $orderDir);
+            } else {
+                $query->orderBy('created_at', 'desc');
+            }
+
+            $start = $request->start ?? 0;
+            $length = $request->length ?? 10;
+
+            $records = $query->skip($start)->take($length)->get();
+
+            $data = [];
+
+            foreach ($records as $ticket) {
+                $data[] = [
+                    'ticket_number' => $ticket->ticket_number,
+                    'created_at_timestamp' => $ticket->created_at->timestamp,
+                    'created_at_formatted' => $ticket->created_at->format('d-m-Y H:i'),
+                    'user_name' => ucwords(str_replace('.', ' ', $ticket->user->name ?? '-')),
+                    'user_unit' => $ticket->user->unit ?? '-',
+                    'category' => $ticket->category ?? '-',
+                    'urgency' => $ticket->urgency ?? '-',
+                    'description' => Str::limit($ticket->description, 40),
+                    'status' => $ticket->status ?? 'Closed',
+                    'approval_status' => $ticket->approval?->approval_status ?? 'Pending',
+                    'approved_by' => $ticket->approval?->approved_by ? ucwords(str_replace('.', ' ', $ticket->approval->approved_by)) : '-',
+                    'duration' => $ticket->approval?->duration ?? '-',
+                    'resolved_at' => $ticket->resolved_at ? $ticket->resolved_at->format('d-m-Y') : '-',
+                ];
+            }
+
+            return response()->json([
+                'draw' => intval($request->draw),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data,
+            ]);
+        }
 
         $isFiltered = $request->hasAny([
             'periode_dari',

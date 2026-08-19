@@ -9,10 +9,13 @@
             leading-default bg-gray-50 text-slate-500
             min-h-screen flex flex-col">
 
+    {{-- Skip to content (a11y) --}}
+    <a href="#main-content" class="skip-link">Lewati ke konten utama</a>
+
     {{-- Sidebar --}}
     @include('layouts.partials.sidebar')
 
-    <main class="relative flex-1 transition-all duration-200 ease-in-out xl:ml-68 rounded-xl flex flex-col">
+    <main id="main-content" class="relative flex-1 transition-all duration-200 ease-in-out xl:ml-68 rounded-xl flex flex-col">
         {{-- Navbar --}}
         @include('layouts.partials.navbar')
 

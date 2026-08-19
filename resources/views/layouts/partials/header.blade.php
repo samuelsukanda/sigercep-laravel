@@ -6,8 +6,14 @@
     <meta charset="UTF-8">
     <title>@yield('title', 'SIGERCEP')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Sistem Informasi dan Gangguan Rumah Sakit Rujukan (SIGERCEP) - pengelolaan helpdesk, komplain, aset, dan dokumen." />
+    <meta property="og:title" content="SIGERCEP" />
+    <meta property="og:description" content="Sistem Informasi dan Gangguan Rumah Sakit Rujukan" />
+    <meta property="og:type" content="website" />
     <!-- Fonts and icons -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <!-- Main Styling -->
@@ -26,5 +32,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     {{-- Custom CSS --}}
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+    {{-- Theme CSS (redesign overrides) --}}
+    <link rel="stylesheet" href="{{ asset('assets/css/theme.css') }}">
 </head>
 {{-- end Header --}}

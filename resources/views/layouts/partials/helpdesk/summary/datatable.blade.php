@@ -44,60 +44,6 @@
                 </tr>
             </thead>
             <tbody>
-                @if (!$isFiltered)
-                    <tr>
-                        <td colspan="12" class="text-center py-6 text-gray-400">
-                            Silakan pilih filter lalu klik <b>Cari</b>
-                        </td>
-                    </tr>
-                @elseif ($tickets->count() == 0)
-                    <tr>
-                        <td colspan="12" class="text-center py-6 text-red-400">
-                            Data tidak ditemukan
-                        </td>
-                    </tr>
-                @else
-                    @foreach ($tickets as $ticket)
-                        <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-100">
-                            <td class="py-3 px-3 whitespace-nowrap">
-                                <span class="font-semibold text-blue-600">{{ $ticket->ticket_number }}</span>
-                            </td>
-                            <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">
-                                {{ $ticket->created_at->format('d-m-Y H:i') }}
-                            </td>
-                            <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">
-                                {{ ucwords(str_replace('.', ' ', $ticket->user->name ?? '-')) }}
-                            </td>
-                            <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">
-                                {{ $ticket->user->unit ?? '-' }}
-                            </td>
-                            <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">
-                                {{ $ticket->category ?? '-' }}
-                            </td>
-                            <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">
-                                {{ $ticket->urgency ?? '-' }}
-                            </td>
-                            <td class="py-3 px-3 text-gray-500 max-w-[200px] truncate text-s">
-                                {{ \Str::limit($ticket->description, 40) }}
-                            </td>
-                            <td class="py-3 px-3 whitespace-nowrap text-s text-gray-600">
-                                {{ $ticket->status ?? 'Closed' }}
-                            </td>
-                            <td class="py-3 px-3 whitespace-nowrap text-s text-gray-600">
-                                {{ $ticket->approval?->approval_status ?? 'Pending' }}
-                            </td>
-                            <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">
-                                {{ $ticket->approval?->approved_by ? ucwords(str_replace('.', ' ', $ticket->approval?->approved_by)) : '-' }}
-                            </td>
-                            <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">
-                                {{ $ticket->approval?->duration ?? '-' }}
-                            </td>
-                            <td class="py-3 px-3 text-gray-500 whitespace-nowrap text-s">
-                                {{ $ticket->resolved_at ? $ticket->resolved_at->format('d-m-Y') : '-' }}
-                            </td>
-                        </tr>
-                    @endforeach
-                @endif
             </tbody>
         </table>
     </div>

@@ -67,23 +67,7 @@
                             @if ($unreadCount > 0)
                                 <span
                                     id="notif-badge"
-                                    style="
-                                        position: absolute;
-                                        top: -7px;
-                                        right: -11px;
-                                        min-width: 14px;
-                                        height: 14px;
-                                        padding: 0 3px;
-                                        background: red;
-                                        color: white;
-                                        font-size: 9px;
-                                        font-weight: bold;
-                                        border-radius: 999px;
-                                        display: flex;
-                                        align-items: center;
-                                        justify-content: center;
-                                        line-height: 1;
-                                    ">
+                                    class="notif-badge">
                                     {{ $unreadCount > 99 ? '99+' : $unreadCount }}
                                 </span>
                             @endif
@@ -133,9 +117,7 @@
 
                                                     <div class="mt-2">
                                                         <a href="{{ route('notifications.read', $notification->id) }}"
-                                                            class="text-xs text-gray-500"
-                                                            onmouseover="this.style.color='#2563eb'"
-                                                            onmouseout="this.style.color='#6b7280'">
+                                                            class="text-xs notif-read-link text-gray-500">
                                                             Tandai sudah dibaca
                                                         </a>
                                                     </div>
@@ -154,9 +136,8 @@
 
                                 @if ($unreadCount > 0)
                                     <div class="px-2 py-1 border-t" id="notif-markall">
-                                        <a href="{{ route('notifications.read-all') }}" class="text-xs text-gray-500"
-                                            onmouseover="this.style.color='#2563eb'"
-                                            onmouseout="this.style.color='#6b7280'">
+                                        <a href="{{ route('notifications.read-all') }}"
+                                            class="text-xs notif-read-link text-gray-500">
                                             Tandai semua sudah dibaca
                                         </a>
                                     </div>
@@ -343,7 +324,7 @@
                 } else if (btn) {
                     badge = document.createElement('span');
                     badge.id = 'notif-badge';
-                    badge.style.cssText = 'position:absolute;top:-7px;right:-11px;min-width:14px;height:14px;padding:0 3px;background:red;color:white;font-size:9px;font-weight:bold;border-radius:999px;display:flex;align-items:center;justify-content:center;line-height:1;';
+                    badge.className = 'notif-badge';
                     badge.textContent = '1';
                     btn.appendChild(badge);
                 }
@@ -385,7 +366,7 @@
                 markRead.className = 'mt-2';
                 const markLink = document.createElement('a');
                 markLink.href = '/notifications/' + n.id + '/read';
-                markLink.className = 'text-xs text-gray-500';
+                markLink.className = 'text-xs text-gray-500 notif-read-link';
                 markLink.textContent = 'Tandai sudah dibaca';
                 markRead.appendChild(markLink);
 
