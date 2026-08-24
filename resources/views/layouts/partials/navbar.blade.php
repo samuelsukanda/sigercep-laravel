@@ -129,7 +129,7 @@
 
                                         </div>
                                     @empty
-                                        <div class="px-3 py-2 text-sm text-gray-500 text-center">
+                                        <div class="notif-empty px-3 py-2 text-sm text-gray-500 text-center">
                                             Tidak ada notifikasi
                                         </div>
                                     @endforelse
@@ -381,8 +381,15 @@
                 if (!list) return;
 
                 // buang pesan kosong
-                const empty = list.querySelector('.notif-empty');
-                if (empty) empty.remove();
+                const empty = list.querySelector('.notif-empty') || 
+                              Array.from(list.children).find(function(el) { return el.textContent.includes('Tidak ada notifikasi'); });
+                if (empty) {
+                    if (typeof empty.remove === 'function') {
+                        empty.remove();
+                    } else if (empty.parentNode) {
+                        empty.parentNode.removeChild(empty);
+                    }
+                }
 
                 // update badge
                 const btn = document.querySelector('.fa-bell')?.closest('button');
