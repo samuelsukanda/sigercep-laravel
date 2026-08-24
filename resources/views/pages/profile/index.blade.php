@@ -32,7 +32,7 @@
                         ] as $label => $value)
                             <div style="display: flex; align-items: center; padding: 0.75rem 0.5rem; border-bottom: 1px solid #f1f5f9;">
                                 <div style="flex: 1; font-size: 0.85rem; font-weight: 600; color: #64748b;">{{ $label }}</div>
-                                <div style="font-size: 0.9rem; font-weight: 600; color: #1e293b;">{{ $value ?: '-' }}</div>
+                                <div style="font-size: 0.9rem; font-weight: 600; color: var(--text-strong);">{{ $value ?: '-' }}</div>
                             </div>
                         @endforeach
                     </div>

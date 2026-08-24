@@ -5,6 +5,7 @@
 
 html.dark {
     color-scheme: dark;
+    --text-strong: #f1f5f9;
 }
 
 html.dark body {

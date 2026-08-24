@@ -46,8 +46,8 @@
     {{-- Custom CSS --}}
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
     {{-- Theme CSS (redesign overrides) --}}
-    <link rel="stylesheet" href="{{ asset('assets/css/theme.css') }}?v=5">
+    <link rel="stylesheet" href="{{ asset('assets/css/theme.css') }}?v=6">
     {{-- Dark theme overrides --}}
-    <link rel="stylesheet" href="{{ asset('assets/css/dark-theme.css') }}?v=2">
+    <link rel="stylesheet" href="{{ asset('assets/css/dark-theme.css') }}?v=3">
 </head>
 {{-- end Header --}}

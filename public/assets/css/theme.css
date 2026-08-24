@@ -18,6 +18,7 @@
     --slate-300: #cbd5e1;
     --slate-200: #e2e8f0;
     --slate-100: #f1f5f9;
+    --text-strong: #1e293b;
 }
 
 :root[data-theme="blue"]   { --accent: #2f6690; }
