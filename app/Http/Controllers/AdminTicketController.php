@@ -127,6 +127,8 @@ class AdminTicketController extends Controller
                     'urgency_badge' => $urgencyBadge,
                     'status_badge' => $statusBadge,
                     'approval_badge' => $approvalBadge,
+                    'can_update' => \App\Helpers\PermissionHelper::canAccess('helpdesk', 'manage'),
+                    'can_delete' => \App\Helpers\PermissionHelper::canAccess('helpdesk', 'manage'),
                 ];
             }
 
@@ -141,8 +143,9 @@ class AdminTicketController extends Controller
         return view('pages.helpdesk.admin.index');
     }
 
-    public function edit(Ticket $ticket)
+    public function edit(Ticket $helpdesk)
     {
+        $ticket = $helpdesk;
         return view('pages.helpdesk.admin.edit', compact('ticket'));
     }
 
@@ -152,7 +155,7 @@ class AdminTicketController extends Controller
         return view('pages.helpdesk.admin.show', compact('ticket'));
     }
 
-    public function update(Request $request, Ticket $ticket)
+    public function update(Request $request, Ticket $helpdesk)
     {
         $request->validate([
             'category' => 'required',
@@ -160,14 +163,19 @@ class AdminTicketController extends Controller
             'urgency' => 'required',
         ]);
 
-        $ticket->update($request->only('category', 'description', 'urgency', 'unit_name'));
+        $helpdesk->update($request->only('category', 'description', 'urgency', 'unit_name'));
 
         return redirect()->route('admin.helpdesk.index')->with('success', 'Tiket diperbarui.');
     }
 
-    public function destroy(Ticket $ticket)
+    public function destroy(Ticket $helpdesk)
     {
-        $deleted = $ticket->forceDelete();
+        if ($helpdesk->approval) {
+            $helpdesk->approval->forceDelete();
+        }
+        $helpdesk->updates()->forceDelete();
+
+        $deleted = $helpdesk->forceDelete();
         if (!$deleted) {
             dd('Gagal delete, kemungkinan ada error');
         }

@@ -29,6 +29,8 @@
 @endsection
 
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('assets/js/alert-delete-swal.js') }}"></script>
     <script src="{{ asset('assets/js/datatable/datatable-helpdesk.js') }}"></script>
     <script src="{{ asset('assets/js/loading-filter.js') }}"></script>
     <script>

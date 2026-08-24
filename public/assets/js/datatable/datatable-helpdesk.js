@@ -67,15 +67,46 @@ let table = $("#ticketTable").DataTable({
             orderable: false,
             searchable: false,
             render: function (data) {
-                return `
-                    <div class="flex items-center justify-center gap-2">
-                        <a href="/admin/helpdesk/${data.id}"
-                        class="text-slate-500 hover:text-cyan-600 transition"
-                        title="Lihat Data">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                    </div>
+                let isAdmin = window.location.pathname.startsWith('/admin');
+                let viewUrl = isAdmin ? `/admin/helpdesk/${data.id}` : `/helpdesk/${data.id}`;
+                let btn = `<div class="flex items-center justify-center gap-2">`;
+
+                if (isAdmin && data.can_update) {
+                    btn += `
+                    <a href="/admin/helpdesk/${data.id}/edit"
+                    class="text-slate-500 hover:text-blue-600 transition"
+                    title="Edit">
+                        <i class="fas fa-pen-to-square"></i>
+                    </a>
+                    `;
+                }
+
+                btn += `
+                    <a href="${viewUrl}"
+                    class="text-slate-500 hover:text-cyan-600 transition"
+                    title="Lihat Data">
+                        <i class="fas fa-eye"></i>
+                    </a>
                 `;
+
+                if (isAdmin && data.can_delete) {
+                    btn += `
+                    <form action="/admin/helpdesk/${data.id}" method="POST" style="display:inline;">
+                        <input type="hidden" name="_token" value="${$('meta[name="csrf-token"]').attr("content")}">
+                        <input type="hidden" name="_method" value="DELETE">
+
+                        <button type="button"
+                            class="delete-button text-red-500 hover:text-red-700 transition"
+                            data-confirm="Yakin ingin menghapus tiket ini?"
+                            title="Hapus">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                    `;
+                }
+
+                btn += `</div>`;
+                return btn;
             },
         },
     ],

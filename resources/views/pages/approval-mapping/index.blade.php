@@ -728,7 +728,7 @@
                         </div>
                     </div>
                     <div class="am-card-body">
-                        <form action="{{ route('approval-mapping.store') }}" method="POST">
+                        <form action="{{ route('approval-mapping.store') }}" method="POST" id="form-tambah-mapping">
                             @csrf
                             {{-- Baris 1: Requester & Approver sejajar --}}
                             <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
@@ -1034,6 +1034,24 @@
         // Run on page load
         $(document).ready(function() {
             initSelect2(null);
+
+            // Validasi sebelum submit form tambah mapping
+            $('#form-tambah-mapping').on('submit', function(e) {
+                var reqUser = $(this).find('select[name="requester_user_id"]').val();
+                var apprUser = $(this).find('select[name="approver_user_id"]').val();
+
+                if (!reqUser || !apprUser) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'User Belum Dipilih',
+                        text: 'User Requester dan User Approver harus dipilih terlebih dahulu!',
+                        confirmButtonColor: 'var(--accent)',
+                        confirmButtonText: 'OK',
+                        customClass: { confirmButton: 'btn-swal-success' }
+                    });
+                }
+            });
 
             // Re-init Select2 saat modal edit dibuka
             window.addEventListener('open-edit-modal', function(e) {
