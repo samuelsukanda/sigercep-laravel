@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
-use App\Helpers\TicketHelper;
-use App\Helpers\TelegramHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -190,7 +188,16 @@ class TicketController extends Controller
             }
 
             $ticket = new Ticket();
-            $ticket->ticket_number = TicketHelper::generateTicketNumber();
+            $month = now()->format('m');
+            $year  = now()->format('Y');
+            $prefix = $month . '-' . $year;
+            $lastTicket = DB::table('tickets')->where('ticket_number', 'LIKE', "%-{$prefix}")->lockForUpdate()->orderByDesc('id')->first();
+            if ($lastTicket) {
+                $lastNumber = explode('-', $lastTicket->ticket_number)[0];
+                $ticket->ticket_number = str_pad((int)$lastNumber + 1, 3, '0', STR_PAD_LEFT) . '-' . $prefix;
+            } else {
+                $ticket->ticket_number = '001-' . $prefix;
+            }
             $ticket->user_id       = Auth::id();
             $ticket->category      = $request->category;
             $ticket->description   = $request->description;
@@ -228,7 +235,11 @@ class TicketController extends Controller
                      . "<b>Jabatan:</b> {$jabatan}\n\n"
                     . "<b>Deskripsi:</b>\n{$desc}";
 
-                $response = TelegramHelper::send($message);
+                $response = Http::post("https://api.telegram.org/bot" . config('services.telegram.token') . "/sendMessage", [
+                    'chat_id' => config('services.telegram.chat_id'),
+                    'text' => $message,
+                    'parse_mode' => 'HTML'
+                ]);
 
                 if (!$response || !$response->ok()) {
                     Log::error('Telegram gagal', [

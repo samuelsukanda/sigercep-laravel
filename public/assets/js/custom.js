@@ -24,16 +24,6 @@ $(document).ready(function () {
         });
     }
 
-    $("#filter-unit").select2({
-        placeholder: "Pilih Unit",
-        allowClear: true,
-    });
-
-    $("#filter-jenis").select2({
-        placeholder: "Pilih Jenis",
-        allowClear: true,
-    });
-
     $("#toner").select2({
         placeholder: "Pilih Toner",
         allowClear: true,
@@ -94,24 +84,7 @@ $(document).ready(function () {
         allowClear: true,
     });
 
-    if ($("#dampak").is("select")) {
-        $("#dampak").select2({
-            placeholder: "Pilih Nilai",
-            allowClear: true,
-        });
-    }
-
-    $("#kemungkinan").select2({
-        placeholder: "Pilih Nilai",
-        allowClear: true,
-    });
-
     $("#analisis_tingkat").select2({
-        placeholder: "Pilih Tingkat",
-        allowClear: true,
-    });
-
-    $("#mitigasi_tingkat").select2({
         placeholder: "Pilih Tingkat",
         allowClear: true,
     });
