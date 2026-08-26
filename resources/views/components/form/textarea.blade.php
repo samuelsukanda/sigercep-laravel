@@ -9,7 +9,7 @@
         {{ $attributes->merge([
             'class' =>
                 'focus:shadow-primary-outline text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 px-3 py-2 font-normal outline-none transition-all placeholder:text-gray-500 focus:outline-none focus:border-blue-500 ' .
-                ($readonly ? 'bg-gray-50 text-gray-600 cursor-not-allowed' : ''),
+                ($readonly ? 'readonly-field' : ''),
         ]) }}>{{ $value ?? $slot }}</textarea>
 
     @error($name)

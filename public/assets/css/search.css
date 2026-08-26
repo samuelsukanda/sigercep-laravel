@@ -1,3 +1,7 @@
+.perm-search-input {
+    background: white;
+}
+
 .perm-search-input:focus {
     border-color: var(--accent) !important;
     box-shadow: 0 0 0 3px var(--accent-soft);
@@ -52,4 +56,23 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 8px;
+}
+
+html.dark .perm-search-input {
+    background: #111c2e;
+    color: #e2e8f0;
+    border-color: #475569;
+}
+
+html.dark .perm-search-input::placeholder {
+    color: #64748b;
+}
+
+html.dark .search-highlight {
+    background-color: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+}
+
+html.dark .search-empty-result {
+    color: #94a3b8;
 }

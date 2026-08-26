@@ -35,7 +35,7 @@
         .rule-tab-btn.active {
             color: var(--accent) !important;
             border-bottom-color: var(--accent) !important;
-            background: #fff !important;
+            background: var(--surface) !important;
         }
 
         .rule-tab-btn.active .rule-tab-badge {
@@ -117,7 +117,7 @@
                     style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 1rem;"></i>
                 <input type="text" id="searchMenuInput" class="perm-search-input"
                     placeholder="Cari menu berdasarkan nama..."
-                    style="width: 100%; padding: 12px 50px 12px 48px; border: 1px solid #e2e8f0; border-radius: 12px; background: white; font-size: 0.9rem; outline: none; transition: all 0.2s;">
+                    style="width: 100%; padding: 12px 50px 12px 48px; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 0.9rem; outline: none; transition: all 0.2s;">
                 <button type="button" id="clearSearchBtn" class="perm-search-clear"
                     style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #9ca3af; display: none;">
                     <i class="fas fa-times-circle" style="font-size: 1rem;"></i>

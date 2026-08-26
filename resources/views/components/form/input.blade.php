@@ -20,7 +20,7 @@
     ]) }}
 
     @if($attributes->has('readonly'))
-        style="background-color: #f3f4f6; color: #6b7280; cursor: not-allowed;"
+        class="{{ $attributes->get('class', '') }} readonly-field"
     @endif
 >
 

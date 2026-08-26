@@ -493,17 +493,12 @@
             width: 100%;
             padding: 7px 10px;
             font-size: 12px;
-            border: 1.5px solid transparent;
+            border: 1.5px solid #e2e8f0;
             border-radius: 8px;
-            background: transparent;
+            background: #fff;
             color: #1e293b;
-            transition: all 0.15s;
             outline: none;
-        }
-
-        .am-table-input:hover {
-            border-color: #e2e8f0;
-            background: #f8fafc;
+            cursor: default;
         }
 
         .am-table-input:focus {
@@ -565,6 +560,134 @@
             font-size: 26px;
             color: #c4b5fd;
             margin-bottom: 16px;
+        }
+
+        /* ===== FORM SECTIONS (Requester/Approver) ===== */
+        .am-section {
+            border-radius: 14px;
+            padding: 14px;
+        }
+
+        .am-section.requester {
+            background: #f8f9ff;
+            border: 1px solid var(--accent-soft);
+        }
+
+        .am-section.approver {
+            background: #f8fff9;
+            border: 1px solid rgba(16,185,129,0.12);
+        }
+
+        .am-section-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 0 0 12px;
+        }
+
+        /* ===== DARK MODE ===== */
+        html.dark .am-card {
+            background: #1e293b;
+            border-color: #334155;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        html.dark .am-card-header {
+            background: linear-gradient(to right, rgba(118, 100, 228, 0.08), transparent);
+            border-bottom-color: #334155;
+        }
+
+        html.dark .am-card-title {
+            color: #e2e8f0;
+        }
+
+        html.dark .am-card-subtitle {
+            color: #94a3b8;
+        }
+
+        html.dark .am-card-body {
+            background: transparent;
+        }
+
+        html.dark .am-label {
+            color: #94a3b8;
+        }
+
+        html.dark .am-input,
+        html.dark .am-select {
+            background: #111c2e;
+            color: #e2e8f0;
+            border-color: #475569;
+        }
+
+        html.dark .am-input:hover,
+        html.dark .am-select:hover {
+            background: #1a2538;
+            border-color: #64748b;
+        }
+
+        html.dark .am-input:focus,
+        html.dark .am-select:focus {
+            background: #111c2e;
+            border-color: var(--accent);
+        }
+
+        html.dark .am-input::placeholder {
+            color: #64748b;
+        }
+
+        html.dark .am-alert.info {
+            background: rgba(118, 100, 228, 0.12);
+            color: #c4b5fd;
+        }
+
+        html.dark .am-alert.warning {
+            background: rgba(245, 158, 11, 0.12);
+            color: #fbbf24;
+        }
+
+        html.dark .am-alert.success {
+            background: rgba(16, 185, 129, 0.12);
+            color: #6ee7b7;
+        }
+
+        html.dark .am-alert.danger {
+            background: rgba(239, 68, 68, 0.12);
+            color: #fca5a5;
+        }
+
+        html.dark .am-empty {
+            color: #64748b;
+        }
+
+        html.dark .am-empty p {
+            color: #94a3b8;
+        }
+
+        html.dark .am-section.requester {
+            background: rgba(118, 100, 228, 0.08);
+            border-color: rgba(118, 100, 228, 0.2);
+        }
+
+        html.dark .am-section.approver {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+
+        html.dark .am-section-title {
+            color: inherit;
+        }
+
+        html.dark .am-table-input {
+            background: #111c2e;
+            color: #e2e8f0;
+            border-color: #475569;
+        }
+
+        html.dark .am-table-input:focus {
+            border-color: var(--accent);
+            background: #111c2e;
         }
     </style>
 @endpush
@@ -734,10 +857,8 @@
                             <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
 
                                 {{-- Kolom Requester --}}
-                                <div
-                                    style="background:#f8f9ff; border-radius:14px; padding:14px; border:1px solid var(--accent-soft);">
-                                    <p
-                                        style="font-size:11px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.05em; margin:0 0 12px;">
+                                <div class="am-section requester">
+                                    <p class="am-section-title" style="color:var(--accent);">
                                         <i class="fas fa-user mr-1"></i> Requester
                                     </p>
                                     <div class="am-field" style="margin-bottom:10px;">
@@ -762,10 +883,8 @@
                                 </div>
 
                                 {{-- Kolom Approver 1 --}}
-                                <div
-                                    style="background:#f8fff9; border-radius:14px; padding:14px; border:1px solid rgba(16,185,129,0.12);">
-                                    <p
-                                        style="font-size:11px; font-weight:700; color:#059669; text-transform:uppercase; letter-spacing:0.05em; margin:0 0 12px;">
+                                <div class="am-section approver">
+                                    <p class="am-section-title" style="color:#059669;">
                                         <i class="fas fa-user-check mr-1"></i> Approver 1
                                     </p>
                                     <div class="am-field" style="margin-bottom:10px;">
@@ -827,7 +946,7 @@
                                 <div class="am-empty-icon">
                                     <i class="fas fa-user-slash"></i>
                                 </div>
-                                <p style="font-size:14px; font-weight:600; color:#374151; margin:0 0 6px;">Belum ada
+                                <p style="font-size:14px; font-weight:600; margin:0 0 6px;">Belum ada
                                     mapping</p>
                                 <p style="font-size:12px; color:#9ca3af; margin:0;">Gunakan form di atas untuk menambahkan
                                     mapping approver.</p>
@@ -861,8 +980,8 @@
                                                     <td style="min-width:140px;">
                                                         <input type="text" name="requester_jabatan"
                                                             value="{{ $mapping->requester_jabatan }}" required readonly
-                                                            style="background-color: #f1f5f9; cursor: not-allowed;"
-                                                            list="jabatanList" class="am-table-input"
+                                                            class="am-table-input readonly-field"
+                                                            list="jabatanList"
                                                             placeholder="Jabatan peminta">
                                                         <select name="requester_user_id"
                                                             class="js-user-peminta am-table-select">
@@ -881,8 +1000,8 @@
                                                     <td style="min-width:140px;">
                                                         <input type="text" name="approver_jabatan"
                                                             value="{{ $mapping->approver_jabatan }}" required readonly
-                                                            style="background-color: #f1f5f9; cursor: not-allowed;"
-                                                            list="jabatanList" class="am-table-input"
+                                                            class="am-table-input readonly-field"
+                                                            list="jabatanList"
                                                             placeholder="Jabatan atasan">
                                                         <select name="approver_user_id"
                                                             class="js-user-atasan am-table-select">

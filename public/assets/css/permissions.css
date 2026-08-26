@@ -250,9 +250,6 @@
     color: var(--text);
     display: inline-block;
     letter-spacing: 0.2px;
-    max-width: 130px;
-    overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
 }
 
@@ -1387,4 +1384,202 @@
 /* SweetAlert2 konfirmasi hapus harus di atas side panel (99999) & modal (100001) */
 .swal2-container {
     z-index: 100100 !important;
+}
+
+/* ════════════════════════════════════════════════
+   DARK MODE
+   ════════════════════════════════════════════════ */
+html.dark .perm-page {
+    --surface: #1e293b;
+    --surface2: #111c2e;
+    --surface3: #1a2538;
+    --border: rgba(148, 163, 184, 0.12);
+    --border-mid: rgba(148, 163, 184, 0.22);
+    --input-border: #475569;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --hint: #64748b;
+    --sh-sm: 0 1px 4px rgba(0, 0, 0, 0.3);
+    --sh-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --sh-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+html.dark .perm-stat {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+html.dark .perm-card {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+html.dark .perm-table thead tr {
+    background: #111c2e;
+    border-bottom-color: #334155;
+}
+
+html.dark .perm-table th {
+    color: #94a3b8;
+}
+
+html.dark .perm-table td {
+    border-bottom-color: #334155;
+    color: #cbd5e1;
+}
+
+html.dark .perm-table tbody tr:hover td {
+    background: #1a2538;
+}
+
+html.dark .perm-alert-success {
+    background: #1a2e1a;
+    color: #86efac;
+    border-color: #22c55e;
+}
+
+html.dark .perm-alert-error {
+    background: #2e1a1a;
+    color: #fca5a5;
+    border-color: #ef4444;
+}
+
+html.dark .perm-search-input {
+    background: #111c2e;
+    color: #e2e8f0;
+    border-color: #475569;
+}
+
+html.dark .perm-search-input::placeholder {
+    color: #64748b;
+}
+
+html.dark .menu-chip {
+    background: #1a2538;
+    border-color: #334155;
+    color: #cbd5e1;
+}
+
+html.dark .perm-act-cell.public {
+    background: #1a2538;
+    border-color: #334155;
+    color: #94a3b8;
+}
+
+html.dark .perm-act-cell.locked {
+    background: #111c2e;
+    border-color: #334155;
+    color: #94a3b8;
+}
+
+html.dark .perm-act-cell.add {
+    border-color: #334155;
+    color: #64748b;
+}
+
+html.dark .rule-count-badge {
+    background: #1a2538;
+    border-color: #334155;
+    color: #94a3b8;
+}
+
+html.dark .btn-manage-rules {
+    background: #1a2538 !important;
+    border-color: #334155 !important;
+    color: #94a3b8 !important;
+}
+
+html.dark .btn-manage-rules:hover {
+    background: #293548 !important;
+}
+
+html.dark .perm-super-row td {
+    background: rgba(118, 100, 228, 0.08) !important;
+}
+
+html.dark .perm-modal {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+html.dark .perm-modal-body,
+html.dark .perm-modal form {
+    background: #1e293b;
+}
+
+html.dark .rule-panel {
+    background: #1e293b;
+    border-left-color: #334155;
+}
+
+html.dark .rule-panel-body {
+    background: #1e293b;
+}
+
+html.dark .rule-panel-footer {
+    background: #111c2e;
+    border-top-color: #334155;
+}
+
+html.dark .rule-panel-tabs {
+    background: #111c2e;
+    border-bottom-color: #334155;
+}
+
+html.dark .rule-list-item {
+    background: #1a2538;
+    border-color: #334155;
+}
+
+html.dark .rule-list-item:hover {
+    background: #293548;
+}
+
+html.dark .perm-menu-dropdown-panel {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+html.dark .perm-menu-dropdown-panel a:hover {
+    background: #293548;
+}
+
+html.dark .perm-menu-dropdown-panel a {
+    color: #cbd5e1;
+}
+
+html.dark .perm-act-cell,
+html.dark .perm-act-cell.public,
+html.dark .perm-act-cell.locked,
+html.dark .perm-act-cell.add {
+    background: #1a2538;
+}
+
+html.dark .pf-input,
+html.dark .perm-form-input,
+html.dark .perm-form-select {
+    background: #111c2e;
+    color: #e2e8f0;
+    border-color: #475569;
+}
+
+html.dark .pf-input:focus,
+html.dark .perm-form-input:focus,
+html.dark .perm-form-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(118, 100, 228, 0.15);
+}
+
+html.dark .btn-rule-edit {
+    border-color: #334155 !important;
+    color: #94a3b8 !important;
+}
+
+html.dark .btn-rule-delete {
+    border-color: #7f1d1d !important;
+    color: #fca5a5 !important;
+}
+
+html.dark .btn-rule-delete:hover {
+    background: #2e1a1a !important;
 }
