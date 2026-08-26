@@ -330,3 +330,556 @@ html.dark .dark-toggle .dark-toggle-moon {
 html.dark .dark-toggle .dark-toggle-knob {
     transform: translateX(30px);
 }
+
+/* ═══════════════════════════════════════════════════
+   GLOBAL DARK OVERRIDES — semua text di semua menu
+   ═══════════════════════════════════════════════════ */
+
+/* Headings */
+html.dark h1, html.dark h2, html.dark h3,
+html.dark h4, html.dark h5, html.dark h6 {
+    color: #e2e8f0;
+}
+
+/* Page header — judul & subtitle tetap putih di dark mode */
+html.dark .pg-header-title {
+    color: #fff !important;
+}
+
+html.dark .pg-header-sub,
+html.dark .am-page-header p,
+html.dark .perm-header-info p,
+html.dark .um-title-sub {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+html.dark .am-page-header h1 {
+    color: #fff !important;
+}
+
+html.dark .perm-header-info h1 {
+    color: #fff !important;
+}
+
+/* Status badge — warna tetap vivid di dark mode */
+html.dark .text-blue-500 {
+    color: #60a5fa !important;
+}
+
+html.dark .text-emerald-500,
+html.dark .text-green-500 {
+    color: #34d399 !important;
+}
+
+html.dark .text-orange-500 {
+    color: #fb923c !important;
+}
+
+html.dark .text-red-500,
+html.dark .text-red-600 {
+    color: #f87171 !important;
+}
+
+html.dark .text-yellow-500,
+html.dark .text-amber-500 {
+    color: #fbbf24 !important;
+}
+
+html.dark .text-purple-500,
+html.dark .text-violet-500 {
+    color: #a78bfa !important;
+}
+
+html.dark .text-gray-600 {
+    color: #d1d5db !important;
+}
+
+html.dark .text-gray-500 {
+    color: #9ca3af !important;
+}
+
+/* Sidebar icons — ikuti warna tema di dark mode */
+html.dark aside div i {
+    color: var(--accent) !important;
+}
+
+html.dark aside a.active div i {
+    color: #fff !important;
+}
+
+/* Paragraphs & spans */
+html.dark p, html.dark span, html.dark label, html.dark td, html.dark th {
+    color: inherit;
+}
+
+/* Links */
+html.dark a {
+    color: #93c5fd;
+}
+
+/* Buttons gray light */
+html.dark .btn-gray-light {
+    background-color: #334155;
+    color: #e2e8f0;
+}
+
+/* Select2 rendered text */
+html.dark .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #e2e8f0;
+}
+
+/* Pagination */
+html.dark .pagination .page-link {
+    background: #1e293b;
+    color: #e2e8f0;
+    border-color: #334155;
+}
+
+html.dark .pagination .page-item.disabled .page-link {
+    background: #111c2e;
+    color: #64748b;
+}
+
+html.dark .pagination .page-item.active .page-link {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+
+/* DataTables info/paginate */
+html.dark .dataTables_info {
+    color: #94a3b8;
+}
+
+html.dark .dataTables_paginate .paginate_button {
+    color: #e2e8f0 !important;
+}
+
+html.dark .dataTables_paginate .paginate_button:hover {
+    background: #334155 !important;
+    color: #fff !important;
+    border-color: #475569 !important;
+}
+
+html.dark .dataTables_paginate .paginate_button.current {
+    background: var(--accent) !important;
+    color: #fff !important;
+}
+
+/* Card/Panel titles */
+html.dark .card-title, html.dark .panel-title {
+    color: #e2e8f0;
+}
+
+/* Badge text on light bg */
+html.dark .badge {
+    color: inherit;
+}
+
+/* Alert text */
+html.dark .alert-info { color: #93c5fd; }
+html.dark .alert-success { color: #86efac; }
+html.dark .alert-warning { color: #fbbf24; }
+html.dark .alert-danger { color: #fca5a5; }
+
+/* Sidebar */
+html.dark .sidebar .nav-link {
+    color: #cbd5e1;
+}
+
+html.dark .sidebar .nav-link.active {
+    color: #fff;
+}
+
+/* Table generic */
+html.dark table tbody td {
+    color: #cbd5e1;
+}
+
+html.dark table thead th {
+    color: #94a3b8;
+}
+
+/* Form labels */
+html.dark .form-label, html.dark .control-label {
+    color: #e2e8f0;
+}
+
+/* Loading overlay text */
+.loading-overlay-text {
+    color: #555;
+}
+
+html.dark .loading-overlay-text {
+    color: #94a3b8 !important;
+}
+
+/* KB card title/desc */
+html.dark .kb-card-title {
+    color: #e2e8f0;
+}
+
+html.dark .kb-card-desc {
+    color: #94a3b8;
+}
+
+html.dark .kb-card-meta {
+    color: #94a3b8;
+}
+
+/* KB filter tabs */
+html.dark .kb-tab {
+    color: #94a3b8;
+}
+
+html.dark .kb-tab.active {
+    color: var(--accent);
+}
+
+html.dark .kb-badge {
+    color: #cbd5e1;
+    background: #334155;
+}
+
+/* KB show page */
+html.dark .kb-heading {
+    color: #e2e8f0;
+}
+
+html.dark .kb-text {
+    color: #cbd5e1;
+}
+
+html.dark .kb-meta {
+    color: #94a3b8;
+}
+
+html.dark .kb-breadcrumb {
+    color: #64748b;
+}
+
+/* Profile */
+html.dark .profile-label {
+    color: #94a3b8;
+}
+
+html.dark .profile-value {
+    color: #e2e8f0;
+}
+
+/* Health check */
+html.dark .hc-heading {
+    color: #e2e8f0;
+}
+
+html.dark .hc-text {
+    color: #94a3b8;
+}
+
+html.dark .hc-value {
+    color: #e2e8f0;
+}
+
+/* Approval mapping */
+html.dark .am-empty-heading {
+    color: #e2e8f0;
+}
+
+html.dark .am-empty-sub {
+    color: #94a3b8;
+}
+
+/* Permission helpers */
+html.dark .perm-helper {
+    color: #94a3b8;
+}
+
+html.dark .perm-badge-count {
+    color: #94a3b8;
+}
+
+/* Sessions */
+html.dark .session-timestamp {
+    color: #94a3b8;
+}
+
+/* ═══ Inline color overrides — force dark on hardcoded light colors ═══ */
+html.dark [style*="color: #6b7280"],
+html.dark [style*="color:#6b7280"],
+html.dark [style*="color: #9ca3af"],
+html.dark [style*="color:#9ca3af"],
+html.dark [style*="color: #64748b"],
+html.dark [style*="color:#64748b"],
+html.dark [style*="color: #94a3b8"],
+html.dark [style*="color:#94a3b8"] {
+    color: #94a3b8 !important;
+}
+
+html.dark [style*="color: #374151"],
+html.dark [style*="color:#374151"],
+html.dark [style*="color: #1e293b"],
+html.dark [style*="color:#1e293b"],
+html.dark [style*="color: #1f2937"],
+html.dark [style*="color:#1f2937"],
+html.dark [style*="color: #111827"],
+html.dark [style*="color:#111827"],
+html.dark [style*="color: #000000"],
+html.dark [style*="color:#000"],
+html.dark [style*="color: black"],
+html.dark [style*="color:black"] {
+    color: #e2e8f0 !important;
+}
+
+html.dark [style*="color: #4b5563"],
+html.dark [style*="color:#4b5563"] {
+    color: #cbd5e1 !important;
+}
+
+html.dark [style*="color: #555"],
+html.dark [style*="color:#555"],
+html.dark [style*="color: #333"],
+html.dark [style*="color:#333"] {
+    color: #cbd5e1 !important;
+}
+
+html.dark [style*="background: white"],
+html.dark [style*="background:white"],
+html.dark [style*="background-color: white"],
+html.dark [style*="background-color:white"],
+html.dark [style*="background:#fff"],
+html.dark [style*="background: #fff"],
+html.dark [style*="background-color:#fff"],
+html.dark [style*="background-color: #fff"] {
+    background-color: #1e293b !important;
+}
+
+html.dark [style*="background: #f8fafc"],
+html.dark [style*="background:#f8fafc"],
+html.dark [style*="background: #f8f9ff"],
+html.dark [style*="background:#f8f9ff"],
+html.dark [style*="background: #f8fff9"],
+html.dark [style*="background:#f8fff9"],
+html.dark [style*="background: #fafafa"],
+html.dark [style*="background:#fafafa"],
+html.dark [style*="background: #f3f4f6"],
+html.dark [style*="background:#f3f4f6"],
+html.dark [style*="background-color: #f3f4f6"],
+html.dark [style*="background-color:#f3f4f6"],
+html.dark [style*="background-color: #f1f5f9"],
+html.dark [style*="background-color:#f1f5f9"],
+html.dark [style*="background: #f9fafb"],
+html.dark [style*="background:#f9fafb"] {
+    background-color: #1e293b !important;
+}
+
+html.dark [style*="background-color: #eff6ff"],
+html.dark [style*="background-color:#eff6ff"],
+html.dark [style*="background: #eff6ff"],
+html.dark [style*="background:#eff6ff"],
+html.dark [style*="background-color: #fffbeb"],
+html.dark [style*="background-color:#fffbeb"],
+html.dark [style*="background: #fffbeb"],
+html.dark [style*="background:#fffbeb"],
+html.dark [style*="background-color: #f5f3ff"],
+html.dark [style*="background-color:#f5f3ff"],
+html.dark [style*="background: #f5f3ff"],
+html.dark [style*="background:#f5f3ff"],
+html.dark [style*="background-color: #f0fdf4"],
+html.dark [style*="background-color:#f0fdf4"] {
+    background-color: rgba(118, 100, 228, 0.08) !important;
+}
+
+html.dark [style*="border-top: 1px solid #f1f5f9"],
+html.dark [style*="border-top:1px solid #f1f5f9"],
+html.dark [style*="border: 1px solid #fde68a"],
+html.dark [style*="border:1px solid #fde68a"],
+html.dark [style*="border: 1px solid #f1f5f9"],
+html.dark [style*="border:1px solid #f1f5f9"] {
+    border-color: #334155 !important;
+}
+
+/* Status colors — tetap vivid di dark mode */
+html.dark [style*="color: #10b981"],
+html.dark [style*="color:#10b981"],
+html.dark [style*="color: #059669"],
+html.dark [style*="color:#059669"],
+html.dark [style*="color: #0d9488"],
+html.dark [style*="color:#0d9488"],
+html.dark [style*="color: #166534"],
+html.dark [style*="color:#166534"],
+html.dark [style*="color: #16a34a"],
+html.dark [style*="color:#16a34a"] {
+    color: #34d399 !important;
+}
+
+html.dark [style*="color: #f97316"],
+html.dark [style*="color:#f97316"],
+html.dark [style*="color: #ea580c"],
+html.dark [style*="color:#ea580c"],
+html.dark [style*="color: #d97706"],
+html.dark [style*="color:#d97706"],
+html.dark [style*="color: #e65100"],
+html.dark [style*="color:#e65100"] {
+    color: #fb923c !important;
+}
+
+html.dark [style*="color: #2563eb"],
+html.dark [style*="color:#2563eb"],
+html.dark [style*="color: #1d4ed8"],
+html.dark [style*="color:#1d4ed8"],
+html.dark [style*="color: #0b5394"],
+html.dark [style*="color:#0b5394"],
+html.dark [style*="color: #3b82f6"],
+html.dark [style*="color:#3b82f6"] {
+    color: #60a5fa !important;
+}
+
+html.dark [style*="color: #783f04"],
+html.dark [style*="color:#783f04"],
+html.dark [style*="color: #92400e"],
+html.dark [style*="color:#92400e"] {
+    color: #fbbf24 !important;
+}
+
+html.dark [style*="color: #7c3aed"],
+html.dark [style*="color:#7c3aed"],
+html.dark [style*="color: #674ea7"],
+html.dark [style*="color:#674ea7"],
+html.dark [style*="color: #134f5c"],
+html.dark [style*="color:#134f5c"],
+html.dark [style*="color: #4c382b"],
+html.dark [style*="color:#4c382b"] {
+    color: #c4b5fd !important;
+}
+
+html.dark [style*="color: #7e22ce"],
+html.dark [style*="color:#7e22ce"],
+html.dark [style*="color: #6b21a8"],
+html.dark [style*="color:#6b21a8"] {
+    color: #c084fc !important;
+}
+
+html.dark [style*="background-color: #3b82f6"],
+html.dark [style*="background-color:#3b82f6"],
+html.dark [style*="background: #3b82f6"],
+html.dark [style*="background:#3b82f6"],
+html.dark [style*="background-color: #8b5cf6"],
+html.dark [style*="background-color:#8b5cf6"],
+html.dark [style*="background: #8b5cf6"],
+html.dark [style*="background:#8b5cf6"],
+html.dark [style*="background-color: #f59e0b"],
+html.dark [style*="background-color:#f59e0b"],
+html.dark [style*="background: #f59e0b"],
+html.dark [style*="background:#f59e0b"] {
+    opacity: 0.85;
+}
+
+html.dark [style*="border-color: #e5e7eb"],
+html.dark [style*="border-color:#e5e7eb"],
+html.dark [style*="border: 1px solid #e5e7eb"],
+html.dark [style*="border:1px solid #e5e7eb"],
+html.dark [style*="border: 1px solid #e2e8f0"],
+html.dark [style*="border:1px solid #e2e8f0"],
+html.dark [style*="border-color: #e2e8f0"],
+html.dark [style*="border-color:#e2e8f0"] {
+    border-color: #334155 !important;
+}
+
+html.dark [style*="background: rgba(255,255,255,0.6)"],
+html.dark [style*="background:rgba(255,255,255,0.6)"] {
+    background: rgba(15,23,42,0.7) !important;
+}
+
+/* ═══ KB Pagination ═══ */
+.kb-pagination-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.kb-pagination-info {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.kb-pagination-info b {
+    color: #374151;
+}
+
+.kb-pagination-btns {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.kb-page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 10px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    color: #374151;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.kb-page-btn:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+}
+
+.kb-page-btn.active {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #fff;
+}
+
+.kb-page-btn.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.kb-page-ellipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #cbd5e1;
+}
+
+html.dark .kb-pagination-info {
+    color: #94a3b8;
+}
+
+html.dark .kb-pagination-info b {
+    color: #e2e8f0;
+}
+
+html.dark .kb-page-btn {
+    background: #1e293b;
+    color: #e2e8f0;
+    border-color: #334155;
+}
+
+html.dark .kb-page-btn:hover {
+    background: #334155;
+    border-color: #475569;
+}
+
+html.dark .kb-page-ellipsis {
+    color: #64748b;
+}

@@ -21,17 +21,16 @@
                                 {{-- Unit --}}
                                 <x-form.input name="unit_name" label="Unit" :value="auth()->user()->unit ?? '-'" readonly />
 
+                                {{-- Jabatan --}}
+                                <x-form.input name="jabatan_name" label="Jabatan" :value="ucfirst(auth()->user()->jabatan ?? '')" readonly disabled />
+
                                 {{-- Deskripsi --}}
                                 <x-form.textarea name="description" label="Deskripsi" :value="old('description', $tickets->description ?? '')" required />
 
                                 {{-- Penanganan (hanya muncul jika datang dari Knowledge Base) --}}
                                 @if (!empty($fromKb) && $fromKb)
                                     <div class="md:col-span-2">
-                                        <x-form.input
-                                            name="penanganan"
-                                            label="Penanganan"
-                                            :value="old('penanganan', 'Sudah melakukan tutorial: ' . ($kbTitle ?? ''))"
-                                        />
+                                        <x-form.input name="penanganan" label="Penanganan" :value="old('penanganan', 'Sudah melakukan tutorial: ' . ($kbTitle ?? ''))" />
                                     </div>
                                 @endif
 

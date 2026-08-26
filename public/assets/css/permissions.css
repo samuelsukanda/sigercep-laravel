@@ -66,16 +66,19 @@
 .perm-header-info {
     position: relative;
     z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 .perm-header-info h1 {
-    color: #fff !important;
+    color: #1e293b !important;
     font-size: 1.2rem !important;
     font-weight: 700 !important;
     margin: 0 0 4px !important;
     letter-spacing: -0.3px;
 }
 .perm-header-info p {
-    color: rgba(255, 255, 255, 0.65) !important;
+    color: rgba(30, 41, 59, 0.65) !important;
     font-size: 0.78rem !important;
     margin: 0 !important;
 }
@@ -1454,6 +1457,14 @@ html.dark .perm-search-input::placeholder {
     color: #64748b;
 }
 
+html.dark .perm-header-info h1 {
+    color: #fff !important;
+}
+
+html.dark .perm-header-info p {
+    color: rgba(255, 255, 255, 0.78) !important;
+}
+
 html.dark .menu-chip {
     background: #1a2538;
     border-color: #334155;
@@ -1582,4 +1593,30 @@ html.dark .btn-rule-delete {
 
 html.dark .btn-rule-delete:hover {
     background: #2e1a1a !important;
+}
+
+/* Inline color overrides — icons, helpers, badges */
+html.dark .perm-search-container i.fa-search {
+    color: #94a3b8 !important;
+}
+
+html.dark .perm-search-clear {
+    color: #94a3b8 !important;
+}
+
+html.dark #searchInfo {
+    color: #94a3b8 !important;
+}
+
+html.dark .perm-helper,
+html.dark .perm-hint {
+    color: #94a3b8 !important;
+}
+
+html.dark .perm-badge-count {
+    color: #94a3b8 !important;
+}
+
+html.dark .perm-rules-title {
+    color: #e2e8f0 !important;
 }

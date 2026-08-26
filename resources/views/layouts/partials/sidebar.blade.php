@@ -28,7 +28,7 @@
                     href="{{ route('dashboard') }}">
                     <div
                         class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                        <i class="fa-solid fa-tv text-sm leading-normal text-blue-500"></i>
+                        <i class="fa-solid fa-tv text-sm leading-normal"></i>
                     </div>
                     <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Dashboard</span>
                 </a>
@@ -40,7 +40,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="fas fa-ticket relative top-0 text-sm leading-normal text-orange-500"></i>
+                            <i class="fas fa-ticket relative top-0 text-sm leading-normal"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Helpdesk IT</span>
                     </div>
@@ -135,7 +135,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="fas fa-server relative top-0 text-sm leading-normal text-blue-500"></i>
+                            <i class="fas fa-server relative top-0 text-sm leading-normal"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Hardware</span>
                     </div>
@@ -192,7 +192,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="fas fa-wave-square relative top-0 text-sm leading-normal text-red-500"></i>
+                            <i class="fas fa-wave-square relative top-0 text-sm leading-normal"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Fitur Baru</span>
                     </div>
@@ -253,7 +253,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="fas fa-wrench text-sm leading-normal text-orange-500"></i>
+                            <i class="fas fa-wrench text-sm leading-normal"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Komplain</span>
                     </div>
@@ -309,7 +309,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="fa-solid fa-calendar-days text-sm leading-normal text-blue-500"></i>
+                            <i class="fa-solid fa-calendar-days text-sm leading-normal"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Reservasi</span>
                     </div>
@@ -354,7 +354,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="fas fa-palette text-cyan-500 text-sm leading-normal relative top-0"></i>
+                            <i class="fas fa-palette text-sm leading-normal relative top-0"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Desain Grafis</span>
                     </div>
@@ -384,7 +384,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="fas fa-radiation text-red-500 text-sm leading-normal relative top-0"></i>
+                            <i class="fas fa-radiation text-sm leading-normal relative top-0"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">K3RS</span>
                     </div>
@@ -413,7 +413,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="fas fa-users text-blue-500 relative top-0 text-sm leading-normal"></i>
+                            <i class="fas fa-users relative top-0 text-sm leading-normal"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Komite Mutu</span>
                     </div>
@@ -682,7 +682,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="fas fa-notes-medical relative top-0 text-sm leading-normal text-orange-500"></i>
+                            <i class="fas fa-notes-medical relative top-0 text-sm leading-normal"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Kesiapan Ambulance</span>
                     </div>
@@ -712,7 +712,7 @@
                     class="dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center justify-between whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-50">
                     <div class="flex items-center">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center">
-                            <i class="fas fa-print relative top-0 text-sm leading-normal text-blue-500"></i>
+                            <i class="fas fa-print relative top-0 text-sm leading-normal"></i>
                         </div>
                         <span class="ml-1 duration-300 ease">Toner</span>
                     </div>

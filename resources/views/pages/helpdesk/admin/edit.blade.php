@@ -20,15 +20,18 @@
                                 <x-form.input name="user_name" label="Nama Pelapor" :value="ucfirst($ticket->user->name ?? '')" readonly disabled />
 
                                 {{-- Unit --}}
-                                <x-form.input name="unit_name" label="Unit" :value="old('unit_name', $ticket->unit_name ?? '')" required />
+                                <x-form.input name="unit_name" label="Unit" :value="ucfirst($ticket->user->unit ?? '')" readonly disabled />
+
+                                {{-- Jabatan --}}
+                                <x-form.input name="jabatan_name" label="Jabatan" :value="ucfirst($ticket->user->jabatan ?? '')" readonly disabled />
 
                                 {{-- Kategori --}}
-                                <x-form.select name="category" label="Kategori" :options="['Hardware', 'Printer', 'Jaringan', 'Software', 'SIMRS']"
-                                    :selected="old('category', $ticket->category)" required />
+                                <x-form.select name="category" label="Kategori" :options="['Hardware', 'Printer', 'Jaringan', 'Software', 'SIMRS']" :selected="old('category', $ticket->category)"
+                                    required />
 
                                 {{-- Urgensi --}}
-                                <x-form.select name="urgency" label="Urgensi" :options="['Low', 'Medium', 'High', 'Critical']"
-                                    :selected="old('urgency', $ticket->urgency)" required />
+                                <x-form.select name="urgency" label="Urgensi" :options="['Low', 'Medium', 'High', 'Critical']" :selected="old('urgency', $ticket->urgency)"
+                                    required />
 
                                 {{-- Deskripsi --}}
                                 <div class="md:col-span-2">

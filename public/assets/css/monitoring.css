@@ -702,3 +702,23 @@ html.dark .um-footer strong {
 html.dark .um-empty {
     color: #64748b;
 }
+
+html.dark .um-uid--guest {
+    color: #94a3b8;
+}
+
+html.dark .um-device--desktop {
+    color: #5eead4;
+}
+
+html.dark .um-device--mobile {
+    color: #c4b5fd;
+}
+
+html.dark .um-device--tablet {
+    color: #93c5fd;
+}
+
+html.dark .um-time-rel--old {
+    color: #94a3b8;
+}

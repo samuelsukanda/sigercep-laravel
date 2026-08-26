@@ -13,7 +13,7 @@
 
     <div style="text-align:center;">
         <div class="spinner"></div>
-        <div style="margin-top:10px; font-size:14px; color:#555;">
+        <div style="margin-top:10px; font-size:14px;" class="loading-overlay-text">
             Memuat data...
         </div>
     </div>
