@@ -32,8 +32,8 @@
 }
 
 .filter-badge {
-    background: #f0ecff;
-    color: #6c47ff;
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    color: var(--accent);
     border-radius: 20px;
     padding: 4px 12px;
     font-size: 0.75rem;

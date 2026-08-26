@@ -1,14 +1,13 @@
 .perm-page {
-    --accent: #6c47ff;
-    --accent-h: #5535e0;
-    --accent-lt: #f0ecff;
+    --accent-h: color-mix(in srgb, var(--accent) 85%, #000);
+    --accent-lt: color-mix(in srgb, var(--accent) 12%, transparent);
     --accent2: #4f8aff;
     --surface: #ffffff;
     --surface2: #f8f7fc;
-    --surface3: #f1effe;
-    --border: rgba(108, 71, 255, 0.12);
-    --border-mid: rgba(108, 71, 255, 0.22);
-    --input-border: #d1c9f5;
+    --surface3: color-mix(in srgb, var(--accent) 8%, #f1effe);
+    --border: color-mix(in srgb, var(--accent) 12%, transparent);
+    --border-mid: color-mix(in srgb, var(--accent) 22%, transparent);
+    --input-border: color-mix(in srgb, var(--accent) 30%, #d1c9f5);
     --text: #1a1523;
     --muted: #6b6880;
     --hint: #a9a6b8;
@@ -16,10 +15,9 @@
     --r-md: 10px;
     --r-lg: 14px;
     --r-xl: 18px;
-    --sh-sm: 0 1px 4px rgba(108, 71, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
-    --sh-md: 0 4px 16px rgba(108, 71, 255, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
-    --sh-lg:
-        0 12px 40px rgba(108, 71, 255, 0.18), 0 4px 12px rgba(0, 0, 0, 0.08);
+    --sh-sm: 0 1px 4px color-mix(in srgb, var(--accent) 8%, transparent), 0 1px 2px rgba(0, 0, 0, 0.04);
+    --sh-md: 0 4px 16px color-mix(in srgb, var(--accent) 12%, transparent), 0 2px 6px rgba(0, 0, 0, 0.06);
+    --sh-lg: 0 12px 40px color-mix(in srgb, var(--accent) 18%, transparent), 0 4px 12px rgba(0, 0, 0, 0.08);
     --tr: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -33,7 +31,7 @@
 
 /* ── Header ── */
 .perm-header {
-    background: linear-gradient(135deg, #6c47ff 0%, #4f8aff 100%);
+    background: linear-gradient(135deg, var(--accent-grad-1) 0%, var(--accent-grad-2) 60%, var(--accent-grad-3) 100%);
     border-radius: var(--r-xl);
     padding: 1.5rem 2rem;
     display: flex;
@@ -83,7 +81,7 @@
 }
 .btn-add-perm {
     background: #fff !important;
-    color: #6c47ff !important;
+    color: var(--accent) !important;
     border: none !important;
     border-radius: var(--r-md) !important;
     padding: 9px 18px !important;
@@ -249,7 +247,7 @@
     border: 1px solid var(--border-mid);
     border-radius: var(--r-sm);
     padding: 4px 10px;
-    color: var(--accent);
+    color: var(--text);
     display: inline-block;
     letter-spacing: 0.2px;
     max-width: 130px;
@@ -322,7 +320,7 @@
     background: var(--surface3);
     border: 1px solid var(--border-mid);
     font-size: 0.75rem;
-    color: var(--accent);
+    color: var(--muted);
     font-weight: 600;
     cursor: default;
 }
@@ -354,7 +352,7 @@
     border-radius: var(--r-sm) !important;
     border: 1px solid var(--border-mid) !important;
     background: var(--surface3) !important;
-    color: var(--accent) !important;
+    color: var(--muted) !important;
     font-size: 0.74rem !important;
     font-weight: 600 !important;
     cursor: pointer !important;
@@ -367,7 +365,7 @@
     white-space: nowrap;
 }
 .btn-manage-rules:hover {
-    background: var(--accent-lt) !important;
+    background: var(--surface2) !important;
     border-color: var(--accent) !important;
 }
 .btn-delete-perm {
@@ -450,7 +448,7 @@
     z-index: 99999 !important;
     display: flex;
     flex-direction: column;
-    box-shadow: -8px 0 40px rgba(108, 71, 255, 0.18) !important;
+    box-shadow: -8px 0 40px color-mix(in srgb, var(--accent) 18%, transparent) !important;
     transform: translateX(100%);
     transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
     border-left: 1px solid var(--border-mid);
@@ -461,7 +459,7 @@
 
 /* Panel header */
 .rule-panel-header {
-    background: linear-gradient(135deg, #6c47ff 0%, #4f8aff 100%) !important;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%) !important;
     padding: 1.1rem 1.25rem !important;
     display: flex !important;
     align-items: flex-start !important;
@@ -616,7 +614,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    color: var(--accent);
+    color: var(--muted);
     font-size: 0.8rem;
 }
 .rule-list-meta {
@@ -726,23 +724,23 @@
     font-family: "Open Sans", sans-serif !important;
     font-size: 0.83rem !important;
     padding: 9px 11px !important;
-    border: 1.5px solid #8b7dc8 !important;
+    border: 1.5px solid var(--input-border) !important;
     border-radius: var(--r-md) !important;
     background: #fff !important;
     color: var(--text) !important;
     outline: none !important;
-    box-shadow: 0 1px 3px rgba(108, 71, 255, 0.08) !important;
+    box-shadow: 0 1px 3px color-mix(in srgb, var(--accent) 8%, transparent) !important;
     transition:
         border-color var(--tr),
         box-shadow var(--tr) !important;
     height: auto !important;
 }
 .pf-input:hover {
-    border-color: #6c47ff !important;
+    border-color: var(--accent) !important;
 }
 .pf-input:focus {
     border-color: var(--accent) !important;
-    box-shadow: 0 0 0 3px rgba(108, 71, 255, 0.15) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent) !important;
 }
 .pf-input::placeholder {
     color: var(--hint) !important;
@@ -764,10 +762,10 @@
 }
 .btn-pf-cancel {
     padding: 8px 18px !important;
-    border: 1.5px solid #8b7dc8 !important;
+    border: 1.5px solid var(--input-border) !important;
     border-radius: var(--r-md) !important;
     background: #ffffff !important;
-    color: #6c47ff !important;
+    color: var(--accent) !important;
     cursor: pointer !important;
     font-family: "Open Sans", sans-serif !important;
     font-size: 0.82rem !important;
@@ -777,7 +775,7 @@
         border-color var(--tr),
         color var(--tr),
         transform var(--tr) !important;
-    box-shadow: 0 1px 4px rgba(108, 71, 255, 0.12) !important;
+    box-shadow: 0 1px 4px color-mix(in srgb, var(--accent) 12%, transparent) !important;
     line-height: 1 !important;
 }
 .btn-pf-cancel:hover {
@@ -792,7 +790,7 @@
     padding: 8px 20px !important;
     border: none !important;
     border-radius: var(--r-md) !important;
-    background: linear-gradient(135deg, #6c47ff, #4f8aff) !important;
+    background: linear-gradient(135deg, var(--accent), var(--accent2)) !important;
     color: #fff !important;
     cursor: pointer !important;
     font-family: "Open Sans", sans-serif !important;
@@ -804,7 +802,7 @@
     transition:
         opacity var(--tr),
         transform var(--tr) !important;
-    box-shadow: 0 2px 8px rgba(108, 71, 255, 0.3) !important;
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 30%, transparent) !important;
     line-height: 1 !important;
 }
 .btn-pf-submit:hover {
@@ -855,7 +853,7 @@
     transform: translateY(0) scale(1) !important;
 }
 .perm-modal-header {
-    background: linear-gradient(135deg, #6c47ff 0%, #4f8aff 100%) !important;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%) !important;
     padding: 1.1rem 1.5rem !important;
     display: flex !important;
     justify-content: space-between !important;
@@ -913,12 +911,12 @@
     font-family: "Open Sans", sans-serif !important;
     font-size: 0.84rem !important;
     padding: 9px 12px !important;
-    border: 1.5px solid #8b7dc8 !important;
+    border: 1.5px solid var(--input-border) !important;
     border-radius: var(--r-md) !important;
     background: #fff !important;
     color: var(--text) !important;
     outline: none !important;
-    box-shadow: 0 1px 3px rgba(108, 71, 255, 0.08) !important;
+    box-shadow: 0 1px 3px color-mix(in srgb, var(--accent) 8%, transparent) !important;
     transition:
         border-color var(--tr),
         box-shadow var(--tr) !important;
@@ -926,12 +924,12 @@
 }
 .perm-form-input:hover,
 .perm-form-select:hover {
-    border-color: #6c47ff !important;
+    border-color: var(--accent) !important;
 }
 .perm-form-input:focus,
 .perm-form-select:focus {
     border-color: var(--accent) !important;
-    box-shadow: 0 0 0 3px rgba(108, 71, 255, 0.15) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent) !important;
 }
 .perm-form-input::placeholder {
     color: var(--hint) !important;
@@ -976,23 +974,23 @@
     font-family: "Open Sans", sans-serif !important;
     font-size: 0.78rem !important;
     padding: 7px 9px !important;
-    border: 1.5px solid #8b7dc8 !important;
+    border: 1.5px solid var(--input-border) !important;
     border-radius: var(--r-sm) !important;
     background: #fff !important;
     color: var(--text) !important;
     outline: none !important;
-    box-shadow: 0 1px 2px rgba(108, 71, 255, 0.06) !important;
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--accent) 6%, transparent) !important;
     transition:
         border-color var(--tr),
         box-shadow var(--tr) !important;
     height: auto !important;
 }
 .modal-rule-row input:hover {
-    border-color: #6c47ff !important;
+    border-color: var(--accent) !important;
 }
 .modal-rule-row input:focus {
     border-color: var(--accent) !important;
-    box-shadow: 0 0 0 3px rgba(108, 71, 255, 0.15) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent) !important;
 }
 .modal-rule-row input::placeholder {
     color: var(--hint) !important;
@@ -1037,10 +1035,10 @@
 }
 .btn-perm-cancel {
     padding: 8px 18px !important;
-    border: 1.5px solid #8b7dc8 !important;
+    border: 1.5px solid var(--input-border) !important;
     border-radius: var(--r-md) !important;
     background: #ffffff !important;
-    color: #6c47ff !important;
+    color: var(--accent) !important;
     cursor: pointer !important;
     font-family: "Open Sans", sans-serif !important;
     font-size: 0.82rem !important;
@@ -1050,7 +1048,7 @@
         border-color var(--tr),
         color var(--tr),
         transform var(--tr) !important;
-    box-shadow: 0 1px 4px rgba(108, 71, 255, 0.12) !important;
+    box-shadow: 0 1px 4px color-mix(in srgb, var(--accent) 12%, transparent) !important;
     line-height: 1 !important;
 }
 .btn-perm-cancel:hover {
@@ -1065,7 +1063,7 @@
     padding: 8px 20px !important;
     border: none !important;
     border-radius: var(--r-md) !important;
-    background: linear-gradient(135deg, #6c47ff, #4f8aff) !important;
+    background: linear-gradient(135deg, var(--accent), var(--accent2)) !important;
     color: #fff !important;
     cursor: pointer !important;
     font-family: "Open Sans", sans-serif !important;
@@ -1077,7 +1075,7 @@
     transition:
         opacity var(--tr),
         transform var(--tr) !important;
-    box-shadow: 0 2px 8px rgba(108, 71, 255, 0.3) !important;
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 30%, transparent) !important;
     line-height: 1 !important;
 }
 .btn-perm-submit:hover {
@@ -1260,17 +1258,17 @@
     color: var(--hint);
 }
 .perm-act-cell.public:hover {
-    border-color: var(--accent);
-    color: var(--accent);
+    border-color: var(--border-mid);
+    color: var(--muted);
 }
 .perm-act-cell.locked {
-    background: var(--accent-lt);
-    border: 1px solid var(--accent-shadow);
-    color: var(--accent);
+    background: var(--surface2);
+    border: 1px solid var(--border-mid);
+    color: var(--muted);
 }
 .perm-act-cell.locked:hover {
-    background: #e6e0ff;
-    border-color: var(--accent);
+    background: var(--surface3);
+    border-color: var(--border-mid);
 }
 .perm-act-cell.add {
     background: transparent;
@@ -1279,9 +1277,9 @@
     font-size: 0.8rem;
 }
 .perm-act-cell.add:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: var(--accent-lt);
+    border-color: var(--border-mid);
+    color: var(--muted);
+    background: var(--surface2);
 }
 
 /* -- Superadmin row -- */

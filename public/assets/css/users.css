@@ -9,9 +9,9 @@
     --radius-lg: 16px;
     --shadow-card:
         0 1px 4px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
-    --color-primary: #6d51e8;
-    --color-primary-light: #ede9fe;
-    --color-primary-dark: #5b3fd4;
+    --color-primary: var(--accent);
+    --color-primary-light: color-mix(in srgb, var(--accent) 12%, transparent);
+    --color-primary-dark: color-mix(in srgb, var(--accent) 85%, #000);
 
     /* grid: No | Nama | Username | Status | Info */
     --um-grid: 56px 1fr 180px 120px 180px;
@@ -109,7 +109,7 @@
 }
 
 .um-stat--purple .um-stat-value {
-    color: #4c33b8;
+    color: var(--color-primary-dark);
 }
 
 /* ── Table Card ─────────────────────────────────── */

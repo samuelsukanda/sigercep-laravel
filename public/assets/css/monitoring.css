@@ -30,7 +30,7 @@
 .um-icon-box {
     width: 36px;
     height: 36px;
-    background: #fff7ed;
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -39,7 +39,7 @@
 
 .um-icon-box i {
     font-size: 16px;
-    color: #ea580c;
+    color: var(--accent);
 }
 
 .um-title-text {
@@ -150,15 +150,15 @@
 }
 
 .um-stat--purple {
-    background: #faf5ff;
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
 .um-stat--purple .um-stat-label {
-    color: #9333ea;
+    color: var(--accent);
 }
 
 .um-stat--purple .um-stat-value {
-    color: #7e22ce;
+    color: color-mix(in srgb, var(--accent) 85%, #000);
 }
 
 /* ── Table Card ─────────────────────────────────── */
@@ -244,8 +244,8 @@
 }
 
 .um-uid--id {
-    background: #ede9fe;
-    color: #6d28d9;
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    color: color-mix(in srgb, var(--accent) 85%, #000);
 }
 
 .um-uid--guest {
@@ -284,8 +284,8 @@
 }
 
 .um-avatar--purple {
-    background: #ede9fe;
-    color: #6d28d9;
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    color: color-mix(in srgb, var(--accent) 85%, #000);
 }
 
 .um-avatar--pink {

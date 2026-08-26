@@ -15,9 +15,9 @@
             width: 28px !important;
             height: 28px !important;
             border-radius: 6px !important;
-            border: 1px solid var(--accent-focus) !important;
+            border: 1px solid var(--border-mid) !important;
             background: transparent !important;
-            color: var(--accent) !important;
+            color: var(--muted) !important;
             font-size: 0.75rem !important;
             cursor: pointer !important;
             flex-shrink: 0 !important;
@@ -27,9 +27,9 @@
         }
 
         .btn-rule-edit:hover {
-            background: #f0ecff !important;
-            border-color: var(--accent) !important;
-            color: var(--accent-strong) !important;
+            background: var(--surface2) !important;
+            border-color: var(--border-mid) !important;
+            color: var(--muted) !important;
         }
 
         .rule-tab-btn.active {
@@ -44,13 +44,13 @@
         }
 
         .rule-list-icon {
-            color: var(--accent) !important;
-            background: #f0ecff !important;
-            border-color: var(--accent-focus) !important;
+            color: var(--muted) !important;
+            background: var(--surface2) !important;
+            border-color: var(--border-mid) !important;
         }
 
         .rule-list-item:hover {
-            border-color: var(--accent) !important;
+            border-color: var(--border-mid) !important;
         }
     </style>
 @endpush
