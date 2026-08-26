@@ -11,8 +11,8 @@ let table = $("#hardwareTable").DataTable({
         },
     },
     language: {
-        zeroRecords: "Tidak ada data yang ditemukan",
-        emptyTable: "Tidak ada data tersedia",
+        zeroRecords: "No matching records found",
+        emptyTable: "No data available in table",
     },
     columns: [
         {

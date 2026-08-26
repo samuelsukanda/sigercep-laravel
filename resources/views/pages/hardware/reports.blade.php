@@ -12,7 +12,7 @@
         <div class="flex flex-wrap -mx-3">
             <div class="w-full max-w-full px-3 mx-auto mt-0">
                 {{-- Header --}}
-                <x-page-header icon="fa-file-chart-column" title="Laporan Bulanan Ceklis Hardware" subtitle="Laporan Bulanan Ceklis PC Set & AIO" />
+                <x-page-header icon="fa-chart-column" title="Laporan Bulanan Ceklis Hardware" subtitle="Laporan Bulanan Ceklis PC Set & AIO" />
 
                 {{-- Filter Section --}}
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-4">

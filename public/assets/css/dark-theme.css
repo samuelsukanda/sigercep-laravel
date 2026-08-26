@@ -215,7 +215,7 @@ html.dark textarea:disabled,
 html.dark select:disabled {
     background-color: #1a2538;
     color: #64748b;
-    border-color: #334155;
+    border-color: #475569;
     opacity: 0.8;
 }
 
@@ -223,6 +223,7 @@ html.dark input[readonly],
 html.dark textarea[readonly] {
     background-color: #1e293b;
     color: #94a3b8;
+    border-color: #475569;
 }
 
 .readonly-field {
@@ -234,6 +235,7 @@ html.dark textarea[readonly] {
 html.dark .readonly-field {
     background-color: #1e293b !important;
     color: #94a3b8 !important;
+    border-color: #475569 !important;
     cursor: not-allowed;
 }
 
@@ -241,7 +243,12 @@ html.dark .readonly-field {
 html.dark .select2-container--default .select2-selection--single,
 html.dark .select2-container--default .select2-selection--multiple {
     background-color: #111c2e;
-    border-color: #475569;
+    border: 1px solid #475569;
+}
+
+html.dark .select2-container--default.select2-container--focus .select2-selection--single,
+html.dark .select2-container--default.select2-container--focus .select2-selection--multiple {
+    border: 1px solid #475569;
 }
 
 html.dark .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -415,6 +422,60 @@ html.dark p, html.dark span, html.dark label, html.dark td, html.dark th {
 /* Links */
 html.dark a {
     color: #93c5fd;
+}
+
+/* Tombol aksen — teks tetap putih di dark mode */
+html.dark a[style*="background-color: var(--accent)"],
+html.dark a[style*="background-color:var(--accent)"],
+html.dark a.bg-blue-500,
+html.dark a.bg-green-500,
+html.dark a.bg-red-500,
+html.dark a.bg-purple-500,
+html.dark a.bg-indigo-500,
+html.dark a.bg-gradient-to-tl {
+    color: #fff !important;
+}
+
+/* Tombol biru inline — teks tetap putih */
+html.dark button[style*="#3b82f6"],
+html.dark a[style*="#3b82f6"] {
+    color: #fff !important;
+}
+
+/* Tombol Generate — teks putih di dark mode */
+html.dark .btn-generate {
+    color: #fff !important;
+}
+
+/* Semua tombol dengan background gelap — teks putih */
+html.dark button[style*="color: #fff"] {
+    color: #fff !important;
+}
+
+/* Button Edit & Hapus di hardware tables — dark mode */
+html.dark .btn-edit-row {
+    background: #1e293b !important;
+    color: #60a5fa !important;
+}
+
+html.dark .btn-edit-row:hover {
+    background: #2d3a4f !important;
+    color: #93bbfd !important;
+}
+
+html.dark .btn-hapus-row {
+    background: #1e293b !important;
+    color: #f87171 !important;
+}
+
+html.dark .btn-hapus-row:hover {
+    background: #2d3a4f !important;
+    color: #fca5a5 !important;
+}
+
+/* Loading overlay — gelap di dark mode */
+html.dark #loadingOverlay {
+    background: rgba(15, 23, 42, 0.85) !important;
 }
 
 /* Buttons gray light */

@@ -232,6 +232,7 @@
                                 Batal
                             </button>
                             <button type="submit"
+                                class="btn-generate"
                                 style="
                                 height: 38px;
                                 padding: 0 20px;

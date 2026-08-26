@@ -220,20 +220,28 @@
                         @endforeach
                     </div>
 
-                    {{-- Year Selector --}}
-                    <form method="GET" action="{{ route('indicators.index') }}" id="filterForm"
-                        class="flex items-center gap-2">
-                        <label for="tahunSelect"
-                            class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mr-2">Tahun:</label>
-                        <select id="tahunSelect" name="tahun" onchange="this.form.submit()"
-                            class="text-xs font-bold bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
-                            @foreach ($tahunOptions as $y)
-                                <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>
-                                    {{ $y }}</option>
-                            @endforeach
-                        </select>
-                        <input type="hidden" name="jenis" value="{{ $jenis }}">
-                    </form>
+                    {{-- Year Selector + Tambah Data --}}
+                    <div class="flex items-center gap-2">
+                        <form method="GET" action="{{ route('indicators.index') }}" id="filterForm"
+                            class="flex items-center gap-2">
+                            <label for="tahunSelect"
+                                class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mr-2">Tahun:</label>
+                            <select id="tahunSelect" name="tahun" onchange="this.form.submit()"
+                                class="text-xs font-bold bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+                                @foreach ($tahunOptions as $y)
+                                    <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>
+                                        {{ $y }}</option>
+                                @endforeach
+                            </select>
+                            <input type="hidden" name="jenis" value="{{ $jenis }}">
+                        </form>
+
+                        @canAccess('mutu', 'create')
+                        <button onclick="openModal()" class="inline-flex items-center justify-center h-9 px-4 text-xs font-semibold text-white uppercase rounded-lg shadow-md hover:shadow-sm active:opacity-85 transition-all" style="background-color: var(--accent) !important;">
+                            <i class="fas fa-plus mr-1"></i> Tambah Data
+                        </button>
+                        @endcanAccess
+                    </div>
                 </div>
             </div>
 
@@ -463,6 +471,103 @@
 @canAccess('mutu', 'update')
 {{-- Modal Edit Indikator --}}
 @push('modals')
+    {{-- ── Modal Tambah Indikator ── --}}
+    <div id="createIndicatorModal" tabindex="-1" aria-hidden="true" role="dialog"
+        class="modal-overlay hidden justify-center"
+        style="
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0,0,0,0.5);
+            padding: 2rem 1rem;
+            overflow-y: auto;
+            align-items: flex-start;
+         ">
+        <div class="relative w-full" style="max-width: 480px; margin: 1.5rem auto;">
+            <div style="background: #ffffff; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); overflow: hidden;">
+                {{-- Header --}}
+                <div style="background: var(--accent); padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-plus" style="color: #fff; font-size: 13px;"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 14px; font-weight: 700; color: #fff; line-height: 1.2;">Tambah Indikator</h3>
+                            <p style="margin: 0; font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 1px;">
+                                Kategori: {{ ucfirst(str_replace('-', ' ', $jenis)) }}</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeCreateModal()" aria-label="Tutup modal"
+                        style="width: 30px; height: 30px; border-radius: 8px; background: rgba(255,255,255,0.15); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; flex-shrink: 0;">
+                        <i class="fas fa-times" style="color: #fff; font-size: 13px;"></i>
+                    </button>
+                </div>
+
+                {{-- Body --}}
+                <form action="{{ route('indicators.store') }}" method="POST" style="padding: 1.375rem 1.25rem 1.25rem;">
+                    @csrf
+                    <input type="hidden" name="tahun" value="{{ $tahun }}">
+                    <input type="hidden" name="jenis_indikator" value="{{ $jenis }}">
+
+                    {{-- Target --}}
+                    <div style="display: grid; grid-template-columns: 80px 1fr; gap: 12px; margin-bottom: 1rem;">
+                        <div>
+                            <label style="display: block; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px;">Tanda</label>
+                            <select name="operator" style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 11px; font-size: 13.5px; color: #1e293b; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; outline: none;">
+                                <option value="<">&lt;</option>
+                                <option value="<=">&le;</option>
+                                <option value=">">&gt;</option>
+                                <option value=">=" selected>&ge;</option>
+                                <option value="=">=</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px;">Target (%)</label>
+                            <input type="number" step="any" name="target_value" placeholder="e.g. 80"
+                                style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 11px; font-size: 13.5px; color: #1e293b; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; outline: none;" />
+                        </div>
+                    </div>
+
+                    {{-- Nama Indikator --}}
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px;">
+                            Nama Indikator <span style="color: #ef4444;">*</span>
+                        </label>
+                        <input type="text" name="nama_indikator" required
+                            style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 11px; font-size: 13.5px; color: #1e293b; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; outline: none;" />
+                    </div>
+
+                    {{-- PJ & Unit Terkait --}}
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.375rem;">
+                        <div>
+                            <label style="display: block; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px;">PJ (Penanggung Jawab)</label>
+                            <input type="text" name="pj"
+                                style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 11px; font-size: 13.5px; color: #1e293b; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; outline: none;" />
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px;">Unit Terkait</label>
+                            <input type="text" name="unit_terkait"
+                                style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 11px; font-size: 13.5px; color: #1e293b; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; outline: none;" />
+                        </div>
+                    </div>
+
+                    {{-- Footer --}}
+                    <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                        <button type="button" onclick="closeCreateModal()"
+                            style="height: 38px; padding: 0 16px; font-size: 13px; font-weight: 600; color: #64748b; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: background 0.15s;">
+                            Batal
+                        </button>
+                        <button type="submit"
+                            style="height: 38px; padding: 0 20px; font-size: 13px; font-weight: 700; color: #fff; background: var(--accent); border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: background 0.15s, box-shadow 0.15s;">
+                            <i class="fas fa-save" style="font-size: 12px;"></i>
+                            Simpan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div id="editIndicatorModal" tabindex="-1" aria-hidden="true" aria-labelledby="modalTitleEdit" role="dialog"
         class="modal-overlay hidden justify-center"
         style="
@@ -831,7 +936,7 @@
             }
         });
 
-        function openEditModal(id, nama, pj, unit, target, operator) {
+function openEditModal(id, nama, pj, unit, target, operator) {
             const modal = document.getElementById('editIndicatorModal');
             if (!modal) return;
 
@@ -854,7 +959,33 @@
             setTimeout(() => {
                 const firstInput = modal.querySelector('input:not([type="hidden"]), select, textarea');
                 if (firstInput) firstInput.focus();
-            }, 50);
+            });
+        }
+
+        function openCreateModal() {
+            const modal = document.getElementById('createIndicatorModal');
+            if (!modal) return;
+
+            // Set default values
+            document.querySelector('#createIndicatorModal input[name="tahun"]').value = "{{ $tahun }}";
+            document.querySelector('#createIndicatorModal input[name="jenis_indikator"]').value = "{{ $jenis }}";
+            document.querySelector('#createIndicatorModal select[name="operator"]').value = '>=';
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+                const firstInput = modal.querySelector('input:not([type="hidden"]), select, textarea');
+                if (firstInput) firstInput.focus();
+            });
+        }
+
+        function closeCreateModal() {
+            const modal = document.getElementById('createIndicatorModal');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
         }
 
         function closeEditModal() {
