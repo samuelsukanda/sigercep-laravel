@@ -339,10 +339,10 @@
                             <button onclick="event.stopPropagation(); editCredential(${item.id})"
                                 class="btn-edit-row"
                                 style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px;
-                                       font-size:11px; font-weight:600; color:#3b82f6; border:none; cursor:pointer; border-radius:6px; background:#fff;
+                                       font-size:11px; font-weight:600; color:#3b82f6 !important; border:none; cursor:pointer; border-radius:6px; background:#fff;
                                        transition:background 0.18s, color 0.18s;"
-                                onmouseover="this.style.background='#eff6ff'; this.style.color='#2563eb';"
-                                onmouseout="this.style.background='#fff'; this.style.color='#3b82f6';">
+                                onmouseover="this.style.setProperty('background','#eff6ff'); this.style.setProperty('color','#2563eb','important');"
+                                onmouseout="this.style.setProperty('background','#fff'); this.style.setProperty('color','#3b82f6','important');">
                                 <i class="fas fa-edit"></i> Edit
                             </button>
                             <button onclick="event.stopPropagation(); hapusCredential(${item.id})"

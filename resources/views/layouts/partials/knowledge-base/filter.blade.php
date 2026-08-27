@@ -51,7 +51,7 @@
                         <a href="{{ route('knowledge-base.create') }}"
                             class="inline-flex items-center gap-2 justify-center h-9 px-4 text-xs font-semibold text-white uppercase rounded-lg shadow-md hover:shadow-sm active:opacity-85 transition-all"
                             style="background-color: var(--accent) !important;">
-                            Buat Artikel
+                            Tambah Data
                         </a>
                     @endif
                 </div>
@@ -110,8 +110,7 @@
             @if ($tab === 'draft')
                 <div
                     style="margin-top: 10px; display: flex; align-items: center; gap: 8px; padding: 10px 14px; background-color: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; font-size: 12px; color: #92400e;">
-                    <i class="fas fa-info-circle"
-                        style="color: #f59e0b; flex-shrink: 0; margin-right: 4px;"></i>
+                    <i class="fas fa-info-circle" style="color: #f59e0b; flex-shrink: 0; margin-right: 4px;"></i>
                     <span>
                         <strong>Draft</strong> tidak terlihat oleh pengguna biasa. Klik
                         <strong style="color: #16a34a;">Publish</strong> pada artikel untuk mempublikasikannya.
