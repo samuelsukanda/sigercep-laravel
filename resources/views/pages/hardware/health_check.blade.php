@@ -64,7 +64,7 @@
                                 <button type="button" onclick="bukaModalTambah()"
                                     class="inline-flex items-center justify-center h-9 px-4 text-xs font-semibold text-white uppercase rounded-lg shadow-md hover:shadow-sm active:opacity-85 transition-all"
                                     style="background-color: var(--accent) !important;">
-                                    Tambah Data
+                                    <i class="fas fa-plus mr-1"></i> Tambah Data
                                 </button>
                             </div>
                         </div>
@@ -87,7 +87,7 @@
                         <i class="fas fa-heartbeat" style="font-size:28px; color:#d1d5db;"></i>
                     </div>
                     <h5 style="color:#374151; font-weight:600; margin-bottom:8px;">Belum Ada Data Health Check</h5>
-                    <p style="color:#9ca3af; font-size:13px;">Klik <b>Tambah Data</b> untuk mencatat kesehatan hardware
+                    <p style="color:#9ca3af; font-size:13px;">Klik <b><i class="fas fa-plus mr-1"></i> Tambah Data</b> untuk mencatat kesehatan hardware
                         PC.</p>
                 </div>
 

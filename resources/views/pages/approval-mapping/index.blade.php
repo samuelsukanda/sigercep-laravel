@@ -599,7 +599,7 @@
         }
 
         html.dark .am-card-title {
-            color: #e2e8f0;
+            color: #ffffff !important;
         }
 
         html.dark .am-card-subtitle {
@@ -611,14 +611,20 @@
         }
 
         html.dark .am-label {
-            color: #94a3b8;
+            color: #ffffff !important;
         }
 
         html.dark .am-input,
         html.dark .am-select {
             background: #111c2e;
-            color: #e2e8f0;
+            color: #ffffff !important;
             border-color: #475569;
+        }
+
+        html.dark .am-input option,
+        html.dark .am-select option {
+            background: #111c2e;
+            color: #ffffff;
         }
 
         html.dark .am-input:hover,
@@ -631,6 +637,7 @@
         html.dark .am-select:focus {
             background: #111c2e;
             border-color: var(--accent);
+            color: #ffffff !important;
         }
 
         html.dark .am-input::placeholder {
@@ -679,15 +686,73 @@
             color: inherit;
         }
 
+        html.dark .am-table thead th {
+            color: #ffffff !important;
+            border-bottom-color: rgba(255, 255, 255, 0.12);
+        }
+
+        html.dark .am-table tbody tr {
+            border-bottom-color: #334155;
+        }
+
+        html.dark .am-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        html.dark .am-table td {
+            color: #ffffff;
+        }
+
         html.dark .am-table-input {
             background: #111c2e;
-            color: #e2e8f0;
+            color: #ffffff !important;
             border-color: #475569;
         }
 
         html.dark .am-table-input:focus {
             border-color: var(--accent);
             background: #111c2e;
+            color: #ffffff !important;
+        }
+
+        html.dark .am-table-select {
+            background: #111c2e;
+            color: #ffffff !important;
+            border-color: #475569;
+        }
+
+        html.dark .am-table-select option {
+            background: #111c2e;
+            color: #ffffff;
+        }
+
+        html.dark .am-table-select:focus {
+            border-color: var(--accent);
+            background: #111c2e;
+            color: #ffffff !important;
+        }
+
+        html.dark .am-badge-stage2 {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff !important;
+        }
+
+        html.dark .am-modal {
+            background: #1e293b;
+            border: 1px solid #334155;
+        }
+
+        html.dark .am-modal-header {
+            border-bottom-color: #334155;
+        }
+
+        html.dark .am-modal-header h2 {
+            color: #ffffff;
+        }
+
+        html.dark .am-modal-footer {
+            border-top-color: #334155;
+            background: #1e293b;
         }
     </style>
 @endpush

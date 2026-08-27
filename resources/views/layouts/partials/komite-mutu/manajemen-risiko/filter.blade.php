@@ -71,7 +71,7 @@
                             h-9 px-4 text-xs font-semibold text-white uppercase
                             rounded-lg shadow-md hover:shadow-sm active:opacity-85 transition-all"
                         style="background-color: var(--accent) !important;">
-                        Tambah Data
+                        <i class="fas fa-plus mr-1"></i> Tambah Data
                     </a>
                     @endcanAccess
                 </div>

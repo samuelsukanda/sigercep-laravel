@@ -52,6 +52,101 @@
         .rule-list-item:hover {
             border-color: var(--border-mid) !important;
         }
+        /* ===== PAGE HEADER (Match Approval Mapping Design) ===== */
+        .perm-header {
+            background: linear-gradient(135deg, var(--accent-grad-1) 0%, var(--accent-grad-2) 60%, var(--accent-grad-3) 100%) !important;
+            border-radius: 20px !important;
+            padding: 28px 32px !important;
+            margin-bottom: 24px !important;
+            position: relative !important;
+            overflow: hidden !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            flex-wrap: wrap !important;
+            gap: 16px !important;
+        }
+
+        .perm-header::before {
+            content: '' !important;
+            position: absolute !important;
+            top: -40px !important;
+            right: -40px !important;
+            width: 200px !important;
+            height: 200px !important;
+            background: rgba(255, 255, 255, 0.07) !important;
+            border-radius: 50% !important;
+            pointer-events: none !important;
+        }
+
+        .perm-header::after {
+            content: '' !important;
+            position: absolute !important;
+            bottom: -60px !important;
+            left: 20px !important;
+            width: 160px !important;
+            height: 160px !important;
+            background: rgba(255, 255, 255, 0.05) !important;
+            border-radius: 50% !important;
+            pointer-events: none !important;
+        }
+
+        .perm-header h1 {
+            color: #fff !important;
+            font-size: 20px !important;
+            font-weight: 700 !important;
+            margin: 0 0 4px !important;
+            position: relative !important;
+            z-index: 1 !important;
+        }
+
+        .perm-header p {
+            color: rgba(255, 255, 255, 0.78) !important;
+            font-size: 13px !important;
+            margin: 0 !important;
+            position: relative !important;
+            z-index: 1 !important;
+        }
+
+        .perm-header-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #fff;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-add-perm {
+            background: #fff !important;
+            color: var(--accent) !important;
+            border: none !important;
+            border-radius: 10px !important;
+            padding: 10px 20px !important;
+            font-size: 13px !important;
+            font-weight: 700 !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            position: relative !important;
+            z-index: 1 !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+            transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+
+        .btn-add-perm:hover {
+            background: #f8f7fc !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22) !important;
+        }
     </style>
 @endpush
 
@@ -67,9 +162,14 @@
 
         {{-- Header --}}
         <div class="perm-header">
-            <div class="perm-header-info">
-                <h1><i class="fas fa-shield-halved"></i> Manajemen Hak Akses</h1>
-                <p>Kelola permission dan aturan akses tiap modul sistem</p>
+            <div style="display:flex; align-items:center; gap:16px; position:relative; z-index:1;">
+                <div class="perm-header-icon">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+                <div>
+                    <h1>Manajemen Hak Akses</h1>
+                    <p>Kelola permission dan aturan akses tiap modul sistem</p>
+                </div>
             </div>
             <button class="btn-add-perm" onclick="openPermModal()" type="button">
                 <i class="fas fa-plus"></i> Tambah Permission

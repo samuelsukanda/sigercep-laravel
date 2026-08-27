@@ -45,7 +45,7 @@
                                 style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px;
                                        font-size:12px; font-weight:600; color:#fff; border:none; cursor:pointer;
                                        border-radius:8px; background:var(--accent); box-shadow:0 2px 6px var(--accent-shadow);">
-                                TAMBAH DATA
+                                <i class="fas fa-plus mr-1"></i> Tambah Data
                             </button>
                         </div>
                     </div>
@@ -671,7 +671,7 @@
                         <i class="fas fa-plus" style="color:#fff; font-size:14px;"></i>
                     </div>
                     <div>
-                        <h5 style="margin:0; font-size:15px; font-weight:700; color:#1f2937;">Tambah Data Evaluasi</h5>
+                        <h5 style="margin:0; font-size:15px; font-weight:700; color:#1f2937;"><i class="fas fa-plus mr-1"></i> Tambah Data Evaluasi</h5>
                         <p style="margin:0; font-size:11px; color:#6b7280;">Tambah/Ubah Evaluasi Permasalahan &amp; Rencana
                             Tindak Lanjut Per Bulan</p>
                     </div>

@@ -203,7 +203,7 @@
             class="bg-white dark:bg-slate-850 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-800 overflow-hidden mb-8">
             {{-- Filters Card Header --}}
             <div class="p-6 border-b border-gray-100 dark:border-slate-800 bg-gray-50/50 dark:bg-slate-900/50">
-                <div class="flex flex-wrap items-center gap-2">
+                <div class="flex flex-wrap items-center justify-between gap-2">
                     {{-- Category Tabs --}}
                     <div class="flex flex-wrap items-center">
                         @foreach ($jenisOptions as $opt)
@@ -220,29 +220,30 @@
                         @endforeach
                     </div>
 
-                    {{-- Year Selector --}}
-                    <form method="GET" action="{{ route('indicators.index') }}" id="filterForm"
-                        class="flex items-center gap-2">
-                        <label for="tahunSelect"
-                            class="ml-2 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Tahun:</label>
-                        <select id="tahunSelect" name="tahun" onchange="this.form.submit()"
-                            class="text-xs font-bold bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
-                            @foreach ($tahunOptions as $y)
-                                <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>
-                                    {{ $y }}</option>
-                            @endforeach
-                        </select>
-                        <input type="hidden" name="jenis" value="{{ $jenis }}">
-                    </form>
+                    {{-- Year Selector + Tambah Data --}}
+                    <div class="flex items-center gap-2">
+                        <form method="GET" action="{{ route('indicators.index') }}" id="filterForm"
+                            class="flex items-center gap-2">
+                            <label for="tahunSelect"
+                                class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Tahun:</label>
+                            <select id="tahunSelect" name="tahun" onchange="this.form.submit()"
+                                class="text-xs font-bold bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+                                @foreach ($tahunOptions as $y)
+                                    <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>
+                                        {{ $y }}</option>
+                                @endforeach
+                            </select>
+                            <input type="hidden" name="jenis" value="{{ $jenis }}">
+                        </form>
 
-                    {{-- Tambah Data --}}
-                    @canAccess('mutu', 'update')
-                    <a href="{{ route('indicator-values.bulk-edit', ['tahun' => $tahun, 'jenis' => $jenis]) }}"
-                        class="inline-flex items-center justify-center h-9 px-4 text-xs font-semibold text-white uppercase rounded-lg shadow-md hover:shadow-sm active:opacity-85 transition-all"
-                        style="background-color: var(--accent) !important; margin-left: auto;">
-                        Tambah Data
-                    </a>
-                    @endcanAccess
+                        @canAccess('mutu', 'update')
+                        <a href="{{ route('indicator-values.bulk-edit', ['tahun' => $tahun, 'jenis' => $jenis]) }}"
+                            class="inline-flex items-center justify-center h-9 px-4 text-xs font-semibold text-white uppercase rounded-lg shadow-md hover:shadow-sm active:opacity-85 transition-all"
+                            style="background-color: var(--accent) !important;">
+                            <i class="fas fa-plus mr-1"></i> Tambah Data
+                        </a>
+                        @endcanAccess
+                    </div>
                 </div>
             </div>
 
