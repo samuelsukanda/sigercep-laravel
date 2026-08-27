@@ -12,8 +12,19 @@ class ApprovalMappingController extends Controller
     private function ensureIT()
     {
         $user = auth()->user();
-        if (!$user || strtolower(trim($user->unit ?? '')) != 'teknologi dan informasi') {
+        if (!$user) {
             abort(403, 'Hanya user IT yang dapat mengakses panel ini.');
+        }
+
+        $name = strtolower(trim($user->name ?? ''));
+        $unit = strtolower(trim($user->unit ?? ''));
+        $jabatan = strtolower(trim($user->jabatan ?? ''));
+
+        $isSammuel = ($name === 'sammuel' && $unit === 'teknologi dan informasi' && $jabatan === 'operasional it technical support');
+        $isDeden = ($name === 'deden eka nugraha' && $unit === 'teknologi dan informasi' && $jabatan === 'spv it');
+
+        if (!$isSammuel && !$isDeden) {
+            abort(403, 'Hanya user IT yang berwenang yang dapat mengakses panel ini.');
         }
     }
 

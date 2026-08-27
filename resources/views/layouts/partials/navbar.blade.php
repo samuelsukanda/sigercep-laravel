@@ -152,7 +152,25 @@
                 @endauth
 
                 {{-- Approval Change Request --}}
-                @if (Auth::check() && strtolower(trim(Auth::user()->unit ?? '')) === 'teknologi dan informasi')
+                @php
+                    $navUser = Auth::user();
+                    $canAccessApprovalMapping = false;
+
+                    if ($navUser) {
+                        $nName = strtolower(trim($navUser->name ?? ''));
+                        $nUnit = strtolower(trim($navUser->unit ?? ''));
+                        $nJabatan = strtolower(trim($navUser->jabatan ?? ''));
+
+                        if (
+                            ($nName == 'sammuel' && $nUnit == 'teknologi dan informasi' && $nJabatan == 'operasional it technical support') ||
+                            ($nName == 'deden eka nugraha' && $nUnit == 'teknologi dan informasi' && $nJabatan == 'spv it')
+                        ) {
+                            $canAccessApprovalMapping = true;
+                        }
+                    }
+                @endphp
+
+                @if ($canAccessApprovalMapping)
                     <li class="flex items-center px-2">
                         <a href="{{ route('approval-mapping.index') }}" title="Approval Change Request"
                             class="relative p-0 text-sm transition-all ease-nav-brand group"

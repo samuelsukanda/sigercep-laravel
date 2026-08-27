@@ -52,6 +52,36 @@
         .rule-list-item:hover {
             border-color: var(--border-mid) !important;
         }
+        /* Modal & Panel Header Titles & Labels */
+        #modalTitle,
+        #panelTitle,
+        #editModalTitle,
+        html.dark #modalTitle,
+        html.dark #panelTitle,
+        html.dark #editModalTitle,
+        html.dark .perm-modal h3,
+        html.dark .rule-panel h3 {
+            color: #ffffff !important;
+        }
+
+        .perm-modal-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        html.dark .perm-modal-label,
+        html.dark .perm-modal label,
+        html.dark .perm-modal-body label,
+        html.dark .perm-modal span[class*="perm-modal-label"],
+        html.dark .rule-panel label,
+        html.dark .rule-panel-body label {
+            color: #ffffff !important;
+        }
+
         /* ===== PAGE HEADER (Match Approval Mapping Design) ===== */
         .perm-header {
             background: linear-gradient(135deg, var(--accent-grad-1) 0%, var(--accent-grad-2) 60%, var(--accent-grad-3) 100%) !important;
@@ -392,7 +422,7 @@
             style="background: var(--accent); padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; border-bottom: none; height: auto;">
             <div class="rule-panel-header-info">
                 <h3 id="panelTitle"
-                    style="margin: 0; font-size: 14px; font-weight: 700; color: #fff; line-height: 1.2; font-family: inherit;">
+                    style="margin: 0; font-size: 14px; font-weight: 700; color: #ffffff !important; line-height: 1.2; font-family: inherit;">
                     Kelola Rules</h3>
                 <p style="margin: 3px 0 0 0; display: flex; align-items: center; gap: 5px;">
                     <span id="panelMenuChip"
@@ -455,16 +485,7 @@
                     <input type="hidden" name="_method" value="POST">
 
                     <div style="margin-bottom: 1rem;">
-                        <label for="pf-user"
-                            style="
-                                   display: block;
-                                   font-size: 11px;
-                                   font-weight: 700;
-                                   color: #475569;
-                                   text-transform: uppercase;
-                                   letter-spacing: 0.06em;
-                                   margin-bottom: 5px;
-                               ">
+                        <label for="pf-user" class="perm-modal-label" style="margin-bottom: 5px;">
                             <i class="fas fa-user" style="margin-right:4px"></i>Pilih User
                         </label>
                         <select id="pf-user"
@@ -576,7 +597,7 @@
                             margin: 0;
                             font-size: 14px;
                             font-weight: 700;
-                            color: #fff;
+                            color: #ffffff !important;
                             line-height: 1.2;
                             font-family: inherit;
                         ">
@@ -617,19 +638,10 @@
 
                     {{-- Menu --}}
                     <div style="margin-bottom: 1rem;">
-                        <label for="inp-menu"
-                            style="
-                                   display: block;
-                                   font-size: 11px;
-                                   font-weight: 700;
-                                   color: #475569;
-                                   text-transform: uppercase;
-                                   letter-spacing: 0.06em;
-                                   margin-bottom: 5px;
-                               ">
+                        <label for="inp-menu" class="perm-modal-label" style="margin-bottom: 5px;">
                             Menu <span style="color: #ef4444;">*</span>
                         </label>
-                                                <div style="position: relative;">
+                        <div style="position: relative;">
                             <select id="inp-menu" name="menu" required
                                 style="
                                     width: 100%;
@@ -661,16 +673,7 @@
 
                     {{-- Action / Level Akses --}}
                     <div style="margin-bottom: 1rem;">
-                        <label for="inp-action"
-                            style="
-                                   display: block;
-                                   font-size: 11px;
-                                   font-weight: 700;
-                                   color: #475569;
-                                   text-transform: uppercase;
-                                   letter-spacing: 0.06em;
-                                   margin-bottom: 5px;
-                               ">
+                        <label for="inp-action" class="perm-modal-label" style="margin-bottom: 5px;">
                             Action / Level Akses <span style="color: #ef4444;">*</span>
                         </label>
                         <div style="position: relative;">
@@ -703,9 +706,7 @@
 
                     {{-- Rules awal (opsional) --}}
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <span
-                            style="font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.06em;">Rules
-                            awal (opsional)</span>
+                        <span class="perm-modal-label">Rules awal (opsional)</span>
                         <button type="button" onclick="addModalRuleRow()"
                             style="
                                 font-size: 11px !important;
@@ -846,7 +847,7 @@
                             margin: 0;
                             font-size: 14px;
                             font-weight: 700;
-                            color: #fff;
+                            color: #ffffff !important;
                             line-height: 1.2;
                             font-family: inherit;
                         ">
@@ -886,16 +887,7 @@
                 <input type="hidden" id="editRuleId">
 
                 <div style="margin-bottom: 1rem;">
-                    <label for="edit-name"
-                        style="
-                               display: block;
-                               font-size: 11px;
-                               font-weight: 700;
-                               color: #475569;
-                               text-transform: uppercase;
-                               letter-spacing: 0.06em;
-                               margin-bottom: 5px;
-                           ">
+                    <label for="edit-name" class="perm-modal-label" style="margin-bottom: 5px;">
                         <i class="fas fa-user" style="margin-right:4px"></i>Nama User
                     </label>
                     <input type="text" id="edit-name" placeholder="Nama user"
@@ -919,16 +911,7 @@
                 </div>
 
                 <div style="margin-bottom: 1rem;">
-                    <label for="edit-unit"
-                        style="
-                               display: block;
-                               font-size: 11px;
-                               font-weight: 700;
-                               color: #475569;
-                               text-transform: uppercase;
-                               letter-spacing: 0.06em;
-                               margin-bottom: 5px;
-                           ">
+                    <label for="edit-unit" class="perm-modal-label" style="margin-bottom: 5px;">
                         <i class="fas fa-building" style="margin-right:4px"></i>Unit / Divisi
                     </label>
                     <input type="text" id="edit-unit" placeholder="Unit"
@@ -952,16 +935,7 @@
                 </div>
 
                 <div style="margin-bottom: 1rem;">
-                    <label for="edit-jabatan"
-                        style="
-                               display: block;
-                               font-size: 11px;
-                               font-weight: 700;
-                               color: #475569;
-                               text-transform: uppercase;
-                               letter-spacing: 0.06em;
-                               margin-bottom: 5px;
-                           ">
+                    <label for="edit-jabatan" class="perm-modal-label" style="margin-bottom: 5px;">
                         <i class="fas fa-user-tie" style="margin-right:4px"></i>Jabatan
                     </label>
                     <input type="text" id="edit-jabatan" placeholder="Jabatan"
