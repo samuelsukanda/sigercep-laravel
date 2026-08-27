@@ -95,16 +95,16 @@ html.dark .dash-module-card:hover {
 html.dark .dash-hero-title,
 html.dark .dash-module-count,
 html.dark .dash-panel-title,
-html.dark .dash-list-title {
-    color: #f1f5f9;
+html.dark .dash-list-title,
+html.dark .dash-module-label,
+html.dark .dash-unit-title > span {
+    color: #ffffff !important;
 }
 
 html.dark .dash-hero-sub,
-html.dark .dash-module-label,
 html.dark .dash-module-last,
 html.dark .dash-panel-sub,
 html.dark .dash-list-sub,
-html.dark .dash-unit-title > span,
 html.dark .dash-list-empty {
     color: #94a3b8;
 }

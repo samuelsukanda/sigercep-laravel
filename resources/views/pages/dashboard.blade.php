@@ -190,7 +190,17 @@
 
             const chart = @json(['labels' => $chartLabels, 'units' => $chartUnits]);
 
-            new Chart(canvas, {
+            function getChartTheme() {
+                const isDark = document.documentElement.classList.contains('dark');
+                return {
+                    textColor: isDark ? '#ffffff' : '#64748b',
+                    gridColor: isDark ? 'rgba(255, 255, 255, 0.12)' : '#f1f5f9'
+                };
+            }
+
+            const theme = getChartTheme();
+
+            const trendChartInstance = new Chart(canvas, {
                 type: "line",
                 data: {
                     labels: chart.labels,
@@ -224,6 +234,7 @@
                                 usePointStyle: true,
                                 boxWidth: 8,
                                 padding: 16,
+                                color: theme.textColor,
                                 font: {
                                     family: "Plus Jakarta Sans",
                                     size: 12
@@ -236,16 +247,18 @@
                             beginAtZero: true,
                             ticks: {
                                 precision: 0,
+                                color: theme.textColor,
                                 font: {
                                     family: "Plus Jakarta Sans"
                                 }
                             },
                             grid: {
-                                color: "#f1f5f9"
+                                color: theme.gridColor
                             },
                         },
                         x: {
                             ticks: {
+                                color: theme.textColor,
                                 font: {
                                     family: "Plus Jakarta Sans"
                                 }
@@ -256,6 +269,27 @@
                         },
                     },
                 },
+            });
+
+            // Observer agar jika mode gelap di-toggle, grafik langsung berubah warna teksnya
+            const observer = new MutationObserver(function() {
+                const updatedTheme = getChartTheme();
+                if (trendChartInstance.options.plugins?.legend?.labels) {
+                    trendChartInstance.options.plugins.legend.labels.color = updatedTheme.textColor;
+                }
+                if (trendChartInstance.options.scales?.y) {
+                    trendChartInstance.options.scales.y.ticks.color = updatedTheme.textColor;
+                    trendChartInstance.options.scales.y.grid.color = updatedTheme.gridColor;
+                }
+                if (trendChartInstance.options.scales?.x) {
+                    trendChartInstance.options.scales.x.ticks.color = updatedTheme.textColor;
+                }
+                trendChartInstance.update();
+            });
+
+            observer.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ['class']
             });
         });
     </script>
