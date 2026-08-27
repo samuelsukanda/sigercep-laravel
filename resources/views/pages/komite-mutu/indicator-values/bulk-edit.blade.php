@@ -195,7 +195,7 @@
                                                         '=' => null,
                                                     ][$operator ?? ''] ?? ($lowerIsBetter ? '≤' : '≥');
                                             @endphp
-                                            <span class="text-xs bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md">
+                                            <span class="text-xs font-bold">
                                                 @if ($operator === '=')
                                                     {{ (float) $target }}%
                                                 @else
@@ -228,11 +228,11 @@
                                             <input type="{{ $isNan ? 'text' : 'number' }}" step="any"
                                                 name="values[{{ $indicator->id }}][nilai]"
                                                 value="{{ $isNan ? 'NaN' : ($nil !== null ? (float) $nil : '') }}"
-                                                class="w-full text-xs p-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-center font-bold input-nilai {{ $isNan ? 'bg-slate-100 dark:bg-slate-900 text-slate-400 dark:text-slate-500 border-dashed' : '' }}"
+                                                class="w-full text-xs p-2 rounded-lg border border-gray-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-center font-bold input-nilai {{ $isNan ? 'text-slate-400 dark:text-slate-500 border-dashed' : '' }}"
                                                 {{ $isNan ? 'readonly' : '' }}>
 
                                             <label
-                                                class="flex items-center justify-center gap-1.5 w-full py-1 px-2 rounded-md transition-all cursor-pointer select-none nan-label {{ $isNan ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' : 'bg-slate-50 text-slate-500 dark:bg-slate-800 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700' }}"
+                                                class="flex items-center justify-center gap-1.5 w-full py-1 px-2 rounded-md transition-all cursor-pointer select-none nan-label {{ $isNan ? 'text-blue-600 dark:text-blue-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:hover:text-slate-300' }}"
                                                 title="Tandai sebagai tidak ada data (NaN)">
                                                 <input type="checkbox"
                                                     class="mr-1 nan-checkbox w-3 h-3 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-700"

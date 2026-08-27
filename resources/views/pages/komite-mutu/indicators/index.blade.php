@@ -263,7 +263,7 @@
                                 </th>
                             @endfor
                             <th
-                                class="py-3 px-3 text-center min-w-[80px] bg-slate-50 dark:bg-slate-900/30 border border-gray-300 dark:border-slate-700">
+                                class="py-3 px-3 text-center min-w-[80px] border border-gray-300 dark:border-slate-700">
                                 Rata-Rata</th>
                             @canAccess('mutu', 'update')
                             <th class="py-3 px-3 text-center w-24 border border-gray-300 dark:border-slate-700">Aksi</th>
@@ -346,7 +346,7 @@
                                                     '=' => null,
                                                 ][$operator ?? ''] ?? ($lowerIsBetter ? '≤' : '≥');
                                         @endphp
-                                        <span class="text-xs bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md">
+                                        <span class="text-xs font-bold">
                                             @if ($operator === '=')
                                                 {{ (float) $target }}%
                                             @else
@@ -376,7 +376,7 @@
                                                 ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/20 dark:text-emerald-400 font-bold'
                                                 : 'text-red-500 bg-red-50 dark:bg-red-950/20 dark:text-red-400 font-bold';
                                         } elseif ($is_nan) {
-                                            $cellClass = 'text-slate-500 bg-slate-50 dark:bg-slate-900/30 font-bold';
+                                            $cellClass = 'text-slate-400 font-bold';
                                         }
 
                                         $tooltipText = '';
@@ -419,7 +419,7 @@
                                     }
                                 @endphp
                                 <td
-                                    class="py-4 px-3 text-center text-xs font-bold bg-slate-50/50 dark:bg-slate-900/20 {{ $avgClass }} border border-gray-300 dark:border-slate-700">
+                                    class="py-4 px-3 text-center text-xs font-bold {{ $avgClass }} border border-gray-300 dark:border-slate-700">
                                     @if ($average !== null)
                                         {{ $average }}%
                                     @else
