@@ -93,19 +93,6 @@ class AuthController extends Controller
         return redirect()->intended('/dashboard');
     }
 
-    public function devLoginPage()
-    {
-        if (!app()->environment('local')) abort(404);
-        return view('dev-login', ['users' => User::orderBy('id')->get()]);
-    }
-
-    public function devLogin($id)
-    {
-        if (!app()->environment('local')) abort(404);
-        Auth::login(User::findOrFail($id));
-        return redirect()->intended('/dashboard');
-    }
-
     public function logout(Request $request)
     {
         $token = session('hris_token');

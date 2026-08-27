@@ -65,10 +65,6 @@ Route::post('/login', [AuthController::class, 'login'])
     ->middleware();
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Dev-login: hanya aktif di environment local untuk testing manual
-Route::get('/dev-login', [AuthController::class, 'devLoginPage'])->name('dev-login');
-Route::get('/dev-login/{id}', [AuthController::class, 'devLogin'])->name('dev-login.as');
-
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
