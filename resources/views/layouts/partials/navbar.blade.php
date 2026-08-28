@@ -369,4 +369,3 @@
 </nav>
 <!-- end Navbar -->
 
-@endpush
