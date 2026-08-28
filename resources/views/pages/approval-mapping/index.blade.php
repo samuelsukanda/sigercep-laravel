@@ -892,7 +892,7 @@
                                     <label class="am-label">User ({{ $stage2 }})</label>
                                     <div class="am-select-wrap">
                                         <select name="stage2_user_id" class="am-select">
-                                            <option value="">— Gunakan jabatan: {{ $stage2 }} —</option>
+                                            <option value="">— Pilih User: {{ $stage2 }} —</option>
                                             @foreach ($users as $u)
                                                 <option value="{{ $u->id }}" @selected($stage2UserId == $u->id)>
                                                     {{ $u->display_name }} — {{ $u->jabatan }} ({{ $u->unit }})
@@ -934,7 +934,7 @@
                                         <label class="am-label">User Requester</label>
                                         <div class="am-select-wrap">
                                             <select name="requester_user_id" class="js-user-peminta am-select">
-                                                <option value="">— Pilih user —</option>
+                                                <option value="">— Pilih User —</option>
                                                 @foreach ($users as $u)
                                                     <option value="{{ $u->id }}" data-jabatan="{{ $u->jabatan }}">
                                                         {{ $u->display_name }} — {{ $u->jabatan }}
@@ -960,7 +960,7 @@
                                         <label class="am-label">User Approver 1</label>
                                         <div class="am-select-wrap">
                                             <select name="approver_user_id" class="js-user-atasan am-select">
-                                                <option value="">— Pilih user —</option>
+                                                <option value="">— Pilih User —</option>
                                                 @foreach ($users as $u)
                                                     <option value="{{ $u->id }}"
                                                         data-jabatan="{{ $u->jabatan }}">
@@ -1053,7 +1053,7 @@
                                                             placeholder="Jabatan peminta">
                                                         <select name="requester_user_id"
                                                             class="js-user-peminta am-table-select">
-                                                            <option value="">— Pilih user —</option>
+                                                            <option value="">— Pilih User —</option>
                                                             @foreach ($users as $u)
                                                                 <option value="{{ $u->id }}"
                                                                     data-jabatan="{{ $u->jabatan }}"
@@ -1072,7 +1072,7 @@
                                                             placeholder="Jabatan atasan">
                                                         <select name="approver_user_id"
                                                             class="js-user-atasan am-table-select">
-                                                            <option value="">— Pilih user —</option>
+                                                            <option value="">— Pilih User —</option>
                                                             @foreach ($users as $u)
                                                                 <option value="{{ $u->id }}"
                                                                     data-jabatan="{{ $u->jabatan }}"
@@ -1145,7 +1145,7 @@
                 // Stage2 user
                 $ctx.find('select[name="stage2_user_id"]').each(function() {
                     $(this).select2({
-                        placeholder: '— Gunakan jabatan —',
+                        placeholder: '— Pilih User —',
                         width: '100%'
                     });
                 });
@@ -1154,7 +1154,7 @@
                 $ctx.find('.js-user-peminta').each(function() {
                     var $sel = $(this);
                     $sel.select2({
-                        placeholder: '— Pilih user —',
+                        placeholder: '— Pilih User —',
                         width: '100%'
                     });
                     // Auto-fill jabatan saat pilih user
@@ -1172,7 +1172,7 @@
                 $ctx.find('.js-user-atasan').each(function() {
                     var $sel = $(this);
                     $sel.select2({
-                        placeholder: '— Pilih user —',
+                        placeholder: '— Pilih User —',
                         width: '100%'
                     });
                     $sel.on('select2:select select2:clear', function() {
@@ -1196,7 +1196,7 @@
                 });
 
                 $('#modal-req-user').select2({
-                    placeholder: '— Pilih user —',
+                    placeholder: '— Pilih User —',
                     width: '100%',
                     dropdownParent: $('#modal-req-user').parent()
                 }).on('select2:select select2:clear', function() {
@@ -1210,7 +1210,7 @@
                 });
 
                 $('#modal-appr-user').select2({
-                    placeholder: '— Pilih user —',
+                    placeholder: '— Pilih User —',
                     width: '100%',
                     dropdownParent: $('#modal-appr-user').parent()
                 }).on('select2:select select2:clear', function() {
