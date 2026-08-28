@@ -17,7 +17,7 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama --}}
-                                <x-form.input name="nama" label="Nama" :value="ucfirst(auth()->user()->name)" readonly />
+                                <x-form.input name="nama" label="Nama" :value="ucwords(str_replace('.', ' ', auth()->user()->name))" readonly />
 
                                 {{-- Unit --}}
                                 <x-form.input-otomatis name="unit" label="Unit" :value="auth()->user()->unit ?? '-'" readonly />

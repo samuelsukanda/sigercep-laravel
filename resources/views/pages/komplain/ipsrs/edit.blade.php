@@ -19,7 +19,7 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {{-- Nama --}}
-                                <x-form.input name="nama" label="Nama" :value="old('nama', $komplain->nama ?? '')" readonly />
+                                <x-form.input name="nama" label="Nama" :value="old('nama', ucwords(str_replace('.', ' ', $komplain->nama ?? '')))" readonly />
 
                                 {{-- Unit --}}
                                 <x-form.input-otomatis name="unit" label="Unit" :value="old('unit', $komplain->unit ?? '')" readonly />

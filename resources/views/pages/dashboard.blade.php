@@ -127,9 +127,9 @@
                         @forelse ($recentKomplain as $komplain)
                             <li>
                                 <a href="{{ route('komplain.ipsrs.show', $komplain->id) }}" class="dash-list-item">
-                                    <span class="dash-avatar">{{ $initialsOf($komplain->nama) }}</span>
+                                    <span class="dash-avatar">{{ $initialsOf(ucwords(str_replace('.', ' ', $komplain->nama))) }}</span>
                                     <div class="dash-list-main">
-                                        <span class="dash-list-title">{{ $komplain->nama }}</span>
+                                        <span class="dash-list-title">{{ ucwords(str_replace('.', ' ', $komplain->nama)) }}</span>
                                         <span class="dash-list-sub">{{ $komplain->unit }} &middot;
                                             {{ \Carbon\Carbon::parse($komplain->tanggal)->translatedFormat('d F Y') }}</span>
                                         @if ($komplain->kendala)
