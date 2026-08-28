@@ -142,7 +142,7 @@ class ChangeRequestController extends Controller
         }
 
         if ($request->ajax()) {
-            $columns = ['id', 'tanggal_formatted', 'nama', 'jabatan', 'permintaan_fitur', 'deskripsi', 'status_dokumen', 'status_pengerjaan', 'no_tiket'];
+            $columns = ['id', 'tanggal_formatted', 'nama', 'jabatan', 'permintaan_fitur', 'deskripsi', 'status_pengerjaan', 'no_tiket'];
 
             $user = Auth::user();
             $isIT = $this->isIT();
@@ -180,9 +180,12 @@ class ChangeRequestController extends Controller
                         }
                     });
 
-                    // User adalah Manajer Umum (tahap 2) -> lihat semua CR yang lolos tahap 1 (riwayat)
+                    // User adalah Manajer Umum (tahap 2) -> lihat CR yang menunggu persetujuan tahap 2
                     if ($this->isStage2User($user)) {
-                        $q->orWhere('approval_1_status', 'Disetujui');
+                        $q->orWhere(function ($q3) {
+                            $q3->where('approval_1_status', 'Disetujui')
+                                ->where('approval_2_status', 'Menunggu');
+                        });
                     }
                 });
             }
@@ -201,10 +204,6 @@ class ChangeRequestController extends Controller
                     $query->where('created_at', '<=', $endDate);
                 } catch (\Exception $e) {
                 }
-            }
-
-            if ($request->filled('status_dokumen')) {
-                $query->where('status_dokumen', $request->status_dokumen);
             }
 
             if ($request->filled('status_pengerjaan')) {
@@ -237,7 +236,6 @@ class ChangeRequestController extends Controller
 
             $canUpdate = PermissionHelper::canAccess('change_request', 'update');
             $canRead   = PermissionHelper::canAccess('change_request', 'read');
-            $canDelete = PermissionHelper::canAccess('change_request', 'delete');
 
             $data = [];
             $isManager = $this->isManager();
@@ -250,7 +248,6 @@ class ChangeRequestController extends Controller
                     'jabatan'               => $item->user->jabatan ?? $item->jabatan ?? '-',
                     'permintaan_fitur'      => $item->permintaan_fitur ?? '-',
                     'deskripsi'             => $item->deskripsi,
-                    'status_dokumen'        => $item->status_dokumen ?? 'Dalam Proses',
                     'status_pengerjaan'     => $item->status_pengerjaan ?? 'Open',
                     'no_tiket'              => $item->no_tiket ?? 'No Tiket',
                     'approval_1_status'     => $item->approval_1_status ?? 'Menunggu',
@@ -263,9 +260,8 @@ class ChangeRequestController extends Controller
                         <span>' . Carbon::parse($item->created_at)->translatedFormat('d F Y') . '</span>
                     </div>
                 ',
-                    'can_update'            => $isOwner || $isManager || $canUpdate,
-                    'can_read'              => $isOwner || $isManager || $canRead,
-                    'can_delete'            => $isOwner || $isManager || $canDelete,
+                    'can_update'            => ($isOwner && $item->approval_1_status !== 'Disetujui') || $isIT || $canUpdate,
+                    'can_read'              => $isOwner || $isIT || $isManager || $canRead,
                 ];
             }
 
@@ -346,11 +342,16 @@ class ChangeRequestController extends Controller
             'deskripsi'         => $request->deskripsi,
             'file_pendukung'    => $filePendukung,
             'file_path'         => $filePath,
-            'status_dokumen'    => 'Dalam Proses',
             'status_pengerjaan' => 'Open',
             'approval_1_status' => 'Menunggu',
             'approval_2_status' => 'Menunggu',
         ]);
+
+        // Auto-generate nomor tiket kecuali SIMRS
+        if ($request->permintaan_fitur !== 'SIMRS') {
+            $cr->no_tiket = 'CR-' . str_pad($cr->id, 4, '0', STR_PAD_LEFT);
+            $cr->save();
+        }
 
         $this->notifyApprover1(
             $mapping,
@@ -367,17 +368,20 @@ class ChangeRequestController extends Controller
         $changeRequest = ChangeRequest::findOrFail($id);
         $approvableLevel = $this->approvableLevel($changeRequest);
 
-        // IT, pemilik, manajer, atau approver yang berelasi dengan request ini boleh melihat detail
-        // (approver tetap boleh lihat meski sudah menyetujui -> approvableLevel jadi 0)
-        if (!$this->isIT() && !$this->isManager()) {
-            $isOwner = $changeRequest->user_id === $user->id;
+        $isIT = $this->isIT();
+        $isManager = $this->isManager();
+        $isOwner = $changeRequest->user_id === $user->id;
+        $isStage2 = $this->isStage2User($user);
+
+        // Akses: IT, Manager, Owner, Stage 2, atau Approver yang bereliasi
+        if (!$isIT && !$isManager && !$isOwner && !$isStage2) {
             $mapping = ApprovalMapping::findForRequester($changeRequest->user_id, $changeRequest->jabatan_id, $changeRequest->jabatan ?? '');
             $isApprover = $mapping && (
                 ApprovalMapping::matchesApprover($mapping, $user->id, $user->jabatan_id, $user->jabatan ?? '')
                 || $this->isApproverStage2($mapping)
             );
 
-            if (!$isOwner && !$isApprover) {
+            if (!$isApprover) {
                 abort(403, 'Akses ditolak.');
             }
         }
@@ -473,10 +477,10 @@ class ChangeRequestController extends Controller
         $user = Auth::user();
         $isIT = $this->isIT();
         $isManager = $this->isManager();
-        $isOwner = $changeRequest->user_id === $user->id && PermissionHelper::canManageChangeRequest();
+        $isOwner = $changeRequest->user_id === $user->id && PermissionHelper::canManageChangeRequest() && $changeRequest->approval_1_status !== 'Disetujui';
 
-        if (!$isIT && !$isManager && !$isOwner) {
-            abort(403, 'Anda hanya dapat mengedit Change Request milik sendiri atau sebagai manajer.');
+        if (!$isIT && !$isOwner) {
+            abort(403, 'Anda hanya dapat mengedit Change Request milik sendiri.');
         }
 
         return view('pages.change-request.edit', compact('changeRequest', 'isIT'));
@@ -488,22 +492,24 @@ class ChangeRequestController extends Controller
         $user = Auth::user();
         $isIT = $this->isIT();
         $isManager = $this->isManager();
-        $isOwner = $changeRequest->user_id === $user->id && PermissionHelper::canManageChangeRequest();
+        $isOwner = $changeRequest->user_id === $user->id && PermissionHelper::canManageChangeRequest() && $changeRequest->approval_1_status !== 'Disetujui';
 
-        if (!$isIT && !$isManager && !$isOwner) {
-            abort(403, 'Anda hanya dapat mengedit Change Request milik sendiri atau sebagai manajer.');
+        if (!$isIT && !$isOwner) {
+            abort(403, 'Anda hanya dapat mengedit Change Request milik sendiri.');
         }
 
-        $request->validate([
-            'permintaan_fitur'  => 'required|in:Sigercep,HRIS,SIMRS,Website',
-            'deskripsi'         => 'required|string',
-            'file_pendukung'    => 'nullable|file|mimes:pdf|max:20480',
-        ]);
+        if (!$isIT) {
+            $request->validate([
+                'permintaan_fitur'  => 'required|in:Sigercep,HRIS,SIMRS,Website',
+                'deskripsi'         => 'required|string',
+                'file_pendukung'    => 'nullable|file|mimes:pdf|max:20480',
+            ]);
+        }
 
         $filePendukung = $changeRequest->file_pendukung;
         $filePath      = $changeRequest->file_path;
 
-        if ($request->hasFile('file_pendukung')) {
+        if (!$isIT && $request->hasFile('file_pendukung')) {
             // Hapus file lama
             if ($changeRequest->file_path && Storage::disk('public')->exists($changeRequest->file_path)) {
                 Storage::disk('public')->delete($changeRequest->file_path);
@@ -524,24 +530,17 @@ class ChangeRequestController extends Controller
             $filePath      = $targetPath;
         }
 
-        $updateData = [
-            'permintaan_fitur'  => $request->permintaan_fitur,
-            'deskripsi'         => $request->deskripsi,
-            'file_pendukung'    => $filePendukung,
-            'file_path'         => $filePath,
-        ];
-
         if ($isIT) {
             $request->validate([
-                'status_dokumen'    => 'required|in:Terpenuhi,Dalam Proses,Tidak Ada',
                 'status_pengerjaan' => 'required|in:Open,In Progress,Pending,QC,Done,Closed',
                 'no_tiket'          => 'nullable|string|max:100',
                 'created_at'        => 'nullable|date',
             ]);
 
-            $updateData['status_dokumen']    = $request->status_dokumen;
-            $updateData['status_pengerjaan'] = $request->status_pengerjaan;
-            $updateData['no_tiket']          = $request->no_tiket;
+            $updateData = [
+                'status_pengerjaan' => $request->status_pengerjaan,
+                'no_tiket'          => $request->no_tiket,
+            ];
 
             if ($request->filled('created_at')) {
                 try {
@@ -550,6 +549,13 @@ class ChangeRequestController extends Controller
                     $updateData['created_at'] = Carbon::parse($request->created_at)->startOfDay();
                 }
             }
+        } else {
+            $updateData = [
+                'permintaan_fitur'  => $request->permintaan_fitur,
+                'deskripsi'         => $request->deskripsi,
+                'file_pendukung'    => $filePendukung,
+                'file_path'         => $filePath,
+            ];
         }
 
         $changeRequest->update($updateData);
@@ -563,10 +569,10 @@ class ChangeRequestController extends Controller
         $user = Auth::user();
         $isIT = $this->isIT();
         $isManager = $this->isManager();
-        $isOwner = $changeRequest->user_id === $user->id && PermissionHelper::canManageChangeRequest();
+        $isOwner = $changeRequest->user_id === $user->id && PermissionHelper::canManageChangeRequest() && $changeRequest->approval_1_status !== 'Disetujui';
 
-        if (!$isIT && !$isManager && !$isOwner) {
-            abort(403, 'Anda hanya dapat menghapus Change Request milik sendiri atau sebagai manajer.');
+        if (!$isIT && !$isOwner) {
+            abort(403, 'Anda hanya dapat menghapus Change Request milik sendiri.');
         }
 
         if ($changeRequest->file_path && Storage::disk('public')->exists($changeRequest->file_path)) {

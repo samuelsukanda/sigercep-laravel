@@ -32,18 +32,12 @@
     <script src="{{ asset('assets/js/datatable/datatable-change-request.js') }}"></script>
     <script src="{{ asset('assets/js/loading-filter.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ asset('assets/js/alert-delete-swal.js') }}"></script>
     <script>
         $.fn.dataTable.ext.errMode = "none";
 
         // Filter
         document.addEventListener("DOMContentLoaded", function() {
             if (typeof $ !== 'undefined' && $.fn.select2) {
-                $('#filter_status_dokumen').select2({
-                    placeholder: "Pilih Status Dokumen",
-                    allowClear: true,
-                    width: '100%'
-                });
                 $('#filter_status_pengerjaan').select2({
                     placeholder: "Pilih Status Pengerjaan",
                     allowClear: true,

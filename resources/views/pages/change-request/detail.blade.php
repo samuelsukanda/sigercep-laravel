@@ -39,22 +39,6 @@
                                     {{ \Carbon\Carbon::parse($changeRequest->created_at)->translatedFormat('d F Y') }}</p>
                             </div>
 
-                            {{-- Status Dokumen --}}
-                            <div>
-                                <label class="block mb-1 text-sm font-semibold text-slate-700">Status Dokumen</label>
-                                @php
-                                    $sdColor = match ($changeRequest->status_dokumen ?? 'Dalam Proses') {
-                                        'Terpenuhi' => 'background-color:#b3e5fc; color:#01579b;',
-                                        'Dalam Proses' => 'background-color:#ffe0b2; color:#e65100;',
-                                        'Tidak Ada' => 'background-color:#ffcdd2; color:#b71c1c;',
-                                        default => 'background-color:#e0e0e0; color:#333;',
-                                    };
-                                @endphp
-                                <span class="px-3 py-1 text-xs font-semibold rounded-full" style="{{ $sdColor }}">
-                                    {{ $changeRequest->status_dokumen ?? 'Dalam Proses' }}
-                                </span>
-                            </div>
-
                             {{-- Status Pengerjaan --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Status Pengerjaan</label>
@@ -118,7 +102,7 @@
                                 <span class="text-xs font-semibold text-slate-500">{{ $approvalTotal }}</span>
                             </div>
 
-                            <div class="p-4 space-y-4">
+                            <div class="p-4">
                                 @php
                                     $badgeColor = function ($s) {
                                         return match ($s) {
@@ -133,34 +117,36 @@
                                     ];
                                 @endphp
 
-                                @foreach ($stages as $field => $label)
-                                    @php
-                                        $status = $changeRequest->{$field . '_status'} ?? 'Menunggu';
-                                    @endphp
-                                    <div class="rounded-lg border border-gray-100 p-3">
-                                        <div class="flex items-center justify-between">
-                                            <span
-                                                class="text-xs font-semibold text-slate-600 uppercase tracking-wide">{{ $label }}</span>
-                                            <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full"
-                                                style="{{ $badgeColor($status) }}">
-                                                {{ $status }}
-                                            </span>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    @foreach ($stages as $field => $label)
+                                        @php
+                                            $status = $changeRequest->{$field . '_status'} ?? 'Menunggu';
+                                        @endphp
+                                        <div class="rounded-lg border border-gray-100 p-3">
+                                            <div class="flex items-center justify-between">
+                                                <span
+                                                    class="text-xs font-semibold text-slate-600 uppercase tracking-wide">{{ $label }}</span>
+                                                <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full"
+                                                    style="{{ $badgeColor($status) }}">
+                                                    {{ $status }}
+                                                </span>
+                                            </div>
+                                            @if ($changeRequest->{$field . '_at'})
+                                                <div class="mt-2 text-xs text-slate-500">
+                                                    Oleh <b>{{ ucwords(str_replace('.', ' ', $changeRequest->{$field . '_by'} ?? '-')) }}</b>
+                                                    •
+                                                    {{ \Carbon\Carbon::parse($changeRequest->{$field . '_at'})->translatedFormat('d F Y H:i') }}
+                                                </div>
+                                            @endif
+                                            @if ($changeRequest->{$field . '_ttd'})
+                                                <div class="mt-2">
+                                                    <img src="{{ $changeRequest->{$field . '_ttd'} }}" alt="Tanda tangan"
+                                                        class="border rounded bg-white" style="max-height:80px;">
+                                                </div>
+                                            @endif
                                         </div>
-                                        @if ($changeRequest->{$field . '_at'})
-                                            <div class="mt-2 text-xs text-slate-500">
-                                                Oleh <b>{{ ucwords(str_replace('.', ' ', $changeRequest->{$field . '_by'} ?? '-')) }}</b>
-                                                •
-                                                {{ \Carbon\Carbon::parse($changeRequest->{$field . '_at'})->translatedFormat('d F Y H:i') }}
-                                            </div>
-                                        @endif
-                                        @if ($changeRequest->{$field . '_ttd'})
-                                            <div class="mt-2">
-                                                <img src="{{ $changeRequest->{$field . '_ttd'} }}" alt="Tanda tangan"
-                                                    class="border rounded bg-white" style="max-height:80px;">
-                                            </div>
-                                        @endif
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                </div>
 
                                 @if ($approvableLevel > 0)
                                     <form action="{{ route('change-request.approve', $changeRequest->id) }}" method="POST"

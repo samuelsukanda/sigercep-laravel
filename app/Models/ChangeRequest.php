@@ -21,7 +21,6 @@ class ChangeRequest extends Model
         'file_pendukung',
         'file_path',
         'status',
-        'status_dokumen',
         'status_pengerjaan',
         'no_tiket',
         'approval_1_status',

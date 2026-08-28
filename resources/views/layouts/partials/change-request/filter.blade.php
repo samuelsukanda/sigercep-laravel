@@ -20,18 +20,6 @@
                         value="{{ request('periode_sampai', now()->format('d-m-Y')) }}" placeholder="Pilih tanggal">
                 </div>
 
-                {{-- Status Dokumen --}}
-                <div class="flex flex-col mr-1 filter-item" style="min-width:148px; flex:1 1 148px; max-width:180px;">
-                    <label class="text-xs font-semibold text-gray-600 mb-1.5">Status Dokumen</label>
-                    <select id="filter_status_dokumen" name="status_dokumen"
-                        class="select2 w-full border-gray-300 text-gray-700 outline-none transition-all">
-                        <option value="">Semua Status Dokumen</option>
-                        <option value="Terpenuhi" {{ request('status_dokumen') == 'Terpenuhi' ? 'selected' : '' }}>Terpenuhi</option>
-                        <option value="Dalam Proses" {{ request('status_dokumen') == 'Dalam Proses' ? 'selected' : '' }}>Dalam Proses</option>
-                        <option value="Tidak Ada" {{ request('status_dokumen') == 'Tidak Ada' ? 'selected' : '' }}>Tidak Ada</option>
-                    </select>
-                </div>
-
                 {{-- Status Pengerjaan --}}
                 <div class="flex flex-col mr-1 filter-item" style="min-width:148px; flex:1 1 148px; max-width:180px;">
                     <label class="text-xs font-semibold text-gray-600 mb-1.5">Status Pengerjaan</label>

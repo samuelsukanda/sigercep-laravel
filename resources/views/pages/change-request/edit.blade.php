@@ -49,26 +49,6 @@
                                         @enderror
                                     </div>
 
-                                    {{-- Status Dokumen --}}
-                                    <div>
-                                        <label class="block text-sm font-semibold mb-1 text-slate-700">
-                                            Status Dokumen
-                                        </label>
-                                        <select name="status_dokumen"
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('status_dokumen') border-red-500 @enderror"
-                                            required>
-                                            @foreach (['Terpenuhi', 'Dalam Proses', 'Tidak Ada'] as $sd)
-                                                <option value="{{ $sd }}"
-                                                    {{ old('status_dokumen', $changeRequest->status_dokumen ?? 'Dalam Proses') == $sd ? 'selected' : '' }}>
-                                                    {{ $sd }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('status_dokumen')
-                                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-
                                     {{-- Status Pengerjaan --}}
                                     <div>
                                         <label class="block text-sm font-semibold mb-1 text-slate-700">
@@ -103,9 +83,15 @@
                                 @endif
 
                                 {{-- Permintaan Fitur --}}
-                                <x-form.select name="permintaan_fitur" label="Permintaan Fitur"
-                                    :options="config('units.permintaan_fitur')"
-                                    :selected="old('permintaan_fitur', $changeRequest->permintaan_fitur)" required />
+                                @if($isIT ?? false)
+                                    <x-form.select name="permintaan_fitur" label="Permintaan Fitur"
+                                        :options="config('units.permintaan_fitur')"
+                                        :selected="old('permintaan_fitur', $changeRequest->permintaan_fitur)" disabled />
+                                @else
+                                    <x-form.select name="permintaan_fitur" label="Permintaan Fitur"
+                                        :options="config('units.permintaan_fitur')"
+                                        :selected="old('permintaan_fitur', $changeRequest->permintaan_fitur)" required />
+                                @endif
 
                                 {{-- Deskripsi --}}
                                 <div class="md:col-span-2">
@@ -114,7 +100,7 @@
                                     </label>
                                     <textarea name="deskripsi" rows="5"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('deskripsi') border-red-500 @enderror"
-                                        required>{{ old('deskripsi', $changeRequest->deskripsi) }}</textarea>
+                                        {{ ($isIT ?? false) ? 'disabled' : 'required' }}>{{ old('deskripsi', $changeRequest->deskripsi) }}</textarea>
                                     @error('deskripsi')
                                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                     @enderror
@@ -122,20 +108,21 @@
 
                                 {{-- Upload File Pendukung --}}
                                 <div class="md:col-span-2">
-                                    <x-form.file-upload-pdf name="file_pendukung" label="Upload File Pendukung" />
+                                    @if($isIT ?? false)
+                                        <label class="block text-sm font-semibold mb-1 text-slate-700">Upload File Pendukung</label>
+                                        @if ($changeRequest->file_path)
+                                            <a href="{{ route('change-request.show-file', $changeRequest->id) }}"
+                                                target="_blank"
+                                                class="px-2 py-1 bg-blue-500 rounded text-white hover:shadow-xs active:opacity-85">
+                                                Lihat File PDF
+                                            </a>
+                                        @else
+                                            <p class="text-sm text-slate-400 italic">Tidak ada file</p>
+                                        @endif
+                                    @else
+                                        <x-form.file-upload-pdf name="file_pendukung" label="Upload File Pendukung" />
+                                    @endif
                                 </div>
-
-                                {{-- File Sekarang --}}
-                                @if ($changeRequest->file_path)
-                                    <div class="md:col-span-2">
-                                        <label class="block text-sm font-semibold mb-2 text-slate-700">File Sekarang</label>
-                                        <a href="{{ route('change-request.show-file', $changeRequest->id) }}"
-                                            target="_blank"
-                                            class="px-2 py-1 bg-blue-500 rounded text-white hover:shadow-xs active:opacity-85">
-                                            📄 Lihat File PDF
-                                        </a>
-                                    </div>
-                                @endif
                             </div>
 
                             <div class="mt-6">

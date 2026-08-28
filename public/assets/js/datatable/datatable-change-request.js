@@ -8,7 +8,6 @@ let table = $("#changeRequestTable").DataTable({
         data: function (d) {
             d.periode_dari = $("input[name=periode_dari]").val();
             d.periode_sampai = $("input[name=periode_sampai]").val();
-            d.status_dokumen = $("#filter_status_dokumen").val();
             d.status_pengerjaan = $("#filter_status_pengerjaan").val();
         },
     },
@@ -51,19 +50,6 @@ let table = $("#changeRequestTable").DataTable({
                 const max = 80;
                 const text = data.length > max ? data.substring(0, max) + "..." : data;
                 return `<span title="${data.replace(/"/g, '&quot;')}">${text}</span>`;
-            },
-        },
-        {
-            // Status Dokumen
-            data: "status_dokumen",
-            render: function (data) {
-                const colors = {
-                    "Terpenuhi": "background-color:#b3e5fc; color:#01579b;",
-                    "Dalam Proses": "background-color:#ffe0b2; color:#e65100;",
-                    "Tidak Ada": "background-color:#ffcdd2; color:#b71c1c;",
-                };
-                const style = colors[data] || "background-color:#e0e0e0; color:#333;";
-                return `<span class="px-3 py-1 text-xs font-semibold rounded-full" style="${style}">${data}</span>`;
             },
         },
         {
@@ -125,8 +111,6 @@ let table = $("#changeRequestTable").DataTable({
             render: function (data) {
                 let btn = `<div class="flex items-center justify-center gap-2">`;
 
-
-
                 if (data.can_update) {
                     btn += `
                     <a href="/change-request/${data.id}/edit"
@@ -145,21 +129,6 @@ let table = $("#changeRequestTable").DataTable({
                         title="Lihat Data">
                         <i class="fas fa-eye"></i>
                     </a>
-                    `;
-                }
-
-                if (data.can_delete) {
-                    btn += `
-                    <form action="/change-request/${data.id}" method="POST" style="display:inline;">
-                        <input type="hidden" name="_token" value="${$('meta[name="csrf-token"]').attr("content")}">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button type="button"
-                            class="delete-button text-red-500 hover:text-red-700 transition"
-                            data-confirm="Yakin ingin menghapus Change Request ini?"
-                            title="Hapus">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </form>
                     `;
                 }
 
