@@ -575,7 +575,7 @@
 
         .am-section.approver {
             background: #f8fff9;
-            border: 1px solid rgba(16,185,129,0.12);
+            border: 1px solid rgba(16, 185, 129, 0.12);
         }
 
         .am-section-title {
@@ -849,7 +849,9 @@
                                 text: {!! json_encode(session('success')) !!},
                                 confirmButtonColor: 'var(--accent)',
                                 confirmButtonText: 'OK',
-                                customClass: { confirmButton: 'btn-swal-success' }
+                                customClass: {
+                                    confirmButton: 'btn-swal-success'
+                                }
                             });
                         });
                     </script>
@@ -863,7 +865,9 @@
                                 text: {!! json_encode(session('error')) !!},
                                 confirmButtonColor: 'var(--accent)',
                                 confirmButtonText: 'OK',
-                                customClass: { confirmButton: 'btn-swal-success' }
+                                customClass: {
+                                    confirmButton: 'btn-swal-success'
+                                }
                             });
                         });
                     </script>
@@ -1045,8 +1049,7 @@
                                                     <td style="min-width:140px;">
                                                         <input type="text" name="requester_jabatan"
                                                             value="{{ $mapping->requester_jabatan }}" required readonly
-                                                            class="am-table-input readonly-field"
-                                                            list="jabatanList"
+                                                            class="am-table-input readonly-field" list="jabatanList"
                                                             placeholder="Jabatan peminta">
                                                         <select name="requester_user_id"
                                                             class="js-user-peminta am-table-select">
@@ -1065,8 +1068,7 @@
                                                     <td style="min-width:140px;">
                                                         <input type="text" name="approver_jabatan"
                                                             value="{{ $mapping->approver_jabatan }}" required readonly
-                                                            class="am-table-input readonly-field"
-                                                            list="jabatanList"
+                                                            class="am-table-input readonly-field" list="jabatanList"
                                                             placeholder="Jabatan atasan">
                                                         <select name="approver_user_id"
                                                             class="js-user-atasan am-table-select">
@@ -1096,7 +1098,7 @@
                                                                 class="am-btn-icon am-btn-save">
                                                                 <i class="fas fa-check"></i>
                                                             </button>
-                                                            <button type="button" title="Edit mapping"
+                                                            {{-- <button type="button" title="Edit mapping"
                                                                 class="am-btn-icon am-btn-edit"
                                                                 onclick="window.dispatchEvent(new CustomEvent('open-edit-modal', { detail: {
                                                                     url: '{{ route('approval-mapping.update', $mapping->id) }}',
@@ -1104,7 +1106,7 @@
                                                                     apprJabatan: '{{ addslashes($mapping->approver_jabatan) }}'
                                                                 } }))">
                                                                 <i class="fas fa-edit"></i>
-                                                            </button>
+                                                            </button> --}}
                                                 </form>
                                                 <form action="{{ route('approval-mapping.destroy', $mapping->id) }}"
                                                     method="POST" style="display:inline;" class="delete-form">
@@ -1126,160 +1128,166 @@
                     @endif
                 </div>
             </div>
-    </div>
-@endsection
+        </div>
+    @endsection
 
-@push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ asset('assets/js/alert-delete-swal.js') }}"></script>
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="{{ asset('assets/js/alert-delete-swal.js') }}"></script>
 
-    <script>
-        // ── Inisialisasi Select2 ──────────────────────────────────────────
-        function initSelect2(context) {
-            var $ctx = context ? $(context) : $(document);
+        <script>
+            // ── Inisialisasi Select2 ──────────────────────────────────────────
+            function initSelect2(context) {
+                var $ctx = context ? $(context) : $(document);
 
-            // Stage2 user
-            $ctx.find('select[name="stage2_user_id"]').each(function() {
-                $(this).select2({
-                    placeholder: '— Gunakan jabatan —',
-                    width: '100%'
+                // Stage2 user
+                $ctx.find('select[name="stage2_user_id"]').each(function() {
+                    $(this).select2({
+                        placeholder: '— Gunakan jabatan —',
+                        width: '100%'
+                    });
                 });
-            });
 
-            // Requester user (form tambah + tabel)
-            $ctx.find('.js-user-peminta').each(function() {
-                var $sel = $(this);
-                $sel.select2({
+                // Requester user (form tambah + tabel)
+                $ctx.find('.js-user-peminta').each(function() {
+                    var $sel = $(this);
+                    $sel.select2({
+                        placeholder: '— Pilih user —',
+                        width: '100%'
+                    });
+                    // Auto-fill jabatan saat pilih user
+                    $sel.on('select2:select select2:clear', function() {
+                        var opt = this.options[this.selectedIndex];
+                        var jabatan = opt ? opt.dataset.jabatan : '';
+                        var target = $sel.closest('tr').length ?
+                            $sel.closest('tr').find('input[name="requester_jabatan"]')[0] :
+                            document.getElementById('req-jabatan');
+                        if (target) target.value = jabatan || '';
+                    });
+                });
+
+                // Approver user (form tambah + tabel)
+                $ctx.find('.js-user-atasan').each(function() {
+                    var $sel = $(this);
+                    $sel.select2({
+                        placeholder: '— Pilih user —',
+                        width: '100%'
+                    });
+                    $sel.on('select2:select select2:clear', function() {
+                        var opt = this.options[this.selectedIndex];
+                        var jabatan = opt ? opt.dataset.jabatan : '';
+                        var target = $sel.closest('tr').length ?
+                            $sel.closest('tr').find('input[name="approver_jabatan"]')[0] :
+                            document.getElementById('appr-jabatan');
+                        if (target) target.value = jabatan || '';
+                    });
+                });
+            }
+
+            // ── Inisialisasi Select2 Modal Edit ──────────────────────────────
+            function initModalSelect2() {
+                // Destroy dulu jika sudah ada instance sebelumnya
+                $('#modal-req-user, #modal-appr-user').each(function() {
+                    if ($(this).hasClass('select2-hidden-accessible')) {
+                        $(this).select2('destroy');
+                    }
+                });
+
+                $('#modal-req-user').select2({
                     placeholder: '— Pilih user —',
-                    width: '100%'
-                });
-                // Auto-fill jabatan saat pilih user
-                $sel.on('select2:select select2:clear', function() {
+                    width: '100%',
+                    dropdownParent: $('#modal-req-user').parent()
+                }).on('select2:select select2:clear', function() {
                     var opt = this.options[this.selectedIndex];
                     var jabatan = opt ? opt.dataset.jabatan : '';
-                    var target = $sel.closest('tr').length
-                        ? $sel.closest('tr').find('input[name="requester_jabatan"]')[0]
-                        : document.getElementById('req-jabatan');
-                    if (target) target.value = jabatan || '';
+                    // update Alpine data via native change event
+                    var ev = new Event('change', {
+                        bubbles: true
+                    });
+                    this.dispatchEvent(ev);
                 });
-            });
 
-            // Approver user (form tambah + tabel)
-            $ctx.find('.js-user-atasan').each(function() {
-                var $sel = $(this);
-                $sel.select2({
+                $('#modal-appr-user').select2({
                     placeholder: '— Pilih user —',
-                    width: '100%'
-                });
-                $sel.on('select2:select select2:clear', function() {
-                    var opt = this.options[this.selectedIndex];
-                    var jabatan = opt ? opt.dataset.jabatan : '';
-                    var target = $sel.closest('tr').length
-                        ? $sel.closest('tr').find('input[name="approver_jabatan"]')[0]
-                        : document.getElementById('appr-jabatan');
-                    if (target) target.value = jabatan || '';
-                });
-            });
-        }
-
-        // ── Inisialisasi Select2 Modal Edit ──────────────────────────────
-        function initModalSelect2() {
-            // Destroy dulu jika sudah ada instance sebelumnya
-            $('#modal-req-user, #modal-appr-user').each(function() {
-                if ($(this).hasClass('select2-hidden-accessible')) {
-                    $(this).select2('destroy');
-                }
-            });
-
-            $('#modal-req-user').select2({
-                placeholder: '— Pilih user —',
-                width: '100%',
-                dropdownParent: $('#modal-req-user').parent()
-            }).on('select2:select select2:clear', function() {
-                var opt = this.options[this.selectedIndex];
-                var jabatan = opt ? opt.dataset.jabatan : '';
-                // update Alpine data via native change event
-                var ev = new Event('change', { bubbles: true });
-                this.dispatchEvent(ev);
-            });
-
-            $('#modal-appr-user').select2({
-                placeholder: '— Pilih user —',
-                width: '100%',
-                dropdownParent: $('#modal-appr-user').parent()
-            }).on('select2:select select2:clear', function() {
-                var ev = new Event('change', { bubbles: true });
-                this.dispatchEvent(ev);
-            });
-        }
-
-        // Run on page load
-        $(document).ready(function() {
-            initSelect2(null);
-
-            // Validasi sebelum submit form tambah mapping
-            $('#form-tambah-mapping').on('submit', function(e) {
-                var reqUser = $(this).find('select[name="requester_user_id"]').val();
-                var apprUser = $(this).find('select[name="approver_user_id"]').val();
-
-                if (!reqUser || !apprUser) {
-                    e.preventDefault();
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'User Belum Dipilih',
-                        text: 'User Requester dan User Approver harus dipilih terlebih dahulu!',
-                        confirmButtonColor: 'var(--accent)',
-                        confirmButtonText: 'OK',
-                        customClass: { confirmButton: 'btn-swal-success' }
+                    width: '100%',
+                    dropdownParent: $('#modal-appr-user').parent()
+                }).on('select2:select select2:clear', function() {
+                    var ev = new Event('change', {
+                        bubbles: true
                     });
-                }
-            });
+                    this.dispatchEvent(ev);
+                });
+            }
 
-            // Re-init Select2 saat modal edit dibuka
-            window.addEventListener('open-edit-modal', function(e) {
-                // Tunggu Alpine render modal dulu (x-if)
-                setTimeout(function() {
-                    initModalSelect2();
-                    // Set nilai yang sudah ada
-                    if (e.detail.reqUserId) {
-                        $('#modal-req-user').val(e.detail.reqUserId).trigger('change.select2');
-                    }
-                    if (e.detail.apprUserId) {
-                        $('#modal-appr-user').val(e.detail.apprUserId).trigger('change.select2');
-                    }
-                }, 80);
-            });
-        });
+            // Run on page load
+            $(document).ready(function() {
+                initSelect2(null);
 
-        // Alpine.js component for Edit Modal
-        function editMappingModal() {
-            return {
-                open: false,
-                url: '',
-                reqJabatan: '',
-                apprJabatan: '',
-                init() {
-                    window.addEventListener('open-edit-modal', (e) => {
-                        this.url = e.detail.url;
-                        this.reqJabatan = e.detail.reqJabatan;
-                        this.apprJabatan = e.detail.apprJabatan;
-                        this.open = true;
-                    });
-                },
-                close() {
-                    // Destroy Select2 sebelum modal ditutup
-                    if (window.$) {
-                        $('#modal-req-user, #modal-appr-user').each(function() {
-                            if ($(this).hasClass('select2-hidden-accessible')) {
-                                $(this).select2('destroy');
+                // Validasi sebelum submit form tambah mapping
+                $('#form-tambah-mapping').on('submit', function(e) {
+                    var reqUser = $(this).find('select[name="requester_user_id"]').val();
+                    var apprUser = $(this).find('select[name="approver_user_id"]').val();
+
+                    if (!reqUser || !apprUser) {
+                        e.preventDefault();
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'User Belum Dipilih',
+                            text: 'User Requester dan User Approver harus dipilih terlebih dahulu!',
+                            confirmButtonColor: 'var(--accent)',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                confirmButton: 'btn-swal-success'
                             }
                         });
                     }
-                    this.open = false;
-                }
-            };
-        }
-    </script>
-@endpush
+                });
+
+                // Re-init Select2 saat modal edit dibuka
+                window.addEventListener('open-edit-modal', function(e) {
+                    // Tunggu Alpine render modal dulu (x-if)
+                    setTimeout(function() {
+                        initModalSelect2();
+                        // Set nilai yang sudah ada
+                        if (e.detail.reqUserId) {
+                            $('#modal-req-user').val(e.detail.reqUserId).trigger('change.select2');
+                        }
+                        if (e.detail.apprUserId) {
+                            $('#modal-appr-user').val(e.detail.apprUserId).trigger('change.select2');
+                        }
+                    }, 80);
+                });
+            });
+
+            // Alpine.js component for Edit Modal
+            function editMappingModal() {
+                return {
+                    open: false,
+                    url: '',
+                    reqJabatan: '',
+                    apprJabatan: '',
+                    init() {
+                        window.addEventListener('open-edit-modal', (e) => {
+                            this.url = e.detail.url;
+                            this.reqJabatan = e.detail.reqJabatan;
+                            this.apprJabatan = e.detail.apprJabatan;
+                            this.open = true;
+                        });
+                    },
+                    close() {
+                        // Destroy Select2 sebelum modal ditutup
+                        if (window.$) {
+                            $('#modal-req-user, #modal-appr-user').each(function() {
+                                if ($(this).hasClass('select2-hidden-accessible')) {
+                                    $(this).select2('destroy');
+                                }
+                            });
+                        }
+                        this.open = false;
+                    }
+                };
+            }
+        </script>
+    @endpush
