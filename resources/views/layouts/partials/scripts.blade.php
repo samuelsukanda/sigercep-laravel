@@ -15,9 +15,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 {{-- Alphine JS --}}
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-{{-- Laravel Echo + Pusher (realtime notification via Reverb) --}}
-<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.16.1/dist/echo.iife.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pusher-js@8.4.0/dist/web/pusher.min.js"></script>
+
 {{-- Custom JS --}}
 <script src="{{ asset('assets/js/custom.js') }}"></script>
 {{-- Theme toggle JS --}}

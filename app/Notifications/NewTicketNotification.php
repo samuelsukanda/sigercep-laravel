@@ -21,7 +21,7 @@ class NewTicketNotification extends Notification implements ShouldQueue
 
     public function via($notifiable)
     {
-        return ['database', 'mail', 'broadcast'];
+        return ['database', 'mail'];
     }
 
     public function toDatabase($notifiable)

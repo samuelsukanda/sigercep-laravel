@@ -23,7 +23,7 @@ class TicketApprovalNotification extends Notification
             return [];
         }
 
-        return ['database', 'broadcast'];
+        return ['database'];
     }
 
     public function toArray($notifiable)

@@ -21,7 +21,7 @@ class TicketStatusUpdatedNotification extends Notification implements ShouldQueu
 
     public function via($notifiable)
     {
-        return ['database', 'mail', 'broadcast'];
+        return ['database', 'mail'];
     }
 
     public function toDatabase($notifiable)
