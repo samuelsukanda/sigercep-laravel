@@ -148,7 +148,7 @@
                                         </div>
                                         @if ($changeRequest->{$field . '_at'})
                                             <div class="mt-2 text-xs text-slate-500">
-                                                Oleh <b>{{ $changeRequest->{$field . '_by'} ?? '-' }}</b>
+                                                Oleh <b>{{ ucwords(str_replace('.', ' ', $changeRequest->{$field . '_by'} ?? '-')) }}</b>
                                                 •
                                                 {{ \Carbon\Carbon::parse($changeRequest->{$field . '_at'})->translatedFormat('d F Y H:i') }}
                                             </div>

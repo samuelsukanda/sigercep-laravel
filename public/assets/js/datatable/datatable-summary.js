@@ -73,7 +73,13 @@ $(document).ready(function () {
                     return `<span class="whitespace-nowrap text-s text-gray-600">${data}</span>`;
                 },
             },
-            { data: "approved_by" },
+            {
+                data: "approved_by",
+                render: function (data) {
+                    if (!data) return '-';
+                    return data.split('.').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                },
+            },
             { data: "duration" },
             { data: "resolved_at" },
         ],

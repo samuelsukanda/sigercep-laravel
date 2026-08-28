@@ -103,7 +103,9 @@ let table = $("#changeRequestTable").DataTable({
                     text = "Approved";
                     style = "background-color:#0f766e; color:#ffffff;";
                 } else if (s1 === "Disetujui") {
-                    text = "Approved by " + (row.approval_1_by || "-");
+                    const rawName = (row.approval_1_by || "-");
+                    const formattedName = rawName.split('.').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                    text = "Approved by " + formattedName;
                     style = "background-color:#d1fae5; color:#065f46;";
                 } else if (s1 === "Ditolak" || s2 === "Ditolak") {
                     text = "Ditolak";
