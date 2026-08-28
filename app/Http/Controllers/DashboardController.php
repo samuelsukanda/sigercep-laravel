@@ -7,7 +7,7 @@ use App\Models\BankIlmu;
 use App\Models\BankSpo;
 use App\Models\ChangeRequest;
 use App\Models\DesainGrafis;
-use App\Models\DokumenIT;
+use App\Models\DokumenIt;
 use App\Models\Hardware;
 use App\Models\KecelakaanKerja;
 use App\Models\KesehatanLingkungan;
@@ -195,7 +195,7 @@ class DashboardController extends Controller
                 'icon' => 'fa-laptop-code',
                 'modules' => [
                     ['helpdesk', Ticket::class, 'Helpdesk', 'fa-headset'],
-                    ['dokumen_it', DokumenIT::class, 'Dokumen IT', 'fa-file-alt'],
+                    ['dokumen_it', DokumenIt::class, 'Dokumen IT', 'fa-file-alt'],
                     ['hardware', Hardware::class, 'Ceklis Hardware', 'fa-server'],
                     ['change_request', ChangeRequest::class, 'Change Request', 'fa-code-branch'],
                 ],
