@@ -4,12 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Broadcast;
-use Illuminate\Broadcasting\BroadcastManager;
 use Illuminate\View\DynamicComponent;
 use App\Helpers\PermissionHelper;
 use App\Compilers\ResilientBladeCompiler;
-use App\Broadcasting\SafeBroadcaster;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,12 +31,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Blade::if('canAccess', function ($menu, $action) {
             return PermissionHelper::canAccess($menu, $action);
-        });
-
-        Broadcast::extend('reverb', function ($app, $config) {
-            $manager = $app->make(BroadcastManager::class);
-
-            return new SafeBroadcaster($manager->pusher($config), $config['jsonp'] ?? false);
         });
     }
 }
