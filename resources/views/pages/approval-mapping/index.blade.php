@@ -269,14 +269,14 @@
         }
 
         .am-btn-amber {
-            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            background: var(--accent) !important;
             color: #fff;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+            box-shadow: 0 4px 12px var(--accent-shadow);
         }
 
         .am-btn-amber:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(245, 158, 11, 0.45);
+            box-shadow: 0 6px 18px var(--accent-shadow);
         }
 
         .am-btn-icon {
