@@ -16,7 +16,7 @@
                             {{-- Nama --}}
                             <div>
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Nama</label>
-                                <p class="text-slate-600">{{ ucfirst($changeRequest->nama) }}</p>
+                                <p class="text-slate-600">{{ ucwords(str_replace('.', ' ', $changeRequest->nama)) }}</p>
                             </div>
 
                             {{-- Jabatan --}}

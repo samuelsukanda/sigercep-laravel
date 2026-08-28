@@ -142,7 +142,7 @@ class ChangeRequestController extends Controller
         }
 
         if ($request->ajax()) {
-            $columns = ['id', 'tanggal_formatted', 'nama', 'jabatan', 'permintaan_fitur', 'deskripsi', 'status_pengerjaan', 'no_tiket'];
+            $columns = ['id', 'tanggal_formatted', 'jabatan', 'permintaan_fitur', 'status_pengerjaan', 'no_tiket'];
 
             $user = Auth::user();
             $isIT = $this->isIT();
@@ -180,12 +180,17 @@ class ChangeRequestController extends Controller
                         }
                     });
 
-                    // User adalah Manajer Umum (tahap 2) -> lihat CR yang menunggu persetujuan tahap 2
+                    // Approver 1/2: tampilkan juga CR yang sudah di-approve oleh user ini (riwayat)
+                    $q->orWhere('approval_1_by', $user->name);
+                    $q->orWhere('approval_2_by', $user->name);
+
+                    // User adalah Manajer Umum (tahap 2) -> lihat CR menunggu tahap 2 + CR yang sudah di-approve oleh dirinya
                     if ($this->isStage2User($user)) {
-                        $q->orWhere(function ($q3) {
+                        $q->orWhere(function ($q3) use ($user) {
                             $q3->where('approval_1_status', 'Disetujui')
                                 ->where('approval_2_status', 'Menunggu');
                         });
+                        $q->orWhere('approval_2_by', $user->name);
                     }
                 });
             }
@@ -236,18 +241,19 @@ class ChangeRequestController extends Controller
 
             $canUpdate = PermissionHelper::canAccess('change_request', 'update');
             $canRead   = PermissionHelper::canAccess('change_request', 'read');
+            $canDelete = PermissionHelper::canAccess('change_request', 'delete');
 
             $data = [];
             $isManager = $this->isManager();
+            $isStage2 = $this->isStage2User($user);
             foreach ($records as $item) {
                 $isOwner = $item->user_id === $user->id;
+                $wasApprover = ($item->approval_1_by ?? '') === $user->name || ($item->approval_2_by ?? '') === $user->name;
                 $data[] = [
                     'id'                    => $item->id,
                     'no_cr'                 => $item->id,
-                    'nama'                  => ucfirst($item->nama),
                     'jabatan'               => $item->user->jabatan ?? $item->jabatan ?? '-',
                     'permintaan_fitur'      => $item->permintaan_fitur ?? '-',
-                    'deskripsi'             => $item->deskripsi,
                     'status_pengerjaan'     => $item->status_pengerjaan ?? 'Open',
                     'no_tiket'              => $item->no_tiket ?? 'No Tiket',
                     'approval_1_status'     => $item->approval_1_status ?? 'Menunggu',
@@ -260,8 +266,9 @@ class ChangeRequestController extends Controller
                         <span>' . Carbon::parse($item->created_at)->translatedFormat('d F Y') . '</span>
                     </div>
                 ',
-                    'can_update'            => ($isOwner && $item->approval_1_status !== 'Disetujui') || $isIT || $canUpdate,
-                    'can_read'              => $isOwner || $isIT || $isManager || $canRead,
+                    'can_update'            => $isIT || ($isOwner && !$wasApprover && $item->approval_1_status !== 'Disetujui'),
+                    'can_read'              => true,
+                    'can_delete'            => $isIT || ($isOwner && !$wasApprover && $item->approval_1_status !== 'Disetujui'),
                 ];
             }
 
@@ -355,7 +362,7 @@ class ChangeRequestController extends Controller
 
         $this->notifyApprover1(
             $mapping,
-            'Change Request #' . $cr->id . ' dari ' . $cr->nama . ' menunggu persetujuan Anda.',
+            'Change Request #' . $cr->id . ' dari ' . ucwords(str_replace('.', ' ', $cr->nama)) . ' menunggu persetujuan Anda.',
             $cr,
         );
 
@@ -375,14 +382,20 @@ class ChangeRequestController extends Controller
 
         // Akses: IT, Manager, Owner, Stage 2, atau Approver yang bereliasi
         if (!$isIT && !$isManager && !$isOwner && !$isStage2) {
-            $mapping = ApprovalMapping::findForRequester($changeRequest->user_id, $changeRequest->jabatan_id, $changeRequest->jabatan ?? '');
-            $isApprover = $mapping && (
-                ApprovalMapping::matchesApprover($mapping, $user->id, $user->jabatan_id, $user->jabatan ?? '')
-                || $this->isApproverStage2($mapping)
-            );
+            // Cek apakah user adalah approver yang sudah melakukan aksi (riwayat)
+            $wasApprover = ($changeRequest->approval_1_by ?? '') === $user->name
+                || ($changeRequest->approval_2_by ?? '') === $user->name;
 
-            if (!$isApprover) {
-                abort(403, 'Akses ditolak.');
+            if (!$wasApprover) {
+                $mapping = ApprovalMapping::findForRequester($changeRequest->user_id, $changeRequest->jabatan_id, $changeRequest->jabatan ?? '');
+                $isApprover = $mapping && (
+                    ApprovalMapping::matchesApprover($mapping, $user->id, $user->jabatan_id, $user->jabatan ?? '')
+                    || $this->isApproverStage2($mapping)
+                );
+
+                if (!$isApprover) {
+                    abort(403, 'Akses ditolak.');
+                }
             }
         }
 
@@ -457,7 +470,7 @@ class ChangeRequestController extends Controller
                     $cr->save();
                     $this->notifyRequester($cr, 'Disetujui', 1);
                     $this->notifyStage2(
-                        'Change Request #' . $cr->id . ' dari ' . $cr->nama . ' menunggu persetujuan Anda.',
+                        'Change Request #' . $cr->id . ' dari ' . ucwords(str_replace('.', ' ', $cr->nama)) . ' menunggu persetujuan Anda.',
                         $cr,
                     );
                 }

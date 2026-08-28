@@ -23,7 +23,7 @@
                                     <label class="block text-sm font-semibold mb-1 text-slate-700">Nama</label>
                                     <input type="text"
                                         class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-slate-500 text-sm"
-                                        value="{{ ucfirst($changeRequest->nama) }}" disabled>
+                                        value="{{ ucwords(str_replace('.', ' ', $changeRequest->nama)) }}" disabled>
                                 </div>
 
                                 {{-- Jabatan (read only) --}}
@@ -41,9 +41,9 @@
                                         <label class="block text-sm font-semibold mb-1 text-slate-700">Tanggal
                                             Permintaan</label>
                                         <input type="text" id="created_at" name="created_at"
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('created_at') border-red-500 @enderror"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-gray-50 text-slate-500"
                                             value="{{ old('created_at', \Carbon\Carbon::parse($changeRequest->created_at)->format('d-m-Y')) }}"
-                                            placeholder="Pilih Tanggal">
+                                            placeholder="Pilih Tanggal" readonly>
                                         @error('created_at')
                                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                         @enderror

@@ -44,15 +44,6 @@ let table = $("#changeRequestTable").DataTable({
             },
         },
         {
-            // Deskripsi
-            data: "deskripsi",
-            render: function (data) {
-                const max = 80;
-                const text = data.length > max ? data.substring(0, max) + "..." : data;
-                return `<span title="${data.replace(/"/g, '&quot;')}">${text}</span>`;
-            },
-        },
-        {
             // Status Pengerjaan
             data: "status_pengerjaan",
             render: function (data) {
@@ -129,6 +120,21 @@ let table = $("#changeRequestTable").DataTable({
                         title="Lihat Data">
                         <i class="fas fa-eye"></i>
                     </a>
+                    `;
+                }
+
+                if (data.can_delete) {
+                    btn += `
+                    <form action="/change-request/${data.id}" method="POST" style="display:inline;">
+                        <input type="hidden" name="_token" value="${$('meta[name="csrf-token"]').attr("content")}">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="button"
+                            class="delete-button text-red-500 hover:text-red-700 transition"
+                            data-confirm="Yakin ingin menghapus Change Request ini?"
+                            title="Hapus">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
                     `;
                 }
 
