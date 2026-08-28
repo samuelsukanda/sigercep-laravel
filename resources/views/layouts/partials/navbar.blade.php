@@ -381,9 +381,9 @@
             window.Echo = new Echo({
                 broadcaster: 'reverb',
                 key: '{{ config('reverb.apps.apps.0.key') }}',
-                wsHost: '{{ config('reverb.servers.reverb.hostname') }}',
-                wsPort: {{ config('reverb.servers.reverb.port') }},
-                wssPort: {{ config('reverb.servers.reverb.port') }},
+                wsHost: '{{ config('reverb.apps.apps.0.options.host') }}',
+                wsPort: {{ config('reverb.apps.apps.0.options.port') }},
+                wssPort: {{ config('reverb.apps.apps.0.options.port') }},
                 forceTLS: {{ config('reverb.apps.apps.0.options.scheme') === 'https' ? 'true' : 'false' }},
                 enabledTransports: ['ws', 'wss'],
                 authEndpoint: '/broadcasting/auth',
