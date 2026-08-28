@@ -1,6 +1,7 @@
 @props(['status'])
 
 @php
+    $status = ucwords(strtolower($status ?? 'Pending'));
     $color = match ($status) {
         'Done' => 'text-emerald-500 font-semibold',
         'Open' => 'text-blue-500 font-semibold',
@@ -16,5 +17,5 @@
 @endphp
 
 <span class="{{ $color }}">
-    {{ $status ?? 'Pending' }}
+    {{ $status }}
 </span>
