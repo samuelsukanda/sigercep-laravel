@@ -2,6 +2,10 @@
 
 @section('title', 'SIGERCEP - Health Check Hardware')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/loading.css') }}">
+@endpush
+
 @section('content')
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex flex-wrap -mx-3">
@@ -51,7 +55,7 @@
                                 </div>
 
                                 {{-- Button Cari --}}
-                                <button type="button" onclick="cariFilter()"
+                                <button type="button" onclick="cariFilter()" data-filter-submit
                                     class="inline-flex items-center justify-center h-9 px-4 text-xs font-semibold text-white uppercase rounded-lg shadow-md hover:shadow-sm active:opacity-85 transition-all"
                                     style="background-color: var(--accent) !important;">
                                     <i class="fas fa-search mr-1"></i>
@@ -97,12 +101,16 @@
                         PC.</p>
                 </div>
 
+                {{-- Loading Overlay --}}
+                @include('layouts.partials.dokumen-it.loading-overlay')
+
             </div>
         </div>
     </div>
 @endsection
 
 @push('scripts')
+    <script src="{{ asset('assets/js/loading-filter.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         var semuaDataGlobal = [];
@@ -259,9 +267,11 @@
         }
 
         function cariFilter() {
+            showFilterLoading();
             filterAktif = true;
             halamanSekarang = 1;
             renderSemua();
+            setTimeout(hideFilterLoading, 150);
         }
 
         function resetFilter() {
@@ -272,6 +282,7 @@
             filterAktif = false;
             halamanSekarang = 1;
             renderSemua();
+            setTimeout(hideFilterLoading, 150);
         }
 
         function pindahHalaman(hal) {

@@ -4,8 +4,17 @@ $(document).ready(function () {
         $("#loadingOverlay").css("display", "flex").hide().fadeIn(150);
     }
 
+    window.showFilterLoading = showLoading;
+    window.hideFilterLoading = function () {
+        $("#loadingOverlay").stop(true, true).fadeOut(200);
+    };
+
     // Submit filter
     $("form").on("submit", function () {
+        showLoading();
+    });
+
+    $("[data-filter-submit]").on("click", function () {
         showLoading();
     });
 
