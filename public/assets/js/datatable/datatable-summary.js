@@ -1,6 +1,15 @@
 // Datatable Summary
 $(document).ready(function () {
-    $("#ticketTable").DataTable({
+    const params = new URLSearchParams(window.location.search);
+    const hasReportFilter = [
+        "periode_dari",
+        "periode_sampai",
+        "kategori",
+        "status_tiket",
+        "status_approval",
+    ].some((name) => params.has(name) && params.get(name) !== "");
+
+    const tableOptions = {
         processing: true,
         serverSide: true,
         ajax: {
@@ -91,5 +100,11 @@ $(document).ready(function () {
         },
 
         order: [[1, "desc"]],
-    });
+    };
+
+    if (!hasReportFilter) {
+        tableOptions.deferLoading = 0;
+    }
+
+    $("#ticketTable").DataTable(tableOptions);
 });

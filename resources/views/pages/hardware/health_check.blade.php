@@ -19,8 +19,7 @@
                                 <div class="flex flex-col mr-1" style="min-width:180px;">
                                     <label class="text-xs font-semibold text-gray-600 mb-1.5">Cari</label>
                                     <input type="text" id="filterCari" placeholder="Nama PC / IP / Unit"
-                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                                        oninput="gantiFilter()">
+                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none">
                                 </div>
 
                                 {{-- Periode Dari --}}
@@ -28,7 +27,7 @@
                                     <label class="text-xs font-semibold text-gray-600 mb-1.5">Periode Dari</label>
                                     <input type="text" id="filterDari"
                                         class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                                        placeholder="Pilih tanggal" onchange="gantiFilter()">
+                                        placeholder="Pilih tanggal">
                                 </div>
 
                                 {{-- Periode Sampai --}}
@@ -36,21 +35,27 @@
                                     <label class="text-xs font-semibold text-gray-600 mb-1.5">Periode Sampai</label>
                                     <input type="text" id="filterSampai"
                                         class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                                        placeholder="Pilih tanggal" onchange="gantiFilter()">
+                                        placeholder="Pilih tanggal">
                                 </div>
 
                                 {{-- Status --}}
                                 <div class="flex flex-col mr-1" style="min-width:150px;">
                                     <label class="text-xs font-semibold text-gray-600 mb-1.5">Status</label>
                                     <select id="filterStatus"
-                                        class="select2 w-full border-gray-300 text-gray-700 outline-none transition-all"
-                                        onchange="gantiFilter()">
+                                        class="select2 w-full border-gray-300 text-gray-700 outline-none transition-all">
                                         <option value="">Semua Status</option>
                                         <option value="Healthy">Healthy</option>
                                         <option value="Warning">Warning</option>
                                         <option value="Critical">Critical</option>
                                     </select>
                                 </div>
+
+                                {{-- Button Cari --}}
+                                <button type="button" onclick="cariFilter()"
+                                    class="inline-flex items-center justify-center h-9 px-4 text-xs font-semibold text-white uppercase rounded-lg shadow-md hover:shadow-sm active:opacity-85 transition-all"
+                                    style="background-color: var(--accent) !important;">
+                                    <i class="fas fa-search mr-1"></i>
+                                </button>
 
                                 {{-- Button Reset --}}
                                 <button type="button" onclick="resetFilter()"
@@ -87,7 +92,8 @@
                         <i class="fas fa-heartbeat" style="font-size:28px; color:#d1d5db;"></i>
                     </div>
                     <h5 style="color:#374151; font-weight:600; margin-bottom:8px;">Belum Ada Data Health Check</h5>
-                    <p style="color:#9ca3af; font-size:13px;">Klik <b><i class="fas fa-plus mr-1"></i> Tambah Data</b> untuk mencatat kesehatan hardware
+                    <p style="color:#9ca3af; font-size:13px;">Klik <b><i class="fas fa-plus mr-1"></i> Tambah Data</b> untuk
+                        mencatat kesehatan hardware
                         PC.</p>
                 </div>
 
@@ -106,6 +112,7 @@
         var edittingId = null;
         var halamanSekarang = 1;
         var limitPerHalaman = 10;
+        var filterAktif = false;
         var fpTanggal, fpDari, fpSampai;
 
         $(document).ready(function() {
@@ -120,7 +127,8 @@
                 dateFormat: 'd-m-Y'
             });
             fpSampai = flatpickr('#filterSampai', {
-                dateFormat: 'd-m-Y'
+                dateFormat: 'd-m-Y',
+                defaultDate: 'today'
             });
             fpTanggal = flatpickr('#fieldTanggal', {
                 dateFormat: 'd-m-Y',
@@ -187,6 +195,8 @@
 
         function filterSemua() {
             var semua = semuaDataGlobal;
+            if (!filterAktif) return semua;
+
             var cari = (document.getElementById('filterCari').value || '').toLowerCase().trim();
             var dari = isoDmy(document.getElementById('filterDari').value);
             var sampai = isoDmy(document.getElementById('filterSampai').value);
@@ -248,7 +258,8 @@
             renderPagination(semua.length, totalHalaman);
         }
 
-        function gantiFilter() {
+        function cariFilter() {
+            filterAktif = true;
             halamanSekarang = 1;
             renderSemua();
         }
@@ -256,8 +267,9 @@
         function resetFilter() {
             document.getElementById('filterCari').value = '';
             fpDari.clear();
-            fpSampai.clear();
+            fpSampai.setDate('today');
             $('#filterStatus').val('').trigger('change');
+            filterAktif = false;
             halamanSekarang = 1;
             renderSemua();
         }
@@ -1149,7 +1161,8 @@
                            font-size:13px; font-weight:700; color:#fff; border:none; cursor:pointer;
                            border-radius:8px; background:var(--accent); box-shadow:0 2px 8px var(--accent-shadow);
                            transition:background 0.15s;"
-                    onmouseover="this.style.background='var(--accent-strong)'" onmouseout="this.style.background='var(--accent)'">
+                    onmouseover="this.style.background='var(--accent-strong)'"
+                    onmouseout="this.style.background='var(--accent)'">
                     <i class="fas fa-save"></i> Simpan
                 </button>
             </div>
