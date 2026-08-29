@@ -132,7 +132,7 @@ class BankIlmuController extends Controller
             'file_path' => $targetPath,
         ]);
 
-        return redirect()->route('bank-ilmu.index')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('bank-ilmu.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -212,7 +212,7 @@ class BankIlmuController extends Controller
             'file_path' => $targetPath,
         ]);
 
-        return redirect()->route('bank-ilmu.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('bank-ilmu.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)
@@ -225,6 +225,6 @@ class BankIlmuController extends Controller
 
         $bankIlmu->delete();
 
-        return redirect()->route('bank-ilmu.index')->with('success', 'Data berhasil dihapus.');
+        return redirect(route('bank-ilmu.index') . '?deleted=1')->with('success', 'Data berhasil dihapus.');
     }
 }

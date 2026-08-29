@@ -26,7 +26,7 @@ swalStyle.innerHTML = `
     transition: background-color 0.2s !important;
   }
   .swal2-container .btn-swal-success:hover {
-    background-color: #6051c9 !important;
+    filter: brightness(1.2) !important;
   }
   .swal2-container {
     z-index: 99999 !important;
@@ -38,6 +38,23 @@ swalStyle.innerHTML = `
 document.head.appendChild(swalStyle);
 
 document.addEventListener("DOMContentLoaded", function () {
+  // Success alert after delete redirect
+  var params = new URLSearchParams(window.location.search);
+  if (params.get("deleted") === "1") {
+    params.delete("deleted");
+    var qs = params.toString();
+    var newUrl = window.location.pathname + (qs ? "?" + qs : "") + window.location.hash;
+    history.replaceState(null, "", newUrl);
+    Swal.fire({
+      title: "Terhapus!",
+      text: "Data berhasil dihapus.",
+      icon: "success",
+      confirmButtonColor: "var(--accent)",
+      customClass: { confirmButton: "btn-swal-success" },
+      confirmButtonText: "OK"
+    });
+  }
+
   document.addEventListener("click", function (e) {
     const button = e.target.closest(".delete-button");
     if (!button) return;

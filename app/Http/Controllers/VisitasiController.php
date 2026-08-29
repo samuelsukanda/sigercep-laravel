@@ -178,7 +178,7 @@ class VisitasiController extends Controller
 
         $visitasi->delete();
 
-        return redirect()->route('visitasi.index')
+        return redirect(route('visitasi.index') . '?deleted=1')
             ->with('success', 'Data berhasil dihapus.');
     }
 }

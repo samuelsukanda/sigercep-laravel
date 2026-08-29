@@ -108,6 +108,6 @@ class IndicatorController extends Controller
         $indicator->values()->delete();
         $indicator->delete();
 
-        return back()->with('success', 'Data berhasil dihapus.');
+        return redirect(route('indicators.index') . '?deleted=1')->with('success', 'Data berhasil dihapus.');
     }
 }

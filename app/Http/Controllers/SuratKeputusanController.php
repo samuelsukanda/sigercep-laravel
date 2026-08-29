@@ -139,7 +139,7 @@ class SuratKeputusanController extends Controller
             'file_path' => $targetPath,
         ]);
 
-        return redirect()->route('sdm-hukum.surat-keputusan.index')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('sdm-hukum.surat-keputusan.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -221,7 +221,7 @@ class SuratKeputusanController extends Controller
             'unit' => $unit,
         ]);
 
-        return redirect()->route('sdm-hukum.surat-keputusan.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('sdm-hukum.surat-keputusan.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)
@@ -234,6 +234,6 @@ class SuratKeputusanController extends Controller
 
         $suratKeputusan->delete();
 
-        return redirect()->route('sdm-hukum.surat-keputusan.index')->with('success', 'Data berhasil dihapus.');
+        return redirect(route('sdm-hukum.surat-keputusan.index') . '?deleted=1')->with('success', 'Data berhasil dihapus.');
     }
 }

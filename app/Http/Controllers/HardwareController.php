@@ -267,7 +267,7 @@ class HardwareController extends Controller
     {
         $hardware->delete();
 
-        return redirect()->route('hardware.index')
+        return redirect(route('hardware.index') . '?deleted=1')
             ->with('success', 'Data berhasil dihapus.');
     }
 
@@ -376,7 +376,7 @@ class HardwareController extends Controller
 
         $devicePrinter->delete();
 
-        return redirect()->route('hardware.device-printer.show', $ip)
+        return redirect(route('hardware.device-printer.show', $ip) . '?deleted=1')
             ->with('success', 'Device/Printer berhasil dihapus.');
     }
 

@@ -134,7 +134,7 @@ class PeminjamanController extends Controller
 
         Peminjaman::create($validated);
 
-        return redirect()->route('peminjaman.index')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('peminjaman.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -182,7 +182,7 @@ class PeminjamanController extends Controller
 
         $peminjaman->update($validated);
 
-        return redirect()->route('peminjaman.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('peminjaman.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)
@@ -198,6 +198,6 @@ class PeminjamanController extends Controller
 
         $peminjaman->delete();
 
-        return redirect()->route('peminjaman.index')->with('success', 'Data berhasil dihapus.');
+        return redirect(route('peminjaman.index') . '?deleted=1')->with('success', 'Data berhasil dihapus.');
     }
 }

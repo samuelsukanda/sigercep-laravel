@@ -326,8 +326,7 @@ class BankSpoController extends Controller
             Storage::disk('public')->delete($filePath);
         }
 
-        return redirect()
-            ->route('komite-mutu.bank-spo.index')
+        return redirect(route('komite-mutu.bank-spo.index') . '?deleted=1')
             ->with('success', 'Data berhasil dihapus.');
     }
 }

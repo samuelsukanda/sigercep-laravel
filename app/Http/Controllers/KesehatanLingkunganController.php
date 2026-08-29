@@ -132,7 +132,7 @@ class KesehatanLingkunganController extends Controller
 
         KesehatanLingkungan::create($validated);
 
-        return redirect()->route('komplain.kesehatan-lingkungan.index')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('komplain.kesehatan-lingkungan.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -175,7 +175,7 @@ class KesehatanLingkunganController extends Controller
 
         $komplain->update($validated);
 
-        return redirect()->route('komplain.kesehatan-lingkungan.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('komplain.kesehatan-lingkungan.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -188,6 +188,6 @@ class KesehatanLingkunganController extends Controller
 
         $komplain->delete();
 
-        return redirect()->route('komplain.kesehatan-lingkungan.index')->with('success', 'Data berhasil dihapus.');
+        return redirect(route('komplain.kesehatan-lingkungan.index') . '?deleted=1')->with('success', 'Data berhasil dihapus.');
     }
 }

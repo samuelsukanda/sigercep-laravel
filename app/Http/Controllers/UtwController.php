@@ -135,7 +135,7 @@ class UtwController extends Controller
             'file_path' => $targetPath,
         ]);
 
-        return redirect()->route('sdm-hukum.utw.index')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('sdm-hukum.utw.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -217,7 +217,7 @@ class UtwController extends Controller
             'unit' => $unit,
         ]);
 
-        return redirect()->route('sdm-hukum.utw.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('sdm-hukum.utw.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)
@@ -230,6 +230,6 @@ class UtwController extends Controller
 
         $utw->delete();
 
-        return redirect()->route('sdm-hukum.utw.index')->with('success', 'Data berhasil dihapus.');
+        return redirect(route('sdm-hukum.utw.index') . '?deleted=1')->with('success', 'Data berhasil dihapus.');
     }
 }

@@ -130,7 +130,7 @@ class TonerController extends Controller
 
         Toner::create($validated);
 
-        return redirect()->route('toner.index')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('toner.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -178,7 +178,7 @@ class TonerController extends Controller
 
         $toner->update($validated);
 
-        return redirect()->route('toner.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('toner.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)
@@ -194,6 +194,6 @@ class TonerController extends Controller
 
         $toner->delete();
 
-        return redirect()->route('toner.index')->with('success', 'Data berhasil dihapus.');
+        return redirect(route('toner.index') . '?deleted=1')->with('success', 'Data berhasil dihapus.');
     }
 }

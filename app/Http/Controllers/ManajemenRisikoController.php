@@ -272,7 +272,7 @@ class ManajemenRisikoController extends Controller
         $risiko = DaftarRisiko::findOrFail($id);
         $risiko->delete();
 
-        return redirect()->route('komite-mutu.manajemen-risiko.index')
+        return redirect(route('komite-mutu.manajemen-risiko.index') . '?deleted=1')
             ->with('success', 'Data berhasil dihapus.');
     }
 }

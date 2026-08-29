@@ -107,7 +107,7 @@ class MutuController extends Controller
 
         Mutu::create($validated);
 
-        return redirect()->route('komite-mutu.mutu.index')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('komite-mutu.mutu.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -138,7 +138,7 @@ class MutuController extends Controller
 
         $mutu->update($validated);
 
-        return redirect()->route('komite-mutu.mutu.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('komite-mutu.mutu.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)
@@ -146,6 +146,6 @@ class MutuController extends Controller
         $mutu = Mutu::findOrFail($id);
         $mutu->delete();
 
-        return redirect()->route('komite-mutu.mutu.index')->with('success', 'Data berhasil dihapus.');
+        return redirect(route('komite-mutu.mutu.index') . '?deleted=1')->with('success', 'Data berhasil dihapus.');
     }
 }

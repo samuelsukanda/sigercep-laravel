@@ -151,7 +151,7 @@ class KecelakaanKerjaController extends Controller
 
         KecelakaanKerja::create($validated);
 
-        return redirect()->route('kecelakaan-kerja.index')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('kecelakaan-kerja.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -210,7 +210,7 @@ class KecelakaanKerjaController extends Controller
 
         $k3rs->update($validated);
 
-        return redirect()->route('kecelakaan-kerja.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('kecelakaan-kerja.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)
@@ -226,6 +226,6 @@ class KecelakaanKerjaController extends Controller
 
         $k3rs->delete();
 
-        return redirect()->route('kecelakaan-kerja.index')->with('success', 'Data berhasil dihapus.');
+        return redirect(route('kecelakaan-kerja.index') . '?deleted=1')->with('success', 'Data berhasil dihapus.');
     }
 }

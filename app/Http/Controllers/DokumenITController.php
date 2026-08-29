@@ -141,7 +141,7 @@ class DokumenITController extends Controller
             'jenis_dokumen' => $request->jenis_dokumen,
         ]);
 
-        return redirect()->route('dokumen-it.index')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('dokumen-it.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -222,7 +222,7 @@ class DokumenITController extends Controller
             'jenis_dokumen' => $request->jenis_dokumen,
         ]);
 
-        return redirect()->route('dokumen-it.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('dokumen-it.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)
@@ -235,6 +235,6 @@ class DokumenITController extends Controller
 
         $DokumenIt->delete();
 
-        return redirect()->route('dokumen-it.index')->with('success', 'Data berhasil dihapus.');
+        return redirect(route('dokumen-it.index') . '?deleted=1')->with('success', 'Data berhasil dihapus.');
     }
 }

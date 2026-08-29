@@ -269,6 +269,6 @@ class PengajuanDokumenController extends Controller
 
         $pengajuanDokumen->delete();
 
-        return redirect()->route('komite-mutu.pengajuan-dokumen.index')->with('success', 'Data berhasil dihapus.');
+        return redirect(route('komite-mutu.pengajuan-dokumen.index') . '?deleted=1')->with('success', 'Data berhasil dihapus.');
     }
 }

@@ -165,7 +165,7 @@ class AdminTicketController extends Controller
 
         $helpdesk->update($request->only('category', 'description', 'urgency', 'unit_name'));
 
-        return redirect()->route('admin.helpdesk.index')->with('success', 'Tiket diperbarui.');
+        return redirect(route('admin.helpdesk.index') . '?deleted=1')->with('success', 'Tiket diperbarui.');
     }
 
     public function destroy(Ticket $helpdesk)
@@ -179,7 +179,7 @@ class AdminTicketController extends Controller
         if (!$deleted) {
             dd('Gagal delete, kemungkinan ada error');
         }
-        return redirect()->route('admin.helpdesk.index')->with('success', 'Tiket berhasil dihapus.');
+        return redirect(route('admin.helpdesk.index') . '?deleted=1')->with('success', 'Tiket berhasil dihapus.');
     }
 
     public function approve(Request $request, Ticket $ticket)

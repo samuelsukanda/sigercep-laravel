@@ -132,7 +132,7 @@ class KomplainIpsrsController extends Controller
 
         KomplainIpsrs::create($validated);
 
-        return redirect()->route('komplain.ipsrs.index')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('komplain.ipsrs.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function edit($id)
@@ -175,7 +175,7 @@ class KomplainIpsrsController extends Controller
 
         $komplain->update($validated);
 
-        return redirect()->route('komplain.ipsrs.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('komplain.ipsrs.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -188,6 +188,6 @@ class KomplainIpsrsController extends Controller
 
         $komplain->delete();
 
-        return redirect()->route('komplain.ipsrs.index')->with('success', 'Data berhasil dihapus.');
+        return redirect(route('komplain.ipsrs.index') . '?deleted=1')->with('success', 'Data berhasil dihapus.');
     }
 }

@@ -45,7 +45,7 @@ class PermissionController extends Controller
             }
         }
 
-        return redirect()->route('permissions.index')->with('success', 'Permission berhasil ditambahkan!');
+        return redirect(route('permissions.index') . '?deleted=1')->with('success', 'Permission berhasil ditambahkan!');
     }
 
     public function update(Request $request, Permission $permission)
@@ -60,13 +60,13 @@ class PermissionController extends Controller
             'action' => $request->action
         ]);
 
-        return redirect()->route('permissions.index')->with('success', 'Permission berhasil diupdate!');
+        return redirect(route('permissions.index') . '?deleted=1')->with('success', 'Permission berhasil diupdate!');
     }
 
     public function destroy(Permission $permission)
     {
         $permission->delete();
-        return redirect()->route('permissions.index')->with('success', 'Permission berhasil dihapus!');
+        return redirect(route('permissions.index') . '?deleted=1')->with('success', 'Permission berhasil dihapus!');
     }
 
     public function addRule(Request $request, Permission $permission)
@@ -79,7 +79,7 @@ class PermissionController extends Controller
 
         $permission->rules()->create($request->only(['unit', 'jabatan', 'name']));
 
-        return redirect()->route('permissions.index')->with('success', 'Rule berhasil ditambahkan!');
+        return redirect(route('permissions.index') . '?deleted=1')->with('success', 'Rule berhasil ditambahkan!');
     }
 
     public function updateRule(Request $request, PermissionRule $rule)
@@ -101,6 +101,6 @@ class PermissionController extends Controller
     public function deleteRule(PermissionRule $rule)
     {
         $rule->delete();
-        return redirect()->route('permissions.index')->with('success', 'Rule berhasil dihapus!');
+        return redirect(route('permissions.index') . '?deleted=1')->with('success', 'Rule berhasil dihapus!');
     }
 }

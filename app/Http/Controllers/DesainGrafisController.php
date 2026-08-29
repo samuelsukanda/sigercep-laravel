@@ -134,7 +134,7 @@ class DesainGrafisController extends Controller
 
         DesainGrafis::create($validated);
 
-        return redirect()->route('desain-grafis.index')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('desain-grafis.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show($id)
@@ -180,7 +180,7 @@ class DesainGrafisController extends Controller
 
         $desain->update($updateData);
 
-        return redirect()->route('desain-grafis.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('desain-grafis.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)
@@ -188,6 +188,6 @@ class DesainGrafisController extends Controller
         $desain = DesainGrafis::findOrFail($id);
         $desain->delete();
 
-        return redirect()->route('desain-grafis.index')->with('success', 'Data berhasil dihapus.');
+        return redirect(route('desain-grafis.index') . '?deleted=1')->with('success', 'Data berhasil dihapus.');
     }
 }

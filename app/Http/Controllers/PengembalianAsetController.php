@@ -139,7 +139,7 @@ class PengembalianAsetController extends Controller
 
         PengembalianAset::create($validated);
 
-        return redirect()->route('pengadaan-aset.pengembalian-aset.index')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('pengadaan-aset.pengembalian-aset.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -193,7 +193,7 @@ class PengembalianAsetController extends Controller
 
         $pengadaan->update($validated);
 
-        return redirect()->route('pengadaan-aset.pengembalian-aset.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('pengadaan-aset.pengembalian-aset.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)
@@ -210,6 +210,6 @@ class PengembalianAsetController extends Controller
 
         $pengadaan->delete();
 
-        return redirect()->route('pengadaan-aset.pengembalian-aset.index')->with('success', 'Data berhasil dihapus.');
+        return redirect(route('pengadaan-aset.pengembalian-aset.index') . '?deleted=1')->with('success', 'Data berhasil dihapus.');
     }
 }

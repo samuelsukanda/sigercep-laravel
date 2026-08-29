@@ -145,7 +145,7 @@ class KesiapanAmbulanceController extends Controller
 
         KesiapanAmbulance::create($data);
 
-        return redirect()->route('kesiapan-ambulance.index')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('kesiapan-ambulance.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -203,7 +203,7 @@ class KesiapanAmbulanceController extends Controller
 
         $ambulance->update($data);
 
-        return redirect()->route('kesiapan-ambulance.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('kesiapan-ambulance.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)
@@ -211,6 +211,6 @@ class KesiapanAmbulanceController extends Controller
         $ambulance = KesiapanAmbulance::findOrFail($id);
         $ambulance->delete();
 
-        return redirect()->route('kesiapan-ambulance.index')->with('success', 'Data berhasil dihapus.');
+        return redirect(route('kesiapan-ambulance.index') . '?deleted=1')->with('success', 'Data berhasil dihapus.');
     }
 }

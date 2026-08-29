@@ -373,7 +373,7 @@ class ChangeRequestController extends Controller
             $cr,
         );
 
-        return redirect()->route('change-request.index')->with('success', 'Change Request berhasil dikirim dan menunggu approval.');
+        return redirect(route('change-request.index') . '?deleted=1')->with('success', 'Change Request berhasil dikirim dan menunggu approval.');
     }
 
     public function show(string $id)
@@ -628,7 +628,7 @@ class ChangeRequestController extends Controller
 
         $changeRequest->update($updateData);
 
-        return redirect()->route('change-request.index')->with('success', 'Change Request berhasil diperbarui.');
+        return redirect(route('change-request.index') . '?deleted=1')->with('success', 'Change Request berhasil diperbarui.');
     }
 
     public function destroy(string $id)
@@ -649,6 +649,6 @@ class ChangeRequestController extends Controller
 
         $changeRequest->delete();
 
-        return redirect()->route('change-request.index')->with('success', 'Change Request berhasil dihapus.');
+        return redirect(route('change-request.index') . '?deleted=1')->with('success', 'Change Request berhasil dihapus.');
     }
 }

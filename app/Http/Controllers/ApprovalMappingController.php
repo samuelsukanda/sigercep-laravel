@@ -57,7 +57,7 @@ class ApprovalMappingController extends Controller
         $data['requester_jabatan_id'] = $this->resolveJabatanId($data['requester_jabatan']);
         $data['approver_jabatan_id'] = $this->resolveJabatanId($data['approver_jabatan']);
         ApprovalMapping::create($data);
-        return redirect()->route('approval-mapping.index')->with('success', 'Mapping approver 1 berhasil ditambahkan.');
+        return redirect(route('approval-mapping.index') . '?deleted=1')->with('success', 'Mapping approver 1 berhasil ditambahkan.');
     }
 
     public function update(Request $request, $id)
@@ -73,7 +73,7 @@ class ApprovalMappingController extends Controller
         $data['requester_jabatan_id'] = $this->resolveJabatanId($data['requester_jabatan']);
         $data['approver_jabatan_id'] = $this->resolveJabatanId($data['approver_jabatan']);
         $mapping->update($data);
-        return redirect()->route('approval-mapping.index')->with('success', 'Mapping approver 1 berhasil diperbarui.')->withFragment('mapping-list');
+        return redirect(route('approval-mapping.index') . '?deleted=1')->with('success', 'Mapping approver 1 berhasil diperbarui.')->withFragment('mapping-list');
     }
 
     /* Cari jabatan_id (dari HRIS) untuk nama jabatan: dari user yang memegang jabatan tsb. */
@@ -94,13 +94,13 @@ class ApprovalMappingController extends Controller
             'stage2_user_id' => 'nullable|exists:users,id',
         ]);
         Setting::set('stage2_user_id', $data['stage2_user_id'] ?? null);
-        return redirect()->route('approval-mapping.index')->with('success', 'Mapping approver 2 berhasil disimpan.');
+        return redirect(route('approval-mapping.index') . '?deleted=1')->with('success', 'Mapping approver 2 berhasil disimpan.');
     }
 
     public function destroy($id)
     {
         $this->ensureIT();
         ApprovalMapping::findOrFail($id)->delete();
-        return redirect()->route('approval-mapping.index')->with('success', 'Mapping approver 1 berhasil dihapus.');
+        return redirect(route('approval-mapping.index') . '?deleted=1')->with('success', 'Mapping approver 1 berhasil dihapus.');
     }
 }

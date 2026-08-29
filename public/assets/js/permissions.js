@@ -553,6 +553,24 @@
 })();
 
 /* ───── Alert Delete Global ───── */
+document.addEventListener("DOMContentLoaded", function () {
+    // Success alert after delete redirect
+    var params = new URLSearchParams(window.location.search);
+    if (params.get("deleted") === "1") {
+        params.delete("deleted");
+        var qs = params.toString();
+        var newUrl = window.location.pathname + (qs ? "?" + qs : "") + window.location.hash;
+        history.replaceState(null, "", newUrl);
+        Swal.fire({
+            title: "Terhapus!",
+            text: "Data berhasil dihapus.",
+            icon: "success",
+            confirmButtonColor: "var(--accent)",
+            customClass: { confirmButton: "btn-swal-success" },
+            confirmButtonText: "OK"
+        });
+    }
+});
 document.addEventListener("click", function (e) {
     const btn = e.target.closest(".btn-delete-rule, .btn-delete-trigger");
     if (!btn) return;

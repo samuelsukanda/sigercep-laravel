@@ -223,6 +223,6 @@ class LaporanPerilakuController extends Controller
 
         $laporanPerilaku->delete();
 
-        return redirect()->route('komite-mutu.laporan-perilaku.index')->with('success', 'Data berhasil dihapus.');
+        return redirect(route('komite-mutu.laporan-perilaku.index') . '?deleted=1')->with('success', 'Data berhasil dihapus.');
     }
 }

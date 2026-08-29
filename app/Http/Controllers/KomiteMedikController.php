@@ -137,7 +137,7 @@ class KomiteMedikController extends Controller
             'file_path' => $targetPath,
         ]);
 
-        return redirect()->route('komite-medik.index')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('komite-medik.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -219,7 +219,7 @@ class KomiteMedikController extends Controller
             'unit' => $unit,
         ]);
 
-        return redirect()->route('komite-medik.index')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('komite-medik.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)
@@ -232,6 +232,6 @@ class KomiteMedikController extends Controller
 
         $komiteMedik->delete();
 
-        return redirect()->route('komite-medik.index')->with('success', 'Data berhasil dihapus.');
+        return redirect(route('komite-medik.index') . '?deleted=1')->with('success', 'Data berhasil dihapus.');
     }
 }
