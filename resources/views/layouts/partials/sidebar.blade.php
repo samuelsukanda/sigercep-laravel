@@ -1,6 +1,6 @@
 <!-- sidebar  -->
 <aside
-    class="fixed inset-y-0 flex-wrap items-center justify-between block w-full p-0 my-4 overflow-hidden antialiased transition-transform duration-200 -translate-x-full bg-white border-0 shadow-xl dark:shadow-none dark:bg-slate-850 max-w-64 ease-nav-brand z-990 xl:ml-6 rounded-2xl xl:left-0 xl:translate-x-0"
+    class="fixed inset-y-0 flex flex-col w-full p-0 my-4 overflow-hidden antialiased transition-transform duration-200 -translate-x-full bg-white border-0 shadow-xl dark:shadow-none dark:bg-slate-850 max-w-64 ease-nav-brand z-990 xl:ml-6 rounded-2xl xl:left-0 xl:translate-x-0"
     aria-expanded="false">
     <div class="h-19">
         <i class="absolute top-0 right-0 p-4 opacity-50 cursor-pointer fas fa-times dark:text-white text-slate-400 xl:hidden"
@@ -21,7 +21,7 @@
         class="h-px mt-0 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent dark:bg-gradient-to-r dark:from-transparent dark:via-white dark:to-transparent" />
 
     <div id="sidebar-scroll" class="items-center block w-auto grow basis-full"
-        style="height:calc(100vh - 100px); overflow-y:auto; overflow-x:hidden; min-height:0;">
+        style="flex:1 1 auto; min-height:0; overflow-y:auto; overflow-x:hidden; padding-bottom:16px;">
 
         <ul class="flex flex-col pl-0 mb-0">
             <li class="mt-0.5 w-full">
