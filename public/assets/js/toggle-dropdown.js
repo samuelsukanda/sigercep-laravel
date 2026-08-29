@@ -75,9 +75,14 @@ window.addEventListener("click", function (e) {
                 if (!state.openMenus || state.openMenus.indexOf(index) === -1) return;
             }
             var icon = menu.previousElementSibling.querySelector("i.fas.fa-chevron-down");
+            // Restore state instantly after navigation; manual toggles keep animation.
+            menu.style.transition = "none";
             menu.style.maxHeight = menu.scrollHeight + "px";
             menu.style.opacity = "1";
             if (icon) icon.style.transform = "rotate(180deg)";
+            requestAnimationFrame(function () {
+                menu.style.transition = "";
+            });
         });
 
         var scrollTop = Number(state.scrollTop);
