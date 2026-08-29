@@ -64,6 +64,13 @@ class ChangeRequestController extends Controller
         $stage2UserId = Setting::get('stage2_user_id');
         if ($stage2UserId && $user->id == $stage2UserId) return true;
 
+        // Approver 2 yang dipilih langsung pada approval mapping.
+        if (ApprovalMapping::where('approver_user_id', $user->id)
+            ->whereRaw('LOWER(TRIM(approver_jabatan)) = ?', [strtolower(trim(config('approvals.stage2_jabatan')))])
+            ->exists()) {
+            return true;
+        }
+
         $stage2Id = config('approvals.stage2_jabatan_id');
         if ($stage2Id && $user->jabatan_id == $stage2Id) return true;
 
@@ -379,7 +386,6 @@ class ChangeRequestController extends Controller
         $isManager = $this->isManager();
         $isOwner = $changeRequest->user_id === $user->id;
         $isStage2 = $this->isStage2User($user);
-
         // Akses: IT, Manager, Owner, Stage 2, atau Approver yang bereliasi
         if (!$isIT && !$isManager && !$isOwner && !$isStage2) {
             // Cek apakah user adalah approver yang sudah melakukan aksi (riwayat)
@@ -387,11 +393,31 @@ class ChangeRequestController extends Controller
                 || ($changeRequest->approval_2_by ?? '') === $user->name;
 
             if (!$wasApprover) {
-                $mapping = ApprovalMapping::findForRequester($changeRequest->user_id, $changeRequest->jabatan_id, $changeRequest->jabatan ?? '');
-                $isApprover = $mapping && (
-                    ApprovalMapping::matchesApprover($mapping, $user->id, $user->jabatan_id, $user->jabatan ?? '')
-                    || $this->isApproverStage2($mapping)
-                );
+                // Cek semua mapping di mana user ini adalah approver
+                $mappings = ApprovalMapping::where('approver_user_id', $user->id)
+                    ->orWhere('approver_jabatan_id', $user->jabatan_id)
+                    ->orWhereRaw('LOWER(approver_jabatan) = ?', [strtolower(trim($user->jabatan ?? ''))])
+                    ->get();
+
+                $isApprover = false;
+                foreach ($mappings as $mapping) {
+                    if (!ApprovalMapping::matchesApprover($mapping, $user->id, $user->jabatan_id, $user->jabatan ?? '')) {
+                        continue;
+                    }
+                    // Pastikan mapping ini relevan dengan CR creator
+                    if ($mapping->requester_user_id && $mapping->requester_user_id == $changeRequest->user_id) {
+                        $isApprover = true;
+                        break;
+                    }
+                    if ($mapping->requester_jabatan_id && $mapping->requester_jabatan_id == $changeRequest->jabatan_id) {
+                        $isApprover = true;
+                        break;
+                    }
+                    if ($mapping->requester_jabatan && strtolower(trim($mapping->requester_jabatan)) === strtolower(trim($changeRequest->jabatan ?? ''))) {
+                        $isApprover = true;
+                        break;
+                    }
+                }
 
                 if (!$isApprover) {
                     abort(403, 'Akses ditolak.');
@@ -407,7 +433,36 @@ class ChangeRequestController extends Controller
         $user = Auth::user();
         $changeRequest = ChangeRequest::findOrFail($id);
 
-        if (!$this->isIT() && $changeRequest->user_id !== $user->id) {
+        $wasApprover = ($changeRequest->approval_1_by ?? '') === $user->name
+            || ($changeRequest->approval_2_by ?? '') === $user->name;
+
+        $isApproverMapped = false;
+        if (!$wasApprover) {
+            $mappings = ApprovalMapping::where('approver_user_id', $user->id)
+                ->orWhere('approver_jabatan_id', $user->jabatan_id)
+                ->orWhereRaw('LOWER(approver_jabatan) = ?', [strtolower(trim($user->jabatan ?? ''))])
+                ->get();
+
+            foreach ($mappings as $mapping) {
+                if (!ApprovalMapping::matchesApprover($mapping, $user->id, $user->jabatan_id, $user->jabatan ?? '')) {
+                    continue;
+                }
+                if ($mapping->requester_user_id && $mapping->requester_user_id == $changeRequest->user_id) {
+                    $isApproverMapped = true;
+                    break;
+                }
+                if ($mapping->requester_jabatan_id && $mapping->requester_jabatan_id == $changeRequest->jabatan_id) {
+                    $isApproverMapped = true;
+                    break;
+                }
+                if ($mapping->requester_jabatan && strtolower(trim($mapping->requester_jabatan)) === strtolower(trim($changeRequest->jabatan ?? ''))) {
+                    $isApproverMapped = true;
+                    break;
+                }
+            }
+        }
+
+        if (!$this->isIT() && $changeRequest->user_id !== $user->id && !$wasApprover && !$isApproverMapped && !$this->isStage2User($user)) {
             abort(403, 'Akses ditolak.');
         }
 
