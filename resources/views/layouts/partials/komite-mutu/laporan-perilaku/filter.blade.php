@@ -8,7 +8,7 @@
                     <label class="text-xs font-semibold text-gray-600 mb-1.5">Periode Dari</label>
                     <input type="text" name="periode_dari"
                         class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent flatpickr"
-                        value="{{ request('periode_dari', now()->startOfMonth()->format('d-m-Y')) }}"
+                        value="{{ request('periode_dari') }}"
                         placeholder="Pilih tanggal">
                 </div>
 

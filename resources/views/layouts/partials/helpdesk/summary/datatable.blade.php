@@ -4,7 +4,7 @@
         <h6 class="mb-0 font-bold text-lg">Detail Tiket</h6>
 
         <span class="font-normal text-gray-500">
-            ({{ request('periode_dari', now()->startOfMonth()->format('d-m-Y')) }}
+            ({{ request('periode_dari') }}
             s/d
             {{ request('periode_sampai', now()->format('d-m-Y')) }})
         </span>

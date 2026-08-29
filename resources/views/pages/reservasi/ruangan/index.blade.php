@@ -57,9 +57,9 @@
             const dariValue = "{{ request('periode_dari') }}";
             const sampaiValue = "{{ request('periode_sampai', now()->format('d-m-Y')) }}";
 
-            dari.setDate(dariValue);
+            if (dariValue) dari.setDate(dariValue);
             sampai.setDate(sampaiValue);
-            sampai.set("minDate", dariValue);
+            if (dariValue) sampai.set("minDate", dariValue);
             dari.set("maxDate", sampaiValue);
         });
     </script>
