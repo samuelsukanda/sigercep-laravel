@@ -33,6 +33,13 @@
 :root[data-theme="coral"]  { --accent: #f07167; }
 :root[data-theme="sage"]   { --accent: #adc178; }
 
+#sidebar-scroll a.sidebar-link-active:hover,
+#sidebar-scroll a.sidebar-link-active:focus {
+    background-color: var(--accent-soft) !important;
+    color: var(--accent) !important;
+    box-shadow: inset 3px 0 0 var(--accent);
+}
+
 /* ---------- Typography ---------- */
 body,
 .font-sans {
