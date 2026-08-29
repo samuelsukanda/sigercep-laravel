@@ -11,36 +11,35 @@
                         <h6 class="mb-0 font-bold text-lg">Detail Change Request</h6>
                     </div>
                     <div class="flex-auto p-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
+                        <div class="flex flex-wrap -mx-3">
                             {{-- Nama --}}
-                            <div>
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3">
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Nama</label>
                                 <p class="text-slate-600">{{ ucwords(str_replace('.', ' ', $changeRequest->nama)) }}</p>
                             </div>
 
                             {{-- Jabatan --}}
-                            <div>
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3">
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Jabatan</label>
                                 <p class="text-slate-600">
                                     {{ $changeRequest->user->jabatan ?? ($changeRequest->jabatan ?? '-') }}</p>
                             </div>
 
                             {{-- Permintaan Fitur --}}
-                            <div>
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3">
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Permintaan Fitur</label>
                                 <p class="text-slate-600">{{ $changeRequest->permintaan_fitur ?? '-' }}</p>
                             </div>
 
                             {{-- Tanggal Permintaan --}}
-                            <div>
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3">
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Tanggal Permintaan</label>
                                 <p class="text-slate-600">
                                     {{ \Carbon\Carbon::parse($changeRequest->created_at)->translatedFormat('d F Y') }}</p>
                             </div>
 
                             {{-- Status Pengerjaan --}}
-                            <div>
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3">
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Status Pengerjaan</label>
                                 @php
                                     $spColor = match ($changeRequest->status_pengerjaan ?? 'Open') {
@@ -59,7 +58,7 @@
                             </div>
 
                             {{-- No Tiket --}}
-                            <div>
+                            <div class="w-full md:w-1/2 xl:w-1/3 px-3">
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">No Tiket</label>
                                 @if (!empty($changeRequest->no_tiket) && $changeRequest->no_tiket !== 'No Tiket')
                                     <p class="text-slate-600">
@@ -71,14 +70,14 @@
                             </div>
 
                             {{-- Deskripsi --}}
-                            <div class="md:col-span-2">
+                            <div class="w-full px-3">
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">Deskripsi</label>
                                 <p class="text-slate-600 whitespace-pre-line">{{ $changeRequest->deskripsi }}</p>
                             </div>
 
                             {{-- File Pendukung --}}
                             @if ($changeRequest->file_path)
-                                <div>
+                                <div class="w-full px-3">
                                     <label class="block mb-1 text-sm font-semibold text-slate-700">File Pendukung</label>
                                     <a href="{{ route('change-request.show-file', $changeRequest->id) }}" target="_blank"
                                         class="px-2 py-1 bg-blue-500 rounded text-white hover:shadow-xs active:opacity-85">
@@ -89,8 +88,8 @@
                         </div>
 
                         {{-- Approval 2 Tahap --}}
-                        <div class="mt-8 rounded-xl border border-gray-200 overflow-hidden">
-                            <div class="px-4 py-3 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+                        <div class="rounded-xl border border-gray-200 overflow-hidden">
+                            <div class="px-3 py-3 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
                                 <h6 class="font-bold text-sm text-slate-700"><i class="fas fa-check-double mr-1"></i>
                                     Persetujuan</h6>
                                 @php
@@ -133,7 +132,8 @@
                                             </div>
                                             @if ($changeRequest->{$field . '_at'})
                                                 <div class="mt-2 text-xs text-slate-500">
-                                                    Oleh <b>{{ ucwords(str_replace('.', ' ', $changeRequest->{$field . '_by'} ?? '-')) }}</b>
+                                                    Oleh
+                                                    <b>{{ ucwords(str_replace('.', ' ', $changeRequest->{$field . '_by'} ?? '-')) }}</b>
                                                     •
                                                     {{ \Carbon\Carbon::parse($changeRequest->{$field . '_at'})->translatedFormat('d F Y H:i') }}
                                                 </div>
