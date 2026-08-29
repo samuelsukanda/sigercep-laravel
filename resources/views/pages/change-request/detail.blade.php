@@ -77,7 +77,7 @@
 
                             {{-- File Pendukung --}}
                             @if ($changeRequest->file_path)
-                                <div class="w-full px-3">
+                                <div class="w-full px-3 mb-4">
                                     <label class="block mb-1 text-sm font-semibold text-slate-700">File Pendukung</label>
                                     <a href="{{ route('change-request.show-file', $changeRequest->id) }}" target="_blank"
                                         class="px-2 py-1 bg-blue-500 rounded text-white hover:shadow-xs active:opacity-85">
@@ -89,7 +89,7 @@
 
                         {{-- Approval 2 Tahap --}}
                         <div class="rounded-xl border border-gray-200 overflow-hidden">
-                            <div class="px-3 py-3 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+                            <div class="px-3 py-1 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
                                 <h6 class="font-bold text-sm text-slate-700"><i class="fas fa-check-double mr-1"></i>
                                     Persetujuan</h6>
                                 @php
@@ -116,12 +116,12 @@
                                     ];
                                 @endphp
 
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div style="display:flex; flex-wrap:wrap; gap:1rem;">
                                     @foreach ($stages as $field => $label)
                                         @php
                                             $status = $changeRequest->{$field . '_status'} ?? 'Menunggu';
                                         @endphp
-                                        <div class="rounded-lg border border-gray-100 p-3">
+                                        <div class="rounded-lg border border-gray-100 p-3" style="flex:1 1 300px;">
                                             <div class="flex items-center justify-between">
                                                 <span
                                                     class="text-xs font-semibold text-slate-600 uppercase tracking-wide">{{ $label }}</span>
