@@ -62,10 +62,10 @@
                                 <label class="block mb-1 text-sm font-semibold text-slate-700">No Tiket</label>
                                 @if (!empty($changeRequest->no_tiket) && $changeRequest->no_tiket !== 'No Tiket')
                                     <p class="text-slate-600">
-                                        {{ \Illuminate\Support\Str::startsWith($changeRequest->no_tiket, '#') ? $changeRequest->no_tiket : '#' . $changeRequest->no_tiket }}
+                                        {{ $changeRequest->no_tiket }}
                                     </p>
                                 @else
-                                    <p class="text-xs text-slate-400" style="font-style: italic !important;">#No Tiket</p>
+                                    <p class="text-xs text-slate-400" style="font-style: italic !important;">No Tiket</p>
                                 @endif
                             </div>
 

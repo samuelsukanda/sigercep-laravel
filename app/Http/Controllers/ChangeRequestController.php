@@ -149,7 +149,7 @@ class ChangeRequestController extends Controller
         }
 
         if ($request->ajax()) {
-            $columns = ['id', 'tanggal_formatted', 'jabatan', 'permintaan_fitur', 'status_pengerjaan', 'no_tiket'];
+            $columns = ['id', 'no_tiket', 'created_at', 'permintaan_fitur', 'status_pengerjaan'];
 
             $user = Auth::user();
             $isIT = $this->isIT();

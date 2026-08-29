@@ -27,6 +27,16 @@ let table = $("#changeRequestTable").DataTable({
             },
         },
         {
+            // No Tiket
+            data: "no_tiket",
+            render: function (data) {
+                if (!data || data === "No Tiket") {
+                    return `<span class="text-xs text-slate-400" style="font-style: italic !important;">No Tiket</span>`;
+                }
+                return data;
+            },
+        },
+        {
             // Tanggal Permintaan
             data: "tanggal_formatted",
             render: function (data, type, row) {
@@ -57,16 +67,6 @@ let table = $("#changeRequestTable").DataTable({
                 };
                 const style = colors[data] || "background-color:#95a5a6; color:#ffffff;";
                 return `<span class="px-3 py-1 text-xs font-semibold rounded-full" style="${style}">${data}</span>`;
-            },
-        },
-        {
-            // No Tiket
-            data: "no_tiket",
-            render: function (data) {
-                if (!data || data === "No Tiket") {
-                    return `<span class="text-xs text-slate-400" style="font-style: italic !important;">#No Tiket</span>`;
-                }
-                return data.startsWith('#') ? data : `#${data}`;
             },
         },
         {
