@@ -139,7 +139,7 @@ class LaporanAsetRusakController extends Controller
 
         LaporanAsetRusak::create($validated);
 
-        return redirect(route('pengadaan-aset.laporan-aset-rusak.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('pengadaan-aset.laporan-aset-rusak.index') . '?saved=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -196,7 +196,7 @@ class LaporanAsetRusakController extends Controller
 
         $pengadaan->update($validated);
 
-        return redirect(route('pengadaan-aset.laporan-aset-rusak.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('pengadaan-aset.laporan-aset-rusak.index') . '?updated=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)

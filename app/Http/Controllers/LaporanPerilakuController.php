@@ -139,8 +139,7 @@ class LaporanPerilakuController extends Controller
 
         LaporanPerilaku::create($validated);
 
-        return redirect()
-            ->route('komite-mutu.laporan-perilaku.index')
+        return redirect(route('komite-mutu.laporan-perilaku.index') . '?saved=1')
             ->with('success', 'Data berhasil disimpan.');
     }
 
@@ -208,8 +207,7 @@ class LaporanPerilakuController extends Controller
 
         $laporanPerilaku->update($validated);
 
-        return redirect()
-            ->route('komite-mutu.laporan-perilaku.index')
+        return redirect(route('komite-mutu.laporan-perilaku.index') . '?updated=1')
             ->with('success', 'Data berhasil diperbarui.');
     }
 

@@ -207,7 +207,7 @@ class BankSpoController extends Controller
             }
         }
 
-        return redirect()->route('komite-mutu.bank-spo.index')
+        return redirect(route('komite-mutu.bank-spo.index') . '?saved=1')
             ->with('success', 'Data berhasil disimpan.');
     }
 
@@ -299,8 +299,7 @@ class BankSpoController extends Controller
             'file_path' => $filePath,
         ]);
 
-        return redirect()
-            ->route('komite-mutu.bank-spo.index')
+        return redirect(route('komite-mutu.bank-spo.index') . '?updated=1')
             ->with('success', 'Data berhasil diperbarui.');
     }
 

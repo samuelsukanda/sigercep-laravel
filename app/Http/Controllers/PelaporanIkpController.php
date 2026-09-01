@@ -149,7 +149,7 @@ class PelaporanIkpController extends Controller
 
         PelaporanIkp::create($validated);
 
-        return redirect(route('komite-mutu.pelaporan-ikp.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('komite-mutu.pelaporan-ikp.index') . '?saved=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -197,7 +197,7 @@ class PelaporanIkpController extends Controller
 
         $pelaporanIkp->update($validated);
 
-        return redirect(route('komite-mutu.pelaporan-ikp.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('komite-mutu.pelaporan-ikp.index') . '?updated=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)

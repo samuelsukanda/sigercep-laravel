@@ -123,7 +123,7 @@ class VisitasiController extends Controller
 
         Visitasi::create($validated);
 
-        return redirect()->route('visitasi.index')
+        return redirect(route('visitasi.index') . '?saved=1')
             ->with('success', 'Data berhasil disimpan.');
     }
 
@@ -164,7 +164,7 @@ class VisitasiController extends Controller
 
         $visitasi->update($validated);
 
-        return redirect()->route('visitasi.index')
+        return redirect(route('visitasi.index') . '?updated=1')
             ->with('success', 'Data berhasil diperbarui.');
     }
 

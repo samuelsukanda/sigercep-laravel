@@ -124,7 +124,7 @@ class PeraturanPerusahaanController extends Controller
             'file_path' => $targetPath,
         ]);
 
-        return redirect(route('sdm-hukum.peraturan-perusahaan.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('sdm-hukum.peraturan-perusahaan.index') . '?saved=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -204,7 +204,7 @@ class PeraturanPerusahaanController extends Controller
             'file_path' => $targetPath,
         ]);
 
-        return redirect(route('sdm-hukum.peraturan-perusahaan.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('sdm-hukum.peraturan-perusahaan.index') . '?updated=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)

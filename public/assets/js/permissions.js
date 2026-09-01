@@ -554,16 +554,18 @@
 
 /* ───── Alert Delete Global ───── */
 document.addEventListener("DOMContentLoaded", function () {
-    // Success alert after delete redirect
     var params = new URLSearchParams(window.location.search);
-    if (params.get("deleted") === "1") {
-        params.delete("deleted");
+    var alertType = params.get("saved") === "1" ? "saved" :
+        params.get("updated") === "1" ? "updated" :
+        params.get("deleted") === "1" ? "deleted" : null;
+    if (alertType) {
+        params.delete(alertType);
         var qs = params.toString();
         var newUrl = window.location.pathname + (qs ? "?" + qs : "") + window.location.hash;
         history.replaceState(null, "", newUrl);
         Swal.fire({
-            title: "Terhapus!",
-            text: "Data berhasil dihapus.",
+            title: alertType === "saved" ? "Tersimpan!" : alertType === "updated" ? "Diubah!" : "Terhapus!",
+            text: alertType === "saved" ? "Data berhasil disimpan." : alertType === "updated" ? "Data berhasil diubah." : "Data berhasil dihapus.",
             icon: "success",
             confirmButtonColor: "var(--accent)",
             customClass: { confirmButton: "btn-swal-success" },

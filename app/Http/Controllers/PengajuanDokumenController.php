@@ -165,8 +165,7 @@ class PengajuanDokumenController extends Controller
 
         PengajuanDokumen::create($validated);
 
-        return redirect()
-            ->route('komite-mutu.pengajuan-dokumen.index')
+        return redirect(route('komite-mutu.pengajuan-dokumen.index') . '?saved=1')
             ->with('success', 'Data berhasil disimpan.');
     }
 
@@ -254,8 +253,7 @@ class PengajuanDokumenController extends Controller
 
         $pengajuanDokumen->update($validated);
 
-        return redirect()
-            ->route('komite-mutu.pengajuan-dokumen.index')
+        return redirect(route('komite-mutu.pengajuan-dokumen.index') . '?updated=1')
             ->with('success', 'Data berhasil diperbarui.');
     }
 

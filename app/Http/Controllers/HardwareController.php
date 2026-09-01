@@ -207,7 +207,7 @@ class HardwareController extends Controller
 
         Hardware::create($validated);
 
-        return redirect()->route('hardware.index')
+        return redirect(route('hardware.index') . '?saved=1')
             ->with('success', 'Data berhasil ditambahkan.');
     }
 
@@ -259,7 +259,7 @@ class HardwareController extends Controller
 
         $hardware->update($validated);
 
-        return redirect()->route('hardware.index')
+        return redirect(route('hardware.index') . '?updated=1')
             ->with('success', 'Data berhasil diperbarui.');
     }
 
@@ -343,7 +343,7 @@ class HardwareController extends Controller
 
         \App\Models\DevicePrinter::create($validated);
 
-        return redirect()->route('hardware.device-printer.show', $ip)
+        return redirect(route('hardware.device-printer.show', $ip) . '?saved=1')
             ->with('success', 'Device/Printer berhasil ditambahkan.');
     }
 
@@ -361,7 +361,7 @@ class HardwareController extends Controller
 
         $devicePrinter->update($validated);
 
-        return redirect()->route('hardware.device-printer.show', $devicePrinter->ip_pc)
+        return redirect(route('hardware.device-printer.show', $devicePrinter->ip_pc) . '?updated=1')
             ->with('success', 'Data device/printer berhasil diperbarui.');
     }
 

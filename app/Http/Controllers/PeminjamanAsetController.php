@@ -139,7 +139,7 @@ class PeminjamanAsetController extends Controller
 
         PeminjamanAset::create($validated);
 
-        return redirect(route('pengadaan-aset.peminjaman-aset.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('pengadaan-aset.peminjaman-aset.index') . '?saved=1')->with('success', 'Data berhasil disimpan.');
     }
 
 
@@ -196,7 +196,7 @@ class PeminjamanAsetController extends Controller
 
         $pengadaan->update($validated);
 
-        return redirect(route('pengadaan-aset.peminjaman-aset.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('pengadaan-aset.peminjaman-aset.index') . '?updated=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)

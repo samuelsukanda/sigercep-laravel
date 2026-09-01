@@ -145,7 +145,7 @@ class KomplainOutsourcingVendorController extends Controller
 
         KomplainOutsourcingVendor::create($validated);
 
-        return redirect(route('komplain.outsourcing-vendor.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('komplain.outsourcing-vendor.index') . '?saved=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function edit($id)
@@ -190,7 +190,7 @@ class KomplainOutsourcingVendorController extends Controller
 
         $komplain->update($validated);
 
-        return redirect(route('komplain.outsourcing-vendor.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('komplain.outsourcing-vendor.index') . '?updated=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy($id)

@@ -167,7 +167,7 @@ class KnowledgeBaseController extends Controller
             ? 'Artikel disimpan sebagai draft.'
             : 'Artikel berhasil dipublikasikan.';
 
-        return redirect(route('knowledge-base.show', $knowledgeBase) . '?deleted=1')->with('success', $msg);
+        return redirect(route('knowledge-base.show', $knowledgeBase) . '?updated=1')->with('success', $msg);
     }
 
     public function destroy(KnowledgeBase $knowledgeBase)

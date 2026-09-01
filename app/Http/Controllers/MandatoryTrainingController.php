@@ -120,7 +120,7 @@ class MandatoryTrainingController extends Controller
             'file_path' => $targetPath,
         ]);
 
-        return redirect(route('sdm-hukum.mandatory-training.index') . '?deleted=1')->with('success', 'Data berhasil disimpan.');
+        return redirect(route('sdm-hukum.mandatory-training.index') . '?saved=1')->with('success', 'Data berhasil disimpan.');
     }
 
     public function show(string $id)
@@ -200,7 +200,7 @@ class MandatoryTrainingController extends Controller
             'file_path' => $targetPath,
         ]);
 
-        return redirect(route('sdm-hukum.mandatory-training.index') . '?deleted=1')->with('success', 'Data berhasil diperbarui.');
+        return redirect(route('sdm-hukum.mandatory-training.index') . '?updated=1')->with('success', 'Data berhasil diperbarui.');
     }
 
     public function destroy(string $id)

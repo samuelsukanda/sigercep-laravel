@@ -201,7 +201,7 @@ class ManajemenRisikoController extends Controller
 
         DaftarRisiko::create($validated);
 
-        return redirect()->route('komite-mutu.manajemen-risiko.index')
+        return redirect(route('komite-mutu.manajemen-risiko.index') . '?saved=1')
             ->with('success', 'Data berhasil disimpan.');
     }
 
@@ -263,7 +263,7 @@ class ManajemenRisikoController extends Controller
 
         $risiko->update($validated);
 
-        return redirect()->route('komite-mutu.manajemen-risiko.index')
+        return redirect(route('komite-mutu.manajemen-risiko.index') . '?updated=1')
             ->with('success', 'Data berhasil diperbarui.');
     }
 

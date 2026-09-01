@@ -165,7 +165,7 @@ class AdminTicketController extends Controller
 
         $helpdesk->update($request->only('category', 'description', 'urgency', 'unit_name'));
 
-        return redirect(route('admin.helpdesk.index') . '?deleted=1')->with('success', 'Tiket diperbarui.');
+        return redirect(route('admin.helpdesk.index') . '?updated=1')->with('success', 'Tiket diperbarui.');
     }
 
     public function destroy(Ticket $helpdesk)
