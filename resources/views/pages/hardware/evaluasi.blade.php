@@ -112,7 +112,7 @@
         }
 
         .btn-swal-success:hover {
-            background-color: #6051c9 !important;
+            filter: brightness(1.2) !important;
         }
     </style>
     <script>
@@ -405,6 +405,7 @@
                                     title: 'Terhapus!',
                                     text: 'Data evaluasi berhasil dihapus.',
                                     icon: 'success',
+                                    confirmButtonColor: 'var(--accent)',
                                     customClass: {
                                         confirmButton: 'btn-swal-success'
                                     }

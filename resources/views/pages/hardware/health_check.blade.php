@@ -834,7 +834,7 @@
         }
 
         .btn-swal-success:hover {
-            background-color: #6051c9 !important;
+            filter: brightness(1.2) !important;
         }
 
         /* Pastikan SweetAlert selalu tampil di atas semua modal */
